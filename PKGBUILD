@@ -9,14 +9,14 @@ arch=('x86_64')
 url="https://github.com/dmaliog/kLausqt/"
 license=('GPL 2.0')
 groups=()
-depends=('qt5-base' 'qt5-multimedia' 'qt5-webengine' 'qt5-xmlpatterns' 'yay' 'zenity' 'notify-send' 'konsole' 'neofetch')
+depends=('qt5-base' 'qt5-multimedia' 'qt5-webengine' 'qt5-xmlpatterns' 'yay' 'zenity' 'libnotify' 'konsole' 'neofetch')
 
 source=(
 	"${pkgname}-${pkgver}.zip::${url}/releases/download/${pkgver}/klaus-${pkgver}-${_releasedate}-linux64.zip"
 )
 
 sha256sums=(
-	'e7c732d638e29f41a1679782ad30b7b5dab00c5822d963364c2d5005564d66e2'
+	'9273a9c1548d8ba8b4b8e5e9c6f459c3dc8bd4c0db4b34040cd2bc05d6a44e1c'
 )
 
 package() {
