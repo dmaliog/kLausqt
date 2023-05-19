@@ -60,7 +60,7 @@ void MainWindow::on_action_1_triggered()
     if (page == 1) return;
     mrpropper();
     page = 1;
-    ui->label1->setText("Добавить пакет в AUR");
+    ui->label1->setText(tr("Добавить пакет в AUR"));
 }
 
 void MainWindow::on_action_2_triggered()
@@ -68,7 +68,7 @@ void MainWindow::on_action_2_triggered()
     if (page == 2) return;
     mrpropper();
     page = 2;
-    ui->label1->setText("Каталог пакетов из AUR");
+    ui->label1->setText(tr("Каталог пакетов из AUR"));
 
     ui->action_4->setVisible(true);
     ui->action_5->setVisible(true);
@@ -86,7 +86,7 @@ void MainWindow::on_action_17_triggered()
     if (page == 3) return;
     mrpropper();
     page = 3;
-    ui->label1->setText("Очистка системы");
+    ui->label1->setText(tr("Очистка системы"));
 
     ui->label2->setVisible(true);
     ui->listWidget_clear->setVisible(true);
@@ -118,7 +118,7 @@ void MainWindow::on_action_7_triggered()
     int numPackages = output.toInt();
 
     // Устанавливаем текст для label с количеством установленных пакетов
-    ui->label1->setText(QString("Каталог установленных пакетов: %1").arg(numPackages));
+    ui->label1->setText(QString(tr("Каталог установленных пакетов: %1")).arg(numPackages));
 
     ui->action_5->setVisible(true);
     ui->action_6->setVisible(true);
@@ -159,7 +159,7 @@ void MainWindow::on_action_9_triggered()
     if (page == 5) return;
     mrpropper();
     page = 5;
-    ui->label1->setText("Параметры ядра");
+    ui->label1->setText(tr("Параметры ядра"));
 
     ui->action_26->setVisible(true);
     ui->action_27->setVisible(true);
@@ -179,7 +179,7 @@ void MainWindow::on_action_9_triggered()
         ui->action_26->setDisabled(true);
         ui->textEdit_grub->setDisabled(true);
         ui->spinBox_grub->setDisabled(true);
-        ui->textEdit_grub->setText("GRUB не установлен");
+        ui->textEdit_grub->setText(tr("GRUB не установлен"));
         // Ошибка открытия файла
     } else {
         QTextStream in(&file);
@@ -271,7 +271,7 @@ void MainWindow::on_action_10_triggered()
     if (page == 8) return;
     mrpropper();
     page = 8;
-    ui->label1->setText("Информация о приложении");
+    ui->label1->setText(tr("Информация о приложении"));
     ui->tabWidget->setVisible(true);
     ui->tabWidget->setCurrentIndex(2);
     showLoadingAnimation(false);
@@ -282,7 +282,7 @@ void MainWindow::on_action_12_triggered()
     if (page == 9) return;
     mrpropper(); // Обнуление всех других разделов
     page = 9;
-    ui->label1->setText("Дополнительные настройки");
+    ui->label1->setText(tr("Дополнительные настройки"));
     ui->action_28->setVisible(true);
     ui->action_29->setVisible(true);
     ui->toolBar_2->setVisible(true);
@@ -307,7 +307,7 @@ void MainWindow::on_action_13_triggered()
     if (page == 10) return;
     mrpropper(); //Обнуление всех других разделов
     page = 10;
-    ui->label1->setText("Приглашение");
+    ui->label1->setText(tr("Приглашение"));
 
     ui->wlogin->show();
     ui->hello->show();
@@ -430,7 +430,7 @@ void MainWindow::on_action_5_triggered()
                     }
                     process->startDetached("konsole", QStringList() << "-e" << program);
                 } else {
-                    QMessageBox::information(this, "Пакет не найден", "Пакет " + packageName + " не найден в системе!");
+                    QMessageBox::information(this, tr("Пакет не найден"), "Пакет " + packageName + tr(" не найден в системе!"));
                 }
                 process->deleteLater();
             });
@@ -445,7 +445,7 @@ void MainWindow::on_action_5_triggered()
             // Запускаем процесс
             process->start("yay", QStringList() << "-Qi" << packageName);
         } else
-            QMessageBox::information(this, "Внимание", "Выберите пакет из списка для запуска!");
+            QMessageBox::information(this, tr("Внимание"), tr("Выберите пакет из списка для запуска!"));
 
     } else {
         if (ui->listWidgetManager->currentItem() != nullptr) {
@@ -454,7 +454,7 @@ void MainWindow::on_action_5_triggered()
             QProcess* process = new QProcess(this);
              process->startDetached("konsole", QStringList() << "--hold" << "-e" << packageName);
         } else
-            QMessageBox::information(this, "Внимание", "Выберите пакет из списка для запуска!");
+            QMessageBox::information(this, tr("Внимание"), tr("Выберите пакет из списка для запуска!"));
     }
 }
 
@@ -480,7 +480,7 @@ void MainWindow::on_action_6_triggered()
 
                     process->startDetached("konsole", QStringList() << "-e" << "yay -R " + packageName);
                 } else
-                    QMessageBox::information(this, "Пакет не найден", "Пакет " + packageName + " не найден в системе!");
+                    QMessageBox::information(this, tr("Пакет не найден"), tr("Пакет ") + packageName + tr(" не найден в системе!"));
 
                 process->deleteLater();
             });
@@ -495,7 +495,7 @@ void MainWindow::on_action_6_triggered()
             // Запускаем процесс
             process->start("yay", QStringList() << "-Qi" << packageName);
         } else
-            QMessageBox::information(this, "Внимание", "Выберите пакет из списка для удаления!");
+            QMessageBox::information(this, tr("Внимание"), tr("Выберите пакет из списка для удаления!"));
 
     } else {
         if (ui->listWidgetManager->currentItem() != nullptr) {
@@ -504,7 +504,7 @@ void MainWindow::on_action_6_triggered()
             QProcess* process = new QProcess(this);
              process->startDetached("konsole", QStringList() << "-e" << "yay -R " + packageName);
         } else
-            QMessageBox::information(this, "Внимание", "Выберите пакет из списка для удаления!");
+             QMessageBox::information(this, tr("Внимание"), tr("Выберите пакет из списка для удаления!"));
     }
 }
 
@@ -518,7 +518,7 @@ void MainWindow::on_action_4_triggered()
             QProcess* process = new QProcess(this);
             process->startDetached("konsole", QStringList() << "-e" << "yay -S " + packageName);
          } else
-            QMessageBox::information(this, "Внимание", "Выберите пакет из списка для установки!");
+            QMessageBox::information(this, tr("Внимание"), tr("Выберите пакет из списка для установки!"));
 
     } else {
         if (ui->listWidgetManager->currentItem() != nullptr) {
@@ -527,7 +527,7 @@ void MainWindow::on_action_4_triggered()
             QProcess* process = new QProcess(this);
              process->startDetached("konsole", QStringList() << "-e" << "yay -S " + packageName);
         } else
-            QMessageBox::information(this, "Внимание", "Выберите пакет из списка для установки!");
+             QMessageBox::information(this, tr("Внимание"), tr("Выберите пакет из списка для установки!"));
     }
 }
 
@@ -583,7 +583,7 @@ void MainWindow::on_action_30_triggered()
         QProcess* process = new QProcess(this);
         process->startDetached("konsole", QStringList() << "-e" << command);
     } else {
-        QMessageBox::information(this, "Внимание", "Выберите пакет из списка для установки!");
+        QMessageBox::information(this, tr("Внимание"), tr("Выберите пакет из списка для установки!"));
     }
 }
 
@@ -603,13 +603,13 @@ void MainWindow::on_action_26_triggered()
     // Запускаем процесс с pkexec
     process.start();
     if (!process.waitForStarted()) {
-        QMessageBox::warning(this, "Ошибка выполнения", "Не удалось запустить pkexec");
+        QMessageBox::warning(this, tr("Ошибка выполнения"), tr("Не удалось запустить pkexec"));
         return;
     }
 
     // Ждем, пока процесс завершится
     if (!process.waitForFinished(-1)) {
-        QMessageBox::warning(this, "Ошибка выполнения", "Не удалось выполнить команду pkexec");
+        QMessageBox::warning(this, tr("Ошибка выполнения"), tr("Не удалось выполнить команду pkexec"));
         return;
     }
 
@@ -617,7 +617,7 @@ void MainWindow::on_action_26_triggered()
     if (process.exitCode() != QProcess::NormalExit || process.exitStatus() != QProcess::ExitStatus::NormalExit) {
         return;
     }
-    QMessageBox::information(this, "GRUB изменен", "Изменения GRUB вступят в силу после перезагрузки.");
+    QMessageBox::information(this, tr("GRUB изменен"), tr("Изменения GRUB вступят в силу после перезагрузки."));
 }
 
 void MainWindow::on_action_16_triggered()
@@ -719,7 +719,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     progressBar->setValue(usedPercentage);
 
     // Устанавливаем текст на прогресс-баре, отображающий количество свободных гигабайтов
-    QString text = QString("свободно %1 ГиБ").arg(QString::number(freeGB, 'f', 2));
+    QString text = QString(tr("свободно %1 ГиБ")).arg(QString::number(freeGB, 'f', 2));
     progressBar->setFormat(text);
 
     ui->statusBar->addPermanentWidget(progressBar);
@@ -742,7 +742,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     switch(mainpage) {
     case 0:
         on_action_10_triggered();
-        ui->label1->setText("Добро пожаловать в kLaus App Store!");
+        ui->label1->setText(tr("Добро пожаловать в kLaus - Arch Manager!"));
         break;
     case 1:
         on_action_2_triggered();
@@ -770,7 +770,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
         break;
     default:
         on_action_10_triggered();
-        ui->label1->setText("Добро пожаловать в kLaus App Store!");
+        ui->label1->setText(tr("Добро пожаловать в kLaus - Arch Manager!"));
         break;
     }
 
@@ -860,7 +860,7 @@ void MainWindow::loadSettings()
     if (savedPassword == QString::fromStdString(secpass)) {
 
         // Форматируем строку приветствия
-        QString loginwelcome = QString("Добро пожаловать %1!").arg(savedLogin);
+        QString loginwelcome = QString(tr("Добро пожаловать %1!")).arg(savedLogin);
 
         // Устанавливаем заголовок и текст метки с приветствием
         ui->menu_2->setTitle(loginwelcome);
@@ -1031,7 +1031,7 @@ void MainWindow::handleServerResponse(QNetworkReply *reply)
             ui->tableWidgetApp->setColumnWidth(3, 70);
             ui->tableWidgetApp->setColumnWidth(4, 110);
             ui->tableWidgetApp->setColumnWidth(5, 170);
-            ui->tableWidgetApp->setHorizontalHeaderLabels({"Название", "Описание", "Версия", "Голоса", "Популярность", "Последнее обновление"});
+            ui->tableWidgetApp->setHorizontalHeaderLabels({tr("Название"), tr("Описание"), tr("Версия"), tr("Голоса"), tr("Популярность"), tr("Последнее обновление")});
 
             ui->tableWidgetApp->setColumnHidden(1, table1 == 0);
             ui->tableWidgetApp->setColumnHidden(2, table2 == 0);
@@ -1264,7 +1264,7 @@ void MainWindow::on_timeEdit_update_timeChanged(const QTime &time)
         timeupdate = time; // Обновляем глобальную переменную timeupdate
         settings.setValue("TimeUpdate", timeupdate.toString("HH:mm")); // Сохраняем значение времени в настройках
     } else
-        QMessageBox::critical(nullptr, "Ошибка", "Неверный формат времени.");
+        QMessageBox::critical(nullptr, tr("Ошибка"), tr("Неверный формат времени."));
 }
 
 void MainWindow::on_checkBox_trayon_stateChanged()
@@ -1365,7 +1365,7 @@ void MainWindow::on_listWidget_2_itemDoubleClicked(QListWidgetItem *item) {
         scriptPath = scriptDir + itemName;
     }
 
-    QMessageBox::StandardButton reply = QMessageBox::question(this, "Вопрос", msg, QMessageBox::Yes | QMessageBox::No);
+    QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), msg, QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes) {
         QProcess::startDetached("konsole", QStringList() << "-e" << "bash" << scriptPath);
     }
@@ -1406,7 +1406,7 @@ void MainWindow::on_listWidget_grub_itemDoubleClicked(QListWidgetItem *item) {
         scriptPath = scriptDir + itemName;
     }
 
-    QMessageBox::StandardButton reply = QMessageBox::question(this, "Вопрос", msg, QMessageBox::Yes | QMessageBox::No);
+    QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), msg, QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes) {
         QProcess::startDetached("konsole", QStringList() << "-e" << "bash" << scriptPath);
     }
@@ -1447,7 +1447,7 @@ void MainWindow::on_listWidget_clear_itemDoubleClicked(QListWidgetItem *item) {
         scriptPath = scriptDir + itemName;
     }
 
-    QMessageBox::StandardButton reply = QMessageBox::question(this, "Вопрос", msg, QMessageBox::Yes | QMessageBox::No);
+    QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), msg, QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes) {
         QProcess::startDetached("konsole", QStringList() << "-e" << "bash" << scriptPath);
     }

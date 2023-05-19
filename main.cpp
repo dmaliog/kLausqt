@@ -67,19 +67,6 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    QString output = process.readAll();
-
-    // Проверяем наличие KDE
-    process.start("pgrep", QStringList() << "plasma");
-    process.waitForFinished();
-
-    output = process.readAll();
-    if (output.isEmpty()) {
-        QMessageBox::critical(nullptr, "Ошибка", "Приложение доступно только с окружением KDE!");
-        return 1;
-    }
-
-
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();
     for (const QString &locale : uiLanguages) {
