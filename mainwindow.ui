@@ -1,0 +1,1785 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1162</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1162</width>
+    <height>600</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1162</width>
+    <height>600</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>kLaus - Arch Manager</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QTimeEdit, QSpinBox {
+    background-color:#272727;
+	border-radius:10px;
+	border:1px solid #3d3d3d; /* Цвет фона */
+    padding: 5px; /* Внутренний отступ */
+ }
+
+QCheckBox {
+    spacing: 5px; /* Отступ между флажком и текстом */
+}
+
+QCheckBox::indicator {
+    width: 24px; /* Ширина флажка */
+    height: 24px; /* Высота флажка */
+    image: url(:/img/m2.png); /* Путь к пользовательской картинке */
+}
+
+QCheckBox::indicator:checked {
+	image: url(:/img/m3.png); /* Картинка для выбранного состояния */
+}
+
+QComboBox {
+    padding: 5px 10px; /* Внутренний отступ сверху и снизу, а также слева и справа */
+    background-color: #252525; /* Цвет фона при выборе */
+    border-radius: 10px; /* Закругление углов */
+    border: 1px solid #3d3d3d; /* Цвет границы */
+    color: #FFFFFF; /* Цвет текста */
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+padding-right:10px;
+    width: 15px; /* Ширина стрелки выпадающего списка */
+    image: url(:/img/m1.png); /* Изображение стрелки (замените на свое) */
+}
+
+QComboBox::down-arrow {
+    image: none; /* Убираем стандартное изображение стрелки */
+}
+
+ QAbstractSpinBox::up-button { width: 0; height: 0; }
+    QAbstractSpinBox::down-button { width: 0; height: 0; }
+
+
+QToolTip {
+    display: none; /* Отключаем отображение подсказок */
+}
+
+#centralwidget{
+background: url(:/img/background.png) no-repeat bottom right;
+background-color: #322F85;
+}
+
+QListWidget::item:selected, QTableView::item:selected { background-color: #1e1e1e; color: white;border:0; outline: none;}
+QListWidget::item:hover { background-color: #1e1e1e;border:0; outline: none;}
+
+QListWidget,QScrollArea {
+    background-color: #242424;
+    border: 5px solid #28276b;
+    border-radius: 13px;
+	padding:6px 0;
+}
+
+QListWidget::item {
+    padding: 2px 10px;
+	border:0;
+}
+
+QMenu {
+    background-color:#272727;
+border-radius:10px;
+border:1px solid #2c2e2d; /* Цвет фона */
+    padding: 5px; /* Внутренний отступ */
+ }
+
+QMenu::item {
+    padding: 5px 20px; /* Внутренний отступ сверху и снизу, а также слева и справа */
+}
+
+QMenu::item:selected {
+	border-radius:10px;
+	padding: 5px 20px; /* Внутренний отступ сверху и снизу, а также слева и справа */
+    background-color: #916ee4; /* Цвет фона при выборе */
+    color: #FFFFFF; /* Цвет текста при выборе */
+}
+
+QMenu::separator {
+    height: 1px; /* Высота разделителя */
+    background-color: #2c2e2d; /* Цвет разделителя */
+    margin: 2px 0; /* Внешний отступ сверху и снизу */
+}
+
+QMenu::icon {
+    padding-left: 15px; /* Отступ между иконкой и текстом */
+}
+
+QMenuBar { background-color: #1f1f1f; color: #ffffff;padding:3px; }
+                           QMenuBar::item { spacing: 3px; padding: 5px 10px;}
+                           QMenuBar::item:selected { border-radius:5px;background-color: #916ee4; }
+                           QMenuBar::item:pressed { border-radius:5px;background-color: #916ee4; }</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="label1">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>10</y>
+      <width>731</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Добро пожаловать в kLaus App Store!</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+    <property name="margin">
+     <number>0</number>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="tableWidgetApp">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>971</width>
+      <height>481</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QTableWidget#tableWidgetApp {
+    background-color: #242424;
+    border: 5px solid #28276b;
+    border-radius: 13px;
+    padding: 2px;
+}
+
+QTableWidget#tableWidgetApp::item {
+    padding: 5px 10px;
+border:0;
+}
+
+QTableWidget#tableWidgetApp QHeaderView {
+    background-color: #1f1f1f;
+    border: 0;
+}
+
+QTableWidget#tableWidgetApp QHeaderView::section {
+    background-color: #1f1f1f;
+border:0;
+}
+
+QTableWidget#tableWidgetApp QHeaderView::section:selected {
+    background-color: #202020;
+    color: #FFFFFF;
+border:0;
+}
+
+QTableWidget#tableWidgetApp QHeaderView::section:hover {
+    background-color: #202020;
+    color: #FFFFFF;
+border:0;
+}
+
+QTableWidget#tableWidgetApp QTableView::item {
+    padding: 5px;
+border:0;
+}
+
+QTableWidget#tableWidgetApp QTableView::item:selected {
+    background-color: #916ee4;
+    color: #FFFFFF;
+border:0;
+}
+
+QTableWidget#tableWidgetApp QHeaderView::section:first {
+    border-top-left-radius: 5px;
+}</string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="wlogin">
+    <property name="geometry">
+     <rect>
+      <x>830</x>
+      <y>10</y>
+      <width>251</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Авторизация</string>
+    </property>
+    <widget class="QWidget" name="gridLayoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>324</width>
+       <height>482</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="1">
+       <widget class="QPushButton" name="pushButton_3">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>ОК</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLineEdit" name="login">
+        <property name="focusPolicy">
+         <enum>Qt::StrongFocus</enum>
+        </property>
+        <property name="contextMenuPolicy">
+         <enum>Qt::DefaultContextMenu</enum>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="inputMethodHints">
+         <set>Qt::ImhNone</set>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="frame">
+         <bool>true</bool>
+        </property>
+        <property name="echoMode">
+         <enum>QLineEdit::Normal</enum>
+        </property>
+        <property name="placeholderText">
+         <string>Логин</string>
+        </property>
+        <property name="clearButtonEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="2">
+       <widget class="QLineEdit" name="pass">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="dragEnabled">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>false</bool>
+        </property>
+        <property name="placeholderText">
+         <string>Код приглашения</string>
+        </property>
+        <property name="cursorMoveStyle">
+         <enum>Qt::LogicalMoveStyle</enum>
+        </property>
+        <property name="clearButtonEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QLineEdit" name="searchApp">
+    <property name="geometry">
+     <rect>
+      <x>750</x>
+      <y>5</y>
+      <width>221</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLineEdit#searchApp {
+    padding: 0 30px;
+    border-radius: 15px;
+    background-image: url(:/img/m4.png);
+	border:0;
+    background-repeat: no-repeat;
+    background-position: left center; /* Отступ слева 10px */
+    background-color: #242424;
+}</string>
+    </property>
+    <property name="placeholderText">
+     <string>Введите то, что нужно  ...</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="listWidgetManager">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>971</width>
+      <height>481</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="movement">
+     <enum>QListView::Static</enum>
+    </property>
+    <property name="flow">
+     <enum>QListView::TopToBottom</enum>
+    </property>
+    <property name="isWrapping" stdset="0">
+     <bool>false</bool>
+    </property>
+    <property name="uniformItemSizes">
+     <bool>false</bool>
+    </property>
+    <property name="wordWrap">
+     <bool>false</bool>
+    </property>
+    <property name="selectionRectVisible">
+     <bool>false</bool>
+    </property>
+    <property name="sortingEnabled">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QWebEngineView" name="webEngineView">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1091</width>
+      <height>531</height>
+     </rect>
+    </property>
+    <property name="url">
+     <url>
+      <string>about:blank</string>
+     </url>
+    </property>
+   </widget>
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>971</width>
+      <height>481</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QTabWidget#tabWidget {
+    background-color: transparent;
+    border: 0;
+}
+
+QTabWidget#tabWidget QTabBar {
+    background-color: transparent;
+    border: 0;
+}
+
+QTabWidget#tabWidget QTabBar::tab {
+    color: transparent;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    outline: none;
+    cursor: default;
+}
+
+QTabWidget#tabWidget QTabBar::tab:hover,
+QTabWidget#tabWidget QTabBar::tab:selected {
+    border: none;
+    background: transparent;
+}</string>
+    </property>
+    <property name="currentIndex">
+     <number>2</number>
+    </property>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>Настройки AUR</string>
+     </attribute>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>20</y>
+        <width>201</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Видимость элементов</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>190</y>
+        <width>201</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Другие настройки</string>
+      </property>
+     </widget>
+     <widget class="QScrollArea" name="scrollArea">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>220</y>
+        <width>371</width>
+        <height>161</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>349</width>
+         <height>139</height>
+        </rect>
+       </property>
+       <widget class="QWidget" name="layoutWidget_2">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>20</y>
+          <width>321</width>
+          <height>42</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLabel" name="label_4">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Частота обновления пакетов</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTimeEdit" name="timeEdit_update">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="layoutWidget_3">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>80</y>
+          <width>321</width>
+          <height>42</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLabel" name="label_5">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Удаление кэша</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comboBox_yaycache">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <item>
+            <property name="text">
+             <string>Удаленных пакетов</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Всех пакетов</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Последних трех пакетов</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </widget>
+     <widget class="QScrollArea" name="scrollArea_2">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>50</y>
+        <width>931</width>
+        <height>121</height>
+       </rect>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents_2">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>909</width>
+         <height>99</height>
+        </rect>
+       </property>
+       <widget class="QWidget" name="layoutWidget_4">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>0</y>
+          <width>871</width>
+          <height>48</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QCheckBox" name="checkBox_1">
+           <property name="text">
+            <string>Описание</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_2">
+           <property name="text">
+            <string>Версия</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_3">
+           <property name="text">
+            <string>Голоса</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_4">
+           <property name="text">
+            <string>Популярность</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_5">
+           <property name="text">
+            <string>Последнее обновление</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="layoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>50</y>
+          <width>291</width>
+          <height>51</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <property name="topMargin">
+          <number>4</number>
+         </property>
+         <property name="bottomMargin">
+          <number>4</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="label_6">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Рейтинг для показа звезды</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="spinBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>Настройки приложения</string>
+     </attribute>
+     <widget class="QCheckBox" name="checkBox_trayon">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>281</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Закрывать без сворачивания в трей</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_soundon">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>70</y>
+        <width>281</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Выключить звуки меню</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="layoutWidget_5">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>140</y>
+        <width>395</width>
+        <height>42</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Стартовая страница</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_mainpage">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <item>
+          <property name="text">
+           <string>Главная</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Каталог пакетов AUR</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Запущенные пакеты</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Установленные пакеты</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Информация о системе</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Arch Wiki</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Новости Linux</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Информация о приложении</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Дополнительные настройки</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>Страница</string>
+     </attribute>
+     <widget class="QLabel" name="hello">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>0</y>
+        <width>891</width>
+        <height>481</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background:none</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; color:#5d58f8;&quot;&gt;kLaus&lt;/span&gt; - это всего-лишь взаимодействие между пользователем и помощниками AUR с базой скриптов и прочих мелочей. Он создавался исключительно ради удовлетворения некоторых хотелок, чтобы быстро и легко взаимодействовать с терминалом.&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#5d58f8;&quot;&gt;Поддержать:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;:/img/donate.png&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; color:#3f3ca9;&quot;&gt;Автор @dmali [vk.com/linux2] - GNU GENERAL PUBLIC LICENSE 2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::AutoText</enum>
+      </property>
+      <property name="scaledContents">
+       <bool>false</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QScrollArea" name="scrollArea_3">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>100</y>
+        <width>331</width>
+        <height>171</height>
+       </rect>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents_3">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>309</width>
+         <height>149</height>
+        </rect>
+       </property>
+       <widget class="QLabel" name="label_8">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>20</y>
+          <width>281</width>
+          <height>111</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Exomoon Design Studio&lt;/p&gt;&lt;p&gt;Hasymi и Luvdat&lt;/p&gt;&lt;p&gt;Разработчикам KDE &lt;/p&gt;&lt;p&gt;Линусу Торвальдсу&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+     <widget class="QLabel" name="label_7">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>70</y>
+        <width>121</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#5d58f8;&quot;&gt;Благодарности:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QListWidget" name="listWidget_clear">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>341</width>
+      <height>481</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="listWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>40</y>
+      <width>621</width>
+      <height>481</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label2">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>10</y>
+      <width>731</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Полезные скрипты</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+    <property name="margin">
+     <number>0</number>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="textEdit_grub">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>751</width>
+      <height>48</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: #242424;
+border: 5px solid #28276b;
+border-radius: 13px;
+padding: 5px;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label3_grub">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>100</y>
+      <width>231</width>
+      <height>39</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Другие настройки</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+    <property name="margin">
+     <number>0</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label4_grub">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>210</y>
+      <width>231</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Системные журналы</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+    <property name="margin">
+     <number>0</number>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="listWidget_grub">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>240</y>
+      <width>971</width>
+      <height>281</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>140</y>
+      <width>351</width>
+      <height>38</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <widget class="QLabel" name="label_grub">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Ожидание загрузочного меню</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::AutoText</enum>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="spinBox_grub">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: #242424;
+border: 5px solid #28276b;
+border-radius: 13px;
+padding: 5px;</string>
+       </property>
+       <property name="correctionMode">
+        <enum>QAbstractSpinBox::CorrectToPreviousValue</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label2_grub">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>секунд</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <zorder>webEngineView</zorder>
+   <zorder>listWidget_grub</zorder>
+   <zorder>layoutWidget</zorder>
+   <zorder>listWidget_2</zorder>
+   <zorder>listWidgetManager</zorder>
+   <zorder>tableWidgetApp</zorder>
+   <zorder>wlogin</zorder>
+   <zorder>searchApp</zorder>
+   <zorder>listWidget_clear</zorder>
+   <zorder>label1</zorder>
+   <zorder>label2</zorder>
+   <zorder>textEdit_grub</zorder>
+   <zorder>label3_grub</zorder>
+   <zorder>label4_grub</zorder>
+   <zorder>tabWidget</zorder>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1162</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Главное меню</string>
+    </property>
+    <addaction name="action_1"/>
+    <addaction name="separator"/>
+    <addaction name="action_2"/>
+    <addaction name="separator"/>
+    <addaction name="action_17"/>
+    <addaction name="action_7"/>
+    <addaction name="separator"/>
+    <addaction name="action_3"/>
+    <addaction name="action_8"/>
+    <addaction name="action_9"/>
+    <addaction name="action_10"/>
+    <addaction name="separator"/>
+    <addaction name="action_12"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="title">
+     <string>Вы не авторизовались</string>
+    </property>
+    <addaction name="action_13"/>
+    <addaction name="action_14"/>
+    <addaction name="action_15"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QToolBar#toolBar {
+background-color:#1f1f1f;
+border:0;
+}
+QToolBar#toolBar QToolButton {
+border:0;
+width:60px;
+padding: 10px 0;
+border-radius:5px;
+}
+QToolBar#toolBar QToolButton:hover {
+background-color:#1a1a1a;
+ }
+</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Vertical</enum>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>30</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonIconOnly</enum>
+   </property>
+   <property name="floatable">
+    <bool>true</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="action_1"/>
+   <addaction name="action_2"/>
+   <addaction name="action_17"/>
+   <addaction name="action_7"/>
+   <addaction name="action_9"/>
+   <addaction name="action_3"/>
+   <addaction name="action_8"/>
+   <addaction name="action_10"/>
+   <addaction name="action_12"/>
+  </widget>
+  <widget class="QToolBar" name="toolBar_2">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="mouseTracking">
+    <bool>false</bool>
+   </property>
+   <property name="tabletTracking">
+    <bool>false</bool>
+   </property>
+   <property name="acceptDrops">
+    <bool>false</bool>
+   </property>
+   <property name="windowTitle">
+    <string>toolBar_2</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QToolBar#toolBar_2{
+background-color:#2d2b79;
+border:0;
+}
+QToolBar#toolBar_2 QToolButton {
+                              border:0;
+width:100px;
+padding: 18px 0;
+border-radius:5px;
+                          }
+                          QToolBar#toolBar_2 QToolButton:hover {
+                              background-color:#29286f;
+                          }
+</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Vertical</enum>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextUnderIcon</enum>
+   </property>
+   <property name="floatable">
+    <bool>true</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>true</bool>
+   </attribute>
+   <addaction name="action_4"/>
+   <addaction name="action_5"/>
+   <addaction name="action_6"/>
+   <addaction name="action_11"/>
+   <addaction name="action_16"/>
+   <addaction name="action_sh"/>
+   <addaction name="action_29"/>
+   <addaction name="action_28"/>
+   <addaction name="action_18"/>
+   <addaction name="action_19"/>
+   <addaction name="action_20"/>
+   <addaction name="action_21"/>
+   <addaction name="action_22"/>
+   <addaction name="action_23"/>
+   <addaction name="action_24"/>
+   <addaction name="action_25"/>
+   <addaction name="action_26"/>
+   <addaction name="action_27"/>
+   <addaction name="action_30"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="action_1">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/1.png</normaloff>:/img/1.png</iconset>
+   </property>
+   <property name="text">
+    <string>Добавить пакет в каталог</string>
+   </property>
+   <property name="iconText">
+    <string>Добавить пакет в каталог</string>
+   </property>
+   <property name="toolTip">
+    <string>Добавить пакет в каталог</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/2.png</normaloff>:/img/2.png</iconset>
+   </property>
+   <property name="text">
+    <string>Каталог пакетов AUR</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/3.png</normaloff>:/img/3.png</iconset>
+   </property>
+   <property name="text">
+    <string>Arch Wiki</string>
+   </property>
+   <property name="toolTip">
+    <string>Arch Wiki</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_sh">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/19.png</normaloff>:/img/19.png</iconset>
+   </property>
+   <property name="text">
+    <string>Скрипты</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_7">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/5.png</normaloff>:/img/5.png</iconset>
+   </property>
+   <property name="text">
+    <string>Установленные пакеты</string>
+   </property>
+   <property name="toolTip">
+    <string>Установленные пакеты</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_8">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/6.png</normaloff>:/img/6.png</iconset>
+   </property>
+   <property name="text">
+    <string>Новости Linux</string>
+   </property>
+   <property name="toolTip">
+    <string>Новости Linux</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_9">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/7.png</normaloff>:/img/7.png</iconset>
+   </property>
+   <property name="text">
+    <string>Информация о системе</string>
+   </property>
+   <property name="toolTip">
+    <string>Информация о системе</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_10">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/8.png</normaloff>:/img/8.png</iconset>
+   </property>
+   <property name="text">
+    <string>Информация о приложении</string>
+   </property>
+   <property name="toolTip">
+    <string>Информация о приложении</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_12">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/9.png</normaloff>:/img/9.png</iconset>
+   </property>
+   <property name="text">
+    <string>Дополнительные настройки</string>
+   </property>
+   <property name="toolTip">
+    <string>Дополнительные настройки</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_13">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/10.png</normaloff>:/img/10.png</iconset>
+   </property>
+   <property name="text">
+    <string>Авторизация</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_14">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/11.png</normaloff>:/img/11.png</iconset>
+   </property>
+   <property name="text">
+    <string>Регистрация</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_15">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/12.png</normaloff>:/img/12.png</iconset>
+   </property>
+   <property name="text">
+    <string>Забыли пароль</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_5">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/13.png</normaloff>:/img/13.png</iconset>
+   </property>
+   <property name="text">
+    <string>Запустить</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_6">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/14.png</normaloff>:/img/14.png</iconset>
+   </property>
+   <property name="text">
+    <string>Удалить</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_4">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/15.png</normaloff>:/img/15.png</iconset>
+   </property>
+   <property name="text">
+    <string>Установить</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_11">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/16.png</normaloff>:/img/16.png</iconset>
+   </property>
+   <property name="text">
+    <string>Обновить</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_16">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/17.png</normaloff>:/img/17.png</iconset>
+   </property>
+   <property name="text">
+    <string>Наш выбор</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_17">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/4.png</normaloff>:/img/4.png</iconset>
+   </property>
+   <property name="text">
+    <string>Автоматизация</string>
+   </property>
+   <property name="toolTip">
+    <string>Автоматизация</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_18">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/20.png</normaloff>:/img/20.png</iconset>
+   </property>
+   <property name="text">
+    <string>Ярлыки</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_19">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/21.png</normaloff>:/img/21.png</iconset>
+   </property>
+   <property name="text">
+    <string>Темы</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_20">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/22.png</normaloff>:/img/22.png</iconset>
+   </property>
+   <property name="text">
+    <string>Иконки</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_21">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/23.png</normaloff>:/img/23.png</iconset>
+   </property>
+   <property name="text">
+    <string>Цвет. схемы</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_22">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/24.png</normaloff>:/img/24.png</iconset>
+   </property>
+   <property name="text">
+    <string>Курсоры</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_23">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/25.png</normaloff>:/img/25.png</iconset>
+   </property>
+   <property name="text">
+    <string>Виджеты</string>
+   </property>
+   <property name="toolTip">
+    <string>Виджеты</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_24">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/26.png</normaloff>:/img/26.png</iconset>
+   </property>
+   <property name="text">
+    <string>Сироты</string>
+   </property>
+   <property name="toolTip">
+    <string>Сироты</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_25">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/26.png</normaloff>:/img/26.png</iconset>
+   </property>
+   <property name="text">
+    <string>Кэш пакетов</string>
+   </property>
+   <property name="toolTip">
+    <string>Кэш пакетов</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_26">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/27.png</normaloff>:/img/27.png</iconset>
+   </property>
+   <property name="text">
+    <string>Применить</string>
+   </property>
+   <property name="toolTip">
+    <string>Применить</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_27">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/28.png</normaloff>:/img/28.png</iconset>
+   </property>
+   <property name="text">
+    <string>Журналы</string>
+   </property>
+   <property name="toolTip">
+    <string>Журналы</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_28">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/29.png</normaloff>:/img/29.png</iconset>
+   </property>
+   <property name="text">
+    <string>Приложение</string>
+   </property>
+   <property name="toolTip">
+    <string>Приложение</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_29">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/5.png</normaloff>:/img/5.png</iconset>
+   </property>
+   <property name="text">
+    <string>AUR</string>
+   </property>
+   <property name="toolTip">
+    <string>AUR</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_30">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/27.png</normaloff>:/img/27.png</iconset>
+   </property>
+   <property name="text">
+    <string>PKGBUILD</string>
+   </property>
+   <property name="toolTip">
+    <string>PKGBUILD</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QWebEngineView</class>
+   <extends>QWidget</extends>
+   <header location="global">QtWebEngineWidgets/QWebEngineView</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="klausres.qrc"/>
+ </resources>
+ <connections/>
+</ui>
