@@ -182,13 +182,14 @@ void MainWindow::on_action_9_triggered()
         ui->textEdit_grub->setText(tr("GRUB не установлен"));
         // Ошибка открытия файла
     } else {
+
         QTextStream in(&file);
         QString grubContent;
         QString timeoutStr;
 
-        // статические объекты QRegularExpression
-        static QRegularExpression timeoutRegex("^GRUB_TIMEOUT=\"(\\d+)\"$");
-        static QRegularExpression grubCmdlineRegex("^GRUB_CMDLINE_LINUX_DEFAULT=\"(.*)\"$");
+        // Обновленные регулярные выражения для поиска значений с обоими вариантами ковычек
+        static QRegularExpression timeoutRegex("^GRUB_TIMEOUT=['\"]?(\\d+)['\"]?$");
+        static QRegularExpression grubCmdlineRegex("^GRUB_CMDLINE_LINUX_DEFAULT=['\"]?(.*)['\"]?$");
 
         while (!in.atEnd()) {
             QString line = in.readLine();
@@ -196,6 +197,7 @@ void MainWindow::on_action_9_triggered()
                 QRegularExpressionMatch match = timeoutRegex.match(line);
                 if (match.hasMatch()) {
                     timeoutStr = match.captured(1).trimmed();
+                    timeoutStr.remove(QRegularExpression("[\"']")); // Удалить кавычки из значения
                 }
                 continue;
             }
@@ -204,11 +206,20 @@ void MainWindow::on_action_9_triggered()
                 QRegularExpressionMatch match = grubCmdlineRegex.match(line);
                 if (match.hasMatch()) {
                     grubContent = match.captured(1).trimmed();
+                    grubContent.remove(QRegularExpression("[\"']")); // Удалить кавычки из значения
+                }
+                else {
+                    // Если первая попытка не удалась, попробуйте другой вариант ковычек
+                    grubCmdlineRegex.setPattern("^GRUB_CMDLINE_LINUX_DEFAULT=['\"]?(.*)['\"]?$");
+                    match = grubCmdlineRegex.match(line);
+                    if (match.hasMatch()) {
+                        grubContent = match.captured(1).trimmed();
+                        grubContent.remove(QRegularExpression("[\"']")); // Удалить кавычки из значения
+                    }
                 }
                 break; // Закончит цикл поиска
             }
         }
-        file.close();
 
         int timeout = timeoutStr.toInt(); // получаем значение timeout из файла
         ui->spinBox_grub->setValue(timeout); // устанавливаем значение в QSpinBox
@@ -725,19 +736,20 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->statusBar->addPermanentWidget(progressBar);
 
     // Устанавливаем цвет для прогресс-бара
-    QColor customColor(42, 40, 112); // устанавливаем оранжевый цвет
+    QColor customColor(42, 40, 112);
     QPalette palette = progressBar->palette();
     palette.setColor(QPalette::Highlight, customColor);
     progressBar->setPalette(palette);
-    loadingListWidget();
 
 //-##################################################################################
 //-############################### ПРОДОЛЖАЕМ... ####################################
 //-##################################################################################
 
     mrpropper(); //зачистка говна
+    loadingListWidget();
     loadSettings(); //загрузка настроек
     loadContent(); //загрузка списков приложений игр и тп
+    //checkUpdates(); //проверка обнолвлений
 
     switch(mainpage) {
     case 0:
@@ -776,6 +788,13 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     connect(ui->spinBox_grub, SIGNAL(valueChanged(int)), this, SLOT(on_spinBox_grub_valueChanged(int)));
     connect(ui->timeEdit_update, &QTimeEdit::timeChanged, this, &MainWindow::onTimeChanged);
+
+    //таймер на каждый час
+    QTimer* timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &MainWindow::checkUpdates);
+    timer->setInterval(3600000);
+    timer->start();
+
     connect(ui->spinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::on_spinBox_valueChanged);
     showLoadingAnimation(false);
 }
@@ -899,7 +918,6 @@ QColor MainWindow::generateRandomColor()
         color = QColor::fromHsv(hue, saturation, value);
 
     } while (color.blue() > 200 || !color.isValid());
-
     return color;
 }
 
@@ -1153,6 +1171,34 @@ void MainWindow::loadContent() {
         // Выделяем всю строку при клике на ячейку
         ui->tableWidgetApp->setSelectionBehavior(QAbstractItemView::SelectRows);
     });
+}
+
+void MainWindow::checkUpdates()
+{
+    QProcess process;
+    process.start("yay", QStringList() << "-Suy");
+    process.waitForFinished();
+    QByteArray output = process.readAllStandardOutput();
+    QString str = " packages to upgrade/install";
+    int index = output.indexOf(str.toUtf8());
+
+    if (index != -1) {
+        // Извлечение количества доступных обновлений
+        QString countStr = output.mid(index - 3, 2);
+        int count = countStr.toInt();
+
+        QString message = QString("Доступно %1 обновлений. Пожалуйста, обновите систему.").arg(count);
+        showNotification("Обновление", message);
+    }
+}
+
+void MainWindow::showNotification(const QString& title, const QString& text) {
+    QProcess process;
+    QStringList arguments;
+    QString baseDir = QDir::homePath() + "/kLaus/other/";
+    arguments << title << text << "-i" << baseDir + "notify.png" << "-a" << "kLaus" << "-t" << "10000";
+    process.start("notify-send", arguments);
+    process.waitForFinished();
 }
 
 void MainWindow::loadingListWidget()

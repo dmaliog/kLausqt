@@ -32,7 +32,23 @@
    <string>kLaus - Arch Manager</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QTimeEdit, QSpinBox {
+   <string notr="true">* {
+    color: #ffffff;
+}
+
+
+QMessageBox {
+    background-color: #1f1f1f; /* Цвет фона MessageBox */
+    color: #FFFFFF; /* Цвет текста MessageBox */
+}
+
+QStatusBar {
+    background-color: #1f1f1f; /* Замените #FF0000 на желаемый цвет */
+    color: #FFFFFF; /* Замените #FFFFFF на желаемый цвет текста */
+}
+
+
+QTimeEdit, QSpinBox, QScrollArea {
     background-color:#272727;
 	border-radius:10px;
 	border:1px solid #3d3d3d; /* Цвет фона */
@@ -89,7 +105,7 @@ background-color: #322F85;
 QListWidget::item:selected, QTableView::item:selected { background-color: #1e1e1e; color: white;border:0; outline: none;}
 QListWidget::item:hover { background-color: #1e1e1e;border:0; outline: none;}
 
-QListWidget,QScrollArea {
+QListWidget {
     background-color: #242424;
     border: 5px solid #28276b;
     border-radius: 13px;
@@ -101,7 +117,7 @@ QListWidget::item {
 	border:0;
 }
 
-QMenu {
+QMenu  {
     background-color:#272727;
 border-radius:10px;
 border:1px solid #2c2e2d; /* Цвет фона */
@@ -112,7 +128,7 @@ QMenu::item {
     padding: 5px 20px; /* Внутренний отступ сверху и снизу, а также слева и справа */
 }
 
-QMenu::item:selected {
+QMenu::item:selected, QMessageBox QPushButton {
 	border-radius:10px;
 	padding: 5px 20px; /* Внутренний отступ сверху и снизу, а также слева и справа */
     background-color: #916ee4; /* Цвет фона при выборе */
@@ -415,9 +431,16 @@ QTableWidget#tableWidgetApp QHeaderView::section:first {
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">QTabWidget#tabWidget {
+     <string notr="true">QTabWidget {
     background-color: transparent;
     border: 0;
+}
+
+QTabWidget::pane { 
+	background-color: #242424;
+    border: 5px solid #28276b;
+    border-radius: 13px;
+	padding:6px 0;
 }
 
 QTabWidget#tabWidget QTabBar {
@@ -496,7 +519,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true"/>
+       <string notr="true">background:#272727;</string>
       </property>
       <property name="widgetResizable">
        <bool>true</bool>
@@ -506,8 +529,8 @@ QTabWidget#tabWidget QTabBar::tab:selected {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>349</width>
-         <height>139</height>
+         <width>359</width>
+         <height>149</height>
         </rect>
        </property>
        <widget class="QWidget" name="layoutWidget_2">
@@ -607,6 +630,9 @@ QTabWidget#tabWidget QTabBar::tab:selected {
         <height>121</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">background:#272727;</string>
+      </property>
       <property name="widgetResizable">
        <bool>true</bool>
       </property>
@@ -615,8 +641,8 @@ QTabWidget#tabWidget QTabBar::tab:selected {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>909</width>
-         <height>99</height>
+         <width>919</width>
+         <height>109</height>
         </rect>
        </property>
        <widget class="QWidget" name="layoutWidget_4">
@@ -833,16 +859,17 @@ QTabWidget#tabWidget QTabBar::tab:selected {
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>0</y>
-        <width>891</width>
-        <height>481</height>
+        <y>10</y>
+        <width>941</width>
+        <height>441</height>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background:none</string>
+       <string notr="true">background-color:#242424;
+border:0;</string>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; color:#5d58f8;&quot;&gt;kLaus&lt;/span&gt; - это всего-лишь взаимодействие между пользователем и помощниками AUR с базой скриптов и прочих мелочей. Он создавался исключительно ради удовлетворения некоторых хотелок, чтобы быстро и легко взаимодействовать с терминалом.&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#5d58f8;&quot;&gt;Поддержать:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;:/img/donate.png&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; color:#3f3ca9;&quot;&gt;Автор @dmali [vk.com/linux2] - GNU GENERAL PUBLIC LICENSE 2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; color:#5d58f8;&quot;&gt;kLaus&lt;/span&gt; - это всего-лишь взаимодействие между пользователем и помощниками AUR с базой скриптов и прочих мелочей. Он создавался исключительно ради удовлетворения некоторых хотелок, чтобы быстро и легко взаимодействовать с терминалом.&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#5d58f8;&quot;&gt;Поддержать:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;:/img/donate.png&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;span style=&quot; font-size:11pt; color:#3f3ca9;&quot;&gt;Автор @dmali [vk.com/linux2] - GNU GENERAL PUBLIC LICENSE 2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="textFormat">
        <enum>Qt::AutoText</enum>
@@ -857,56 +884,39 @@ QTabWidget#tabWidget QTabBar::tab:selected {
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QScrollArea" name="scrollArea_3">
-      <property name="geometry">
-       <rect>
-        <x>330</x>
-        <y>100</y>
-        <width>331</width>
-        <height>171</height>
-       </rect>
-      </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
-      </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents_3">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>309</width>
-         <height>149</height>
-        </rect>
-       </property>
-       <widget class="QLabel" name="label_8">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>20</y>
-          <width>281</width>
-          <height>111</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Exomoon Design Studio&lt;/p&gt;&lt;p&gt;Hasymi и Luvdat&lt;/p&gt;&lt;p&gt;Разработчикам KDE &lt;/p&gt;&lt;p&gt;Линусу Торвальдсу&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-        </property>
-       </widget>
-      </widget>
-     </widget>
      <widget class="QLabel" name="label_7">
       <property name="geometry">
        <rect>
-        <x>330</x>
-        <y>70</y>
+        <x>350</x>
+        <y>80</y>
         <width>121</width>
         <height>21</height>
        </rect>
       </property>
       <property name="text">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#5d58f8;&quot;&gt;Благодарности:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_8">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>110</y>
+        <width>281</width>
+        <height>161</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">    background-color:#272727;
+	border-radius:10px;
+	border:1px solid #3d3d3d; /* Цвет фона */
+    padding: 5px; /* Внутренний отступ */</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Exomoon Design Studio&lt;/p&gt;&lt;p&gt;Hasymi и Luvdat&lt;/p&gt;&lt;p&gt;Разработчикам KDE &lt;/p&gt;&lt;p&gt;Линусу Торвальдсу&lt;/p&gt;&lt;p&gt;dalto&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
       </property>
      </widget>
     </widget>

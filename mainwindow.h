@@ -56,6 +56,8 @@ public slots:
     void on_action_sh_triggered();
 
 private slots:
+    void checkUpdates();
+    void showNotification(const QString& title, const QString& text);
     void loadScripts(const QStringList& resourcePaths, const QString& baseDir, QListWidget* listWidget);
     void on_listWidget_2_itemDoubleClicked(QListWidgetItem *item);
     void on_listWidget_grub_itemDoubleClicked(QListWidgetItem *item);
