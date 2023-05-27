@@ -28,18 +28,77 @@
     <height>600</height>
    </size>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>10</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>kLaus - Arch Manager</string>
   </property>
   <property name="styleSheet">
    <string notr="true">* {
     color: #ffffff;
+	border:0;
 }
 
+QProgressBar {
+    /* Общие стили для QProgressBar */
+    background-color: #636363; /* Цвет фона */
+    border-radius: 2px; /* Закругление углов */
+    height: 4px; /* Высота прогресс-бара */
+    min-height:4px; /* Минимальная высота прогресс-бара */
+    max-height:4px; /* Максимальная высота прогресс-бара */
+    padding: 0; /* Удаление отступов */
+	margin:16px 0;
+}
+
+QProgressBar::chunk {
+    /* Стили для заполненной части прогресс-бара */
+    background-color: #2a2a68; /* Цвет заполненной части */
+    border-radius: 2px; /* Закругление углов */
+}
+
+QScrollBar:vertical {
+    width: 8px; /* Ширина полосы прокрутки */
+	background-color: #656766;
+	border-radius: 4px;
+}
+
+QScrollBar:horizontal {
+    height: 8px; /* Высота полосы прокрутки */
+	background-color: #656766;
+	border-radius: 4px;
+}
+
+QScrollBar::handle {
+	padding:60px 0;
+    background-color: #916ee4;
+    border-radius: 4px;
+} 
+
+QScrollBar::add-page, QScrollBar::sub-page {
+    background: none; /* Remove the background */
+}
+
+QScrollBar::add-line, QScrollBar::sub-line {
+    width: 0px; /* Set the width of the arrow buttons to 0 */
+}
+
+QListWidget::item:selected, QTableView::item:selected {
+    background-color: #1e1e1e;
+    color: white;
+    outline: none;
+}
+
+QListWidget::item:hover {
+    background-color: #1e1e1e;
+}
 
 QMessageBox {
     background-color: #1f1f1f; /* Цвет фона MessageBox */
     color: #FFFFFF; /* Цвет текста MessageBox */
+	font-size:10pt;
 }
 
 QStatusBar {
@@ -47,6 +106,9 @@ QStatusBar {
     color: #FFFFFF; /* Замените #FFFFFF на желаемый цвет текста */
 }
 
+QToolBar {
+	padding:5px;
+}
 
 QTimeEdit, QSpinBox, QScrollArea {
     background-color:#272727;
@@ -80,7 +142,7 @@ QComboBox {
 QComboBox::drop-down {
     subcontrol-origin: padding;
     subcontrol-position: top right;
-padding-right:10px;
+	padding-right:10px;
     width: 15px; /* Ширина стрелки выпадающего списка */
     image: url(:/img/m1.png); /* Изображение стрелки (замените на свое) */
 }
@@ -89,21 +151,13 @@ QComboBox::down-arrow {
     image: none; /* Убираем стандартное изображение стрелки */
 }
 
- QAbstractSpinBox::up-button { width: 0; height: 0; }
-    QAbstractSpinBox::down-button { width: 0; height: 0; }
-
-
-QToolTip {
-    display: none; /* Отключаем отображение подсказок */
-}
+QAbstractSpinBox::up-button { width: 0; height: 0; }
+QAbstractSpinBox::down-button { width: 0; height: 0; }
 
 #centralwidget{
 background: url(:/img/background.png) no-repeat bottom right;
 background-color: #322F85;
 }
-
-QListWidget::item:selected, QTableView::item:selected { background-color: #1e1e1e; color: white;border:0; outline: none;}
-QListWidget::item:hover { background-color: #1e1e1e;border:0; outline: none;}
 
 QListWidget {
     background-color: #242424;
@@ -113,14 +167,14 @@ QListWidget {
 }
 
 QListWidget::item {
-    padding: 2px 10px;
+    padding:10px;
 	border:0;
 }
 
 QMenu  {
     background-color:#272727;
-border-radius:10px;
-border:1px solid #2c2e2d; /* Цвет фона */
+	border-radius:15px;
+	border:1px solid #2c2e2d; /* Цвет фона */
     padding: 5px; /* Внутренний отступ */
  }
 
@@ -146,9 +200,9 @@ QMenu::icon {
 }
 
 QMenuBar { background-color: #1f1f1f; color: #ffffff;padding:3px; }
-                           QMenuBar::item { spacing: 3px; padding: 5px 10px;}
-                           QMenuBar::item:selected { border-radius:5px;background-color: #916ee4; }
-                           QMenuBar::item:pressed { border-radius:5px;background-color: #916ee4; }</string>
+QMenuBar::item { spacing: 3px; padding: 5px 10px;}
+QMenuBar::item:selected { border-radius:5px;background-color: #916ee4; }
+QMenuBar::item:pressed { border-radius:5px;background-color: #916ee4; }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="label1">
@@ -195,6 +249,9 @@ QMenuBar { background-color: #1f1f1f; color: #ffffff;padding:3px; }
       <pointsize>16</pointsize>
      </font>
     </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
     <property name="styleSheet">
      <string notr="true">QTableWidget#tableWidgetApp {
     background-color: #242424;
@@ -204,41 +261,44 @@ QMenuBar { background-color: #1f1f1f; color: #ffffff;padding:3px; }
 }
 
 QTableWidget#tableWidgetApp::item {
-    padding: 5px 10px;
-border:0;
+    padding:10px;
+    border:none;
 }
 
 QTableWidget#tableWidgetApp QHeaderView {
     background-color: #1f1f1f;
-    border: 0;
+    border:none;
 }
 
 QTableWidget#tableWidgetApp QHeaderView::section {
     background-color: #1f1f1f;
-border:0;
+    border:0;
+    padding:5px;
+    font-size:10pt;
+	font-weight: bold;
 }
 
 QTableWidget#tableWidgetApp QHeaderView::section:selected {
     background-color: #202020;
     color: #FFFFFF;
-border:0;
+    border:none;
 }
 
 QTableWidget#tableWidgetApp QHeaderView::section:hover {
     background-color: #202020;
     color: #FFFFFF;
-border:0;
+    border:none;
 }
 
 QTableWidget#tableWidgetApp QTableView::item {
-    padding: 5px;
-border:0;
+    padding:10px;
+    border:none;
 }
 
 QTableWidget#tableWidgetApp QTableView::item:selected {
     background-color: #916ee4;
     color: #FFFFFF;
-border:0;
+    border:none;
 }
 
 QTableWidget#tableWidgetApp QHeaderView::section:first {
@@ -349,6 +409,9 @@ QTableWidget#tableWidgetApp QHeaderView::section:first {
       <height>31</height>
      </rect>
     </property>
+    <property name="contextMenuPolicy">
+     <enum>Qt::NoContextMenu</enum>
+    </property>
     <property name="styleSheet">
      <string notr="true">QLineEdit#searchApp {
     padding: 0 30px;
@@ -381,6 +444,9 @@ QTableWidget#tableWidgetApp QHeaderView::section:first {
       <pointsize>16</pointsize>
      </font>
     </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
     <property name="styleSheet">
      <string notr="true"/>
     </property>
@@ -411,8 +477,8 @@ QTableWidget#tableWidgetApp QHeaderView::section:first {
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>1091</width>
-      <height>531</height>
+      <width>1089</width>
+      <height>535</height>
      </rect>
     </property>
     <property name="url">
@@ -467,7 +533,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -563,6 +629,9 @@ QTabWidget#tabWidget QTabBar::tab:selected {
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::NoContextMenu</enum>
+           </property>
           </widget>
          </item>
         </layout>
@@ -572,7 +641,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
          <rect>
           <x>20</x>
           <y>80</y>
-          <width>321</width>
+          <width>334</width>
           <height>42</height>
          </rect>
         </property>
@@ -692,7 +761,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="layoutWidget">
+       <widget class="QWidget" name="layoutWidget_6">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -728,6 +797,9 @@ QTabWidget#tabWidget QTabBar::tab:selected {
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::NoContextMenu</enum>
+           </property>
            <property name="layoutDirection">
             <enum>Qt::LeftToRight</enum>
            </property>
@@ -756,6 +828,9 @@ QTabWidget#tabWidget QTabBar::tab:selected {
       </property>
      </widget>
      <widget class="QCheckBox" name="checkBox_soundon">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -861,7 +936,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
         <x>10</x>
         <y>10</y>
         <width>941</width>
-        <height>441</height>
+        <height>51</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -869,7 +944,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 border:0;</string>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; color:#5d58f8;&quot;&gt;kLaus&lt;/span&gt; - это всего-лишь взаимодействие между пользователем и помощниками AUR с базой скриптов и прочих мелочей. Он создавался исключительно ради удовлетворения некоторых хотелок, чтобы быстро и легко взаимодействовать с терминалом.&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#5d58f8;&quot;&gt;Поддержать:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;:/img/donate.png&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;span style=&quot; font-size:11pt; color:#3f3ca9;&quot;&gt;Автор @dmali [vk.com/linux2] - GNU GENERAL PUBLIC LICENSE 2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; color:#5d58f8;&quot;&gt;kLaus&lt;/span&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; - &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;это всего-лишь взаимодействие между пользователем и помощниками AUR с базой скриптов и прочих мелочей. Он создавался исключительно ради удовлетворения некоторых хотелок, чтобы быстро и легко взаимодействовать с терминалом.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="textFormat">
        <enum>Qt::AutoText</enum>
@@ -887,7 +962,7 @@ border:0;</string>
      <widget class="QLabel" name="label_7">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>380</x>
         <y>80</y>
         <width>121</width>
         <height>21</height>
@@ -900,23 +975,71 @@ border:0;</string>
      <widget class="QLabel" name="label_8">
       <property name="geometry">
        <rect>
-        <x>340</x>
+        <x>380</x>
         <y>110</y>
         <width>281</width>
-        <height>161</height>
+        <height>171</height>
        </rect>
       </property>
       <property name="styleSheet">
        <string notr="true">    background-color:#272727;
 	border-radius:10px;
 	border:1px solid #3d3d3d; /* Цвет фона */
-    padding: 5px; /* Внутренний отступ */</string>
+    padding: 15px; /* Внутренний отступ */</string>
       </property>
       <property name="text">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Exomoon Design Studio&lt;/p&gt;&lt;p&gt;Hasymi и Luvdat&lt;/p&gt;&lt;p&gt;Разработчикам KDE &lt;/p&gt;&lt;p&gt;Линусу Торвальдсу&lt;/p&gt;&lt;p&gt;dalto&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_9">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>110</y>
+        <width>325</width>
+        <height>321</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">    background-color:#272727;
+	border-radius:10px;
+	border:1px solid #3d3d3d; /* Цвет фона */
+    padding: 15px; /* Внутренний отступ */</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/img/donate.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_10">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>80</y>
+        <width>261</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#5d58f8;&quot;&gt;Помогите развитию приложения:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_11">
+      <property name="geometry">
+       <rect>
+        <x>670</x>
+        <y>430</y>
+        <width>281</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#3d3d3d;&quot;&gt;Автор @dmali (vk.com/linux2) / GPL2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
     </widget>
@@ -935,6 +1058,9 @@ border:0;</string>
       <pointsize>12</pointsize>
      </font>
     </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
    </widget>
    <widget class="QListWidget" name="listWidget_2">
     <property name="geometry">
@@ -949,6 +1075,9 @@ border:0;</string>
      <font>
       <pointsize>12</pointsize>
      </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
    </widget>
    <widget class="QLabel" name="label2">
@@ -976,22 +1105,6 @@ border:0;</string>
     </property>
     <property name="margin">
      <number>0</number>
-    </property>
-   </widget>
-   <widget class="QTextEdit" name="textEdit_grub">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>40</y>
-      <width>751</width>
-      <height>48</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: #242424;
-border: 5px solid #28276b;
-border-radius: 13px;
-padding: 5px;</string>
     </property>
    </widget>
    <widget class="QLabel" name="label3_grub">
@@ -1062,6 +1175,9 @@ padding: 5px;</string>
       <pointsize>12</pointsize>
      </font>
     </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
@@ -1069,7 +1185,7 @@ padding: 5px;</string>
       <x>30</x>
       <y>140</y>
       <width>351</width>
-      <height>38</height>
+      <height>41</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -1077,7 +1193,7 @@ padding: 5px;</string>
       <widget class="QLabel" name="label_grub">
        <property name="font">
         <font>
-         <pointsize>10</pointsize>
+         <pointsize>11</pointsize>
         </font>
        </property>
        <property name="text">
@@ -1102,6 +1218,9 @@ padding: 5px;</string>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="contextMenuPolicy">
+        <enum>Qt::NoContextMenu</enum>
+       </property>
        <property name="styleSheet">
         <string notr="true">background-color: #242424;
 border: 5px solid #28276b;
@@ -1117,7 +1236,7 @@ padding: 5px;</string>
       <widget class="QLabel" name="label2_grub">
        <property name="font">
         <font>
-         <pointsize>10</pointsize>
+         <pointsize>11</pointsize>
         </font>
        </property>
        <property name="text">
@@ -1126,6 +1245,25 @@ padding: 5px;</string>
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_grub">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>751</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="contextMenuPolicy">
+     <enum>Qt::NoContextMenu</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: #242424;
+border: 5px solid #28276b;
+border-radius:13px;
+padding: 5px 7px;</string>
+    </property>
    </widget>
    <zorder>webEngineView</zorder>
    <zorder>listWidget_grub</zorder>
@@ -1138,9 +1276,9 @@ padding: 5px;</string>
    <zorder>listWidget_clear</zorder>
    <zorder>label1</zorder>
    <zorder>label2</zorder>
-   <zorder>textEdit_grub</zorder>
    <zorder>label3_grub</zorder>
    <zorder>label4_grub</zorder>
+   <zorder>lineEdit_grub</zorder>
    <zorder>tabWidget</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -1151,6 +1289,9 @@ padding: 5px;</string>
      <width>1162</width>
      <height>30</height>
     </rect>
+   </property>
+   <property name="inputMethodHints">
+    <set>Qt::ImhNone</set>
    </property>
    <widget class="QMenu" name="menu">
     <property name="title">
@@ -1191,8 +1332,17 @@ padding: 5px;</string>
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+     <kerning>true</kerning>
+    </font>
+   </property>
    <property name="focusPolicy">
     <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::NoContextMenu</enum>
    </property>
    <property name="windowTitle">
     <string>toolBar</string>
@@ -1209,7 +1359,7 @@ QToolBar#toolBar QToolButton {
 border:0;
 width:60px;
 padding: 10px 0;
-border-radius:5px;
+border-radius:10px;
 }
 QToolBar#toolBar QToolButton:hover {
 background-color:#1a1a1a;
@@ -1218,6 +1368,9 @@ background-color:#1a1a1a;
    </property>
    <property name="movable">
     <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::NoToolBarArea</set>
    </property>
    <property name="orientation">
     <enum>Qt::Vertical</enum>
@@ -1260,11 +1413,19 @@ background-color:#1a1a1a;
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
    <property name="mouseTracking">
     <bool>false</bool>
    </property>
    <property name="tabletTracking">
     <bool>false</bool>
+   </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::NoContextMenu</enum>
    </property>
    <property name="acceptDrops">
     <bool>false</bool>
@@ -1278,18 +1439,22 @@ background-color:#2d2b79;
 border:0;
 }
 QToolBar#toolBar_2 QToolButton {
-                              border:0;
-width:100px;
-padding: 18px 0;
-border-radius:5px;
-                          }
-                          QToolBar#toolBar_2 QToolButton:hover {
-                              background-color:#29286f;
-                          }
+	border:0;
+	width:100px;
+	padding: 18px 0;
+	margin:3px 0;
+	border-radius:15px;
+}
+QToolBar#toolBar_2 QToolButton:hover {
+	background-color:#29286f;
+}
 </string>
    </property>
    <property name="movable">
     <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::NoToolBarArea</set>
    </property>
    <property name="orientation">
     <enum>Qt::Vertical</enum>
@@ -1342,16 +1507,25 @@ border-radius:5px;
      <normaloff>:/img/1.png</normaloff>:/img/1.png</iconset>
    </property>
    <property name="text">
-    <string>Добавить пакет в каталог</string>
+    <string>Добавить приложение в каталог</string>
    </property>
    <property name="iconText">
-    <string>Добавить пакет в каталог</string>
+    <string notr="true"> </string>
    </property>
    <property name="toolTip">
-    <string>Добавить пакет в каталог</string>
+    <string> </string>
+   </property>
+   <property name="statusTip">
+    <string notr="true"/>
+   </property>
+   <property name="whatsThis">
+    <string notr="true"/>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
+   </property>
+   <property name="shortcutVisibleInContextMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="action_2">

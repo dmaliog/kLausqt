@@ -1,13 +1,6 @@
 #include "mainwindow.h"
 #include <QtWidgets>
 
-#include <QApplication>
-#include <QSystemTrayIcon>
-#include <QMenu>
-#include <QLocale>
-#include <QTranslator>
-#include <QLabel>
-
 bool isPackageInstalled(const QString& packageName)
 {
     QProcess process;

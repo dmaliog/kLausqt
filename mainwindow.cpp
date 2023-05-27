@@ -4,23 +4,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "qtimer.h"
-#include <QMessageBox>
-#include <QProcess>
-#include <QNetworkReply>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QSettings>
-#include <QDesktopServices>
-#include <QStorageInfo>
-#include <QProgressBar>
-#include <QFileDialog>
-#include <QtWebEngineWidgets/QWebEngineView>
-#include <QMovie>
-#include <QSound>
 #include <QtWebEngineWidgets>
-#include <QDebug>
 
 //---#####################################################################################################################################################
 //--############################################################## ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ################################################################
@@ -164,7 +148,7 @@ void MainWindow::on_action_9_triggered()
     ui->action_26->setVisible(true);
     ui->action_27->setVisible(true);
     ui->toolBar_2->setVisible(true);
-    ui->textEdit_grub->setVisible(true);
+    ui->lineEdit_grub->setVisible(true);
     ui->spinBox_grub->setVisible(true);
     ui->label_grub->setVisible(true);
     ui->label2_grub->setVisible(true);
@@ -177,9 +161,9 @@ void MainWindow::on_action_9_triggered()
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         ui->action_26->setDisabled(true);
-        ui->textEdit_grub->setDisabled(true);
+        ui->lineEdit_grub->setDisabled(true);
         ui->spinBox_grub->setDisabled(true);
-        ui->textEdit_grub->setText(tr("GRUB не установлен"));
+        ui->lineEdit_grub->setText(tr("GRUB не установлен"));
         // Ошибка открытия файла
     } else {
 
@@ -224,7 +208,7 @@ void MainWindow::on_action_9_triggered()
         int timeout = timeoutStr.toInt(); // получаем значение timeout из файла
         ui->spinBox_grub->setValue(timeout); // устанавливаем значение в QSpinBox
 
-        ui->textEdit_grub->setText(grubContent);
+        ui->lineEdit_grub->setText(grubContent);
     }
 
     showLoadingAnimation(false);
@@ -601,7 +585,7 @@ void MainWindow::on_action_30_triggered()
 void MainWindow::on_action_26_triggered()
 {
     QString filename = "/etc/default/grub";
-    QString grubContent = ui->textEdit_grub->toPlainText().trimmed();
+    QString grubContent = ui->lineEdit_grub->text().trimmed();
     QString timeout = ui->spinBox_grub->value() > 0 ? QString::number(ui->spinBox_grub->value()) : "5";
 
     // Создаем процесс для выполнения команды с pkexec
@@ -707,39 +691,49 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 //-##################################################################################
 //-############################### ЗАНЯТОЕ МЕСТО ####################################
 //-##################################################################################
-
     QProgressBar* progressBar = new QProgressBar();
-    progressBar->setFixedSize(200, 30);
+    progressBar->setFixedSize(50, 30);
 
     // Получаем информацию о корневом каталоге
     QStorageInfo storageInfo = QStorageInfo::root();
-
-    // Получаем общий объем диска в байтах
-    qint64 totalBytes = storageInfo.bytesTotal();
 
     // Получаем количество свободных байтов на диске
     qint64 freeBytes = storageInfo.bytesAvailable();
 
     // Вычисляем процент занятого места на диске
-    int usedPercentage = 100 - static_cast<int>((freeBytes * 100) / totalBytes);
-
-    // Получаем количество свободных гигабайтов на диске
-    double freeGB = freeBytes / (1024.0 * 1024.0 * 1024.0);
+    int usedPercentage = 100 - static_cast<int>((freeBytes * 100) / storageInfo.bytesTotal());
 
     // Устанавливаем значение прогресс-бара в процентах
     progressBar->setValue(usedPercentage);
 
     // Устанавливаем текст на прогресс-баре, отображающий количество свободных гигабайтов
-    QString text = QString(tr("свободно %1 ГиБ")).arg(QString::number(freeGB, 'f', 2));
-    progressBar->setFormat(text);
+    progressBar->setFormat("");
 
-    ui->statusBar->addPermanentWidget(progressBar);
+    QLabel* label = new QLabel(tr("свободно %1 ГиБ").arg(QString::number(freeBytes / (1024.0 * 1024.0 * 1024.0), 'f', 2)));
+
+    QWidget* containerWidget = new QWidget();
+    QHBoxLayout* layout = new QHBoxLayout(containerWidget);
+    layout->addStretch(); // Добавляем растягивающий элемент, чтобы выровнять элементы по правому краю
+    layout->addWidget(progressBar);
+    layout->addWidget(label);
+    layout->setContentsMargins(0, 0, 0, 0);
+
+    ui->statusBar->addPermanentWidget(containerWidget, 1); // Установите растягиваемый элемент с индексом 1
 
     // Устанавливаем цвет для прогресс-бара
     QColor customColor(42, 40, 112);
     QPalette palette = progressBar->palette();
     palette.setColor(QPalette::Highlight, customColor);
     progressBar->setPalette(palette);
+
+    // Выравниваем содержимое статусного бара по правому краю
+    QHBoxLayout* statusBarLayout = qobject_cast<QHBoxLayout*>(ui->statusBar->layout());
+    if (statusBarLayout) {
+        statusBarLayout->setAlignment(Qt::AlignRight);
+    }
+
+    // Выравниваем текст метки по правому краю
+    label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
 //-##################################################################################
 //-############################### ПРОДОЛЖАЕМ... ####################################
@@ -796,6 +790,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     timer->start();
 
     connect(ui->spinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::on_spinBox_valueChanged);
+
     showLoadingAnimation(false);
 }
 
@@ -812,18 +807,12 @@ void MainWindow::closeEvent(QCloseEvent*)
 
 void MainWindow::mrpropper() //зачистка говна перед началом каждой вкладки
 {
-    if(soundon == 0)
-    {
-        QSound *sound = new QSound(":/media/sound.wav", this);
-        sound->play();
-    }
-
     ui->tableWidgetApp->setVisible(false);
     ui->listWidget_clear->setVisible(false);
     ui->listWidget_2->setVisible(false);
     ui->listWidgetManager->setVisible(false);
     ui->listWidget_grub->setVisible(false);
-    ui->textEdit_grub->setVisible(false);
+    ui->lineEdit_grub->setVisible(false);
     ui->spinBox_grub->setVisible(false);
     ui->label_grub->setVisible(false);
     ui->label2_grub->setVisible(false);
