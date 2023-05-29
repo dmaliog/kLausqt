@@ -483,8 +483,8 @@ QTableWidget#tableWidgetApp QHeaderView::section:first {
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>1089</width>
-      <height>535</height>
+      <width>990</width>
+      <height>530</height>
      </rect>
     </property>
     <property name="url">
@@ -1278,7 +1278,6 @@ padding: 5px 7px;</string>
     </property>
    </widget>
    <zorder>tabWidget</zorder>
-   <zorder>webEngineView</zorder>
    <zorder>listWidget_grub</zorder>
    <zorder>layoutWidget</zorder>
    <zorder>listWidget_2</zorder>
@@ -1292,6 +1291,7 @@ padding: 5px 7px;</string>
    <zorder>label3_grub</zorder>
    <zorder>label4_grub</zorder>
    <zorder>lineEdit_grub</zorder>
+   <zorder>webEngineView</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -1508,6 +1508,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    <addaction name="action_26"/>
    <addaction name="action_27"/>
    <addaction name="action_30"/>
+   <addaction name="action_31"/>
+   <addaction name="action_32"/>
+   <addaction name="action_33"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="action_1">
@@ -1964,6 +1967,51 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="toolTip">
     <string>PKGBUILD</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_31">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/31.png</normaloff>:/img/31.png</iconset>
+   </property>
+   <property name="text">
+    <string>Домашняя</string>
+   </property>
+   <property name="toolTip">
+    <string> </string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_32">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/32.png</normaloff>:/img/32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Обновить</string>
+   </property>
+   <property name="toolTip">
+    <string> </string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_33">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/33.png</normaloff>:/img/33.png</iconset>
+   </property>
+   <property name="text">
+    <string>Копировать</string>
+   </property>
+   <property name="toolTip">
+    <string> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>

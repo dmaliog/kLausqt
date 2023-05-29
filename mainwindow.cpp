@@ -217,7 +217,9 @@ void MainWindow::on_action_3_triggered()
     mrpropper();
     page = 6;
     ui->label1->hide();
-    ui->toolBar_2->setVisible(false);
+    ui->action_31->setVisible(true);
+    ui->action_32->setVisible(true);
+    ui->action_33->setVisible(true);
 
     QWebEnginePage* pagez = ui->webEngineView->page();
     runScriptVK = false; // reset the flag
@@ -237,7 +239,9 @@ void MainWindow::on_action_8_triggered()
     mrpropper();
     page = 7;
     ui->label1->hide();
-    ui->toolBar_2->setVisible(false);
+    ui->action_31->setVisible(true);
+    ui->action_32->setVisible(true);
+    ui->action_33->setVisible(true);
 
     QWebEnginePage* pagez = ui->webEngineView->page();
     runScriptVK = true; // set the flag to true
@@ -268,7 +272,6 @@ void MainWindow::on_action_10_triggered()
     ui->label1->setText(tr("Информация о приложении"));
     ui->tabWidget->setVisible(true);
     ui->tabWidget->setCurrentIndex(2);
-    ui->toolBar_2->setVisible(false);
     showLoadingAnimation(false);
 }
 
@@ -366,6 +369,60 @@ void MainWindow::on_action_28_triggered()
 void MainWindow::on_action_29_triggered()
 {
     ui->tabWidget->setCurrentIndex(0);
+}
+
+void MainWindow::on_action_31_triggered()
+{
+    QWebEnginePage* pagez = ui->webEngineView->page();
+    if (page == 6)
+    {
+        runScriptVK = false; // reset the flag
+        pagez->load(QUrl("https://wiki.archlinux.org/title/General_recommendations_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)"));
+
+        QObject::connect(ui->webEngineView->page(), &QWebEnginePage::loadFinished, this, [=]() {
+            if (page == 6) {
+                showLoadingAnimation(false);
+                ui->webEngineView->show();
+            }
+        });
+    }
+    if (page == 7)
+    {
+        runScriptVK = true; // set the flag to true
+        pagez->load(QUrl("https://vk.com/@linux2-main"));
+
+        QObject::connect(pagez, &QWebEnginePage::loadFinished, this, [=]() {
+
+            // execute the script only if the flag is set to true
+            if (runScriptVK && page == 7) {
+                QFile scriptFile(":/vk_dark_theme.user.js"); // путь к файлу vk_dark_theme.user.js
+                if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                    QTextStream stream(&scriptFile);
+                    QString script = stream.readAll();
+                    pagez->runJavaScript(script);
+                    showLoadingAnimation(false);
+                    ui->webEngineView->show();
+                }
+            }
+        });
+    }
+}
+
+void MainWindow::on_action_32_triggered()
+{
+    ui->webEngineView->reload();
+    sendNotification(tr("Обновление"), tr("Страница успешно обновлена!"));
+}
+
+
+void MainWindow::on_action_33_triggered()
+{
+    QUrl url = ui->webEngineView->url();
+    QString urlString = url.toDisplayString();
+
+    QClipboard *clipboard = QGuiApplication::clipboard();
+    clipboard->setText(urlString);
+    sendNotification(tr("Буфер обмена"), tr("Ссылка успешно скопирована в буфер обмена!"));
 }
 
 void MainWindow::on_action_11_triggered()
@@ -843,9 +900,12 @@ void MainWindow::mrpropper() //зачистка говна перед начал
     ui->action_28->setVisible(false);
     ui->action_29->setVisible(false);
     ui->action_30->setVisible(false);
+    ui->action_31->setVisible(false);
+    ui->action_32->setVisible(false);
+    ui->action_33->setVisible(false);
     ui->webEngineView->setVisible(false);
     ui->label2->setVisible(false);
-    ui->toolBar_2->setVisible(true);
+
     ui->label1->show();
 
     if(soundon == 0)

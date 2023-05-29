@@ -84,6 +84,9 @@ private slots:
     void on_checkBox_4_stateChanged();
     void on_checkBox_5_stateChanged();
     void on_pushButton_3_clicked();
+    void on_action_31_triggered();
+    void on_action_32_triggered();
+    void on_action_33_triggered();
 };
 
 #endif // MAINWINDOW_H

@@ -72,5 +72,8 @@
         <file>other/notify.png</file>
         <file>img/donate.png</file>
         <file>media/message.wav</file>
+        <file>img/31.png</file>
+        <file>img/32.png</file>
+        <file>img/33.png</file>
     </qresource>
 </RCC>
