@@ -28,6 +28,12 @@
     <height>600</height>
    </size>
   </property>
+  <property name="baseSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
   <property name="font">
    <font>
     <pointsize>10</pointsize>
@@ -110,7 +116,7 @@ QToolBar {
 	padding:5px;
 }
 
-QTimeEdit, QSpinBox, QScrollArea {
+QTimeEdit, QSpinBox, QScrollArea,QComboBox QAbstractItemView {
     background-color:#272727;
 	border-radius:10px;
 	border:1px solid #3d3d3d; /* Цвет фона */
@@ -328,22 +334,6 @@ QTableWidget#tableWidgetApp QHeaderView::section:first {
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="1">
-       <widget class="QPushButton" name="pushButton_3">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>ОК</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="0">
        <widget class="QLineEdit" name="login">
         <property name="focusPolicy">
@@ -372,6 +362,22 @@ QTableWidget#tableWidgetApp QHeaderView::section:first {
         </property>
         <property name="clearButtonEnabled">
          <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QPushButton" name="pushButton_3">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>ОК</string>
         </property>
        </widget>
       </item>
@@ -533,7 +539,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -668,6 +674,12 @@ QTabWidget#tabWidget QTabBar::tab:selected {
            </property>
            <property name="styleSheet">
             <string notr="true"/>
+           </property>
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <property name="maxVisibleItems">
+            <number>8</number>
            </property>
            <item>
             <property name="text">
@@ -829,7 +841,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
      </widget>
      <widget class="QCheckBox" name="checkBox_soundon">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="geometry">
        <rect>
@@ -1265,6 +1277,7 @@ border-radius:13px;
 padding: 5px 7px;</string>
     </property>
    </widget>
+   <zorder>tabWidget</zorder>
    <zorder>webEngineView</zorder>
    <zorder>listWidget_grub</zorder>
    <zorder>layoutWidget</zorder>
@@ -1279,7 +1292,6 @@ padding: 5px 7px;</string>
    <zorder>label3_grub</zorder>
    <zorder>label4_grub</zorder>
    <zorder>lineEdit_grub</zorder>
-   <zorder>tabWidget</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -1510,10 +1522,10 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Добавить приложение в каталог</string>
    </property>
    <property name="iconText">
-    <string notr="true"> </string>
+    <string notr="true">Добавить приложение в каталог</string>
    </property>
    <property name="toolTip">
-    <string> </string>
+    <string>Добавить приложение в каталог</string>
    </property>
    <property name="statusTip">
     <string notr="true"/>
@@ -1745,6 +1757,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
+   </property>
+   <property name="shortcutVisibleInContextMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="action_16">

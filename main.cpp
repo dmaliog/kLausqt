@@ -13,8 +13,9 @@ bool isPackageInstalled(const QString& packageName)
 
 int main(int argc, char *argv[])
 {
-
     QApplication a(argc, argv);
+    MainWindow w;
+
     a.setWindowIcon(QIcon(":/img/2.png"));
 
     const char* semaphoreName = "kLausSemaphore";
@@ -26,9 +27,10 @@ int main(int argc, char *argv[])
         semaphore.detach();
     }
 
+
     // Создаем семафор, если он не существует
     if (!semaphore.create(1)) {
-        QMessageBox::information(nullptr, "Внимание", "Приложение уже запущено!");
+        w.sendNotification("Внимание", "Приложение уже запущено!");
         return 1;
     }
 
@@ -36,18 +38,19 @@ int main(int argc, char *argv[])
     bool yayInstalled = isPackageInstalled("yay");
     bool konsoleInstalled = isPackageInstalled("konsole");
 
+
     if (!pacmanInstalled) {
-        QMessageBox::critical(nullptr, "Ошибка", "Доступно только для Arch-дистрибутивов!!!");
+        w.sendNotification("Ошибка", "Доступно только для Arch-дистрибутивов!!!");
         return 1;
     }
 
     if (!yayInstalled) {
-        QMessageBox::critical(nullptr, "Ошибка", "Помощник yay не установлен. Установите его самостоятельно!");
+        w.sendNotification("Ошибка", "Помощник yay не установлен. Установите его самостоятельно!");
         return 1;
     }
 
     if (!konsoleInstalled) {
-        QMessageBox::critical(nullptr, "Ошибка", "Терминал konsole не установлен. Установите его самостоятельно!");
+        w.sendNotification("Ошибка", "Терминал konsole не установлен. Установите его самостоятельно!");
         return 1;
     }
 
@@ -70,7 +73,6 @@ int main(int argc, char *argv[])
         }
     }
 
-    MainWindow w;
     w.show();
 
     // Создание иконки для трея

@@ -5,6 +5,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QtWebEngineWidgets>
+#include <QSoundEffect>
 
 //---#####################################################################################################################################################
 //--############################################################## ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ################################################################
@@ -59,9 +60,8 @@ void MainWindow::on_action_2_triggered()
     ui->action_6->setVisible(true);
     ui->action_16->setVisible(true);
     ui->action_30->setVisible(true);
-    ui->toolBar_2->show();
-    ui->tableWidgetApp->show(); //Показываем список устнановить
-    ui->searchApp->show();
+    ui->tableWidgetApp->setVisible(true); //Показываем список устнановить
+    ui->searchApp->setVisible(true);
     showLoadingAnimation(false);
 }
 
@@ -82,7 +82,6 @@ void MainWindow::on_action_17_triggered()
     ui->action_21->setVisible(true);
     ui->action_22->setVisible(true);
     ui->action_23->setVisible(true);
-    ui->toolBar_2->setVisible(true);
     showLoadingAnimation(false);
 }
 
@@ -109,7 +108,6 @@ void MainWindow::on_action_7_triggered()
     ui->action_11->setVisible(true);
     ui->action_24->setVisible(true);
     ui->action_25->setVisible(true);
-    ui->toolBar_2->setVisible(true);
     ui->listWidgetManager->show();
 
     // Очищаем listWidgetManager
@@ -147,7 +145,6 @@ void MainWindow::on_action_9_triggered()
 
     ui->action_26->setVisible(true);
     ui->action_27->setVisible(true);
-    ui->toolBar_2->setVisible(true);
     ui->lineEdit_grub->setVisible(true);
     ui->spinBox_grub->setVisible(true);
     ui->label_grub->setVisible(true);
@@ -220,6 +217,7 @@ void MainWindow::on_action_3_triggered()
     mrpropper();
     page = 6;
     ui->label1->hide();
+    ui->toolBar_2->setVisible(false);
 
     QWebEnginePage* pagez = ui->webEngineView->page();
     runScriptVK = false; // reset the flag
@@ -239,6 +237,7 @@ void MainWindow::on_action_8_triggered()
     mrpropper();
     page = 7;
     ui->label1->hide();
+    ui->toolBar_2->setVisible(false);
 
     QWebEnginePage* pagez = ui->webEngineView->page();
     runScriptVK = true; // set the flag to true
@@ -269,6 +268,7 @@ void MainWindow::on_action_10_triggered()
     ui->label1->setText(tr("Информация о приложении"));
     ui->tabWidget->setVisible(true);
     ui->tabWidget->setCurrentIndex(2);
+    ui->toolBar_2->setVisible(false);
     showLoadingAnimation(false);
 }
 
@@ -280,9 +280,8 @@ void MainWindow::on_action_12_triggered()
     ui->label1->setText(tr("Дополнительные настройки"));
     ui->action_28->setVisible(true);
     ui->action_29->setVisible(true);
-    ui->toolBar_2->setVisible(true);
-
     ui->tabWidget->setVisible(true);
+
     ui->checkBox_trayon->setChecked(trayon == 1);
     ui->checkBox_soundon->setChecked(soundon == 1);
     ui->checkBox_1->setChecked(table1 == 1);
@@ -371,9 +370,10 @@ void MainWindow::on_action_29_triggered()
 
 void MainWindow::on_action_11_triggered()
 {
-    QProcess process;
-    process.setProcessChannelMode(QProcess::MergedChannels);
-    process.startDetached("konsole", QStringList() << "--hold" << "-e" << "yay -Syu");
+    QProcess updateProcess;
+    updateProcess.setProcessChannelMode(QProcess::MergedChannels);
+    updateProcess.startDetached("konsole", QStringList() << "--hold" << "-e" << "yay -Syu");
+    updateProcess.waitForFinished();
 }
 
 void MainWindow::on_action_24_triggered()
@@ -425,7 +425,7 @@ void MainWindow::on_action_5_triggered()
                     }
                     process->startDetached("konsole", QStringList() << "-e" << program);
                 } else {
-                    QMessageBox::information(this, tr("Пакет не найден"), "Пакет " + packageName + tr(" не найден в системе!"));
+                    sendNotification(tr("Пакет не найден"), tr("Пакет ") + packageName + tr(" не найден в системе!"));
                 }
                 process->deleteLater();
             });
@@ -433,14 +433,14 @@ void MainWindow::on_action_5_triggered()
             // Обработчик вывода ошибок из процесса
             connect(process, &QProcess::readyReadStandardError, this, [=]() {
                 QString error = process->readAllStandardError();
-                QMessageBox::critical(this, "Ошибка", error);
+                sendNotification(tr("Ошибка"), error);
                 process->deleteLater();
             });
 
             // Запускаем процесс
             process->start("yay", QStringList() << "-Qi" << packageName);
         } else
-            QMessageBox::information(this, tr("Внимание"), tr("Выберите пакет из списка для запуска!"));
+            sendNotification(tr("Внимание"), tr("Выберите пакет из списка для запуска!"));
 
     } else {
         if (ui->listWidgetManager->currentItem() != nullptr) {
@@ -449,7 +449,7 @@ void MainWindow::on_action_5_triggered()
             QProcess* process = new QProcess(this);
              process->startDetached("konsole", QStringList() << "--hold" << "-e" << packageName);
         } else
-            QMessageBox::information(this, tr("Внимание"), tr("Выберите пакет из списка для запуска!"));
+            sendNotification(tr("Внимание"), tr("Выберите пакет из списка для запуска!"));
     }
 }
 
@@ -475,7 +475,7 @@ void MainWindow::on_action_6_triggered()
 
                     process->startDetached("konsole", QStringList() << "-e" << "yay -R " + packageName);
                 } else
-                    QMessageBox::information(this, tr("Пакет не найден"), tr("Пакет ") + packageName + tr(" не найден в системе!"));
+                    sendNotification(tr("Пакет не найден"), tr("Пакет ") + packageName + tr(" не найден в системе!"));
 
                 process->deleteLater();
             });
@@ -483,14 +483,14 @@ void MainWindow::on_action_6_triggered()
             // Обработчик вывода ошибок из процесса
             connect(process, &QProcess::readyReadStandardError, this, [=]() {
                 QString error = process->readAllStandardError();
-                QMessageBox::critical(this, "Ошибка", error);
+                sendNotification(tr("Ошибка"), error);
                 process->deleteLater();
             });
 
             // Запускаем процесс
             process->start("yay", QStringList() << "-Qi" << packageName);
         } else
-            QMessageBox::information(this, tr("Внимание"), tr("Выберите пакет из списка для удаления!"));
+            sendNotification(tr("Внимание"), tr("Выберите пакет из списка для удаления!"));
 
     } else {
         if (ui->listWidgetManager->currentItem() != nullptr) {
@@ -499,7 +499,7 @@ void MainWindow::on_action_6_triggered()
             QProcess* process = new QProcess(this);
              process->startDetached("konsole", QStringList() << "-e" << "yay -R " + packageName);
         } else
-             QMessageBox::information(this, tr("Внимание"), tr("Выберите пакет из списка для удаления!"));
+             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для удаления!"));
     }
 }
 
@@ -513,7 +513,7 @@ void MainWindow::on_action_4_triggered()
             QProcess* process = new QProcess(this);
             process->startDetached("konsole", QStringList() << "-e" << "yay -S " + packageName);
          } else
-            QMessageBox::information(this, tr("Внимание"), tr("Выберите пакет из списка для установки!"));
+            sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
 
     } else {
         if (ui->listWidgetManager->currentItem() != nullptr) {
@@ -522,7 +522,7 @@ void MainWindow::on_action_4_triggered()
             QProcess* process = new QProcess(this);
              process->startDetached("konsole", QStringList() << "-e" << "yay -S " + packageName);
         } else
-             QMessageBox::information(this, tr("Внимание"), tr("Выберите пакет из списка для установки!"));
+             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
     }
 }
 
@@ -578,7 +578,7 @@ void MainWindow::on_action_30_triggered()
         QProcess* process = new QProcess(this);
         process->startDetached("konsole", QStringList() << "-e" << command);
     } else {
-        QMessageBox::information(this, tr("Внимание"), tr("Выберите пакет из списка для установки!"));
+        sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
     }
 }
 
@@ -598,13 +598,13 @@ void MainWindow::on_action_26_triggered()
     // Запускаем процесс с pkexec
     process.start();
     if (!process.waitForStarted()) {
-        QMessageBox::warning(this, tr("Ошибка выполнения"), tr("Не удалось запустить pkexec"));
+        sendNotification(tr("Ошибка выполнения"), tr("Не удалось запустить pkexec"));
         return;
     }
 
     // Ждем, пока процесс завершится
     if (!process.waitForFinished(-1)) {
-        QMessageBox::warning(this, tr("Ошибка выполнения"), tr("Не удалось выполнить команду pkexec"));
+        sendNotification(tr("Ошибка выполнения"), tr("Не удалось выполнить команду pkexec"));
         return;
     }
 
@@ -612,7 +612,7 @@ void MainWindow::on_action_26_triggered()
     if (process.exitCode() != QProcess::NormalExit || process.exitStatus() != QProcess::ExitStatus::NormalExit) {
         return;
     }
-    QMessageBox::information(this, tr("GRUB изменен"), tr("Изменения GRUB вступят в силу после перезагрузки."));
+    sendNotification(tr("GRUB изменен"), tr("Изменения GRUB вступят в силу после перезагрузки."));
 }
 
 void MainWindow::on_action_16_triggered()
@@ -739,6 +739,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 //-############################### ПРОДОЛЖАЕМ... ####################################
 //-##################################################################################
 
+    removeToolButtonTooltips(ui->toolBar);
+
     mrpropper(); //зачистка говна
     loadingListWidget();
     loadSettings(); //загрузка настроек
@@ -805,6 +807,7 @@ void MainWindow::closeEvent(QCloseEvent*)
         QApplication::quit();
 }
 
+
 void MainWindow::mrpropper() //зачистка говна перед началом каждой вкладки
 {
     ui->tableWidgetApp->setVisible(false);
@@ -821,7 +824,6 @@ void MainWindow::mrpropper() //зачистка говна перед начал
     ui->wlogin->setVisible(false);
     ui->tabWidget->setVisible(false);
     ui->searchApp->setVisible(false);
-    ui->toolBar_2->setVisible(false);
     ui->action_4->setVisible(false);
     ui->action_5->setVisible(false);
     ui->action_6->setVisible(false);
@@ -843,8 +845,30 @@ void MainWindow::mrpropper() //зачистка говна перед начал
     ui->action_30->setVisible(false);
     ui->webEngineView->setVisible(false);
     ui->label2->setVisible(false);
-    showLoadingAnimation(true);
+    ui->toolBar_2->setVisible(true);
     ui->label1->show();
+
+    if(soundon == 0)
+    {
+        loadSound(0);
+    }
+    showLoadingAnimation(true);
+}
+
+void MainWindow::loadSound(int soundIndex)
+{
+    QSoundEffect* beep = new QSoundEffect(this);
+    QString soundPath;
+
+    if (soundIndex == 1) {
+        soundPath = "qrc:/media/message.wav";
+    } else {
+        soundPath = "qrc:/media/sound.wav";
+    }
+
+    beep->setSource(QUrl(soundPath));
+    beep->setVolume(1.0f);
+    beep->play();
 }
 
 void MainWindow::loadSettings()
@@ -1016,6 +1040,7 @@ void MainWindow::showLoadingAnimation(bool show)
         });
         hideTimer->start(300);
     }
+    removeToolButtonTooltips(ui->toolBar_2);
 }
 
 void MainWindow::handleServerResponse(QNetworkReply *reply)
@@ -1177,17 +1202,8 @@ void MainWindow::checkUpdates()
         int count = countStr.toInt();
 
         QString message = QString("Доступно %1 обновлений. Пожалуйста, обновите систему.").arg(count);
-        showNotification("Обновление", message);
+        sendNotification("Обновление", message);
     }
-}
-
-void MainWindow::showNotification(const QString& title, const QString& text) {
-    QProcess process;
-    QStringList arguments;
-    QString baseDir = QDir::homePath() + "/kLaus/other/";
-    arguments << title << text << "-i" << baseDir + "notify.png" << "-a" << "kLaus" << "-t" << "10000";
-    process.start("notify-send", arguments);
-    process.waitForFinished();
 }
 
 void MainWindow::loadingListWidget()
@@ -1276,6 +1292,15 @@ void MainWindow::loadScripts(const QStringList& resourcePaths, const QString& ba
     }
 }
 
+void MainWindow::sendNotification(const QString& title, const QString& message)
+{
+    QStringList arguments;
+    arguments << title << message << "-i" << QDir::homePath() + "/kLaus/other/notify.png" << "-a" << "kLaus" << "-t" << "10000";
+
+    QProcess::startDetached("notify-send", arguments);
+    loadSound(1);
+}
+
 //---#####################################################################################################################################################
 //--################################################################## СОБЫТИЯ ФУНКЦИЙ ##################################################################
 //-#####################################################################################################################################################
@@ -1299,7 +1324,7 @@ void MainWindow::on_timeEdit_update_timeChanged(const QTime &time)
         timeupdate = time; // Обновляем глобальную переменную timeupdate
         settings.setValue("TimeUpdate", timeupdate.toString("HH:mm")); // Сохраняем значение времени в настройках
     } else
-        QMessageBox::critical(nullptr, tr("Ошибка"), tr("Неверный формат времени."));
+        sendNotification(tr("Ошибка"), tr("Неверный формат времени."));
 }
 
 void MainWindow::on_checkBox_trayon_stateChanged()
@@ -1488,3 +1513,19 @@ void MainWindow::on_listWidget_clear_itemDoubleClicked(QListWidgetItem *item) {
     }
 }
 
+void MainWindow::removeToolButtonTooltips(QToolBar* toolbar) {
+    // Получение стиля текущей темы
+    QStyle* style = qApp->style();
+
+    QList<QAction*> actions = toolbar->actions();
+
+    // Отключение отображения подсказок для виджетов
+    for (QAction* action : actions) {
+        QWidget* widget = toolbar->widgetForAction(action);
+        if (widget) {
+            widget->setToolTip("");
+            widget->setStyle(style);
+            widget->setToolTipDuration(0); // Отключение подсказок
+        }
+    }
+}

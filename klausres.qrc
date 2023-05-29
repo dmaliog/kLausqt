@@ -71,5 +71,6 @@
         <file>clear/yay.sh</file>
         <file>other/notify.png</file>
         <file>img/donate.png</file>
+        <file>media/message.wav</file>
     </qresource>
 </RCC>

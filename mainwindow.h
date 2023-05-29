@@ -54,10 +54,10 @@ public slots:
     void on_action_29_triggered();
     void on_action_30_triggered();
     void on_action_sh_triggered();
+    void sendNotification(const QString& title, const QString& message);
 
 private slots:
     void checkUpdates();
-    void showNotification(const QString& title, const QString& text);
     void loadScripts(const QStringList& resourcePaths, const QString& baseDir, QListWidget* listWidget);
     void on_listWidget_2_itemDoubleClicked(QListWidgetItem *item);
     void on_listWidget_grub_itemDoubleClicked(QListWidgetItem *item);
@@ -68,6 +68,8 @@ private slots:
     void handleServerResponse(QNetworkReply* reply);
     void openDirectory(const QString &dirPath);
     void on_spinBox_valueChanged(int arg1);
+    void removeToolButtonTooltips(QToolBar* toolbar);
+    void loadSound(int soundIndex);
     void loadSettings();
     void loadContent();
     void loadingListWidget();
