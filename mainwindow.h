@@ -5,9 +5,29 @@
 #include <QListWidgetItem>
 #include <QNetworkAccessManager>
 
+#include <QString>
+#include <QVector>
+
+struct Terminal {
+    QString binary;
+    QString args;
+};
+
+const QVector<Terminal> m_terminalList = {
+    {"/usr/bin/konsole", "-e"},
+    {"/usr/bin/gnome-terminal", "--"},
+    {"/usr/bin/xfce4-terminal", "-x"},
+    {"/usr/bin/lxterminal", "-e"},
+    {"/usr/bin/xterm", "-e"},
+    {"/usr/bin/alacritty", "-e"}
+};
+
+Terminal getTerminal();
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
+
 
 class MainWindow : public QMainWindow
 {

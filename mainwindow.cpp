@@ -32,6 +32,23 @@ std::string secpass = "root"; // правильный пароль
 bool runScriptVK = false; // проверка на VK скрипт
 
 //---#####################################################################################################################################################
+//--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
+//-#####################################################################################################################################################
+
+Terminal getTerminal()
+{
+    // Итерируемся по списку, пока не найдем установленный терминал
+    for (const Terminal &terminal : m_terminalList) {
+        if (QFile::exists(terminal.binary)) {
+            return terminal;
+        }
+    }
+
+    // Возвращаем пустой объект Terminal, если не найден ни один терминал
+    return Terminal();
+}
+
+//---#####################################################################################################################################################
 //--################################################################# ОСНОВНЫЕ ФУНКЦИИ ##################################################################
 //-#####################################################################################################################################################
 
@@ -428,35 +445,39 @@ void MainWindow::on_action_33_triggered()
 void MainWindow::on_action_11_triggered()
 {
     QProcess updateProcess;
+    Terminal terminal = getTerminal();
     updateProcess.setProcessChannelMode(QProcess::MergedChannels);
-    updateProcess.startDetached("konsole", QStringList() << "--hold" << "-e" << "yay -Syu");
+    updateProcess.startDetached(terminal.binary, QStringList() << terminal.args << "yay -Syu");
     updateProcess.waitForFinished();
 }
 
 void MainWindow::on_action_24_triggered()
 {
     QProcess process;
+    Terminal terminal = getTerminal();
     process.setProcessChannelMode(QProcess::MergedChannels);
-    process.startDetached("konsole", QStringList() << "-e" << "bash" << "-c" << "yay -Rs $(yay -Qdtq); read");
+    process.startDetached(terminal.binary, QStringList() << terminal.args << "yay -Rs $(yay -Qdtq); read");
 }
 
 void MainWindow::on_action_25_triggered()
 {
     QProcess process;
     process.setProcessChannelMode(QProcess::MergedChannels);
+    Terminal terminal = getTerminal();
+
 
     switch(yaycache) {
     case 0:
-        process.startDetached("konsole", QStringList() << "--hold" << "-e" << "yay -Sc");
+        process.startDetached(terminal.binary, QStringList() << terminal.args << "yay -Sc");
         break;
     case 1:
-        process.startDetached("konsole", QStringList() << "--hold" << "-e" << "yay -Scc");
+        process.startDetached(terminal.binary, QStringList() << terminal.args << "yay -Scc");
         break;
     case 2:
-        process.startDetached("konsole", QStringList() << "--hold" << "-e" << "paccache -rvk3");
+        process.startDetached(terminal.binary, QStringList() << terminal.args << "paccache -rvk3");
         break;
     default:
-        process.startDetached("konsole", QStringList() << "--hold" << "-e" << "yay -Sc");
+        process.startDetached(terminal.binary, QStringList() << terminal.args << "yay -Sc");
         break;
     }
 }
@@ -480,7 +501,9 @@ void MainWindow::on_action_5_triggered()
                     if (program.endsWith("-bin") || program.endsWith("-git") || program.endsWith("-qt") || program.endsWith("-qt4") || program.endsWith("-qt5") || program.endsWith("-qt6") || program.endsWith("qt-") || program.endsWith("qt4-") || program.endsWith("qt5-") || program.endsWith("qt6-") || program.endsWith("-gtk") || program.endsWith("-gtk2") || program.endsWith("-gtk3")) {
                         program.chop(4); // Убираем "-bin" или "-git" из имени программы
                     }
-                    process->startDetached("konsole", QStringList() << "-e" << program);
+
+                    Terminal terminal = getTerminal();
+                    QProcess::startDetached(terminal.binary, QStringList() << terminal.args << program);
                 } else {
                     sendNotification(tr("Пакет не найден"), tr("Пакет ") + packageName + tr(" не найден в системе!"));
                 }
@@ -503,8 +526,8 @@ void MainWindow::on_action_5_triggered()
         if (ui->listWidgetManager->currentItem() != nullptr) {
             QString packageName = ui->listWidgetManager->currentItem()->text();
             packageName = packageName.left(packageName.indexOf(" "));
-            QProcess* process = new QProcess(this);
-             process->startDetached("konsole", QStringList() << "--hold" << "-e" << packageName);
+            Terminal terminal = getTerminal();
+            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << packageName);
         } else
             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для запуска!"));
     }
@@ -530,7 +553,8 @@ void MainWindow::on_action_6_triggered()
                         program.chop(4); // Убираем "-bin" или "-git" из имени программы
                     }
 
-                    process->startDetached("konsole", QStringList() << "-e" << "yay -R " + packageName);
+                    Terminal terminal = getTerminal();
+                    QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -R " + packageName);
                 } else
                     sendNotification(tr("Пакет не найден"), tr("Пакет ") + packageName + tr(" не найден в системе!"));
 
@@ -553,8 +577,8 @@ void MainWindow::on_action_6_triggered()
         if (ui->listWidgetManager->currentItem() != nullptr) {
             QString packageName = ui->listWidgetManager->currentItem()->text();
             packageName = packageName.left(packageName.indexOf(" "));
-            QProcess* process = new QProcess(this);
-             process->startDetached("konsole", QStringList() << "-e" << "yay -R " + packageName);
+            Terminal terminal = getTerminal();
+            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -R " + packageName);
         } else
              sendNotification(tr("Внимание"), tr("Выберите пакет из списка для удаления!"));
     }
@@ -567,8 +591,8 @@ void MainWindow::on_action_4_triggered()
     {
         if (ui->tableWidgetApp->currentItem() != nullptr) {
             QString packageName = ui->tableWidgetApp->item(ui->tableWidgetApp->currentRow(), 0)->text();
-            QProcess* process = new QProcess(this);
-            process->startDetached("konsole", QStringList() << "-e" << "yay -S " + packageName);
+            Terminal terminal = getTerminal();
+            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -S " + packageName);
          } else
             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
 
@@ -576,8 +600,8 @@ void MainWindow::on_action_4_triggered()
         if (ui->listWidgetManager->currentItem() != nullptr) {
             QString packageName = ui->listWidgetManager->currentItem()->text();
             packageName = packageName.left(packageName.indexOf(" "));
-            QProcess* process = new QProcess(this);
-             process->startDetached("konsole", QStringList() << "-e" << "yay -S " + packageName);
+            Terminal terminal = getTerminal();
+            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -S " + packageName);
         } else
              sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
     }
@@ -632,8 +656,8 @@ void MainWindow::on_action_30_triggered()
 
         QString command = QString("bash -c '%1'").arg(script.arg(packageName));
 
-        QProcess* process = new QProcess(this);
-        process->startDetached("konsole", QStringList() << "-e" << command);
+        Terminal terminal = getTerminal();
+        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << command);
     } else {
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
     }
@@ -1487,7 +1511,8 @@ void MainWindow::on_listWidget_2_itemDoubleClicked(QListWidgetItem *item) {
 
     QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), msg, QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes) {
-        QProcess::startDetached("konsole", QStringList() << "-e" << "bash" << scriptPath);
+        Terminal terminal = getTerminal();
+        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << scriptPath);
     }
 }
 
@@ -1528,7 +1553,9 @@ void MainWindow::on_listWidget_grub_itemDoubleClicked(QListWidgetItem *item) {
 
     QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), msg, QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes) {
-        QProcess::startDetached("konsole", QStringList() << "-e" << "bash" << scriptPath);
+        Terminal terminal = getTerminal();
+        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << scriptPath);
+
     }
 }
 
@@ -1569,7 +1596,8 @@ void MainWindow::on_listWidget_clear_itemDoubleClicked(QListWidgetItem *item) {
 
     QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), msg, QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes) {
-        QProcess::startDetached("konsole", QStringList() << "-e" << "bash" << scriptPath);
+        Terminal terminal = getTerminal();
+        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << scriptPath);
     }
 }
 

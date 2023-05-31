@@ -1981,7 +1981,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Домашняя</string>
    </property>
    <property name="toolTip">
-    <string> </string>
+    <string>Домашняя</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -1996,7 +1996,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Обновить</string>
    </property>
    <property name="toolTip">
-    <string> </string>
+    <string>Обновить</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -2008,7 +2008,7 @@ QToolBar#toolBar_2 QToolButton:hover {
      <normaloff>:/img/33.png</normaloff>:/img/33.png</iconset>
    </property>
    <property name="text">
-    <string>Копировать</string>
+    <string>Скопировать</string>
    </property>
    <property name="toolTip">
     <string> </string>

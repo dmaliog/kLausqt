@@ -36,21 +36,15 @@ int main(int argc, char *argv[])
 
     bool pacmanInstalled = isPackageInstalled("pacman");
     bool yayInstalled = isPackageInstalled("yay");
-    bool konsoleInstalled = isPackageInstalled("konsole");
 
 
     if (!pacmanInstalled) {
-        w.sendNotification("Ошибка", "Доступно только для Arch-дистрибутивов!!!");
+        w.sendNotification("Ошибка", "Для правильно работы требуется Pacman!");
         return 1;
     }
 
     if (!yayInstalled) {
-        w.sendNotification("Ошибка", "Помощник yay не установлен. Установите его самостоятельно!");
-        return 1;
-    }
-
-    if (!konsoleInstalled) {
-        w.sendNotification("Ошибка", "Терминал konsole не установлен. Установите его самостоятельно!");
+        w.sendNotification("Ошибка", "Для правильно работы требуется помощник yay!");
         return 1;
     }
 
@@ -59,18 +53,15 @@ int main(int argc, char *argv[])
     process.waitForFinished();
 
     if (process.exitCode() != 0) {
-        QMessageBox::critical(nullptr, "Ошибка", "Пакет notify-send не установлен. Установите его самостоятельно!");
+        w.sendNotification("Ошибка", "Для правильно работы требуется notify-send!");
         return 1;
     }
 
-    QTranslator translator;
-    const QStringList uiLanguages = QLocale::system().uiLanguages();
-    for (const QString &locale : uiLanguages) {
-        const QString baseName = "kLaus_" + QLocale(locale).name();
-        if (translator.load(":/i18n/" + baseName)) {
-            a.installTranslator(&translator);
-            break;
-        }
+    Terminal terminal = getTerminal();
+
+    if (terminal.binary.isEmpty()) {
+        w.sendNotification("Ошибка", "Для правильно работы требуется любой из терминалов: konsole, gnome-terminal, xfce4-terminal, lxterminal, xterm, alacritty!");
+        return 1;
     }
 
     w.show();
@@ -124,9 +115,7 @@ int main(int argc, char *argv[])
         if (reason == QSystemTrayIcon::Trigger) {
             // Проверяем, было ли главное окно свернуто
             if (w.isHidden())
-            {
                 w.show(); // Если главное окно свернуто, показываем его и делаем активным
-            }
             else
                 w.hide(); // Если главное окно открыто, сворачиваем его
         }
