@@ -1,4 +1,4 @@
-#name Добавить поддержку Wayland+Nvidia
+#name Добавить поддержку Wayland+Nvidia в KDE
 #msg Вы действительно хотите подключить Wayland для Nvidia?
 #!/bin/bash
 
