@@ -5,4 +5,4 @@
 ![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/b1dd9bd6-8fda-43d4-85df-dfbf117a4c37)
 ![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/5af1a7f8-4ecd-465b-a7ed-0b6ec836da5f)
 ![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/544a8114-01b8-4374-b1d8-d3f3dcd9be88)
-![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/32036df7-33be-4014-8e3f-18c24cf8cc95)
+![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/f6580849-8519-4182-b8bb-e72a7b053d77)
