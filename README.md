@@ -1,8 +1,8 @@
 # kLausqt
 Арч менеджер который позволяет скачивать, устанавливать, удалять пакеты (Включая изменения PKGBUILD) и отображение рейтинга и прочего. Добавлять/использовать автоматические скрипты для автоматизации повторных действий. Добавлять модули ядра и время загрузки в GRUB. Просматривать журналы системы. Включать автообновление системы, удалять сироты, и кэша пакетов (с его настройкой). Имеются рекомендованные приложения которые позволяют без проблем установить полезные приложения.
 
-![2023-05-19_06-37](https://github.com/dmaliog/kLausqt/assets/115931219/4e73a85a-1458-45ca-a386-29458869e67c)
-![hegWIIXaCaQ](https://github.com/dmaliog/kLausqt/assets/115931219/9b91598a-b4e7-4bf5-b15c-c1fa75786acb)
-![3](https://github.com/dmaliog/kLausqt/assets/115931219/6037df54-5e2e-4a36-b39f-d4dd2694cb8b)
-![5](https://github.com/dmaliog/kLausqt/assets/115931219/bf22d466-022e-4164-9e04-8d0127722d01)
-![7](https://github.com/dmaliog/kLausqt/assets/115931219/14e3810b-f3a0-4a98-8160-6e36f4a988a4)
+![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/67b1394d-6c56-44ef-91d4-94c6020724a2)
+![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/b1dd9bd6-8fda-43d4-85df-dfbf117a4c37)
+![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/5af1a7f8-4ecd-465b-a7ed-0b6ec836da5f)
+![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/544a8114-01b8-4374-b1d8-d3f3dcd9be88)
+![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/32036df7-33be-4014-8e3f-18c24cf8cc95)
