@@ -39,12 +39,12 @@ int main(int argc, char *argv[])
 
 
     if (!pacmanInstalled) {
-        w.sendNotification("Ошибка", "Для правильно работы требуется Pacman!");
+        w.sendNotification("Ошибка", "Требуется Pacman!");
         return 1;
     }
 
     if (!yayInstalled) {
-        w.sendNotification("Ошибка", "Для правильно работы требуется помощник yay!");
+        w.sendNotification("Ошибка", "Требуется помощник yay!");
         return 1;
     }
 
@@ -53,14 +53,14 @@ int main(int argc, char *argv[])
     process.waitForFinished();
 
     if (process.exitCode() != 0) {
-        w.sendNotification("Ошибка", "Для правильно работы требуется notify-send!");
+        w.sendNotification("Ошибка", "Требуется notify-send!");
         return 1;
     }
 
     Terminal terminal = getTerminal();
 
     if (terminal.binary.isEmpty()) {
-        w.sendNotification("Ошибка", "Для правильно работы требуется любой из терминалов: konsole, gnome-terminal, xfce4-terminal, lxterminal, xterm, alacritty!");
+        w.sendNotification("Ошибка", "Требуется любой из терминалов: konsole, gnome-terminal, xfce4-terminal, lxterminal, xterm, alacritty!");
         return 1;
     }
 
