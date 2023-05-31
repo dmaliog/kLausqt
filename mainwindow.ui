@@ -116,7 +116,7 @@ QToolBar {
 	padding:5px;
 }
 
-QTimeEdit, QSpinBox, QScrollArea,QComboBox QAbstractItemView {
+QTimeEdit, QSpinBox, QScrollArea {
     background-color:#272727;
 	border-radius:10px;
 	border:1px solid #3d3d3d; /* Цвет фона */
@@ -138,7 +138,7 @@ QCheckBox::indicator:checked {
 }
 
 QComboBox {
-    padding: 5px 10px; /* Внутренний отступ сверху и снизу, а также слева и справа */
+    padding: 0 10px;
     background-color: #252525; /* Цвет фона при выборе */
     border-radius: 10px; /* Закругление углов */
     border: 1px solid #3d3d3d; /* Цвет границы */
@@ -177,9 +177,8 @@ QListWidget::item {
 	border:0;
 }
 
-QMenu  {
+QMenu,QComboBox QAbstractItemView  {
     background-color:#272727;
-	border-radius:15px;
 	border:1px solid #2c2e2d; /* Цвет фона */
     padding: 5px; /* Внутренний отступ */
  }
