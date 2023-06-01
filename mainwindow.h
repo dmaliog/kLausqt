@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QListWidgetItem>
 #include <QNetworkAccessManager>
+#include <QProcess>
 
 #include <QString>
 #include <QVector>
@@ -78,6 +79,10 @@ public slots:
 
 private slots:
     void checkUpdates();
+    void onProcessOutputAvailable();
+    void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void onUpdateProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+
     void loadScripts(const QStringList& resourcePaths, const QString& baseDir, QListWidget* listWidget);
     void on_listWidget_2_itemDoubleClicked(QListWidgetItem *item);
     void on_listWidget_grub_itemDoubleClicked(QListWidgetItem *item);

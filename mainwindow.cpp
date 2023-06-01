@@ -467,11 +467,7 @@ void MainWindow::on_action_33_triggered()
 
 void MainWindow::on_action_11_triggered()
 {
-    QProcess updateProcess;
-    Terminal terminal = getTerminal();
-    updateProcess.setProcessChannelMode(QProcess::MergedChannels);
-    updateProcess.startDetached(terminal.binary, QStringList() << terminal.args << "yay -Syu");
-    updateProcess.waitForFinished();
+    checkUpdates();
 }
 
 void MainWindow::on_action_24_triggered()
@@ -865,7 +861,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     loadContent(); //загрузка списков приложений игр и тп
 
     loadingListWidget();
-    //checkUpdates(); //проверка обнолвлений
 
     switch(mainpage) {
     case 0:
@@ -904,12 +899,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     connect(ui->spinBox_grub, SIGNAL(valueChanged(int)), this, SLOT(on_spinBox_grub_valueChanged(int)));
     connect(ui->timeEdit_update, &QTimeEdit::timeChanged, this, &MainWindow::onTimeChanged);
-
-    //таймер на каждый час
-    QTimer* timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &MainWindow::checkUpdates);
-    timer->setInterval(3600000);
-    timer->start();
 
     connect(ui->spinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::on_spinBox_valueChanged);
 
@@ -1086,11 +1075,11 @@ void MainWindow::onTimeChanged(const QTime& time)
     }
 
     // Устанавливаем таймер для первого вызова функции
-    QTimer::singleShot(interval, this, &MainWindow::on_action_11_triggered);
+    QTimer::singleShot(interval, this, &MainWindow::checkUpdates);
 
     // Устанавливаем таймер для повторных вызовов функции каждый день
     QTimer* timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &MainWindow::on_action_11_triggered);
+    connect(timer, &QTimer::timeout, this, &MainWindow::checkUpdates);
     timer->start(24 * 60 * 60 * 1000); // 24 часа в миллисекундах
 }
 
@@ -1316,20 +1305,62 @@ void MainWindow::loadContent() {
 
 void MainWindow::checkUpdates()
 {
-    QProcess process;
-    process.start("yay", QStringList() << "-Suy");
-    process.waitForFinished();
-    QByteArray output = process.readAllStandardOutput();
-    QString str = " packages to upgrade/install";
-    int index = output.indexOf(str.toUtf8());
+    QProcess* process = new QProcess(this);
+    connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(onProcessOutputAvailable()));
+    connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onProcessFinished(int, QProcess::ExitStatus)));
 
-    if (index != -1) {
-        // Извлечение количества доступных обновлений
-        QString countStr = output.mid(index - 3, 2);
-        int count = countStr.toInt();
+    process->start("yay", QStringList() << "-Suy");
+}
 
-        QString message = QString(tr("Доступно %1 обновлений. Пожалуйста, обновите систему.")).arg(count);
-        sendNotification(tr("Обновление"), message);
+void MainWindow::onProcessOutputAvailable()
+{
+    QProcess* process = qobject_cast<QProcess*>(sender());
+
+    if (process) {
+        QByteArray output = process->readAllStandardOutput();
+        QString str = " packages to upgrade/install";
+        int index = output.indexOf(str.toUtf8());
+
+        if (index != -1) {
+            // Извлечение количества доступных обновлений
+            QString countStr = output.mid(index - 3, 3);  // Извлечение трех символов
+            int count = countStr.toInt();
+
+            QString message = QString(tr("Доступно %1 обновлений. Пожалуйста, обновите систему.")).arg(count);
+            sendNotification(tr("Обновление"), message);
+
+            Terminal terminal = getTerminal();
+            QProcess* updateProcess = new QProcess(this);
+            updateProcess->setProcessChannelMode(QProcess::MergedChannels);
+            connect(updateProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onUpdateProcessFinished(int, QProcess::ExitStatus)));
+            updateProcess->start(terminal.binary, QStringList() << terminal.args << "yay -Syu");
+        }
+    }
+}
+
+void MainWindow::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    Q_UNUSED(exitCode);
+    Q_UNUSED(exitStatus);
+
+    QProcess* process = qobject_cast<QProcess*>(sender());
+
+    if (process) {
+        process->deleteLater();
+    }
+}
+
+void MainWindow::onUpdateProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    Q_UNUSED(exitCode);
+    Q_UNUSED(exitStatus);
+
+    QProcess* process = qobject_cast<QProcess*>(sender());
+
+    if (process) {
+        // Обработка завершения процесса обновления
+        // ...
+        process->deleteLater();
     }
 }
 
