@@ -1,5 +1,6 @@
 #name Корзина (принудительно)
 #msg Вы действительно хотите удалить все файлы и папки из корзины?
+
 #!/bin/bash
   TRASH_DIR=$(find ~/ -name Trash)
   rm -rf "$TRASH_DIR"/*
