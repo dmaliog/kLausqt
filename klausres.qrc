@@ -103,5 +103,6 @@
         <file>en/clear/yay.sh</file>
         <file>en/clear/pacman.sh</file>
         <file>en/clear/clear_trash.sh</file>
+        <file>other/list_en.txt</file>
     </qresource>
 </RCC>

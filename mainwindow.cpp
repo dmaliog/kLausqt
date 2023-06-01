@@ -735,8 +735,18 @@ void MainWindow::on_action_16_triggered()
     ui->tableWidgetApp->setColumnHidden(5, true);
     ui->tableWidgetApp->setColumnWidth(1, 680);
 
-    QString sourceFilePath = ":/other/list.txt";
-    QString targetFilePath = QDir::homePath() + "/kLaus/other/list.txt";
+    QString sourceFilePath;
+    QString targetFilePath;
+    if(lang == "en_US")
+    {
+        sourceFilePath = ":/other/list_en.txt";
+        targetFilePath = QDir::homePath() + "/kLaus/other/list_en.txt";
+    } else
+    {
+        sourceFilePath = ":/other/list.txt";
+        targetFilePath = QDir::homePath() + "/kLaus/other/list.txt";
+    }
+
 
     QFileInfo fileInfo(targetFilePath);
     if (!fileInfo.exists()) {
