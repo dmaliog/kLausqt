@@ -624,7 +624,7 @@ void MainWindow::on_action_30_triggered()
                     read -p "Press Enter to start compiling the package..."
                     cd "$HOME/kLaus/pkg/$program_name" && makepkg -f
                     read -p "Press Enter to install a new package..."
-                    sudo yay -U "$HOME/kLaus/pkg/$program_name"/*.pkg.tar.zst
+                    yay -U "$HOME/kLaus/pkg/$program_name"/*.pkg.tar.zst
                 else
                     notify-send "PKGBUILD editor" "PKGBUILD file not found for package $program_name" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
                 fi
@@ -647,7 +647,7 @@ void MainWindow::on_action_30_triggered()
                     read -p "Нажмите Enter, чтобы начать компиляцию пакета..."
                     cd "$HOME/kLaus/pkg/$program_name" && makepkg -f
                     read -p "Нажмите Enter, чтобы установить новый пакет..."
-                    sudo yay -U "$HOME/kLaus/pkg/$program_name"/*.pkg.tar.zst
+                    yay -U "$HOME/kLaus/pkg/$program_name"/*.pkg.tar.zst
                 else
                     notify-send "Редактор PKGBUILD" "PKGBUILD файл не найден для пакета $program_name" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
                 fi

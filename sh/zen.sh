@@ -8,7 +8,7 @@ if [ -n "$(yay -Qs linux-zen)" ] || [ -n "$(yay -Qs linux-zen-headers)" ]; then
     echo "Хотите удалить его и обновить GRUB? (д/н)"
     read answer
     if [ "$answer" == "д" ]; then
-        sudo yay -R --noconfirm linux-zen linux-zen-headers
+        yay -R --noconfirm linux-zen linux-zen-headers
 
         # Проверка наличия Grub
         if [ ! -f "/boot/grub/grub.cfg" ]; then
