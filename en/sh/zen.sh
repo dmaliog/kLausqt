@@ -8,7 +8,7 @@ echo "You already have Zen core installed!"
 echo "Want to delete it and update GRUB? (d/n)"
 read answer
 if [ "$answer" == "d" ]; then
-sudo yay -R --noconfirm linux-zen linux-zen-headers
+yay -R --noconfirm linux-zen linux-zen-headers
 
 # Checking for Grub
 if [ ! -f "/boot/grub/grub.cfg" ]; then
