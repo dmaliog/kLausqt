@@ -538,7 +538,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -854,87 +854,184 @@ QTabWidget#tabWidget QTabBar::tab:selected {
        <string>Выключить звуки меню</string>
       </property>
      </widget>
-     <widget class="QWidget" name="layoutWidget_5">
+     <widget class="QScrollArea" name="scrollArea_3">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>140</y>
-        <width>395</width>
-        <height>42</height>
+        <x>30</x>
+        <y>150</y>
+        <width>451</width>
+        <height>161</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QLabel" name="label_2">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Стартовая страница</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="comboBox_mainpage">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true"/>
-         </property>
+      <property name="styleSheet">
+       <string notr="true">background:#272727;</string>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents_4">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>439</width>
+         <height>149</height>
+        </rect>
+       </property>
+       <widget class="QWidget" name="layoutWidget_5">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>20</y>
+          <width>395</width>
+          <height>42</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <property name="text">
-           <string>Главная</string>
-          </property>
+          <widget class="QLabel" name="label_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Стартовая страница</string>
+           </property>
+          </widget>
          </item>
          <item>
-          <property name="text">
-           <string>Каталог пакетов AUR</string>
-          </property>
+          <widget class="QComboBox" name="comboBox_mainpage">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <item>
+            <property name="text">
+             <string>Главная</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Каталог пакетов AUR</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Запущенные пакеты</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Установленные пакеты</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Информация о системе</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Arch Wiki</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Новости Linux</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Информация о приложении</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Дополнительные настройки</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="layoutWidget_7">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>80</y>
+          <width>271</width>
+          <height>42</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <item>
+          <widget class="QLabel" name="label_lang">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Язык</string>
+           </property>
+          </widget>
          </item>
          <item>
-          <property name="text">
-           <string>Запущенные пакеты</string>
-          </property>
+          <widget class="QComboBox" name="comboBox_lang">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <item>
+            <property name="text">
+             <string>Русский</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>English</string>
+            </property>
+           </item>
+          </widget>
          </item>
-         <item>
-          <property name="text">
-           <string>Установленные пакеты</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Информация о системе</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Arch Wiki</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Новости Linux</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Информация о приложении</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Дополнительные настройки</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-      </layout>
+        </layout>
+       </widget>
+      </widget>
+     </widget>
+     <widget class="QLabel" name="label_16">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>120</y>
+        <width>201</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Другие настройки</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_3">

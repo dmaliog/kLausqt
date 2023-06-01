@@ -34,12 +34,6 @@ int main(int argc, char *argv[])
         } else if (savedLanguage == "en_US") {
             // Язык английский уже выбран
             locale = savedLanguage;
-        } else if (savedLanguage == "fr_FR") {
-            // Язык французский уже выбран
-            locale = savedLanguage;
-        } else if (savedLanguage == "de_DE") {
-            // Язык немецкий уже выбран
-            locale = savedLanguage;
         } else {
             // Значение языка в файле INI недействительно
             QMessageBox::critical(nullptr, "Error", "Invalid language value in INI file");
@@ -65,10 +59,6 @@ int main(int argc, char *argv[])
             locale = QLocale(QLocale::Russian).name();
         } else if (selectedLanguage == "English") {
             locale = QLocale(QLocale::English).name();
-        } else if (selectedLanguage == "French") {
-            locale = QLocale(QLocale::French).name();
-        } else if (selectedLanguage == "German") {
-            locale = QLocale(QLocale::German).name();
         } else {
             QMessageBox::critical(nullptr, "Error", "Invalid language selection");
             return 1;

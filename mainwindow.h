@@ -107,6 +107,7 @@ private slots:
     void on_action_31_triggered();
     void on_action_32_triggered();
     void on_action_33_triggered();
+    void on_comboBox_lang_currentIndexChanged(int index);
 };
 
 #endif // MAINWINDOW_H

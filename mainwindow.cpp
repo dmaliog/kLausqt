@@ -318,6 +318,14 @@ void MainWindow::on_action_12_triggered()
     ui->timeEdit_update->setTime(timeupdate);
     ui->spinBox->setValue(fav);
     ui->tabWidget->setCurrentIndex(0);
+
+    if(lang == "ru_RU")
+        ui->comboBox_lang->setCurrentIndex(0);
+    else if(lang == "en_US")
+        ui->comboBox_lang->setCurrentIndex(1);
+
+
+
     showLoadingAnimation(false);
 }
 
@@ -625,49 +633,55 @@ void MainWindow::on_action_30_triggered()
 {
     if (ui->tableWidgetApp->currentItem() != nullptr) {
         QString packageName = ui->tableWidgetApp->item(ui->tableWidgetApp->currentRow(), 0)->text();
+        QString script;
 
-        QString script = R"(
-            #name Изменить PKGBUILD пакета перед установкой
-            #msg Вы действительно хотите изменить PKGBUILD пакета перед установкой?
-            #!/bin/bash
-
-            program_name="%1"
-
-            # Создание каталога, если он не существует
-            if [ ! -d "$HOME/kLaus/pkg/" ]; then
-                mkdir "$HOME/kLaus/pkg/"
-            fi
-
-            cd "$HOME/kLaus/pkg/"
-            read -p "Нажмите Enter, чтобы начать компиляцию пакета..."
-
-            # Получение PKGBUILD
-            yay --getpkgbuild "$program_name"
-
-            # Путь к PKGBUILD файлу
-            pkgbuild_path="$HOME/kLaus/pkg/$program_name/PKGBUILD"
-
-            # Проверка наличия PKGBUILD файла
-            if [ -f "$pkgbuild_path" ]; then
-                notify-send "Редактор PKGBUILD" "Найден PKGBUILD файл для пакета $program_name" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
-
-                # Открытие редактора для редактирования PKGBUILD
-                read -p "Нажмите Enter, чтобы открыть редактор для редактирования PKGBUILD..."
-                $EDITOR "$pkgbuild_path"
-
-                # Компиляция пакета
+        if (lang == "en_US") {
+             script = R"(
+                #!/bin/bash
+                program_name="%1"
+                if [ ! -d "$HOME/kLaus/pkg/" ]; then
+                    mkdir "$HOME/kLaus/pkg/"
+                fi
+                cd "$HOME/kLaus/pkg/"
+                read -p "Press Enter to start compiling the package..."
+                yay --getpkgbuild "$program_name"
+                pkgbuild_path="$HOME/kLaus/pkg/$program_name/PKGBUILD"
+                if [ -f "$pkgbuild_path" ]; then
+                    notify-send "PKGBUILD Editor" "PKGBUILD file found for package $program_name" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+                    read -p "Press Enter to open the editor to edit PKGBUILD..."
+                    $EDITOR "$pkgbuild_path"
+                    read -p "Press Enter to start compiling the package..."
+                    cd "$HOME/kLaus/pkg/$program_name" && makepkg -f
+                    read -p "Press Enter to install a new package..."
+                    sudo yay -U "$HOME/kLaus/pkg/$program_name"/*.pkg.tar.zst
+                else
+                    notify-send "PKGBUILD editor" "PKGBUILD file not found for package $program_name" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+                fi
+            )";
+        } else {
+            script = R"(
+                #!/bin/bash
+                program_name="%1"
+                if [ ! -d "$HOME/kLaus/pkg/" ]; then
+                    mkdir "$HOME/kLaus/pkg/"
+                fi
+                cd "$HOME/kLaus/pkg/"
                 read -p "Нажмите Enter, чтобы начать компиляцию пакета..."
-                cd "$HOME/kLaus/pkg/$program_name" && makepkg -f
-
-                # Установка нового пакета
-                read -p "Нажмите Enter, чтобы установить новый пакет..."
-                sudo yay -U "$HOME/kLaus/pkg/$program_name"/*.pkg.tar.zst
-
-            else
-                notify-send "Редактор PKGBUILD" "PKGBUILD файл не найден для пакета $program_name" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
-            fi
-        )";
-
+                yay --getpkgbuild "$program_name"
+                pkgbuild_path="$HOME/kLaus/pkg/$program_name/PKGBUILD"
+                if [ -f "$pkgbuild_path" ]; then
+                    notify-send "Редактор PKGBUILD" "Найден PKGBUILD файл для пакета $program_name" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+                    read -p "Нажмите Enter, чтобы открыть редактор для редактирования PKGBUILD..."
+                    $EDITOR "$pkgbuild_path"
+                    read -p "Нажмите Enter, чтобы начать компиляцию пакета..."
+                    cd "$HOME/kLaus/pkg/$program_name" && makepkg -f
+                    read -p "Нажмите Enter, чтобы установить новый пакет..."
+                    sudo yay -U "$HOME/kLaus/pkg/$program_name"/*.pkg.tar.zst
+                else
+                    notify-send "Редактор PKGBUILD" "PKGBUILD файл не найден для пакета $program_name" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+                fi
+            )";
+        }
         QString command = QString("bash -c '%1'").arg(script.arg(packageName));
 
         Terminal terminal = getTerminal();
@@ -1446,6 +1460,27 @@ void MainWindow::on_comboBox_mainpage_currentIndexChanged()
 {
     mainpage = ui->comboBox_mainpage->currentIndex();
     settings.setValue("MainPage", mainpage);
+}
+
+void MainWindow::on_comboBox_lang_currentIndexChanged(int index)
+{
+    QString lang;
+    if (index == 0) {
+        lang = "ru_RU";
+    } else if (index == 1) {
+        lang = "en_US";
+    }
+
+    // Получение текущего значения lang из настроек
+    QString currentLang = settings.value("Language", "en_US").toString();
+
+    // Проверка, совпадает ли выбранный язык с текущим языком
+    if (currentLang != lang) {
+        settings.setValue("Language", lang);
+        sendNotification(tr("Смена языка"), tr("Приложение будет перезагружено для смены языка"));
+        qApp->quit();
+        QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+    }
 }
 
 void MainWindow::on_comboBox_yaycache_currentIndexChanged()
