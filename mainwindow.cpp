@@ -26,8 +26,9 @@ int table3; // голоса
 int table4; // популярность
 int table5; // последнее обновление
 int fav; // последнее обновление
-
+QString lang;
 QTime timeupdate;
+
 std::string secpass = "root"; // правильный пароль
 bool runScriptVK = false; // проверка на VK скрипт
 
@@ -240,7 +241,11 @@ void MainWindow::on_action_3_triggered()
 
     QWebEnginePage* pagez = ui->webEngineView->page();
     runScriptVK = false; // reset the flag
-    pagez->load(QUrl("https://wiki.archlinux.org/title/General_recommendations_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)"));
+
+    if (lang == "en_US")
+        pagez->load(QUrl("https://wiki.archlinux.org/title/General_recommendations"));
+    else
+        pagez->load(QUrl("https://wiki.archlinux.org/title/General_recommendations_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)"));
 
    QObject::connect(ui->webEngineView->page(), &QWebEnginePage::loadFinished, this, [=]() {
         if (page == 6) {
@@ -340,7 +345,10 @@ void MainWindow::openDirectory(const QString &directoryPath)
 
 void MainWindow::on_action_sh_triggered()
 {
-    openDirectory("/kLaus/sh/");
+    if (lang == "en_US")
+        openDirectory("/kLaus/en/sh/");
+    else
+        openDirectory("/kLaus/sh/");
 }
 
 void MainWindow::on_action_18_triggered()
@@ -375,7 +383,10 @@ void MainWindow::on_action_23_triggered()
 
 void MainWindow::on_action_27_triggered()
 {
-    openDirectory("/kLaus/journals/");
+    if (lang == "en_US")
+        openDirectory("/kLaus/en/journals/");
+    else
+        openDirectory("/kLaus/journals/");
 }
 
 void MainWindow::on_action_28_triggered()
@@ -391,19 +402,23 @@ void MainWindow::on_action_29_triggered()
 void MainWindow::on_action_31_triggered()
 {
     QWebEnginePage* pagez = ui->webEngineView->page();
+
     if (page == 6)
     {
         runScriptVK = false; // reset the flag
-        pagez->load(QUrl("https://wiki.archlinux.org/title/General_recommendations_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)"));
+        if (lang == "en_US")
+            pagez->load(QUrl("https://wiki.archlinux.org/title/General_recommendations"));
+        else
+            pagez->load(QUrl("https://wiki.archlinux.org/title/General_recommendations_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)"));
 
-        QObject::connect(ui->webEngineView->page(), &QWebEnginePage::loadFinished, this, [=]() {
+        QObject::connect(pagez, &QWebEnginePage::loadFinished, this, [=]() {
             if (page == 6) {
                 showLoadingAnimation(false);
                 ui->webEngineView->show();
             }
         });
     }
-    if (page == 7)
+    else if (page == 7)
     {
         runScriptVK = true; // set the flag to true
         pagez->load(QUrl("https://vk.com/@linux2-main"));
@@ -512,8 +527,7 @@ void MainWindow::on_action_5_triggered()
 
             // Обработчик вывода ошибок из процесса
             connect(process, &QProcess::readyReadStandardError, this, [=]() {
-                QString error = process->readAllStandardError();
-                sendNotification(tr("Ошибка"), error);
+                sendNotification(tr("Ошибка"), process->readAllStandardError());
                 process->deleteLater();
             });
 
@@ -713,19 +727,19 @@ void MainWindow::on_action_16_triggered()
     QFileInfo fileInfo(targetFilePath);
     if (!fileInfo.exists()) {
         if (!QDir().mkpath(fileInfo.absoluteDir().path())) {
-            qDebug() << "Failed to create directory:" << fileInfo.absoluteDir().path();
+            sendNotification(tr("Ошибка"), tr("Не удалось создать каталог: ") + fileInfo.absoluteDir().path());
             return;
         }
 
         if (!QFile::copy(sourceFilePath, targetFilePath)) {
-            qDebug() << "Failed to copy file from" << sourceFilePath << "to" << targetFilePath;
+            sendNotification(tr("Ошибка"), tr("Не удалось скопировать файл из ") + sourceFilePath + tr(" в ") + targetFilePath);
             return;
         }
     }
 
     QFile file(targetFilePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qWarning() << "Не удалось открыть файл ресурсов";
+        sendNotification(tr("Ошибка"), tr("Не удалось открыть файл ресурсов"));
         return;
     }
 
@@ -823,9 +837,10 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     removeToolButtonTooltips(ui->toolBar);
 
     mrpropper(); //зачистка говна
-    loadingListWidget();
     loadSettings(); //загрузка настроек
     loadContent(); //загрузка списков приложений игр и тп
+
+    loadingListWidget();
     //checkUpdates(); //проверка обнолвлений
 
     switch(mainpage) {
@@ -967,6 +982,8 @@ void MainWindow::loadSettings()
     table4 = settings.value("Table4", 0).toInt();
     table5 = settings.value("Table5", 0).toInt();
     fav = settings.value("Favorite", 50).toInt();
+    lang = settings.value("Language").toString();
+
     timeupdate = QTime::fromString(settings.value("TimeUpdate").toString(), "HH:mm");
 
     QString savedLogin = settings.value("login", "").toString();
@@ -1134,7 +1151,8 @@ void MainWindow::handleServerResponse(QNetworkReply *reply)
         QJsonDocument jsonDoc = QJsonDocument::fromJson(response);
         QJsonObject jsonObj = jsonDoc.object();
         if (jsonObj["type"].toString() == "error") {
-            qDebug() << "Ошибка при получении списка приложений из AUR:" << jsonObj["results"].toString();
+            sendNotification(tr("Ошибка"), tr("Ошибка при получении списка приложений из AUR: ") + jsonObj["results"].toString());
+
         } else if (jsonObj["type"].toString() == "search") {
             QJsonArray results = jsonObj["results"].toArray();
             ui->tableWidgetApp->setRowCount(results.size()); // Устанавливаем количество строк в таблице
@@ -1219,8 +1237,9 @@ void MainWindow::handleServerResponse(QNetworkReply *reply)
             Qt::SortOrder order = ui->tableWidgetApp->horizontalHeader()->sortIndicatorOrder();
             ui->tableWidgetApp->sortByColumn(index, order);
         });
-    } else
-        qDebug() << "Ошибка при получении списка приложений из AUR:" << reply->errorString();
+    } else {
+        sendNotification(tr("Ошибка"), tr("Ошибка при получении списка приложений из AUR: ") + reply->errorString());
+    }
     reply->deleteLater();
 }
 
@@ -1285,8 +1304,8 @@ void MainWindow::checkUpdates()
         QString countStr = output.mid(index - 3, 2);
         int count = countStr.toInt();
 
-        QString message = QString("Доступно %1 обновлений. Пожалуйста, обновите систему.").arg(count);
-        sendNotification("Обновление", message);
+        QString message = QString(tr("Доступно %1 обновлений. Пожалуйста, обновите систему.")).arg(count);
+        sendNotification(tr("Обновление"), message);
     }
 }
 
@@ -1296,40 +1315,74 @@ void MainWindow::loadingListWidget()
     ui->listWidget_clear->clear();
     ui->listWidget_grub->clear();
 
-    QStringList shResourcePaths = {":/sh/1c.sh",
-                                   ":/sh/wayland.sh",
-                                   ":/sh/imgneofetch.sh",
-                                   ":/sh/root.sh",
-                                   ":/sh/PKGBUILD.sh",
-                                   ":/sh/save.sh",
-                                   ":/sh/load.sh",
-                                   ":/sh/zen.sh"};
+    if (lang == "en_US") {
+        QStringList shResourcePaths = {":/en/sh/1c.sh",
+                                       ":/en/sh/wayland.sh",
+                                       ":/en/sh/imgneofetch.sh",
+                                       ":/en/sh/root.sh",
+                                       ":/en/sh/PKGBUILD.sh",
+                                       ":/en/sh/save.sh",
+                                       ":/en/sh/load.sh",
+                                       ":/en/sh/zen.sh"};
 
-    QStringList clearResourcePaths = {":/clear/clear_trash.sh",
-                                      ":/clear/yay.sh",
-                                      ":/clear/pacman.sh"};
+        QStringList clearResourcePaths = {":/en/clear/clear_trash.sh",
+                                          ":/en/clear/yay.sh",
+                                          ":/en/clear/pacman.sh"};
 
-    QStringList journalsResourcePaths = {":/journals/neofetch.sh",
-                                         ":/journals/systemd-analyze.sh",
-                                         ":/journals/lspci.sh",
-                                         ":/journals/lsusb.sh",
-                                         ":/journals/inxi.sh",
-                                         ":/journals/hwinfo.sh",
-                                         ":/journals/lsblk.sh",
-                                         ":/journals/fdisk.sh",
-                                         ":/journals/native-pkg.sh",
-                                         ":/journals/foreign-pkg.sh",
-                                         ":/journals/xorg-log.sh",
-                                         ":/journals/grub-cfg.sh",
-                                         ":/journals/fstab.sh",
-                                         ":/journals/pacman.sh",
-                                         ":/journals/top-pkg.sh"};
+        QStringList journalsResourcePaths = {":/en/journals/neofetch.sh",
+                                             ":/en/journals/systemd-analyze.sh",
+                                             ":/en/journals/lspci.sh",
+                                             ":/en/journals/lsusb.sh",
+                                             ":/en/journals/inxi.sh",
+                                             ":/en/journals/hwinfo.sh",
+                                             ":/en/journals/lsblk.sh",
+                                             ":/en/journals/fdisk.sh",
+                                             ":/en/journals/native-pkg.sh",
+                                             ":/en/journals/foreign-pkg.sh",
+                                             ":/en/journals/xorg-log.sh",
+                                             ":/en/journals/grub-cfg.sh",
+                                             ":/en/journals/fstab.sh",
+                                             ":/en/journals/pacman.sh",
+                                             ":/en/journals/top-pkg.sh"};
+        QString baseDir = QDir::homePath() + "/kLaus/"; // Присваиваем значение переменной baseDir в блоке else
+        loadScripts(shResourcePaths, baseDir + "en/sh/", ui->listWidget_2);
+        loadScripts(clearResourcePaths, baseDir + "en/clear/", ui->listWidget_clear);
+        loadScripts(journalsResourcePaths, baseDir + "en/journals/", ui->listWidget_grub);
 
-    QString baseDir = QDir::homePath() + "/kLaus/";
+    } else {
+        QStringList shResourcePaths = {":/sh/1c.sh",
+                                       ":/sh/wayland.sh",
+                                       ":/sh/imgneofetch.sh",
+                                       ":/sh/root.sh",
+                                       ":/sh/PKGBUILD.sh",
+                                       ":/sh/save.sh",
+                                       ":/sh/load.sh",
+                                       ":/sh/zen.sh"};
 
-    loadScripts(shResourcePaths, baseDir + "sh/", ui->listWidget_2);
-    loadScripts(clearResourcePaths, baseDir + "clear/", ui->listWidget_clear);
-    loadScripts(journalsResourcePaths, baseDir + "journals/", ui->listWidget_grub);
+        QStringList clearResourcePaths = {":/clear/clear_trash.sh",
+                                          ":/clear/yay.sh",
+                                          ":/clear/pacman.sh"};
+
+        QStringList journalsResourcePaths = {":/journals/neofetch.sh",
+                                             ":/journals/systemd-analyze.sh",
+                                             ":/journals/lspci.sh",
+                                             ":/journals/lsusb.sh",
+                                             ":/journals/inxi.sh",
+                                             ":/journals/hwinfo.sh",
+                                             ":/journals/lsblk.sh",
+                                             ":/journals/fdisk.sh",
+                                             ":/journals/native-pkg.sh",
+                                             ":/journals/foreign-pkg.sh",
+                                             ":/journals/xorg-log.sh",
+                                             ":/journals/grub-cfg.sh",
+                                             ":/journals/fstab.sh",
+                                             ":/journals/pacman.sh",
+                                             ":/journals/top-pkg.sh"};
+        QString baseDir = QDir::homePath() + "/kLaus/"; // Присваиваем значение переменной baseDir в блоке else
+        loadScripts(shResourcePaths, baseDir + "sh/", ui->listWidget_2);
+        loadScripts(clearResourcePaths, baseDir + "clear/", ui->listWidget_clear);
+        loadScripts(journalsResourcePaths, baseDir + "journals/", ui->listWidget_grub);
+    }
 
     QString baseDir2 = QDir::homePath() + "/kLaus/other/";
     QString fileName2 = QFileInfo(":/other/notify.png").fileName();
@@ -1475,7 +1528,13 @@ void MainWindow::on_spinBox_valueChanged(int arg1)
 }
 
 void MainWindow::on_listWidget_2_itemDoubleClicked(QListWidgetItem *item) {
-    QString scriptDir = QDir::homePath() + "/kLaus/sh/";
+    QString scriptDir;
+    if (lang == "en_US") {
+        scriptDir = QDir::homePath() + "/kLaus/en/sh/";
+    } else {
+        scriptDir = QDir::homePath() + "/kLaus/sh/";
+    }
+
     QString scriptPath;
     QString msg;
     QString itemName = item->text();
@@ -1517,7 +1576,13 @@ void MainWindow::on_listWidget_2_itemDoubleClicked(QListWidgetItem *item) {
 }
 
 void MainWindow::on_listWidget_grub_itemDoubleClicked(QListWidgetItem *item) {
-    QString scriptDir = QDir::homePath() + "/kLaus/journals/";
+    QString scriptDir;
+    if (lang == "en_US") {
+        scriptDir = QDir::homePath() + "/kLaus/en/journals/";
+    } else {
+        scriptDir = QDir::homePath() + "/kLaus/journals/";
+    }
+
     QString scriptPath;
     QString msg;
     QString itemName = item->text();
@@ -1555,12 +1620,17 @@ void MainWindow::on_listWidget_grub_itemDoubleClicked(QListWidgetItem *item) {
     if (reply == QMessageBox::Yes) {
         Terminal terminal = getTerminal();
         QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << scriptPath);
-
     }
 }
 
 void MainWindow::on_listWidget_clear_itemDoubleClicked(QListWidgetItem *item) {
-    QString scriptDir = QDir::homePath() + "/kLaus/clear/";
+    QString scriptDir;
+    if (lang == "en_US") {
+        scriptDir = QDir::homePath() + "/kLaus/en/clear/";
+    } else {
+        scriptDir = QDir::homePath() + "/kLaus/clear/";
+    }
+
     QString scriptPath;
     QString msg;
     QString itemName = item->text();

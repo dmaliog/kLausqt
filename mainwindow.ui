@@ -538,7 +538,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -975,7 +975,7 @@ border:0;</string>
        <rect>
         <x>380</x>
         <y>80</y>
-        <width>121</width>
+        <width>281</width>
         <height>21</height>
        </rect>
       </property>
@@ -1032,7 +1032,7 @@ border:0;</string>
        <rect>
         <x>20</x>
         <y>80</y>
-        <width>261</width>
+        <width>321</width>
         <height>21</height>
        </rect>
       </property>
@@ -1207,6 +1207,9 @@ border:0;</string>
          <pointsize>11</pointsize>
         </font>
        </property>
+       <property name="locale">
+        <locale language="Russian" country="Russia"/>
+       </property>
        <property name="text">
         <string>Ожидание загрузочного меню</string>
        </property>
@@ -1276,7 +1279,6 @@ border-radius:13px;
 padding: 5px 7px;</string>
     </property>
    </widget>
-   <zorder>tabWidget</zorder>
    <zorder>listWidget_grub</zorder>
    <zorder>layoutWidget</zorder>
    <zorder>listWidget_2</zorder>
@@ -1291,6 +1293,7 @@ padding: 5px 7px;</string>
    <zorder>label4_grub</zorder>
    <zorder>lineEdit_grub</zorder>
    <zorder>webEngineView</zorder>
+   <zorder>tabWidget</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -2010,7 +2013,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Скопировать</string>
    </property>
    <property name="toolTip">
-    <string> </string>
+    <string>Скопировать</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>

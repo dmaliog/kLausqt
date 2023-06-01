@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include <QtWidgets>
+#include <QTranslator>
+#include <QObject>
 
 bool isPackageInstalled(const QString& packageName)
 {
@@ -14,6 +16,86 @@ bool isPackageInstalled(const QString& packageName)
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    // Создаем объект QSettings для чтения из файла INI
+    QString kLausDir = QDir::homePath();
+    QString filePath = kLausDir + "/kLaus/settings.ini";
+    QSettings settings(filePath, QSettings::IniFormat);
+
+    QString locale;
+
+    // Проверяем, есть ли уже сохраненный язык в файле INI
+    if (settings.contains("Language")) {
+        QString savedLanguage = settings.value("Language").toString();
+
+        if (savedLanguage == "ru_RU") {
+            // Язык русский уже выбран
+            locale = savedLanguage;
+        } else if (savedLanguage == "en_US") {
+            // Язык английский уже выбран
+            locale = savedLanguage;
+        } else if (savedLanguage == "fr_FR") {
+            // Язык французский уже выбран
+            locale = savedLanguage;
+        } else if (savedLanguage == "de_DE") {
+            // Язык немецкий уже выбран
+            locale = savedLanguage;
+        } else {
+            // Значение языка в файле INI недействительно
+            QMessageBox::critical(nullptr, "Error", "Invalid language value in INI file");
+            return 1;
+        }
+
+        // Загружаем и устанавливаем файл перевода
+        QTranslator translator;
+        if (translator.load("kLaus_" + locale, ":/lang")) {
+            a.installTranslator(&translator);
+        } else {
+            QMessageBox::critical(nullptr, "Error", "Translation not available for selected language");
+            return 1;
+        }
+    } else {
+        // Выводим диалоговое окно с выбором языка
+        QStringList languages;
+        languages << "Русский" << "English"; // Добавьте поддерживаемые языки
+        QString selectedLanguage = QInputDialog::getItem(nullptr, "Select Language", "Preferred Language:", languages);
+
+        // Определяем соответствующий код языка
+        if (selectedLanguage == "Русский") {
+            locale = QLocale(QLocale::Russian).name();
+        } else if (selectedLanguage == "English") {
+            locale = QLocale(QLocale::English).name();
+        } else if (selectedLanguage == "French") {
+            locale = QLocale(QLocale::French).name();
+        } else if (selectedLanguage == "German") {
+            locale = QLocale(QLocale::German).name();
+        } else {
+            QMessageBox::critical(nullptr, "Error", "Invalid language selection");
+            return 1;
+        }
+
+        // Записываем выбранный язык в файл INI
+        settings.setValue("Language", locale);
+
+        // Загружаем и устанавливаем файл перевода
+        QTranslator translator;
+        if (translator.load("kLaus_" + locale, ":/lang")) {
+            a.installTranslator(&translator);
+        } else {
+            QMessageBox::critical(nullptr, "Error", "Translation not available for selected language");
+            return 1;
+        }
+    }
+    // Загружаем и устанавливаем файл перевода
+    QTranslator translator;
+    if (translator.load("kLaus_" + locale, ":/lang")) {
+        a.installTranslator(&translator);
+
+    } else {
+        QMessageBox::critical(nullptr, "Error", "Translation not available for selected language");
+        return 1;
+    }
+
     MainWindow w;
 
     a.setWindowIcon(QIcon(":/img/2.png"));
@@ -30,7 +112,7 @@ int main(int argc, char *argv[])
 
     // Создаем семафор, если он не существует
     if (!semaphore.create(1)) {
-        w.sendNotification("Внимание", "Приложение уже запущено!");
+        w.sendNotification(QObject::tr("Внимание"), QObject::tr("Приложение уже запущено!"));
         return 1;
     }
 
@@ -39,12 +121,12 @@ int main(int argc, char *argv[])
 
 
     if (!pacmanInstalled) {
-        w.sendNotification("Ошибка", "Требуется Pacman!");
+        w.sendNotification(QObject::tr("Ошибка"), QObject::tr("Требуется Pacman!"));
         return 1;
     }
 
     if (!yayInstalled) {
-        w.sendNotification("Ошибка", "Требуется помощник yay!");
+        w.sendNotification(QObject::tr("Ошибка"), QObject::tr("Требуется помощник yay!"));
         return 1;
     }
 
@@ -53,14 +135,14 @@ int main(int argc, char *argv[])
     process.waitForFinished();
 
     if (process.exitCode() != 0) {
-        w.sendNotification("Ошибка", "Требуется notify-send!");
+        w.sendNotification(QObject::tr("Ошибка"), QObject::tr("Требуется notify-send!"));
         return 1;
     }
 
     Terminal terminal = getTerminal();
 
     if (terminal.binary.isEmpty()) {
-        w.sendNotification("Ошибка", "Требуется любой из терминалов: konsole, gnome-terminal, xfce4-terminal, lxterminal, xterm, alacritty!");
+        w.sendNotification(QObject::tr("Ошибка"), QObject::tr("Требуется любой из терминалов: konsole, gnome-terminal, xfce4-terminal, lxterminal, xterm, alacritty!"));
         return 1;
     }
 
@@ -74,27 +156,27 @@ int main(int argc, char *argv[])
     QMenu *trayMenu = new QMenu();
 
     // Создание действия
-    QAction *action_2 = new QAction("Каталог пакетов AUR", trayMenu);
+    QAction *action_2 = new QAction(QObject::tr("Каталог пакетов AUR"), trayMenu);
     action_2->setIcon(QIcon(":/img/2.png"));
     trayMenu->addAction(action_2);
 
-    QAction *action_7 = new QAction("Установленные пакеты", trayMenu);
+    QAction *action_7 = new QAction(QObject::tr("Установленные пакеты"), trayMenu);
     action_7->setIcon(QIcon(":/img/5.png"));
     trayMenu->addAction(action_7);
 
-    QAction *action_11 = new QAction("Обновить пакеты", trayMenu);
+    QAction *action_11 = new QAction(QObject::tr("Обновить пакеты"), trayMenu);
     action_11->setIcon(QIcon(":/img/16.png"));
     trayMenu->addAction(action_11);
 
-    QAction *action_9 = new QAction("Информация о системе", trayMenu);
+    QAction *action_9 = new QAction(QObject::tr("Информация о системе"), trayMenu);
     action_9->setIcon(QIcon(":/img/7.png"));
     trayMenu->addAction(action_9);
 
-    QAction *action_12 = new QAction("Настройки", trayMenu);
+    QAction *action_12 = new QAction(QObject::tr("Настройки"), trayMenu);
     action_12->setIcon(QIcon(":/img/9.png"));
     trayMenu->addAction(action_12);
 
-    QAction *exitAction = new QAction("Выход", trayMenu);
+    QAction *exitAction = new QAction(QObject::tr("Выход"), trayMenu);
     exitAction->setIcon(QIcon(":/img/18.png"));
     trayMenu->addAction(exitAction);
 
