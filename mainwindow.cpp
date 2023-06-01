@@ -14,7 +14,6 @@ QString kLausDir = QDir::homePath();
 QString filePath = kLausDir + "/kLaus/settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
 
-int auth; // вошел юзер или нет
 int page; // какая страница используется
 int trayon; // закрывать без трея
 int soundon; // убрать звуки
@@ -29,7 +28,6 @@ int fav; // последнее обновление
 QString lang;
 QTime timeupdate;
 
-std::string secpass = "root"; // правильный пароль
 bool runScriptVK = false; // проверка на VK скрипт
 
 //---#####################################################################################################################################################
@@ -40,9 +38,8 @@ Terminal getTerminal()
 {
     // Итерируемся по списку, пока не найдем установленный терминал
     for (const Terminal &terminal : m_terminalList) {
-        if (QFile::exists(terminal.binary)) {
+        if (QFile::exists(terminal.binary))
             return terminal;
-        }
     }
 
     // Возвращаем пустой объект Terminal, если не найден ни один терминал
@@ -52,11 +49,6 @@ Terminal getTerminal()
 //---#####################################################################################################################################################
 //--################################################################# ОСНОВНЫЕ ФУНКЦИИ ##################################################################
 //-#####################################################################################################################################################
-
-void MainWindow::on_pushButton_3_clicked()
-{
-//авторизация
-}
 
 void MainWindow::on_action_1_triggered()
 {
@@ -78,7 +70,7 @@ void MainWindow::on_action_2_triggered()
     ui->action_6->setVisible(true);
     ui->action_16->setVisible(true);
     ui->action_30->setVisible(true);
-    ui->tableWidgetApp->setVisible(true); //Показываем список устнановить
+    ui->table_aur->setVisible(true); //Показываем список устнановить
     ui->searchApp->setVisible(true);
     showLoadingAnimation(false);
 }
@@ -91,8 +83,8 @@ void MainWindow::on_action_17_triggered()
     ui->label1->setText(tr("Очистка системы"));
 
     ui->label2->setVisible(true);
-    ui->listWidget_clear->setVisible(true);
-    ui->listWidget_2->setVisible(true);
+    ui->list_clear->setVisible(true);
+    ui->list_sh->setVisible(true);
     ui->action_sh->setVisible(true);
     ui->action_18->setVisible(true);
     ui->action_19->setVisible(true);
@@ -126,10 +118,8 @@ void MainWindow::on_action_7_triggered()
     ui->action_11->setVisible(true);
     ui->action_24->setVisible(true);
     ui->action_25->setVisible(true);
-    ui->listWidgetManager->show();
-
-    // Очищаем listWidgetManager
-    ui->listWidgetManager->clear();
+    ui->list_manager->show();
+    ui->list_manager->clear();
 
     // Выполняем команду yay -Qe и получаем вывод
     process.start("yay", QStringList() << "-Qe");
@@ -145,7 +135,7 @@ void MainWindow::on_action_7_triggered()
             QColor color = generateRandomColor();
             QListWidgetItem* item = new QListWidgetItem(package);
             item->setForeground(color);
-            ui->listWidgetManager->addItem(item);
+            ui->list_manager->addItem(item);
         }
     }
 
@@ -163,22 +153,22 @@ void MainWindow::on_action_9_triggered()
 
     ui->action_26->setVisible(true);
     ui->action_27->setVisible(true);
-    ui->lineEdit_grub->setVisible(true);
-    ui->spinBox_grub->setVisible(true);
+    ui->line_grub->setVisible(true);
+    ui->spin_grub->setVisible(true);
     ui->label_grub->setVisible(true);
     ui->label2_grub->setVisible(true);
     ui->label3_grub->setVisible(true);
     ui->label4_grub->setVisible(true);
-    ui->listWidget_grub->setVisible(true);
+    ui->list_grub->setVisible(true);
 
     QString filename = "/etc/default/grub";
     QFile file(filename);
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         ui->action_26->setDisabled(true);
-        ui->lineEdit_grub->setDisabled(true);
-        ui->spinBox_grub->setDisabled(true);
-        ui->lineEdit_grub->setText(tr("GRUB не установлен"));
+        ui->line_grub->setDisabled(true);
+        ui->spin_grub->setDisabled(true);
+        ui->line_grub->setText(tr("GRUB не установлен"));
         // Ошибка открытия файла
     } else {
 
@@ -221,9 +211,8 @@ void MainWindow::on_action_9_triggered()
         }
 
         int timeout = timeoutStr.toInt(); // получаем значение timeout из файла
-        ui->spinBox_grub->setValue(timeout); // устанавливаем значение в QSpinBox
-
-        ui->lineEdit_grub->setText(grubContent);
+        ui->spin_grub->setValue(timeout); // устанавливаем значение в QSpinBox
+        ui->line_grub->setText(grubContent);
     }
 
     showLoadingAnimation(false);
@@ -266,15 +255,14 @@ void MainWindow::on_action_8_triggered()
     ui->action_33->setVisible(true);
 
     QWebEnginePage* pagez = ui->webEngineView->page();
-    runScriptVK = true; // set the flag to true
+    runScriptVK = true;
 
     pagez->load(QUrl("https://vk.com/@linux2-main"));
 
     QObject::connect(pagez, &QWebEnginePage::loadFinished, this, [=]() {
 
-        // execute the script only if the flag is set to true
         if (runScriptVK && page == 7) {
-            QFile scriptFile(":/vk_dark_theme.user.js"); // путь к файлу vk_dark_theme.user.js
+            QFile scriptFile(":/vk_dark_theme.user.js");
             if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
                 QTextStream stream(&scriptFile);
                 QString script = stream.readAll();
@@ -300,31 +288,29 @@ void MainWindow::on_action_10_triggered()
 void MainWindow::on_action_12_triggered()
 {
     if (page == 9) return;
-    mrpropper(); // Обнуление всех других разделов
+    mrpropper();
     page = 9;
     ui->label1->setText(tr("Дополнительные настройки"));
     ui->action_28->setVisible(true);
     ui->action_29->setVisible(true);
     ui->tabWidget->setVisible(true);
 
-    ui->checkBox_trayon->setChecked(trayon == 1);
-    ui->checkBox_soundon->setChecked(soundon == 1);
-    ui->checkBox_1->setChecked(table1 == 1);
-    ui->checkBox_2->setChecked(table2 == 1);
-    ui->checkBox_3->setChecked(table3 == 1);
-    ui->checkBox_4->setChecked(table4 == 1);
-    ui->checkBox_5->setChecked(table5 == 1);
-    ui->comboBox_mainpage->setCurrentIndex(mainpage);
-    ui->timeEdit_update->setTime(timeupdate);
-    ui->spinBox->setValue(fav);
+    ui->check_trayon->setChecked(trayon == 1);
+    ui->check_soundon->setChecked(soundon == 1);
+    ui->check_description->setChecked(table1 == 1);
+    ui->check_version->setChecked(table2 == 1);
+    ui->check_voices->setChecked(table3 == 1);
+    ui->check_popularity->setChecked(table4 == 1);
+    ui->check_lastupdate->setChecked(table5 == 1);
+    ui->combo_mainpage->setCurrentIndex(mainpage);
+    ui->time_update->setTime(timeupdate);
+    ui->spin_rating->setValue(fav);
     ui->tabWidget->setCurrentIndex(0);
 
     if(lang == "ru_RU")
-        ui->comboBox_lang->setCurrentIndex(0);
+        ui->combo_lang->setCurrentIndex(0);
     else if(lang == "en_US")
-        ui->comboBox_lang->setCurrentIndex(1);
-
-
+        ui->combo_lang->setCurrentIndex(1);
 
     showLoadingAnimation(false);
 }
@@ -332,13 +318,8 @@ void MainWindow::on_action_12_triggered()
 void MainWindow::on_action_13_triggered()
 {
     if (page == 10) return;
-    mrpropper(); //Обнуление всех других разделов
+    mrpropper();
     page = 10;
-    ui->label1->setText(tr("Приглашение"));
-
-    ui->wlogin->show();
-    ui->hello->show();
-    ui->hello->setText("Вы можете получить приглашение у авторов проекта\nили в группе ВКонтакте - vk.com/linux2\n\nС помощью приглашения Вам станут доступны другие интересные разделы!");
     showLoadingAnimation(false);
 }
 
@@ -454,7 +435,6 @@ void MainWindow::on_action_32_triggered()
     sendNotification(tr("Обновление"), tr("Страница успешно обновлена!"));
 }
 
-
 void MainWindow::on_action_33_triggered()
 {
     QUrl url = ui->webEngineView->url();
@@ -472,31 +452,29 @@ void MainWindow::on_action_11_triggered()
 
 void MainWindow::on_action_24_triggered()
 {
-    QProcess process;
     Terminal terminal = getTerminal();
+    QProcess process;
     process.setProcessChannelMode(QProcess::MergedChannels);
-    process.startDetached(terminal.binary, QStringList() << terminal.args << "yay -Rs $(yay -Qdtq); read");
+    process.start(terminal.binary, QStringList() << terminal.args << "bash" << "-c" << "yay -Rs $(yay -Qdtq)");
+    process.waitForFinished();
 }
 
 void MainWindow::on_action_25_triggered()
 {
-    QProcess process;
-    process.setProcessChannelMode(QProcess::MergedChannels);
     Terminal terminal = getTerminal();
-
 
     switch(yaycache) {
     case 0:
-        process.startDetached(terminal.binary, QStringList() << terminal.args << "yay -Sc");
+        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -Sc");
         break;
     case 1:
-        process.startDetached(terminal.binary, QStringList() << terminal.args << "yay -Scc");
+        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -Scc");
         break;
     case 2:
-        process.startDetached(terminal.binary, QStringList() << terminal.args << "paccache -rvk3");
+        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "paccache -rvk3");
         break;
     default:
-        process.startDetached(terminal.binary, QStringList() << terminal.args << "yay -Sc");
+        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -Sc");
         break;
     }
 }
@@ -505,8 +483,8 @@ void MainWindow::on_action_5_triggered()
 {
     if (page == 2)
     {
-        if (ui->tableWidgetApp->currentItem() != nullptr) {
-            QString packageName = ui->tableWidgetApp->item(ui->tableWidgetApp->currentRow(), 0)->text();
+        if (ui->table_aur->currentItem() != nullptr) {
+            QString packageName = ui->table_aur->item(ui->table_aur->currentRow(), 0)->text();
             QProcess* process = new QProcess(this);
 
             // Обработчик вывода информации из процесса
@@ -517,15 +495,13 @@ void MainWindow::on_action_5_triggered()
                 if (match.hasMatch()) {
                     QString appName = match.captured(1);
                     QString program = appName.split('/').last();
-                    if (program.endsWith("-bin") || program.endsWith("-git") || program.endsWith("-qt") || program.endsWith("-qt4") || program.endsWith("-qt5") || program.endsWith("-qt6") || program.endsWith("qt-") || program.endsWith("qt4-") || program.endsWith("qt5-") || program.endsWith("qt6-") || program.endsWith("-gtk") || program.endsWith("-gtk2") || program.endsWith("-gtk3")) {
+                    if (program.endsWith("-bin") || program.endsWith("-git") || program.endsWith("-qt") || program.endsWith("-qt4") || program.endsWith("-qt5") || program.endsWith("-qt6") || program.endsWith("qt-") || program.endsWith("qt4-") || program.endsWith("qt5-") || program.endsWith("qt6-") || program.endsWith("-gtk") || program.endsWith("-gtk2") || program.endsWith("-gtk3"))
                         program.chop(4); // Убираем "-bin" или "-git" из имени программы
-                    }
 
                     Terminal terminal = getTerminal();
                     QProcess::startDetached(terminal.binary, QStringList() << terminal.args << program);
-                } else {
+                } else
                     sendNotification(tr("Пакет не найден"), tr("Пакет ") + packageName + tr(" не найден в системе!"));
-                }
                 process->deleteLater();
             });
 
@@ -541,8 +517,8 @@ void MainWindow::on_action_5_triggered()
             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для запуска!"));
 
     } else {
-        if (ui->listWidgetManager->currentItem() != nullptr) {
-            QString packageName = ui->listWidgetManager->currentItem()->text();
+        if (ui->list_manager->currentItem() != nullptr) {
+            QString packageName = ui->list_manager->currentItem()->text();
             packageName = packageName.left(packageName.indexOf(" "));
             Terminal terminal = getTerminal();
             QProcess::startDetached(terminal.binary, QStringList() << terminal.args << packageName);
@@ -555,8 +531,8 @@ void MainWindow::on_action_6_triggered()
 {
     if (page == 2)
     {
-        if (ui->tableWidgetApp->currentItem() != nullptr) {
-            QString packageName = ui->tableWidgetApp->item(ui->tableWidgetApp->currentRow(), 0)->text();
+        if (ui->table_aur->currentItem() != nullptr) {
+            QString packageName = ui->table_aur->item(ui->table_aur->currentRow(), 0)->text();
             QProcess* process = new QProcess(this);
 
             // Обработчик вывода информации из процесса
@@ -567,9 +543,8 @@ void MainWindow::on_action_6_triggered()
                 if (match.hasMatch()) {
                     QString appName = match.captured(1);
                     QString program = appName.split('/').last();
-                    if (program.endsWith("-bin") || program.endsWith("-git") || program.endsWith("-qt") || program.endsWith("-qt4") || program.endsWith("-qt5") || program.endsWith("-qt6") || program.endsWith("qt-") || program.endsWith("qt4-") || program.endsWith("qt5-") || program.endsWith("qt6-") || program.endsWith("-gtk") || program.endsWith("-gtk2") || program.endsWith("-gtk3")) {
+                    if (program.endsWith("-bin") || program.endsWith("-git") || program.endsWith("-qt") || program.endsWith("-qt4") || program.endsWith("-qt5") || program.endsWith("-qt6") || program.endsWith("qt-") || program.endsWith("qt4-") || program.endsWith("qt5-") || program.endsWith("qt6-") || program.endsWith("-gtk") || program.endsWith("-gtk2") || program.endsWith("-gtk3"))
                         program.chop(4); // Убираем "-bin" или "-git" из имени программы
-                    }
 
                     Terminal terminal = getTerminal();
                     QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -R " + packageName);
@@ -592,8 +567,8 @@ void MainWindow::on_action_6_triggered()
             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для удаления!"));
 
     } else {
-        if (ui->listWidgetManager->currentItem() != nullptr) {
-            QString packageName = ui->listWidgetManager->currentItem()->text();
+        if (ui->list_manager->currentItem() != nullptr) {
+            QString packageName = ui->list_manager->currentItem()->text();
             packageName = packageName.left(packageName.indexOf(" "));
             Terminal terminal = getTerminal();
             QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -R " + packageName);
@@ -607,16 +582,16 @@ void MainWindow::on_action_4_triggered()
 {
     if (page == 2)
     {
-        if (ui->tableWidgetApp->currentItem() != nullptr) {
-            QString packageName = ui->tableWidgetApp->item(ui->tableWidgetApp->currentRow(), 0)->text();
+        if (ui->table_aur->currentItem() != nullptr) {
+            QString packageName = ui->table_aur->item(ui->table_aur->currentRow(), 0)->text();
             Terminal terminal = getTerminal();
             QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -S " + packageName);
          } else
             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
 
     } else {
-        if (ui->listWidgetManager->currentItem() != nullptr) {
-            QString packageName = ui->listWidgetManager->currentItem()->text();
+        if (ui->list_manager->currentItem() != nullptr) {
+            QString packageName = ui->list_manager->currentItem()->text();
             packageName = packageName.left(packageName.indexOf(" "));
             Terminal terminal = getTerminal();
             QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -S " + packageName);
@@ -627,8 +602,8 @@ void MainWindow::on_action_4_triggered()
 
 void MainWindow::on_action_30_triggered()
 {
-    if (ui->tableWidgetApp->currentItem() != nullptr) {
-        QString packageName = ui->tableWidgetApp->item(ui->tableWidgetApp->currentRow(), 0)->text();
+    if (ui->table_aur->currentItem() != nullptr) {
+        QString packageName = ui->table_aur->item(ui->table_aur->currentRow(), 0)->text();
         QString script;
 
         if (lang == "en_US") {
@@ -682,16 +657,15 @@ void MainWindow::on_action_30_triggered()
 
         Terminal terminal = getTerminal();
         QProcess::startDetached(terminal.binary, QStringList() << terminal.args << command);
-    } else {
+    } else
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
-    }
 }
 
 void MainWindow::on_action_26_triggered()
 {
     QString filename = "/etc/default/grub";
-    QString grubContent = ui->lineEdit_grub->text().trimmed();
-    QString timeout = ui->spinBox_grub->value() > 0 ? QString::number(ui->spinBox_grub->value()) : "5";
+    QString grubContent = ui->line_grub->text().trimmed();
+    QString timeout = ui->spin_grub->value() > 0 ? QString::number(ui->spin_grub->value()) : "5";
 
     // Создаем процесс для выполнения команды с pkexec
     QProcess process;
@@ -723,13 +697,13 @@ void MainWindow::on_action_26_triggered()
 void MainWindow::on_action_16_triggered()
 {
     // Удаление содержимого таблицы
-    ui->tableWidgetApp->clearContents();
-    ui->tableWidgetApp->setRowCount(0);
-    ui->tableWidgetApp->setColumnHidden(2, true);
-    ui->tableWidgetApp->setColumnHidden(3, true);
-    ui->tableWidgetApp->setColumnHidden(4, true);
-    ui->tableWidgetApp->setColumnHidden(5, true);
-    ui->tableWidgetApp->setColumnWidth(1, 680);
+    ui->table_aur->clearContents();
+    ui->table_aur->setRowCount(0);
+    ui->table_aur->setColumnHidden(2, true);
+    ui->table_aur->setColumnHidden(3, true);
+    ui->table_aur->setColumnHidden(4, true);
+    ui->table_aur->setColumnHidden(5, true);
+    ui->table_aur->setColumnWidth(1, 680);
 
     QString sourceFilePath;
     QString targetFilePath;
@@ -789,9 +763,9 @@ void MainWindow::on_action_16_triggered()
         item1->setForeground(color);
         item2->setForeground(color);
 
-        ui->tableWidgetApp->insertRow(i);
-        ui->tableWidgetApp->setItem(i, 0, item1);
-        ui->tableWidgetApp->setItem(i, 1, item2);
+        ui->table_aur->insertRow(i);
+        ui->table_aur->setItem(i, 0, item1);
+        ui->table_aur->setItem(i, 1, item2);
     }
 }
 
@@ -843,9 +817,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     // Выравниваем содержимое статусного бара по правому краю
     QHBoxLayout* statusBarLayout = qobject_cast<QHBoxLayout*>(ui->statusBar->layout());
-    if (statusBarLayout) {
+    if (statusBarLayout)
         statusBarLayout->setAlignment(Qt::AlignRight);
-    }
 
     // Выравниваем текст метки по правому краю
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -897,10 +870,12 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
         break;
     }
 
-    connect(ui->spinBox_grub, SIGNAL(valueChanged(int)), this, SLOT(on_spinBox_grub_valueChanged(int)));
-    connect(ui->timeEdit_update, &QTimeEdit::timeChanged, this, &MainWindow::onTimeChanged);
+    connect(ui->spin_grub, SIGNAL(valueChanged(int)), this, SLOT(on_spinBox_grub_valueChanged(int)));
+    connect(ui->time_update, &QTimeEdit::timeChanged, this, &MainWindow::onTimeChanged);
+    connect(ui->spin_rating, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::on_spin_rating_valueChanged);
 
-    connect(ui->spinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::on_spinBox_valueChanged);
+    QTableWidget *table = ui->table_aur;
+    table->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     showLoadingAnimation(false);
 }
@@ -910,27 +885,31 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::closeEvent(QCloseEvent*)
+void MainWindow::closeEvent(QCloseEvent *event)
 {
     if(trayon == 1)
         QApplication::quit();
+    else
+    {
+        hide(); // Скрываем главное окно
+        event->ignore(); // Игнорируем событие закрытия
+    }
 }
 
 
 void MainWindow::mrpropper() //зачистка говна перед началом каждой вкладки
 {
-    ui->tableWidgetApp->setVisible(false);
-    ui->listWidget_clear->setVisible(false);
-    ui->listWidget_2->setVisible(false);
-    ui->listWidgetManager->setVisible(false);
-    ui->listWidget_grub->setVisible(false);
-    ui->lineEdit_grub->setVisible(false);
-    ui->spinBox_grub->setVisible(false);
+    ui->table_aur->setVisible(false);
+    ui->list_clear->setVisible(false);
+    ui->list_sh->setVisible(false);
+    ui->list_manager->setVisible(false);
+    ui->list_grub->setVisible(false);
+    ui->line_grub->setVisible(false);
+    ui->spin_grub->setVisible(false);
     ui->label_grub->setVisible(false);
     ui->label2_grub->setVisible(false);
     ui->label3_grub->setVisible(false);
     ui->label4_grub->setVisible(false);
-    ui->wlogin->setVisible(false);
     ui->tabWidget->setVisible(false);
     ui->searchApp->setVisible(false);
     ui->action_4->setVisible(false);
@@ -961,9 +940,8 @@ void MainWindow::mrpropper() //зачистка говна перед начал
     ui->label1->show();
 
     if(soundon == 0)
-    {
         loadSound(0);
-    }
+
     showLoadingAnimation(true);
 }
 
@@ -972,11 +950,10 @@ void MainWindow::loadSound(int soundIndex)
     QSoundEffect* beep = new QSoundEffect(this);
     QString soundPath;
 
-    if (soundIndex == 1) {
+    if (soundIndex == 1)
         soundPath = "qrc:/media/message.wav";
-    } else {
+    else
         soundPath = "qrc:/media/sound.wav";
-    }
 
     beep->setSource(QUrl(soundPath));
     beep->setVolume(1.0f);
@@ -999,40 +976,13 @@ void MainWindow::loadSettings()
 
     timeupdate = QTime::fromString(settings.value("TimeUpdate").toString(), "HH:mm");
 
-    QString savedLogin = settings.value("login", "").toString();
-    QString savedPassword = settings.value("password", "").toString();
-
-    // Проверяем наличие значений настроек "login" и "password"
-    if (savedPassword == QString::fromStdString(secpass)) {
-
-        // Форматируем строку приветствия
-        QString loginwelcome = QString(tr("Добро пожаловать %1!")).arg(savedLogin);
-
-        // Устанавливаем заголовок и текст метки с приветствием
-        ui->menu_2->setTitle(loginwelcome);
-        ui->label1->setText(loginwelcome);
-
-        // Делаем мой профиль доступным
-        ui->action_13->setVisible(false);
-        ui->action_14->setVisible(false);
-        ui->action_15->setVisible(false);
-
-        //Делаем меню для аворизации/регистрации и тп недоступным
-        ui->menu_2->setEnabled(false);
-
-        // Включаем недоступные функции
-        ui->action_1->setEnabled(true);
-
-        mrpropper();
-        auth = 1;
-    }
     ui->webEngineView->setZoomFactor(0.9);
     ui->toolBar_2->setFixedWidth(100);
     //запретить выключать панели
     ui->toolBar->setContextMenuPolicy(Qt::PreventContextMenu);
     ui->toolBar_2->setContextMenuPolicy(Qt::PreventContextMenu);
     // Запрещаем редактирование ячеек
-    ui->tableWidgetApp->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->table_aur->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
 QColor MainWindow::generateRandomColor()
@@ -1050,11 +1000,9 @@ QColor MainWindow::generateRandomColor()
 
 void MainWindow::onTimeChanged(const QTime& time)
 {
-    // Вызов нужной функции при изменении времени
-    if (time == QTime(0, 0)) {
-        // Если время не задано (00:00), ничего не делаем
+    // Если время не задано (00:00), ничего не делаем
+    if (time == QTime(0, 0))
         return;
-    }
 
     // Получаем текущее время и дату
     QTime currentTime = QTime::currentTime();
@@ -1070,9 +1018,8 @@ void MainWindow::onTimeChanged(const QTime& time)
     int interval = currentTime.msecsTo(selectedTime);
 
     // Если выбранное время уже прошло, добавляем 24 часа к интервалу
-    if (interval < 0) {
+    if (interval < 0)
         interval += 24 * 60 * 60 * 1000; // 24 часа в миллисекундах
-    }
 
     // Устанавливаем таймер для первого вызова функции
     QTimer::singleShot(interval, this, &MainWindow::checkUpdates);
@@ -1090,9 +1037,8 @@ void MainWindow::showLoadingAnimation(bool show)
 
     if (show) {
         // Если иконка уже показывается, не делаем ничего
-        if (label != nullptr) {
+        if (label != nullptr)
             return;
-        }
 
         // Создаем новый QLabel и загружаем в него изображение
         QPixmap pixmap(":/img/load_1.png");
@@ -1111,15 +1057,13 @@ void MainWindow::showLoadingAnimation(bool show)
             QString fileName = QString(":/img/load_%1.png").arg(counter);
 
             QPixmap pixmap(fileName);
-            if (label != nullptr) {
+            if (label != nullptr)
                 label->setPixmap(pixmap);
-            }
 
-            if (counter >= 3) {
+            if (counter >= 3)
                 counter = 1;
-            } else {
+            else
                 counter++;
-            }
         });
         timer->start(200);
 
@@ -1130,9 +1074,8 @@ void MainWindow::showLoadingAnimation(bool show)
         }
     } else {
         // Если иконка не показывается, не делаем ничего
-        if (label == nullptr) {
+        if (label == nullptr)
             return;
-        }
 
         // Запускаем таймер для скрытия иконки через 3 секунды
         hideTimer = new QTimer(this);
@@ -1148,9 +1091,8 @@ void MainWindow::showLoadingAnimation(bool show)
                 ui->statusBar->removeWidget(label);
                 delete label;
                 label = nullptr;
-            } else {
+            } else
                 qDebug() << "QLabel is not created yet!";
-            }
         });
         hideTimer->start(300);
     }
@@ -1163,28 +1105,26 @@ void MainWindow::handleServerResponse(QNetworkReply *reply)
         QByteArray response = reply->readAll();
         QJsonDocument jsonDoc = QJsonDocument::fromJson(response);
         QJsonObject jsonObj = jsonDoc.object();
-        if (jsonObj["type"].toString() == "error") {
-            sendNotification(tr("Ошибка"), tr("Ошибка при получении списка приложений из AUR: ") + jsonObj["results"].toString());
 
-        } else if (jsonObj["type"].toString() == "search") {
+        if (jsonObj["type"].toString() == "search") {
             QJsonArray results = jsonObj["results"].toArray();
-            ui->tableWidgetApp->setRowCount(results.size()); // Устанавливаем количество строк в таблице
-            ui->tableWidgetApp->setColumnCount(6); // Устанавливаем количество столбцов в таблице
-            ui->tableWidgetApp->setShowGrid(false); // Убираем отображение сетки
-            ui->tableWidgetApp->verticalHeader()->setVisible(false); // Убираем отображение номеров строк
-            ui->tableWidgetApp->setColumnWidth(0, 250);
-            ui->tableWidgetApp->setColumnWidth(1, 550);
-            ui->tableWidgetApp->setColumnWidth(2, 130);
-            ui->tableWidgetApp->setColumnWidth(3, 70);
-            ui->tableWidgetApp->setColumnWidth(4, 110);
-            ui->tableWidgetApp->setColumnWidth(5, 170);
-            ui->tableWidgetApp->setHorizontalHeaderLabels({tr("Название"), tr("Описание"), tr("Версия"), tr("Голоса"), tr("Популярность"), tr("Последнее обновление")});
+            ui->table_aur->setRowCount(results.size()); // Устанавливаем количество строк в таблице
+            ui->table_aur->setColumnCount(6); // Устанавливаем количество столбцов в таблице
+            ui->table_aur->setShowGrid(false); // Убираем отображение сетки
+            ui->table_aur->verticalHeader()->setVisible(false); // Убираем отображение номеров строк
+            ui->table_aur->setColumnWidth(0, 250);
+            ui->table_aur->setColumnWidth(1, 550);
+            ui->table_aur->setColumnWidth(2, 130);
+            ui->table_aur->setColumnWidth(3, 70);
+            ui->table_aur->setColumnWidth(4, 110);
+            ui->table_aur->setColumnWidth(5, 170);
+            ui->table_aur->setHorizontalHeaderLabels({tr("Название"), tr("Описание"), tr("Версия"), tr("Голоса"), tr("Популярность"), tr("Последнее обновление")});
 
-            ui->tableWidgetApp->setColumnHidden(1, table1 == 0);
-            ui->tableWidgetApp->setColumnHidden(2, table2 == 0);
-            ui->tableWidgetApp->setColumnHidden(3, table3 == 0);
-            ui->tableWidgetApp->setColumnHidden(4, table4 == 0);
-            ui->tableWidgetApp->setColumnHidden(5, table5 == 0);
+            ui->table_aur->setColumnHidden(1, table1 == 0);
+            ui->table_aur->setColumnHidden(2, table2 == 0);
+            ui->table_aur->setColumnHidden(3, table3 == 0);
+            ui->table_aur->setColumnHidden(4, table4 == 0);
+            ui->table_aur->setColumnHidden(5, table5 == 0);
 
             for (int i = 0; i < results.size(); i++) {
                 QString name = results[i].toObject()["Name"].toString();
@@ -1199,7 +1139,7 @@ void MainWindow::handleServerResponse(QNetworkReply *reply)
 
                 QTableWidgetItem *item = new QTableWidgetItem(name);
                 item->setForeground(color);
-                ui->tableWidgetApp->setItem(i, 0, item);
+                ui->table_aur->setItem(i, 0, item);
 
                 if (votes >= fav) {
                     QIcon icon(":/img/p_1.png");
@@ -1208,7 +1148,7 @@ void MainWindow::handleServerResponse(QNetworkReply *reply)
 
                 QTableWidgetItem *item1 = new QTableWidgetItem(description);
                 item1->setForeground(color);
-                ui->tableWidgetApp->setItem(i, 1, item1);
+                ui->table_aur->setItem(i, 1, item1);
 
                 QTableWidgetItem *item2 = new QTableWidgetItem(version);
                 item2->setForeground(color);
@@ -1220,38 +1160,36 @@ void MainWindow::handleServerResponse(QNetworkReply *reply)
                 } else {
                     item2->setFlags(item2->flags() ^ Qt::ItemIsEditable);
                 }
-                ui->tableWidgetApp->setItem(i, 2, item2);
+                ui->table_aur->setItem(i, 2, item2);
 
                 QTableWidgetItem *item3 = new QTableWidgetItem();
                 item3->setForeground(color);
                 item3->setData(Qt::DisplayRole, votes);
-                ui->tableWidgetApp->setItem(i, 3, item3);
+                ui->table_aur->setItem(i, 3, item3);
 
                 QTableWidgetItem *item4 = new QTableWidgetItem(QString::number(popularity, 'f', 2));
                 item4->setForeground(color);
-                ui->tableWidgetApp->setItem(i, 4, item4);
+                ui->table_aur->setItem(i, 4, item4);
 
                 QDateTime dateTime;
                 dateTime.setMSecsSinceEpoch(timestamp * 1000);
                 QString date = dateTime.toString("yyyy-MM-dd");
                 QTableWidgetItem *item5 = new QTableWidgetItem(date);
                 item5->setForeground(color);
-                ui->tableWidgetApp->setItem(i, 5, item5);
+                ui->table_aur->setItem(i, 5, item5);
             }
         }
         // установка атрибутов сортировки и выбора для ячеек заголовка столбца
-        for(int i = 0; i < ui->tableWidgetApp->columnCount(); i++) {
-            QTableWidgetItem *headerItem = ui->tableWidgetApp->horizontalHeaderItem(i);
+        for(int i = 0; i < ui->table_aur->columnCount(); i++) {
+            QTableWidgetItem *headerItem = ui->table_aur->horizontalHeaderItem(i);
             headerItem->setFlags(headerItem->flags() | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         }
 
         // подключение сигнала клика по заголовку столбца к слоту сортировки таблицы
-        QObject::connect(ui->tableWidgetApp->horizontalHeader(), &QHeaderView::sectionClicked, ui->tableWidgetApp, [this](int index){
-            Qt::SortOrder order = ui->tableWidgetApp->horizontalHeader()->sortIndicatorOrder();
-            ui->tableWidgetApp->sortByColumn(index, order);
+        QObject::connect(ui->table_aur->horizontalHeader(), &QHeaderView::sectionClicked, ui->table_aur, [this](int index){
+            Qt::SortOrder order = ui->table_aur->horizontalHeader()->sortIndicatorOrder();
+            ui->table_aur->sortByColumn(index, order);
         });
-    } else {
-        sendNotification(tr("Ошибка"), tr("Ошибка при получении списка приложений из AUR: ") + reply->errorString());
     }
     reply->deleteLater();
 }
@@ -1268,7 +1206,33 @@ void MainWindow::loadContent() {
     // Обрабатываем ответ от сервера
     QObject::connect(reply, &QNetworkReply::finished, this, [=]() {
         handleServerResponse(reply);
+
+        // Выполняем поиск и выделение в таблице
+        const QString searchText = ui->searchApp->text();
+        if (page != 2 || searchText.isEmpty())
+            return;
+
+        QTableWidget *table = ui->table_aur;
+        int rowCount = table->rowCount();
+        for (int i = 0; i < rowCount; ++i) {
+            QTableWidgetItem *item = table->item(i, 0);
+            if (item) {
+                QString cellText = item->text();
+                QStringList words = cellText.split(' ', Qt::SkipEmptyParts);
+                if (!words.isEmpty() && words.first().startsWith(searchText, Qt::CaseInsensitive)) {
+                    // Выделяем строку
+                    table->setCurrentItem(item);
+                    table->scrollToItem(item, QAbstractItemView::EnsureVisible);
+                    break;
+                }
+            }
+        }
     });
+
+    // Очищаем таблицу
+    QTableWidget *table = ui->table_aur;
+    table->clearContents();
+    table->setRowCount(0);
 
     connect(ui->searchApp, &QLineEdit::textChanged, this, [=](const QString &text) {
         if (page == 2)
@@ -1286,20 +1250,34 @@ void MainWindow::loadContent() {
             // Обработка ответа от сервера
             QObject::connect(reply, &QNetworkReply::finished, this, [=]() {
                 handleServerResponse(reply);
+
+                // Выполняем поиск и выделение в таблице
+                int rowCount = table->rowCount();
+                for (int i = 0; i < rowCount; ++i) {
+                    QTableWidgetItem *item = table->item(i, 0);
+                    if (item) {
+                        QString cellText = item->text();
+                        QStringList words = cellText.split(' ', Qt::SkipEmptyParts);
+                        if (!words.isEmpty() && words.first().startsWith(text, Qt::CaseInsensitive)) {
+                            // Выделяем строку
+                            // Выделяем всю строку
+                            table->setCurrentCell(item->row(), 0);
+                            table->setSelectionBehavior(QAbstractItemView::SelectRows);
+                            table->scrollToItem(item, QAbstractItemView::EnsureVisible);
+                            break;
+                        }
+                    }
+                }
             });
         }
         else {
             //поиск по listWidgetManager
-            QList<QListWidgetItem*> matchingItems = ui->listWidgetManager->findItems(text, Qt::MatchContains);
+            QList<QListWidgetItem*> matchingItems = ui->list_manager->findItems(text, Qt::MatchContains);
             if (!matchingItems.empty()) {
-                ui->listWidgetManager->setCurrentItem(matchingItems.first());
-                ui->listWidgetManager->scrollToItem(matchingItems.first(), QAbstractItemView::PositionAtCenter);
+                ui->list_manager->setCurrentItem(matchingItems.first());
+                ui->list_manager->scrollToItem(matchingItems.first(), QAbstractItemView::PositionAtCenter);
             }
         }
-    });
-    connect(ui->tableWidgetApp, &QTableWidget::cellClicked, this, [=]() {
-        // Выделяем всю строку при клике на ячейку
-        ui->tableWidgetApp->setSelectionBehavior(QAbstractItemView::SelectRows);
     });
 }
 
@@ -1322,18 +1300,22 @@ void MainWindow::onProcessOutputAvailable()
         int index = output.indexOf(str.toUtf8());
 
         if (index != -1) {
-            // Извлечение количества доступных обновлений
-            QString countStr = output.mid(index - 3, 3);  // Извлечение трех символов
-            int count = countStr.toInt();
+            // Используем регулярное выражение для поиска числа
+            QRegularExpression regex("(\\d+)");
+            QRegularExpressionMatch match = regex.match(output, index - 3);
+            if (match.hasMatch()) {
+                QString countStr = match.captured(1);
+                int count = countStr.toInt();
 
-            QString message = QString(tr("Доступно %1 обновлений. Пожалуйста, обновите систему.")).arg(count);
-            sendNotification(tr("Обновление"), message);
+                QString message = QString(tr("Доступно %1 обновлений. Пожалуйста, обновите систему.")).arg(count);
+                sendNotification(tr("Обновление"), message);
 
-            Terminal terminal = getTerminal();
-            QProcess* updateProcess = new QProcess(this);
-            updateProcess->setProcessChannelMode(QProcess::MergedChannels);
-            connect(updateProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onUpdateProcessFinished(int, QProcess::ExitStatus)));
-            updateProcess->start(terminal.binary, QStringList() << terminal.args << "yay -Syu");
+                Terminal terminal = getTerminal();
+                QProcess* updateProcess = new QProcess(this);
+                updateProcess->setProcessChannelMode(QProcess::MergedChannels);
+                connect(updateProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onProcessFinished(int, QProcess::ExitStatus)));
+                updateProcess->start(terminal.binary, QStringList() << terminal.args << "yay -Syu");
+            }
         }
     }
 }
@@ -1345,30 +1327,15 @@ void MainWindow::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus
 
     QProcess* process = qobject_cast<QProcess*>(sender());
 
-    if (process) {
+    if (process)
         process->deleteLater();
-    }
-}
-
-void MainWindow::onUpdateProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
-{
-    Q_UNUSED(exitCode);
-    Q_UNUSED(exitStatus);
-
-    QProcess* process = qobject_cast<QProcess*>(sender());
-
-    if (process) {
-        // Обработка завершения процесса обновления
-        // ...
-        process->deleteLater();
-    }
 }
 
 void MainWindow::loadingListWidget()
 {
-    ui->listWidget_2->clear();
-    ui->listWidget_clear->clear();
-    ui->listWidget_grub->clear();
+    ui->list_sh->clear();
+    ui->list_clear->clear();
+    ui->list_grub->clear();
 
     if (lang == "en_US") {
         QStringList shResourcePaths = {":/en/sh/1c.sh",
@@ -1400,9 +1367,9 @@ void MainWindow::loadingListWidget()
                                              ":/en/journals/pacman.sh",
                                              ":/en/journals/top-pkg.sh"};
         QString baseDir = QDir::homePath() + "/kLaus/"; // Присваиваем значение переменной baseDir в блоке else
-        loadScripts(shResourcePaths, baseDir + "en/sh/", ui->listWidget_2);
-        loadScripts(clearResourcePaths, baseDir + "en/clear/", ui->listWidget_clear);
-        loadScripts(journalsResourcePaths, baseDir + "en/journals/", ui->listWidget_grub);
+        loadScripts(shResourcePaths, baseDir + "en/sh/", ui->list_sh);
+        loadScripts(clearResourcePaths, baseDir + "en/clear/", ui->list_clear);
+        loadScripts(journalsResourcePaths, baseDir + "en/journals/", ui->list_grub);
 
     } else {
         QStringList shResourcePaths = {":/sh/1c.sh",
@@ -1434,9 +1401,9 @@ void MainWindow::loadingListWidget()
                                              ":/journals/pacman.sh",
                                              ":/journals/top-pkg.sh"};
         QString baseDir = QDir::homePath() + "/kLaus/"; // Присваиваем значение переменной baseDir в блоке else
-        loadScripts(shResourcePaths, baseDir + "sh/", ui->listWidget_2);
-        loadScripts(clearResourcePaths, baseDir + "clear/", ui->listWidget_clear);
-        loadScripts(journalsResourcePaths, baseDir + "journals/", ui->listWidget_grub);
+        loadScripts(shResourcePaths, baseDir + "sh/", ui->list_sh);
+        loadScripts(clearResourcePaths, baseDir + "clear/", ui->list_clear);
+        loadScripts(journalsResourcePaths, baseDir + "journals/", ui->list_grub);
     }
 
     QString baseDir2 = QDir::homePath() + "/kLaus/other/";
@@ -1488,7 +1455,6 @@ void MainWindow::sendNotification(const QString& title, const QString& message)
 {
     QStringList arguments;
     arguments << title << message << "-i" << QDir::homePath() + "/kLaus/other/notify.png" << "-a" << "kLaus" << "-t" << "10000";
-
     QProcess::startDetached("notify-send", arguments);
     loadSound(1);
 }
@@ -1497,20 +1463,19 @@ void MainWindow::sendNotification(const QString& title, const QString& message)
 //--################################################################## СОБЫТИЯ ФУНКЦИЙ ##################################################################
 //-#####################################################################################################################################################
 
-void MainWindow::on_comboBox_mainpage_currentIndexChanged()
+void MainWindow::on_combo_mainpage_currentIndexChanged()
 {
-    mainpage = ui->comboBox_mainpage->currentIndex();
+    mainpage = ui->combo_mainpage->currentIndex();
     settings.setValue("MainPage", mainpage);
 }
 
-void MainWindow::on_comboBox_lang_currentIndexChanged(int index)
+void MainWindow::on_combo_lang_currentIndexChanged(int index)
 {
     QString lang;
-    if (index == 0) {
+    if (index == 0)
         lang = "ru_RU";
-    } else if (index == 1) {
+    else if (index == 1)
         lang = "en_US";
-    }
 
     // Получение текущего значения lang из настроек
     QString currentLang = settings.value("Language", "en_US").toString();
@@ -1524,13 +1489,13 @@ void MainWindow::on_comboBox_lang_currentIndexChanged(int index)
     }
 }
 
-void MainWindow::on_comboBox_yaycache_currentIndexChanged()
+void MainWindow::on_combo_cache_currentIndexChanged()
 {
-    yaycache = ui->comboBox_yaycache->currentIndex();
+    yaycache = ui->combo_cache->currentIndex();
     settings.setValue("YayCache", yaycache);
 }
 
-void MainWindow::on_timeEdit_update_timeChanged(const QTime &time)
+void MainWindow::on_time_update_timeChanged(const QTime &time)
 {
     // Проверяем, что время корректно
     if (time.isValid()) {
@@ -1540,76 +1505,75 @@ void MainWindow::on_timeEdit_update_timeChanged(const QTime &time)
         sendNotification(tr("Ошибка"), tr("Неверный формат времени."));
 }
 
-void MainWindow::on_checkBox_trayon_stateChanged()
+void MainWindow::on_check_trayon_stateChanged()
 {
-    trayon = ui->checkBox_trayon->isChecked() ? 1 : 0;
+    trayon = ui->check_trayon->isChecked() ? 1 : 0;
     settings.setValue("TrayOn", trayon);
 }
 
-void MainWindow::on_checkBox_soundon_stateChanged()
+void MainWindow::on_check_soundon_stateChanged()
 {
-    soundon = ui->checkBox_soundon->isChecked() ? 1 : 0;
+    soundon = ui->check_soundon->isChecked() ? 1 : 0;
     settings.setValue("SoundOn", soundon);
 }
 
-void MainWindow::on_checkBox_1_stateChanged()
+void MainWindow::on_check_description_stateChanged()
 {
     //описание
-    table1 = ui->checkBox_1->isChecked() ? 1 : 0;
+    table1 = ui->check_description->isChecked() ? 1 : 0;
     settings.setValue("Table1", table1);
-    ui->tableWidgetApp->setColumnHidden(1, !ui->checkBox_1->isChecked());
+    ui->table_aur->setColumnHidden(1, !ui->check_description->isChecked());
 }
 
-void MainWindow::on_checkBox_2_stateChanged()
+void MainWindow::on_check_version_stateChanged()
 {
     //версия
-    table2 = ui->checkBox_2->isChecked() ? 1 : 0;
+    table2 = ui->check_version->isChecked() ? 1 : 0;
     settings.setValue("Table2", table2);
-    ui->tableWidgetApp->setColumnHidden(2, !ui->checkBox_2->isChecked());
+    ui->table_aur->setColumnHidden(2, !ui->check_version->isChecked());
 
 }
 
-void MainWindow::on_checkBox_3_stateChanged()
+void MainWindow::on_check_voices_stateChanged()
 {
     //голоса
-    table3 = ui->checkBox_3->isChecked() ? 1 : 0;
+    table3 = ui->check_voices->isChecked() ? 1 : 0;
     settings.setValue("Table3", table3);
-    ui->tableWidgetApp->setColumnHidden(3, !ui->checkBox_3->isChecked());
+    ui->table_aur->setColumnHidden(3, !ui->check_voices->isChecked());
 }
 
 
-void MainWindow::on_checkBox_4_stateChanged()
+void MainWindow::on_check_popularity_stateChanged()
 {
     //популярность
-    table4 = ui->checkBox_4->isChecked() ? 1 : 0;
+    table4 = ui->check_popularity->isChecked() ? 1 : 0;
     settings.setValue("Table4", table4);
-    ui->tableWidgetApp->setColumnHidden(4, !ui->checkBox_4->isChecked());
+    ui->table_aur->setColumnHidden(4, !ui->check_popularity->isChecked());
 }
 
 
-void MainWindow::on_checkBox_5_stateChanged()
+void MainWindow::on_check_lastupdate_stateChanged()
 {
     //последнее обновление
-    table5 = ui->checkBox_5->isChecked() ? 1 : 0;
+    table5 = ui->check_lastupdate->isChecked() ? 1 : 0;
     settings.setValue("Table5", table5);
-    ui->tableWidgetApp->setColumnHidden(5, !ui->checkBox_5->isChecked());
+    ui->table_aur->setColumnHidden(5, !ui->check_lastupdate->isChecked());
 }
 
-void MainWindow::on_spinBox_valueChanged(int arg1)
+void MainWindow::on_spin_rating_valueChanged(int arg1)
 {
     fav = arg1;
     settings.setValue("Favorite", fav);
     loadContent();
-
 }
 
-void MainWindow::on_listWidget_2_itemDoubleClicked(QListWidgetItem *item) {
+void MainWindow::on_list_sh_itemDoubleClicked(QListWidgetItem *item) {
     QString scriptDir;
-    if (lang == "en_US") {
+    if (lang == "en_US")
         scriptDir = QDir::homePath() + "/kLaus/en/sh/";
-    } else {
+    else
         scriptDir = QDir::homePath() + "/kLaus/sh/";
-    }
+
 
     QString scriptPath;
     QString msg;
@@ -1625,24 +1589,20 @@ void MainWindow::on_listWidget_2_itemDoubleClicked(QListWidgetItem *item) {
                 QString line = scriptStream.readLine();
                 if (line.startsWith("#name")) {
                     QString name = line.mid(6).trimmed();
-                    if (name == itemName) {
+                    if (name == itemName)
                         scriptPath = fileInfo.absoluteFilePath();
-                    }
                 }
-                else if (line.startsWith("#msg")) {
+                else if (line.startsWith("#msg"))
                     msg = line.mid(5).trimmed();
-                }
             }
             scriptFile.close();
         }
-        if (!scriptPath.isEmpty()) {
+        if (!scriptPath.isEmpty())
             break;
-        }
     }
 
-    if (scriptPath.isEmpty()) {
+    if (scriptPath.isEmpty())
         scriptPath = scriptDir + itemName;
-    }
 
     QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), msg, QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes) {
@@ -1651,13 +1611,12 @@ void MainWindow::on_listWidget_2_itemDoubleClicked(QListWidgetItem *item) {
     }
 }
 
-void MainWindow::on_listWidget_grub_itemDoubleClicked(QListWidgetItem *item) {
+void MainWindow::on_list_grub_itemDoubleClicked(QListWidgetItem *item) {
     QString scriptDir;
-    if (lang == "en_US") {
+    if (lang == "en_US")
         scriptDir = QDir::homePath() + "/kLaus/en/journals/";
-    } else {
+    else
         scriptDir = QDir::homePath() + "/kLaus/journals/";
-    }
 
     QString scriptPath;
     QString msg;
@@ -1677,20 +1636,17 @@ void MainWindow::on_listWidget_grub_itemDoubleClicked(QListWidgetItem *item) {
                         scriptPath = fileInfo.absoluteFilePath();
                     }
                 }
-                else if (line.startsWith("#msg")) {
+                else if (line.startsWith("#msg"))
                     msg = line.mid(5).trimmed();
-                }
             }
             scriptFile.close();
         }
-        if (!scriptPath.isEmpty()) {
+        if (!scriptPath.isEmpty())
             break;
-        }
     }
 
-    if (scriptPath.isEmpty()) {
+    if (scriptPath.isEmpty())
         scriptPath = scriptDir + itemName;
-    }
 
     QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), msg, QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes) {
@@ -1699,13 +1655,12 @@ void MainWindow::on_listWidget_grub_itemDoubleClicked(QListWidgetItem *item) {
     }
 }
 
-void MainWindow::on_listWidget_clear_itemDoubleClicked(QListWidgetItem *item) {
+void MainWindow::on_list_clear_itemDoubleClicked(QListWidgetItem *item) {
     QString scriptDir;
-    if (lang == "en_US") {
+    if (lang == "en_US")
         scriptDir = QDir::homePath() + "/kLaus/en/clear/";
-    } else {
+    else
         scriptDir = QDir::homePath() + "/kLaus/clear/";
-    }
 
     QString scriptPath;
     QString msg;
@@ -1736,9 +1691,8 @@ void MainWindow::on_listWidget_clear_itemDoubleClicked(QListWidgetItem *item) {
         }
     }
 
-    if (scriptPath.isEmpty()) {
+    if (scriptPath.isEmpty())
         scriptPath = scriptDir + itemName;
-    }
 
     QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), msg, QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes) {
@@ -1750,7 +1704,6 @@ void MainWindow::on_listWidget_clear_itemDoubleClicked(QListWidgetItem *item) {
 void MainWindow::removeToolButtonTooltips(QToolBar* toolbar) {
     // Получение стиля текущей темы
     QStyle* style = qApp->style();
-
     QList<QAction*> actions = toolbar->actions();
 
     // Отключение отображения подсказок для виджетов

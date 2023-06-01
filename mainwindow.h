@@ -5,7 +5,6 @@
 #include <QListWidgetItem>
 #include <QNetworkAccessManager>
 #include <QProcess>
-
 #include <QString>
 #include <QVector>
 
@@ -75,44 +74,45 @@ public slots:
     void on_action_29_triggered();
     void on_action_30_triggered();
     void on_action_sh_triggered();
+
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
     void checkUpdates();
     void onProcessOutputAvailable();
     void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
-    void onUpdateProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
     void loadScripts(const QStringList& resourcePaths, const QString& baseDir, QListWidget* listWidget);
-    void on_listWidget_2_itemDoubleClicked(QListWidgetItem *item);
-    void on_listWidget_grub_itemDoubleClicked(QListWidgetItem *item);
-    void on_listWidget_clear_itemDoubleClicked(QListWidgetItem *item);
-    void on_timeEdit_update_timeChanged(const QTime &time);
-    void showLoadingAnimation(bool show);
-    void onTimeChanged(const QTime& time);
-    void handleServerResponse(QNetworkReply* reply);
-    void openDirectory(const QString &dirPath);
-    void on_spinBox_valueChanged(int arg1);
-    void removeToolButtonTooltips(QToolBar* toolbar);
     void loadSound(int soundIndex);
     void loadSettings();
     void loadContent();
     void loadingListWidget();
     void mrpropper();
-    void on_checkBox_trayon_stateChanged();
-    void on_checkBox_soundon_stateChanged();
-    void on_comboBox_mainpage_currentIndexChanged();
-    void on_comboBox_yaycache_currentIndexChanged();
-    void on_checkBox_1_stateChanged();
-    void on_checkBox_2_stateChanged();
-    void on_checkBox_3_stateChanged();
-    void on_checkBox_4_stateChanged();
-    void on_checkBox_5_stateChanged();
-    void on_pushButton_3_clicked();
+    void showLoadingAnimation(bool show);
+
+    void onTimeChanged(const QTime& time);
+    void handleServerResponse(QNetworkReply* reply);
+    void openDirectory(const QString &dirPath);
+    void removeToolButtonTooltips(QToolBar* toolbar);
+
+    void on_list_sh_itemDoubleClicked(QListWidgetItem *item);
+    void on_list_grub_itemDoubleClicked(QListWidgetItem *item);
+    void on_list_clear_itemDoubleClicked(QListWidgetItem *item);
+    void on_spin_rating_valueChanged(int arg1);
+    void on_time_update_timeChanged(const QTime &time);
+    void on_check_trayon_stateChanged();
+    void on_check_soundon_stateChanged();
+    void on_combo_mainpage_currentIndexChanged();
+    void on_combo_cache_currentIndexChanged();
+    void on_check_description_stateChanged();
+    void on_check_version_stateChanged();
+    void on_check_voices_stateChanged();
+    void on_check_popularity_stateChanged();
+    void on_check_lastupdate_stateChanged();
     void on_action_31_triggered();
     void on_action_32_triggered();
     void on_action_33_triggered();
-    void on_comboBox_lang_currentIndexChanged(int index);
+    void on_combo_lang_currentIndexChanged(int index);
 };
 
 #endif // MAINWINDOW_H

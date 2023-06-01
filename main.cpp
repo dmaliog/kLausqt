@@ -27,14 +27,11 @@ int main(int argc, char *argv[])
     // Проверяем, есть ли уже сохраненный язык в файле INI
     if (settings.contains("Language")) {
         QString savedLanguage = settings.value("Language").toString();
-
-        if (savedLanguage == "ru_RU") {
-            // Язык русский уже выбран
+        if (savedLanguage == "ru_RU")
             locale = savedLanguage;
-        } else if (savedLanguage == "en_US") {
-            // Язык английский уже выбран
+        else if (savedLanguage == "en_US")
             locale = savedLanguage;
-        } else {
+        else {
             // Значение языка в файле INI недействительно
             QMessageBox::critical(nullptr, "Error", "Invalid language value in INI file");
             return 1;
@@ -42,9 +39,9 @@ int main(int argc, char *argv[])
 
         // Загружаем и устанавливаем файл перевода
         QTranslator translator;
-        if (translator.load("kLaus_" + locale, ":/lang")) {
+        if (translator.load("kLaus_" + locale, ":/lang"))
             a.installTranslator(&translator);
-        } else {
+        else {
             QMessageBox::critical(nullptr, "Error", "Translation not available for selected language");
             return 1;
         }
@@ -55,11 +52,11 @@ int main(int argc, char *argv[])
         QString selectedLanguage = QInputDialog::getItem(nullptr, "Select Language", "Preferred Language:", languages);
 
         // Определяем соответствующий код языка
-        if (selectedLanguage == "Русский") {
+        if (selectedLanguage == "Русский")
             locale = QLocale(QLocale::Russian).name();
-        } else if (selectedLanguage == "English") {
+        else if (selectedLanguage == "English")
             locale = QLocale(QLocale::English).name();
-        } else {
+        else {
             QMessageBox::critical(nullptr, "Error", "Invalid language selection");
             return 1;
         }
@@ -69,19 +66,18 @@ int main(int argc, char *argv[])
 
         // Загружаем и устанавливаем файл перевода
         QTranslator translator;
-        if (translator.load("kLaus_" + locale, ":/lang")) {
+        if (translator.load("kLaus_" + locale, ":/lang"))
             a.installTranslator(&translator);
-        } else {
+        else {
             QMessageBox::critical(nullptr, "Error", "Translation not available for selected language");
             return 1;
         }
     }
     // Загружаем и устанавливаем файл перевода
     QTranslator translator;
-    if (translator.load("kLaus_" + locale, ":/lang")) {
+    if (translator.load("kLaus_" + locale, ":/lang"))
         a.installTranslator(&translator);
-
-    } else {
+    else {
         QMessageBox::critical(nullptr, "Error", "Translation not available for selected language");
         return 1;
     }

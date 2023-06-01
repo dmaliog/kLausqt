@@ -39,6 +39,9 @@
     <pointsize>10</pointsize>
    </font>
   </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::DefaultContextMenu</enum>
+  </property>
   <property name="windowTitle">
    <string>kLaus - Arch Manager</string>
   </property>
@@ -237,7 +240,7 @@ QMenuBar::item:pressed { border-radius:5px;background-color: #916ee4; }</string>
      <number>0</number>
     </property>
    </widget>
-   <widget class="QTableWidget" name="tableWidgetApp">
+   <widget class="QTableWidget" name="table_aur">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -258,24 +261,24 @@ QMenuBar::item:pressed { border-radius:5px;background-color: #916ee4; }</string>
      <enum>Qt::NoFocus</enum>
     </property>
     <property name="styleSheet">
-     <string notr="true">QTableWidget#tableWidgetApp {
+     <string notr="true">QTableWidget {
     background-color: #242424;
     border: 5px solid #28276b;
     border-radius: 13px;
     padding: 2px;
 }
 
-QTableWidget#tableWidgetApp::item {
+QTableWidget::item {
     padding:10px;
     border:none;
 }
 
-QTableWidget#tableWidgetApp QHeaderView {
+QTableWidget QHeaderView {
     background-color: #1f1f1f;
     border:none;
 }
 
-QTableWidget#tableWidgetApp QHeaderView::section {
+QTableWidget QHeaderView::section {
     background-color: #1f1f1f;
     border:0;
     padding:5px;
@@ -283,127 +286,33 @@ QTableWidget#tableWidgetApp QHeaderView::section {
 	font-weight: bold;
 }
 
-QTableWidget#tableWidgetApp QHeaderView::section:selected {
+QTableWidget QHeaderView::section:selected {
     background-color: #202020;
     color: #FFFFFF;
     border:none;
 }
 
-QTableWidget#tableWidgetApp QHeaderView::section:hover {
+QTableWidget QHeaderView::section:hover {
     background-color: #202020;
     color: #FFFFFF;
     border:none;
 }
 
-QTableWidget#tableWidgetApp QTableView::item {
+QTableWidget QTableView::item {
     padding:10px;
     border:none;
 }
 
-QTableWidget#tableWidgetApp QTableView::item:selected {
+QTableWidget QTableView::item:selected {
     background-color: #916ee4;
     color: #FFFFFF;
     border:none;
 }
 
-QTableWidget#tableWidgetApp QHeaderView::section:first {
+QTableWidget QHeaderView::section:first {
     border-top-left-radius: 5px;
 }</string>
     </property>
-   </widget>
-   <widget class="QGroupBox" name="wlogin">
-    <property name="geometry">
-     <rect>
-      <x>830</x>
-      <y>10</y>
-      <width>251</width>
-      <height>101</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Авторизация</string>
-    </property>
-    <widget class="QWidget" name="gridLayoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>30</y>
-       <width>324</width>
-       <height>482</height>
-      </rect>
-     </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLineEdit" name="login">
-        <property name="focusPolicy">
-         <enum>Qt::StrongFocus</enum>
-        </property>
-        <property name="contextMenuPolicy">
-         <enum>Qt::DefaultContextMenu</enum>
-        </property>
-        <property name="autoFillBackground">
-         <bool>false</bool>
-        </property>
-        <property name="inputMethodHints">
-         <set>Qt::ImhNone</set>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="frame">
-         <bool>true</bool>
-        </property>
-        <property name="echoMode">
-         <enum>QLineEdit::Normal</enum>
-        </property>
-        <property name="placeholderText">
-         <string>Логин</string>
-        </property>
-        <property name="clearButtonEnabled">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QPushButton" name="pushButton_3">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>ОК</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" colspan="2">
-       <widget class="QLineEdit" name="pass">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="dragEnabled">
-         <bool>false</bool>
-        </property>
-        <property name="readOnly">
-         <bool>false</bool>
-        </property>
-        <property name="placeholderText">
-         <string>Код приглашения</string>
-        </property>
-        <property name="cursorMoveStyle">
-         <enum>Qt::LogicalMoveStyle</enum>
-        </property>
-        <property name="clearButtonEnabled">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
    </widget>
    <widget class="QLineEdit" name="searchApp">
     <property name="geometry">
@@ -432,7 +341,7 @@ QTableWidget#tableWidgetApp QHeaderView::section:first {
      <string>Введите то, что нужно  ...</string>
     </property>
    </widget>
-   <widget class="QListWidget" name="listWidgetManager">
+   <widget class="QListWidget" name="list_manager">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -485,6 +394,9 @@ QTableWidget#tableWidgetApp QHeaderView::section:first {
       <width>990</width>
       <height>530</height>
      </rect>
+    </property>
+    <property name="contextMenuPolicy">
+     <enum>Qt::PreventContextMenu</enum>
     </property>
     <property name="url">
      <url>
@@ -540,11 +452,11 @@ QTabWidget#tabWidget QTabBar::tab:selected {
     <property name="currentIndex">
      <number>1</number>
     </property>
-    <widget class="QWidget" name="tab">
+    <widget class="QWidget" name="tab_settings">
      <attribute name="title">
       <string>Настройки AUR</string>
      </attribute>
-     <widget class="QLabel" name="label">
+     <widget class="QLabel" name="label_show">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -562,7 +474,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
        <string>Видимость элементов</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_3">
+     <widget class="QLabel" name="label_other">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -580,7 +492,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
        <string>Другие настройки</string>
       </property>
      </widget>
-     <widget class="QScrollArea" name="scrollArea">
+     <widget class="QScrollArea" name="scroll_other">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -595,7 +507,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
       <property name="widgetResizable">
        <bool>true</bool>
       </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents">
+      <widget class="QWidget" name="scrollArea_other">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -613,9 +525,9 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           <height>42</height>
          </rect>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <layout class="QHBoxLayout" name="horizontal_update">
          <item>
-          <widget class="QLabel" name="label_4">
+          <widget class="QLabel" name="label_update">
            <property name="font">
             <font>
              <pointsize>12</pointsize>
@@ -627,7 +539,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           </widget>
          </item>
          <item>
-          <widget class="QTimeEdit" name="timeEdit_update">
+          <widget class="QTimeEdit" name="time_update">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -650,9 +562,9 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           <height>42</height>
          </rect>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <layout class="QHBoxLayout" name="horizontal_cache">
          <item>
-          <widget class="QLabel" name="label_5">
+          <widget class="QLabel" name="label_cache">
            <property name="font">
             <font>
              <pointsize>12</pointsize>
@@ -664,7 +576,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox_yaycache">
+          <widget class="QComboBox" name="combo_cache">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -701,7 +613,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
        </widget>
       </widget>
      </widget>
-     <widget class="QScrollArea" name="scrollArea_2">
+     <widget class="QScrollArea" name="scrollArea_elements">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -716,7 +628,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
       <property name="widgetResizable">
        <bool>true</bool>
       </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents_2">
+      <widget class="QWidget" name="scroll_visible">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -734,37 +646,37 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           <height>48</height>
          </rect>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <layout class="QHBoxLayout" name="horizontal_visible">
          <item>
-          <widget class="QCheckBox" name="checkBox_1">
+          <widget class="QCheckBox" name="check_description">
            <property name="text">
             <string>Описание</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="checkBox_2">
+          <widget class="QCheckBox" name="check_version">
            <property name="text">
             <string>Версия</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="checkBox_3">
+          <widget class="QCheckBox" name="check_voices">
            <property name="text">
             <string>Голоса</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="checkBox_4">
+          <widget class="QCheckBox" name="check_popularity">
            <property name="text">
             <string>Популярность</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="checkBox_5">
+          <widget class="QCheckBox" name="check_lastupdate">
            <property name="text">
             <string>Последнее обновление</string>
            </property>
@@ -781,7 +693,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           <height>51</height>
          </rect>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <layout class="QHBoxLayout" name="horizontal_rating">
          <property name="topMargin">
           <number>4</number>
          </property>
@@ -789,7 +701,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           <number>4</number>
          </property>
          <item>
-          <widget class="QLabel" name="label_6">
+          <widget class="QLabel" name="label_rating">
            <property name="font">
             <font>
              <pointsize>12</pointsize>
@@ -801,7 +713,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="spinBox">
+          <widget class="QSpinBox" name="spin_rating">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -821,11 +733,11 @@ QTabWidget#tabWidget QTabBar::tab:selected {
       </widget>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_2">
+    <widget class="QWidget" name="tab_aursettings">
      <attribute name="title">
       <string>Настройки приложения</string>
      </attribute>
-     <widget class="QCheckBox" name="checkBox_trayon">
+     <widget class="QCheckBox" name="check_trayon">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -838,7 +750,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
        <string>Закрывать без сворачивания в трей</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_soundon">
+     <widget class="QCheckBox" name="check_soundon">
       <property name="enabled">
        <bool>true</bool>
       </property>
@@ -854,7 +766,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
        <string>Выключить звуки меню</string>
       </property>
      </widget>
-     <widget class="QScrollArea" name="scrollArea_3">
+     <widget class="QScrollArea" name="scroll_othersettings">
       <property name="geometry">
        <rect>
         <x>30</x>
@@ -869,7 +781,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
       <property name="widgetResizable">
        <bool>true</bool>
       </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents_4">
+      <widget class="QWidget" name="scrollArea_othersettings">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -887,9 +799,9 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           <height>42</height>
          </rect>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout">
+        <layout class="QHBoxLayout" name="horizontal_mainpage">
          <item>
-          <widget class="QLabel" name="label_2">
+          <widget class="QLabel" name="label_mainpage">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -907,7 +819,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox_mainpage">
+          <widget class="QComboBox" name="combo_mainpage">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -975,7 +887,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           <height>42</height>
          </rect>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_7">
+        <layout class="QHBoxLayout" name="horizontal_lang">
          <item>
           <widget class="QLabel" name="label_lang">
            <property name="font">
@@ -989,7 +901,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox_lang">
+          <widget class="QComboBox" name="combo_lang">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -1015,12 +927,12 @@ QTabWidget#tabWidget QTabBar::tab:selected {
        </widget>
       </widget>
      </widget>
-     <widget class="QLabel" name="label_16">
+     <widget class="QLabel" name="label_othersettings">
       <property name="geometry">
        <rect>
         <x>30</x>
         <y>120</y>
-        <width>201</width>
+        <width>451</width>
         <height>21</height>
        </rect>
       </property>
@@ -1034,11 +946,11 @@ QTabWidget#tabWidget QTabBar::tab:selected {
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_3">
+    <widget class="QWidget" name="tab_info">
      <attribute name="title">
       <string>Страница</string>
      </attribute>
-     <widget class="QLabel" name="hello">
+     <widget class="QLabel" name="label_hello">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1067,7 +979,7 @@ border:0;</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QLabel" name="label_7">
+     <widget class="QLabel" name="label_thanks">
       <property name="geometry">
        <rect>
         <x>380</x>
@@ -1080,7 +992,7 @@ border:0;</string>
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#5d58f8;&quot;&gt;Благодарности:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_8">
+     <widget class="QLabel" name="label_sponsors">
       <property name="geometry">
        <rect>
         <x>380</x>
@@ -1102,7 +1014,7 @@ border:0;</string>
        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_9">
+     <widget class="QLabel" name="label_qr">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -1124,7 +1036,7 @@ border:0;</string>
        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_10">
+     <widget class="QLabel" name="label_help">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -1137,7 +1049,7 @@ border:0;</string>
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#5d58f8;&quot;&gt;Помогите развитию приложения:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_11">
+     <widget class="QLabel" name="label_author">
       <property name="geometry">
        <rect>
         <x>670</x>
@@ -1152,7 +1064,7 @@ border:0;</string>
      </widget>
     </widget>
    </widget>
-   <widget class="QListWidget" name="listWidget_clear">
+   <widget class="QListWidget" name="list_clear">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -1170,7 +1082,7 @@ border:0;</string>
      <enum>Qt::NoFocus</enum>
     </property>
    </widget>
-   <widget class="QListWidget" name="listWidget_2">
+   <widget class="QListWidget" name="list_sh">
     <property name="geometry">
      <rect>
       <x>360</x>
@@ -1269,7 +1181,7 @@ border:0;</string>
      <number>0</number>
     </property>
    </widget>
-   <widget class="QListWidget" name="listWidget_grub">
+   <widget class="QListWidget" name="list_grub">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -1296,7 +1208,7 @@ border:0;</string>
       <height>41</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_5">
+    <layout class="QHBoxLayout" name="horizontalLayout_grub">
      <item>
       <widget class="QLabel" name="label_grub">
        <property name="font">
@@ -1322,7 +1234,7 @@ border:0;</string>
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="spinBox_grub">
+      <widget class="QSpinBox" name="spin_grub">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -1357,7 +1269,7 @@ padding: 5px;</string>
      </item>
     </layout>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_grub">
+   <widget class="QLineEdit" name="line_grub">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -1376,23 +1288,25 @@ border-radius:13px;
 padding: 5px 7px;</string>
     </property>
    </widget>
-   <zorder>listWidget_grub</zorder>
+   <zorder>list_grub</zorder>
    <zorder>layoutWidget</zorder>
-   <zorder>listWidget_2</zorder>
-   <zorder>listWidgetManager</zorder>
-   <zorder>tableWidgetApp</zorder>
-   <zorder>wlogin</zorder>
+   <zorder>list_sh</zorder>
+   <zorder>list_manager</zorder>
+   <zorder>table_aur</zorder>
    <zorder>searchApp</zorder>
-   <zorder>listWidget_clear</zorder>
+   <zorder>list_clear</zorder>
    <zorder>label1</zorder>
    <zorder>label2</zorder>
    <zorder>label3_grub</zorder>
    <zorder>label4_grub</zorder>
-   <zorder>lineEdit_grub</zorder>
+   <zorder>line_grub</zorder>
    <zorder>webEngineView</zorder>
    <zorder>tabWidget</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -1401,10 +1315,31 @@ padding: 5px 7px;</string>
      <height>30</height>
     </rect>
    </property>
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::PreventContextMenu</enum>
+   </property>
+   <property name="acceptDrops">
+    <bool>false</bool>
+   </property>
    <property name="inputMethodHints">
     <set>Qt::ImhNone</set>
    </property>
+   <property name="defaultUp">
+    <bool>false</bool>
+   </property>
+   <property name="nativeMenuBar">
+    <bool>false</bool>
+   </property>
    <widget class="QMenu" name="menu">
+    <property name="acceptDrops">
+     <bool>false</bool>
+    </property>
+    <property name="tearOffEnabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>Главное меню</string>
     </property>
@@ -1425,6 +1360,9 @@ padding: 5px 7px;</string>
    <widget class="QMenu" name="menu_2">
     <property name="enabled">
      <bool>true</bool>
+    </property>
+    <property name="acceptDrops">
+     <bool>false</bool>
     </property>
     <property name="title">
      <string>Вы не авторизовались</string>
