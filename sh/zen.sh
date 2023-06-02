@@ -1,22 +1,32 @@
-#name Установить Zen-ядро
-#msg Вы действительно хотите установить Zen ядро?
+#name_ru_RU Установить Zen-ядро
+#msg_ru_RU Вы действительно хотите установить Zen ядро?
+#name_en_US Install Zen Core
+#msg_en_US Do you really want to install Zen kernel?
 #!/bin/bash
+# Определение языка
+language="en_US"
+if [ -n "$1" ]; then
+    language="$1"
+fi
+
+# Загрузка файла перевода
+translations_file="translations_$language.txt"
+source "$HOME/kLaus/other/$translations_file"
 
 # Проверка наличия установленных Zen пакетов
 if [ -n "$(yay -Qs linux-zen)" ] || [ -n "$(yay -Qs linux-zen-headers)" ]; then
-    echo "У вас уже установлено Zen ядро!"
-    echo "Хотите удалить его и обновить GRUB? (д/н)"
+    echo "${zen_ok}"
     read answer
-    if [ "$answer" == "д" ]; then
+    if [ "$answer" == "y" ]; then
         yay -R --noconfirm linux-zen linux-zen-headers
 
         # Проверка наличия Grub
         if [ ! -f "/boot/grub/grub.cfg" ]; then
-            notify-send "Установка ZEN" "Grub не обнаружен..." -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+            notify-send "${zen}" "${grub_no}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
         else
             # Обновление Grub
             sudo grub-mkconfig -o /boot/grub/grub.cfg
-            notify-send "Установка ZEN" "Удаление завершено успешно" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+            notify-send "${zen}" "${delete_ok}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
         fi
     fi
 else
@@ -25,11 +35,10 @@ else
 
     # Проверка наличия Grub
     if [ ! -f "/boot/grub/grub.cfg" ]; then
-        notify-send "Установка ZEN" "Grub не обнаружен" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+        notify-send "${zen}" "${grub_no}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
     else
         # Обновление Grub
         sudo grub-mkconfig -o /boot/grub/grub.cfg
-        notify-send "Установка ZEN" "Установка завершена успешно" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+        notify-send "${zen}" "${install_ok}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
     fi
 fi
-

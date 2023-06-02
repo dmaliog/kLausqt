@@ -1,13 +1,24 @@
-#name Загруженные пакеты Yay
-#msg /.cache/yay/: В этой папке хранятся загруженные пакеты Yay. Если вы не планируете откатываться к предыдущим версиям пакетов, то вы можете удалить старые пакеты, чтобы освободить место. Однако, имейте в виду, что если вы захотите удалить пакеты, то вам будет необходимо загрузить их повторно при необходимости.
+#name_ru_RU Загруженные пакеты Yay
+#msg_ru_RU /.cache/yay/: В этой папке хранятся загруженные пакеты Yay. Если вы не планируете откатываться к предыдущим версиям пакетов, то вы можете удалить старые пакеты, чтобы освободить место. Однако, имейте в виду, что если вы захотите удалить пакеты, то вам будет необходимо загрузить их повторно при необходимости.
+#name_en_US Downloaded packages Yay
+#msg_en_US /.cache/yay/: Downloaded Yay packages are stored in this folder. If you do not plan to roll back to previous versions of packages, then you can delete the old packages to free up space. However, keep in mind that if you want to delete packages, you will need to download them again if necessary.
 #!/bin/bash
+# Определение языка
+language="en_US"
+if [ -n "$1" ]; then
+    language="$1"
+fi
+
+# Загрузка файла перевода
+translations_file="translations_$language.txt"
+source "$HOME/kLaus/other/$translations_file"
 
 # Подсчет размера папки /var/cache/pacman/pkg/
 folder_size=$(du -sh $HOME/.cache/yay/ | awk '{print $1}')
 
 # Вывод размера папки
-notify-send "Пакеты Yay" "Размер очистки: $folder_size" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+notify-send "${yay}" "${size_clear}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
 # Очистка папки $HOME/.cache/yay/
 sudo rm -rf $HOME/.cache/yay/*
 
-notify-send "Пакеты Yay" "Каталог $HOME/.cache/yay/ очищен" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+notify-send "${yay}" "${yay_clear}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000

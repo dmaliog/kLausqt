@@ -828,7 +828,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 //-##################################################################################
 
     removeToolButtonTooltips(ui->toolBar);
-
+    checkVersionAndClear();
     mrpropper(); //зачистка говна
     loadSettings(); //загрузка настроек
     loadContent(); //загрузка списков приложений игр и тп
@@ -880,6 +880,21 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     showLoadingAnimation(false);
 }
 
+void MainWindow::checkVersionAndClear() {
+    QString kLausDir = QDir::homePath() + "/kLaus";
+    QString settingsFilePath = kLausDir + "/settings.ini";
+    QString currentVersion = "2.2";
+    QSettings settings(settingsFilePath, QSettings::IniFormat);
+    QString storedVersion = settings.value("Version").toString();
+
+    if (storedVersion.isEmpty() || storedVersion != currentVersion) {
+        QDir directory(kLausDir);
+        directory.removeRecursively();
+        settings.setValue("Version", currentVersion);
+        settings.sync();
+        sendNotification(tr("Обновление kLaus"), tr("Версия kLaus поменялась, конфигурация сброшена!"));
+    }
+}
 MainWindow::~MainWindow()
 {
     delete ui;
@@ -1316,80 +1331,48 @@ void MainWindow::loadingListWidget()
     ui->list_clear->clear();
     ui->list_grub->clear();
 
-    if (lang == "en_US") {
-        QStringList shResourcePaths = {":/en/sh/1c.sh",
-                                       ":/en/sh/wayland.sh",
-                                       ":/en/sh/imgneofetch.sh",
-                                       ":/en/sh/root.sh",
-                                       ":/en/sh/PKGBUILD.sh",
-                                       ":/en/sh/save.sh",
-                                       ":/en/sh/load.sh",
-                                       ":/en/sh/zen.sh"};
+    QStringList shResourcePaths = {":/sh/1c.sh",
+                                   ":/sh/wayland.sh",
+                                   ":/sh/imgneofetch.sh",
+                                   ":/sh/root.sh",
+                                   ":/sh/PKGBUILD.sh",
+                                   ":/sh/save.sh",
+                                   ":/sh/load.sh",
+                                   ":/sh/zen.sh"};
 
-        QStringList clearResourcePaths = {":/en/clear/clear_trash.sh",
-                                          ":/en/clear/yay.sh",
-                                          ":/en/clear/pacman.sh"};
+    QStringList clearResourcePaths = {":/clear/clear_trash.sh",
+                                      ":/clear/yay.sh",
+                                      ":/clear/pacman.sh"};
 
-        QStringList journalsResourcePaths = {":/en/journals/neofetch.sh",
-                                             ":/en/journals/systemd-analyze.sh",
-                                             ":/en/journals/lspci.sh",
-                                             ":/en/journals/lsusb.sh",
-                                             ":/en/journals/inxi.sh",
-                                             ":/en/journals/hwinfo.sh",
-                                             ":/en/journals/lsblk.sh",
-                                             ":/en/journals/fdisk.sh",
-                                             ":/en/journals/native-pkg.sh",
-                                             ":/en/journals/foreign-pkg.sh",
-                                             ":/en/journals/xorg-log.sh",
-                                             ":/en/journals/grub-cfg.sh",
-                                             ":/en/journals/fstab.sh",
-                                             ":/en/journals/pacman.sh",
-                                             ":/en/journals/top-pkg.sh"};
-        QString baseDir = QDir::homePath() + "/kLaus/"; // Присваиваем значение переменной baseDir в блоке else
-        loadScripts(shResourcePaths, baseDir + "en/sh/", ui->list_sh);
-        loadScripts(clearResourcePaths, baseDir + "en/clear/", ui->list_clear);
-        loadScripts(journalsResourcePaths, baseDir + "en/journals/", ui->list_grub);
-
-    } else {
-        QStringList shResourcePaths = {":/sh/1c.sh",
-                                       ":/sh/wayland.sh",
-                                       ":/sh/imgneofetch.sh",
-                                       ":/sh/root.sh",
-                                       ":/sh/PKGBUILD.sh",
-                                       ":/sh/save.sh",
-                                       ":/sh/load.sh",
-                                       ":/sh/zen.sh"};
-
-        QStringList clearResourcePaths = {":/clear/clear_trash.sh",
-                                          ":/clear/yay.sh",
-                                          ":/clear/pacman.sh"};
-
-        QStringList journalsResourcePaths = {":/journals/neofetch.sh",
-                                             ":/journals/systemd-analyze.sh",
-                                             ":/journals/lspci.sh",
-                                             ":/journals/lsusb.sh",
-                                             ":/journals/inxi.sh",
-                                             ":/journals/hwinfo.sh",
-                                             ":/journals/lsblk.sh",
-                                             ":/journals/fdisk.sh",
-                                             ":/journals/native-pkg.sh",
-                                             ":/journals/foreign-pkg.sh",
-                                             ":/journals/xorg-log.sh",
-                                             ":/journals/grub-cfg.sh",
-                                             ":/journals/fstab.sh",
-                                             ":/journals/pacman.sh",
-                                             ":/journals/top-pkg.sh"};
-        QString baseDir = QDir::homePath() + "/kLaus/"; // Присваиваем значение переменной baseDir в блоке else
-        loadScripts(shResourcePaths, baseDir + "sh/", ui->list_sh);
-        loadScripts(clearResourcePaths, baseDir + "clear/", ui->list_clear);
-        loadScripts(journalsResourcePaths, baseDir + "journals/", ui->list_grub);
-    }
+    QStringList journalsResourcePaths = {":/journals/neofetch.sh",
+                                         ":/journals/systemd-analyze.sh",
+                                         ":/journals/lspci.sh",
+                                         ":/journals/lsusb.sh",
+                                         ":/journals/inxi.sh",
+                                         ":/journals/hwinfo.sh",
+                                         ":/journals/lsblk.sh",
+                                         ":/journals/fdisk.sh",
+                                         ":/journals/native-pkg.sh",
+                                         ":/journals/foreign-pkg.sh",
+                                         ":/journals/xorg-log.sh",
+                                         ":/journals/grub-cfg.sh",
+                                         ":/journals/fstab.sh",
+                                         ":/journals/pacman.sh",
+                                         ":/journals/top-pkg.sh"};
+    QString baseDir = QDir::homePath() + "/kLaus/";
+    loadScripts(shResourcePaths, baseDir + "sh/", ui->list_sh);
+    loadScripts(clearResourcePaths, baseDir + "clear/", ui->list_clear);
+    loadScripts(journalsResourcePaths, baseDir + "journals/", ui->list_grub);
 
     QString baseDir2 = QDir::homePath() + "/kLaus/other/";
-    QString fileName2 = QFileInfo(":/other/notify.png").fileName();
-    QString filePath2 = baseDir2 + fileName2;
+    QString notifyFileName = QFileInfo(":/other/notify.png").fileName();
+    QString notifyFilePath = baseDir2 + notifyFileName;
+    QString translationsEnFilePath = baseDir2 + "translations_en_US.txt";
+    QString translationsRuFilePath = baseDir2 + "translations_ru_RU.txt";
     QDir().mkpath(baseDir2);
-    QFile::copy(":/other/notify.png", filePath2);
+    QFile::copy(":/other/notify.png", notifyFilePath);
+    QFile::copy(":/other/translations_en_US.txt", translationsEnFilePath);
+    QFile::copy(":/other/translations_ru_RU.txt", translationsRuFilePath);
 
 }
 
@@ -1416,9 +1399,9 @@ void MainWindow::loadScripts(const QStringList& resourcePaths, const QString& ba
             while (!scriptStream.atEnd())
             {
                 QString line = scriptStream.readLine();
-                if (line.startsWith("#name"))
+                if (line.startsWith("#name_" + lang))
                 {
-                    itemName = line.mid(6).trimmed();
+                    itemName = line.mid(12).trimmed();
                     break;
                 }
             }
@@ -1548,11 +1531,7 @@ void MainWindow::on_spin_rating_valueChanged(int arg1)
 
 void MainWindow::on_list_sh_itemDoubleClicked(QListWidgetItem *item) {
     QString scriptDir;
-    if (lang == "en_US")
-        scriptDir = QDir::homePath() + "/kLaus/en/sh/";
-    else
-        scriptDir = QDir::homePath() + "/kLaus/sh/";
-
+    scriptDir = QDir::homePath() + "/kLaus/sh/";
 
     QString scriptPath;
     QString msg;
@@ -1566,13 +1545,13 @@ void MainWindow::on_list_sh_itemDoubleClicked(QListWidgetItem *item) {
             QTextStream scriptStream(&scriptFile);
             while (!scriptStream.atEnd()) {
                 QString line = scriptStream.readLine();
-                if (line.startsWith("#name")) {
-                    QString name = line.mid(6).trimmed();
+                if (line.startsWith("#name_" + lang)) {
+                    QString name = line.mid(12).trimmed();
                     if (name == itemName)
                         scriptPath = fileInfo.absoluteFilePath();
                 }
-                else if (line.startsWith("#msg"))
-                    msg = line.mid(5).trimmed();
+                else if (line.startsWith("#msg_" + lang))
+                    msg = line.mid(11).trimmed();
             }
             scriptFile.close();
         }
@@ -1586,16 +1565,13 @@ void MainWindow::on_list_sh_itemDoubleClicked(QListWidgetItem *item) {
     QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), msg, QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes) {
         Terminal terminal = getTerminal();
-        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << scriptPath);
+        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << scriptPath << lang);
     }
 }
 
 void MainWindow::on_list_grub_itemDoubleClicked(QListWidgetItem *item) {
     QString scriptDir;
-    if (lang == "en_US")
-        scriptDir = QDir::homePath() + "/kLaus/en/journals/";
-    else
-        scriptDir = QDir::homePath() + "/kLaus/journals/";
+    scriptDir = QDir::homePath() + "/kLaus/journals/";
 
     QString scriptPath;
     QString msg;
@@ -1609,14 +1585,13 @@ void MainWindow::on_list_grub_itemDoubleClicked(QListWidgetItem *item) {
             QTextStream scriptStream(&scriptFile);
             while (!scriptStream.atEnd()) {
                 QString line = scriptStream.readLine();
-                if (line.startsWith("#name")) {
-                    QString name = line.mid(6).trimmed();
-                    if (name == itemName) {
+                if (line.startsWith("#name_" + lang)) {
+                    QString name = line.mid(12).trimmed();
+                    if (name == itemName)
                         scriptPath = fileInfo.absoluteFilePath();
-                    }
                 }
-                else if (line.startsWith("#msg"))
-                    msg = line.mid(5).trimmed();
+                else if (line.startsWith("#msg_" + lang))
+                    msg = line.mid(11).trimmed();
             }
             scriptFile.close();
         }
@@ -1630,16 +1605,13 @@ void MainWindow::on_list_grub_itemDoubleClicked(QListWidgetItem *item) {
     QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), msg, QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes) {
         Terminal terminal = getTerminal();
-        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << scriptPath);
+        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << scriptPath << lang);
     }
 }
 
 void MainWindow::on_list_clear_itemDoubleClicked(QListWidgetItem *item) {
     QString scriptDir;
-    if (lang == "en_US")
-        scriptDir = QDir::homePath() + "/kLaus/en/clear/";
-    else
-        scriptDir = QDir::homePath() + "/kLaus/clear/";
+    scriptDir = QDir::homePath() + "/kLaus/clear/";
 
     QString scriptPath;
     QString msg;
@@ -1653,15 +1625,13 @@ void MainWindow::on_list_clear_itemDoubleClicked(QListWidgetItem *item) {
             QTextStream scriptStream(&scriptFile);
             while (!scriptStream.atEnd()) {
                 QString line = scriptStream.readLine();
-                if (line.startsWith("#name")) {
-                    QString name = line.mid(6).trimmed();
-                    if (name == itemName) {
+                if (line.startsWith("#name_" + lang)) {
+                    QString name = line.mid(12).trimmed();
+                    if (name == itemName)
                         scriptPath = fileInfo.absoluteFilePath();
-                    }
                 }
-                else if (line.startsWith("#msg")) {
-                    msg = line.mid(5).trimmed();
-                }
+                else if (line.startsWith("#msg_" + lang))
+                    msg = line.mid(11).trimmed();
             }
             scriptFile.close();
         }
@@ -1676,7 +1646,7 @@ void MainWindow::on_list_clear_itemDoubleClicked(QListWidgetItem *item) {
     QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), msg, QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes) {
         Terminal terminal = getTerminal();
-        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << scriptPath);
+        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << scriptPath << lang);
     }
 }
 

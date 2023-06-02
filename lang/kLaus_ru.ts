@@ -72,31 +72,31 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="653"/>
-        <location filename="../mainwindow.cpp" line="1121"/>
+        <location filename="../mainwindow.cpp" line="1139"/>
         <source>Описание</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="660"/>
-        <location filename="../mainwindow.cpp" line="1121"/>
+        <location filename="../mainwindow.cpp" line="1139"/>
         <source>Версия</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="667"/>
-        <location filename="../mainwindow.cpp" line="1121"/>
+        <location filename="../mainwindow.cpp" line="1139"/>
         <source>Голоса</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="674"/>
-        <location filename="../mainwindow.cpp" line="1121"/>
+        <location filename="../mainwindow.cpp" line="1139"/>
         <source>Популярность</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="681"/>
-        <location filename="../mainwindow.cpp" line="1121"/>
+        <location filename="../mainwindow.cpp" line="1139"/>
         <source>Последнее обновление</source>
         <translation type="unfinished"></translation>
     </message>
@@ -446,8 +446,8 @@
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="435"/>
-        <location filename="../mainwindow.cpp" line="1303"/>
-        <location filename="../mainwindow.cpp" line="1309"/>
+        <location filename="../mainwindow.cpp" line="1321"/>
+        <location filename="../mainwindow.cpp" line="1327"/>
         <source>Обновление</source>
         <translation type="unfinished"></translation>
     </message>
@@ -490,7 +490,7 @@
         <location filename="../mainwindow.cpp" line="724"/>
         <location filename="../mainwindow.cpp" line="729"/>
         <location filename="../mainwindow.cpp" line="736"/>
-        <location filename="../mainwindow.cpp" line="1484"/>
+        <location filename="../mainwindow.cpp" line="1470"/>
         <source>Ошибка</source>
         <translation type="unfinished"></translation>
     </message>
@@ -582,39 +582,49 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1121"/>
+        <location filename="../mainwindow.cpp" line="897"/>
+        <source>Обновление kLaus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="897"/>
+        <source>Версия kLaus поменялась, конфигурация сброшена!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="1139"/>
         <source>Название</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1302"/>
+        <location filename="../mainwindow.cpp" line="1320"/>
         <source>Доступно %1 обновлений. Пожалуйста, обновите систему.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1309"/>
+        <location filename="../mainwindow.cpp" line="1327"/>
         <source>Доступных обновлений нет!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1465"/>
+        <location filename="../mainwindow.cpp" line="1451"/>
         <source>Смена языка</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1465"/>
+        <location filename="../mainwindow.cpp" line="1451"/>
         <source>Приложение будет перезагружено для смены языка</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1484"/>
+        <location filename="../mainwindow.cpp" line="1470"/>
         <source>Неверный формат времени.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1586"/>
-        <location filename="../mainwindow.cpp" line="1630"/>
-        <location filename="../mainwindow.cpp" line="1676"/>
+        <location filename="../mainwindow.cpp" line="1568"/>
+        <location filename="../mainwindow.cpp" line="1608"/>
+        <location filename="../mainwindow.cpp" line="1649"/>
         <source>Вопрос</source>
         <translation type="unfinished"></translation>
     </message>

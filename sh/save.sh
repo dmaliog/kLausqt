@@ -1,12 +1,23 @@
-#name Создать локальный пакет
-#msg Вы действительно хотите создать локальный пакет?
+#name_ru_RU Создать локальный пакет
+#msg_ru_RU Вы действительно хотите создать локальный пакет?
+#name_en_US Create a local package
+#msg_en_US Do you really want to create a local package?
 #!/bin/bash
+# Определение языка
+language="en_US"
+if [ -n "$1" ]; then
+    language="$1"
+fi
+
+# Загрузка файла перевода
+translations_file="translations_$language.txt"
+source "$HOME/kLaus/other/$translations_file"
 
 # Запрос названия пакета
-read -p "Введите название пакета для скачивания: " package_name
+read -p "${pkgsave_name}" package_name
 
 # Диалоговое окно выбора каталога для сохранения архива
-save_dir=$(zenity --file-selection --directory --title="Выберите каталог для сохранения архива")
+save_dir=$(zenity --file-selection --directory --title="${path_pkgsave}")
 
 # Проверка, был ли выбран каталог для сохранения
 if [ -n "$save_dir" ]; then
@@ -21,10 +32,10 @@ if [ -n "$save_dir" ]; then
 
         # Создание архива скачанных пакетов
         tar czvf "$save_dir/$package_name".tar.gz -C ~/.cache/yay/ "$package_name"
-        notify-send "Создание локальных пакетов" "Пакеты $package_name и его зависимости успешно сохранены в архиве" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+        notify-send "${pkgsave}" "${pkgsave_ok}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
     else
-        notify-send "Создание локальных пакетов" "Ошибка при скачивании пакета $package_name" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+        notify-send "${pkgsave}" "${pkgsave_error}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
     fi
 else
-    notify-send "Создание локальных пакетов" "Каталог для сохранения не выбран" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+    notify-send "${pkgsave}" "${no_direct}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
 fi

@@ -80,8 +80,8 @@ public slots:
 
 private slots:
     void checkUpdates();
-
-    void loadScripts(const QStringList& resourcePaths, const QString& baseDir, QListWidget* listWidget);
+    void checkVersionAndClear();
+    void loadScripts(const QStringList& resourcePaths, const QString& baseDir, QListWidget* listWidgete);
     void loadSound(int soundIndex);
     void loadSettings();
     void loadContent();

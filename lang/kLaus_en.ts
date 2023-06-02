@@ -84,31 +84,31 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="653"/>
-        <location filename="../mainwindow.cpp" line="1121"/>
+        <location filename="../mainwindow.cpp" line="1139"/>
         <source>Описание</source>
         <translation>Description</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="660"/>
-        <location filename="../mainwindow.cpp" line="1121"/>
+        <location filename="../mainwindow.cpp" line="1139"/>
         <source>Версия</source>
         <translation>Version</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="667"/>
-        <location filename="../mainwindow.cpp" line="1121"/>
+        <location filename="../mainwindow.cpp" line="1139"/>
         <source>Голоса</source>
         <translation>Voices</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="674"/>
-        <location filename="../mainwindow.cpp" line="1121"/>
+        <location filename="../mainwindow.cpp" line="1139"/>
         <source>Популярность</source>
         <translation>Popularity</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="681"/>
-        <location filename="../mainwindow.cpp" line="1121"/>
+        <location filename="../mainwindow.cpp" line="1139"/>
         <source>Последнее обновление</source>
         <translation>Last update</translation>
     </message>
@@ -462,8 +462,8 @@
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="435"/>
-        <location filename="../mainwindow.cpp" line="1303"/>
-        <location filename="../mainwindow.cpp" line="1309"/>
+        <location filename="../mainwindow.cpp" line="1321"/>
+        <location filename="../mainwindow.cpp" line="1327"/>
         <source>Обновление</source>
         <translation>Update</translation>
     </message>
@@ -506,7 +506,7 @@
         <location filename="../mainwindow.cpp" line="724"/>
         <location filename="../mainwindow.cpp" line="729"/>
         <location filename="../mainwindow.cpp" line="736"/>
-        <location filename="../mainwindow.cpp" line="1484"/>
+        <location filename="../mainwindow.cpp" line="1470"/>
         <source>Ошибка</source>
         <translation>Error</translation>
     </message>
@@ -598,6 +598,16 @@
         <translation>Welcome to kLaus - Arch Manager!</translation>
     </message>
     <message>
+        <location filename="../mainwindow.cpp" line="897"/>
+        <source>Обновление kLaus</source>
+        <translation>kLaus update</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="897"/>
+        <source>Версия kLaus поменялась, конфигурация сброшена!</source>
+        <translation>The kLaus version has changed, the configuration has been reset!</translation>
+    </message>
+    <message>
         <source>Добро пожаловать %1!</source>
         <translation type="vanished">Welcome %1!</translation>
     </message>
@@ -606,39 +616,39 @@
         <translation type="vanished">Error when getting the list of applications from AUR: </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1121"/>
+        <location filename="../mainwindow.cpp" line="1139"/>
         <source>Название</source>
         <translation>Title</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1302"/>
+        <location filename="../mainwindow.cpp" line="1320"/>
         <source>Доступно %1 обновлений. Пожалуйста, обновите систему.</source>
         <translation>%1 updates are available. Please update the system.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1309"/>
+        <location filename="../mainwindow.cpp" line="1327"/>
         <source>Доступных обновлений нет!</source>
         <translation>There are no updates available!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1465"/>
+        <location filename="../mainwindow.cpp" line="1451"/>
         <source>Смена языка</source>
         <translation>Language change</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1465"/>
+        <location filename="../mainwindow.cpp" line="1451"/>
         <source>Приложение будет перезагружено для смены языка</source>
         <translation>The application will be restarted to change the language</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1484"/>
+        <location filename="../mainwindow.cpp" line="1470"/>
         <source>Неверный формат времени.</source>
         <translation>Incorrect time format.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1586"/>
-        <location filename="../mainwindow.cpp" line="1630"/>
-        <location filename="../mainwindow.cpp" line="1676"/>
+        <location filename="../mainwindow.cpp" line="1568"/>
+        <location filename="../mainwindow.cpp" line="1608"/>
+        <location filename="../mainwindow.cpp" line="1649"/>
         <source>Вопрос</source>
         <translation>Question</translation>
     </message>

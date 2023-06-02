@@ -1,0 +1,56 @@
+c_ok="1C is already installed. Do you want to delete 1C Enterprise? (y/n): "
+c_notify="1C installer"
+c_norun=".run file not found"
+
+no_neofetch="The neofetch package is not installed, the script terminates with "
+path_img="Select the image "
+neofetch_img="Picture in neofetch"
+no_file="File not selected"
+noselect_file="File $image_path not found"
+settings_ok="Setup completed"
+
+path="Select archive"
+local_setup="Local package Installer"
+no_ark="Archive not selected"
+
+pkgbuild="PKGBUILD Editor"
+pkgbuild_ok="PKGBUILD file found for package $program_name"
+pkgbuild_edit="Press Enter to open the editor to edit PKGBUILD..."
+pkgbuild_make="Press Enter to start compiling the package..."
+pkgbuild_newpkg="Press Enter to install a new package..."
+pkgbuild_no="PKGBUILD file not found for package $program_name"
+
+sudo_ok="You have already removed the password. Do you want everything back? (y/n): "
+sudo="SUDO password"
+removefile_ok="File successfully deleted"
+createfile_ok="File successfully created"
+
+pkgsave_name="Enter the name of the download package: "
+path_pkgsave="Select the directory to save the archive"
+pkgsave="Creating local packages"
+pkgsave_ok="Packages $package_name and its dependencies are successfully saved in the archive"
+pkgsave_error="Error when downloading package $package_name"
+no_direct="Directory not selected"
+
+wayland_nvidia="Wayland+Nvidia support"
+pkginstall_ok="All packages are already installed"
+grubmoduleadd_ok="You have already added modules to GRUB"
+grubmodule_ok="You have already installed modules nvidia.drm.modeset"
+
+zen_ok="You already have Zen core installed! Do you want to remove it and update GRUB? (y/n)"
+zen="ZEN Installation"
+grub_no="Grub not detected"
+delete_ok="Removal completed successfully"
+install_ok="Installation completed successfully"
+
+trash="Trash"
+trash_ok="The trash has been successfully emptied"
+
+pacman="Pacman packages"
+size_clear="Cleaning size: $folder_size"
+pacman_clear="Directory /var/cache/pacman/pkg/ cleared"
+
+yay="Yay Packages"
+yay_clear="The $HOME/.cache/yay/ directory has been cleared"
+
+enter_ok="Press Enter to continue..."

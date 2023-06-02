@@ -1,6 +1,17 @@
-#name Изменить PKGBUILD пакета перед установкой
-#msg Вы действительно хотите изменить PKGBUILD пакета перед установкой?
+#name_ru_RU Изменить PKGBUILD пакета перед установкой
+#msg_ru_RU Вы действительно хотите изменить PKGBUILD пакета перед установкой?
+#name_en_US Change PKGBUILD package before installation
+#msg_en_US Do you really want to change the PKGBUILD package before installing?
 #!/bin/bash
+# Определение языка
+language="en_US"
+if [ -n "$1" ]; then
+    language="$1"
+fi
+
+# Загрузка файла перевода
+translations_file="translations_$language.txt"
+source "$HOME/kLaus/other/$translations_file"
 
 read -p "Введите название пакета: " program_name
 
@@ -11,20 +22,20 @@ pkgbuild_path="$HOME/.cache/yay/$program_name/PKGBUILD"
 
 # Проверка наличия PKGBUILD файла
 if [ -f "$pkgbuild_path" ]; then
-    notify-send "Редактор PKGBUILD" "Найден PKGBUILD файл для пакета $program_name" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+    notify-send "${pkgbuild}" "${pkgbuild_ok}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
 
     # Открытие редактора для редактирования PKGBUILD
-    read -p "Нажмите Enter, чтобы открыть редактор для редактирования PKGBUILD..."
+    read -p "${pkgbuild_edit}"
     $EDITOR "$pkgbuild_path"
 
     # Компиляция пакета
-    read -p "Нажмите Enter, чтобы начать компиляцию пакета..."
+    read -p "${pkgbuild_make}"
     cd "$HOME/.cache/yay/$program_name" && makepkg -f
 
     # Установка нового пакета
-    read -p "Нажмите Enter, чтобы установить новый пакет..."
+    read -p "${pkgbuild_newpkg}"
     yay -U "$HOME/.cache/yay/$program_name"/*.pkg.tar.zst
 
 else
-    notify-send "Редактор PKGBUILD" "PKGBUILD файл не найден для пакета $program_name" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+    notify-send "${pkgbuild}" "${pkgbuild_no}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
 fi
