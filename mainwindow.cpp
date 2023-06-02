@@ -607,7 +607,7 @@ void MainWindow::on_action_30_triggered()
         QString script;
 
         Terminal terminal = getTerminal();
-        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << "/home/dmali/kLaus/sh/PKGBUILD.sh" << lang << packageName);
+        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << QDir::homePath() + "/kLaus/sh/PKGBUILD.sh" << lang << packageName);
     } else
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
 }
@@ -834,7 +834,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 void MainWindow::checkVersionAndClear() {
     QString kLausDir = QDir::homePath() + "/kLaus";
     QString settingsFilePath = kLausDir + "/settings.ini";
-    QString currentVersion = "2.3";
+    QString currentVersion = "2.4";
     QSettings settings(settingsFilePath, QSettings::IniFormat);
     QString storedVersion = settings.value("Version").toString();
 
