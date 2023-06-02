@@ -606,57 +606,8 @@ void MainWindow::on_action_30_triggered()
         QString packageName = ui->table_aur->item(ui->table_aur->currentRow(), 0)->text();
         QString script;
 
-        if (lang == "en_US") {
-             script = R"(
-                #!/bin/bash
-                program_name="%1"
-                if [ ! -d "$HOME/kLaus/pkg/" ]; then
-                    mkdir "$HOME/kLaus/pkg/"
-                fi
-                cd "$HOME/kLaus/pkg/"
-                read -p "Press Enter to start compiling the package..."
-                yay --getpkgbuild "$program_name"
-                pkgbuild_path="$HOME/kLaus/pkg/$program_name/PKGBUILD"
-                if [ -f "$pkgbuild_path" ]; then
-                    notify-send "PKGBUILD Editor" "PKGBUILD file found for package $program_name" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
-                    read -p "Press Enter to open the editor to edit PKGBUILD..."
-                    $EDITOR "$pkgbuild_path"
-                    read -p "Press Enter to start compiling the package..."
-                    cd "$HOME/kLaus/pkg/$program_name" && makepkg -f
-                    read -p "Press Enter to install a new package..."
-                    yay -U "$HOME/kLaus/pkg/$program_name"/*.pkg.tar.zst
-                else
-                    notify-send "PKGBUILD editor" "PKGBUILD file not found for package $program_name" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
-                fi
-            )";
-        } else {
-            script = R"(
-                #!/bin/bash
-                program_name="%1"
-                if [ ! -d "$HOME/kLaus/pkg/" ]; then
-                    mkdir "$HOME/kLaus/pkg/"
-                fi
-                cd "$HOME/kLaus/pkg/"
-                read -p "Нажмите Enter, чтобы начать компиляцию пакета..."
-                yay --getpkgbuild "$program_name"
-                pkgbuild_path="$HOME/kLaus/pkg/$program_name/PKGBUILD"
-                if [ -f "$pkgbuild_path" ]; then
-                    notify-send "Редактор PKGBUILD" "Найден PKGBUILD файл для пакета $program_name" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
-                    read -p "Нажмите Enter, чтобы открыть редактор для редактирования PKGBUILD..."
-                    $EDITOR "$pkgbuild_path"
-                    read -p "Нажмите Enter, чтобы начать компиляцию пакета..."
-                    cd "$HOME/kLaus/pkg/$program_name" && makepkg -f
-                    read -p "Нажмите Enter, чтобы установить новый пакет..."
-                    yay -U "$HOME/kLaus/pkg/$program_name"/*.pkg.tar.zst
-                else
-                    notify-send "Редактор PKGBUILD" "PKGBUILD файл не найден для пакета $program_name" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
-                fi
-            )";
-        }
-        QString command = QString("bash -c '%1'").arg(script.arg(packageName));
-
         Terminal terminal = getTerminal();
-        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << command);
+        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << "/home/dmali/kLaus/sh/PKGBUILD.sh" << lang << packageName);
     } else
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
 }
@@ -883,7 +834,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 void MainWindow::checkVersionAndClear() {
     QString kLausDir = QDir::homePath() + "/kLaus";
     QString settingsFilePath = kLausDir + "/settings.ini";
-    QString currentVersion = "2.2";
+    QString currentVersion = "2.3";
     QSettings settings(settingsFilePath, QSettings::IniFormat);
     QString storedVersion = settings.value("Version").toString();
 
@@ -1493,7 +1444,6 @@ void MainWindow::on_check_version_stateChanged()
     table2 = ui->check_version->isChecked() ? 1 : 0;
     settings.setValue("Table2", table2);
     ui->table_aur->setColumnHidden(2, !ui->check_version->isChecked());
-
 }
 
 void MainWindow::on_check_voices_stateChanged()
@@ -1504,7 +1454,6 @@ void MainWindow::on_check_voices_stateChanged()
     ui->table_aur->setColumnHidden(3, !ui->check_voices->isChecked());
 }
 
-
 void MainWindow::on_check_popularity_stateChanged()
 {
     //популярность
@@ -1512,7 +1461,6 @@ void MainWindow::on_check_popularity_stateChanged()
     settings.setValue("Table4", table4);
     ui->table_aur->setColumnHidden(4, !ui->check_popularity->isChecked());
 }
-
 
 void MainWindow::on_check_lastupdate_stateChanged()
 {
@@ -1529,10 +1477,7 @@ void MainWindow::on_spin_rating_valueChanged(int arg1)
     loadContent();
 }
 
-void MainWindow::on_list_sh_itemDoubleClicked(QListWidgetItem *item) {
-    QString scriptDir;
-    scriptDir = QDir::homePath() + "/kLaus/sh/";
-
+void MainWindow::on_list_itemDoubleClicked(QListWidgetItem *item, const QString& scriptDir) {
     QString scriptPath;
     QString msg;
     QString itemName = item->text();
@@ -1567,87 +1512,21 @@ void MainWindow::on_list_sh_itemDoubleClicked(QListWidgetItem *item) {
         Terminal terminal = getTerminal();
         QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << scriptPath << lang);
     }
+}
+
+void MainWindow::on_list_sh_itemDoubleClicked(QListWidgetItem *item) {
+    QString scriptDir = QDir::homePath() + "/kLaus/sh/";
+    on_list_itemDoubleClicked(item, scriptDir);
 }
 
 void MainWindow::on_list_grub_itemDoubleClicked(QListWidgetItem *item) {
-    QString scriptDir;
-    scriptDir = QDir::homePath() + "/kLaus/journals/";
-
-    QString scriptPath;
-    QString msg;
-    QString itemName = item->text();
-
-    QDir dir(scriptDir);
-    QFileInfoList fileInfoList = dir.entryInfoList(QDir::Files);
-    for (const auto& fileInfo : fileInfoList) {
-        QFile scriptFile(fileInfo.absoluteFilePath());
-        if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            QTextStream scriptStream(&scriptFile);
-            while (!scriptStream.atEnd()) {
-                QString line = scriptStream.readLine();
-                if (line.startsWith("#name_" + lang)) {
-                    QString name = line.mid(12).trimmed();
-                    if (name == itemName)
-                        scriptPath = fileInfo.absoluteFilePath();
-                }
-                else if (line.startsWith("#msg_" + lang))
-                    msg = line.mid(11).trimmed();
-            }
-            scriptFile.close();
-        }
-        if (!scriptPath.isEmpty())
-            break;
-    }
-
-    if (scriptPath.isEmpty())
-        scriptPath = scriptDir + itemName;
-
-    QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), msg, QMessageBox::Yes | QMessageBox::No);
-    if (reply == QMessageBox::Yes) {
-        Terminal terminal = getTerminal();
-        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << scriptPath << lang);
-    }
+    QString scriptDir = QDir::homePath() + "/kLaus/journals/";
+    on_list_itemDoubleClicked(item, scriptDir);
 }
 
 void MainWindow::on_list_clear_itemDoubleClicked(QListWidgetItem *item) {
-    QString scriptDir;
-    scriptDir = QDir::homePath() + "/kLaus/clear/";
-
-    QString scriptPath;
-    QString msg;
-    QString itemName = item->text();
-
-    QDir dir(scriptDir);
-    QFileInfoList fileInfoList = dir.entryInfoList(QDir::Files);
-    for (const auto& fileInfo : fileInfoList) {
-        QFile scriptFile(fileInfo.absoluteFilePath());
-        if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            QTextStream scriptStream(&scriptFile);
-            while (!scriptStream.atEnd()) {
-                QString line = scriptStream.readLine();
-                if (line.startsWith("#name_" + lang)) {
-                    QString name = line.mid(12).trimmed();
-                    if (name == itemName)
-                        scriptPath = fileInfo.absoluteFilePath();
-                }
-                else if (line.startsWith("#msg_" + lang))
-                    msg = line.mid(11).trimmed();
-            }
-            scriptFile.close();
-        }
-        if (!scriptPath.isEmpty()) {
-            break;
-        }
-    }
-
-    if (scriptPath.isEmpty())
-        scriptPath = scriptDir + itemName;
-
-    QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), msg, QMessageBox::Yes | QMessageBox::No);
-    if (reply == QMessageBox::Yes) {
-        Terminal terminal = getTerminal();
-        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << scriptPath << lang);
-    }
+    QString scriptDir = QDir::homePath() + "/kLaus/clear/";
+    on_list_itemDoubleClicked(item, scriptDir);
 }
 
 void MainWindow::removeToolButtonTooltips(QToolBar* toolbar) {

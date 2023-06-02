@@ -13,12 +13,21 @@ fi
 translations_file="translations_$language.txt"
 source "$HOME/kLaus/other/$translations_file"
 
-read -p "Введите название пакета: " program_name
+if [ -n "$2" ]; then
+    program_name="$2"
+else
+    read -p "Введите название пакета: " program_name
+fi
+
+if [ ! -d "$HOME/kLaus/pkg/" ]; then
+    mkdir "$HOME/kLaus/pkg/"
+fi
+cd "$HOME/kLaus/pkg/"
 
 yay --getpkgbuild "$program_name"
 
 # Путь к PKGBUILD файлу
-pkgbuild_path="$HOME/.cache/yay/$program_name/PKGBUILD"
+pkgbuild_path="$HOME/kLaus/pkg/$program_name/PKGBUILD"
 
 # Проверка наличия PKGBUILD файла
 if [ -f "$pkgbuild_path" ]; then
@@ -30,11 +39,11 @@ if [ -f "$pkgbuild_path" ]; then
 
     # Компиляция пакета
     read -p "${pkgbuild_make}"
-    cd "$HOME/.cache/yay/$program_name" && makepkg -f
+    cd "$HOME/kLaus/pkg/$program_name" && makepkg -f
 
     # Установка нового пакета
     read -p "${pkgbuild_newpkg}"
-    yay -U "$HOME/.cache/yay/$program_name"/*.pkg.tar.zst
+    yay -U "$HOME/kLaus/pkg/$program_name"/*.pkg.tar.zst
 
 else
     notify-send "${pkgbuild}" "${pkgbuild_no}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000

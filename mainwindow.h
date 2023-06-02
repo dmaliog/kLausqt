@@ -93,7 +93,7 @@ private slots:
     void handleServerResponse(QNetworkReply* reply);
     void openDirectory(const QString &dirPath);
     void removeToolButtonTooltips(QToolBar* toolbar);
-
+    void on_list_itemDoubleClicked(QListWidgetItem *item, const QString& scriptDir);
     void on_list_sh_itemDoubleClicked(QListWidgetItem *item);
     void on_list_grub_itemDoubleClicked(QListWidgetItem *item);
     void on_list_clear_itemDoubleClicked(QListWidgetItem *item);
