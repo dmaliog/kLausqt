@@ -17,9 +17,10 @@ const QVector<Terminal> m_terminalList = {
     {"/usr/bin/konsole", "-e"},
     {"/usr/bin/gnome-terminal", "--"},
     {"/usr/bin/xfce4-terminal", "-x"},
+    {"/usr/bin/mate-terminal", "-e"},
     {"/usr/bin/lxterminal", "-e"},
-    {"/usr/bin/xterm", "-e"},
-    {"/usr/bin/alacritty", "-e"}
+    {"/usr/bin/alacritty", "-e"},
+    {"/usr/bin/xterm", "-e"}
 };
 
 Terminal getTerminal();
@@ -79,8 +80,6 @@ public slots:
 
 private slots:
     void checkUpdates();
-    void onProcessOutputAvailable();
-    void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
     void loadScripts(const QStringList& resourcePaths, const QString& baseDir, QListWidget* listWidget);
     void loadSound(int soundIndex);

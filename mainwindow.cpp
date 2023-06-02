@@ -1283,52 +1283,31 @@ void MainWindow::loadContent() {
 
 void MainWindow::checkUpdates()
 {
-    QProcess* process = new QProcess(this);
-    connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(onProcessOutputAvailable()));
-    connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onProcessFinished(int, QProcess::ExitStatus)));
+    Terminal terminal = getTerminal();
 
-    process->start("yay", QStringList() << "-Suy");
-}
+    QProcess process;
+    process.setProcessChannelMode(QProcess::MergedChannels);
 
-void MainWindow::onProcessOutputAvailable()
-{
-    QProcess* process = qobject_cast<QProcess*>(sender());
+    // Запуск команды "yay -Qu | wc -l"
+    process.start("bash", QStringList() << "-c" << "yay -Qu | wc -l");
+    process.waitForFinished();
 
-    if (process) {
-        QByteArray output = process->readAllStandardOutput();
-        QString str = " packages to upgrade/install";
-        int index = output.indexOf(str.toUtf8());
+    // Получение вывода команды
+    QByteArray output = process.readAllStandardOutput();
+    QString countStr = QString(output).trimmed();
 
-        if (index != -1) {
-            // Используем регулярное выражение для поиска числа
-            QRegularExpression regex("(\\d+)");
-            QRegularExpressionMatch match = regex.match(output, index - 3);
-            if (match.hasMatch()) {
-                QString countStr = match.captured(1);
-                int count = countStr.toInt();
+    if (!countStr.isEmpty()) {
+        int count = countStr.toInt();
+        if (count > 0) {
+            QString message = QString(tr("Доступно %1 обновлений. Пожалуйста, обновите систему.")).arg(count);
+            sendNotification(tr("Обновление"), message);
 
-                QString message = QString(tr("Доступно %1 обновлений. Пожалуйста, обновите систему.")).arg(count);
-                sendNotification(tr("Обновление"), message);
-
-                Terminal terminal = getTerminal();
-                QProcess* updateProcess = new QProcess(this);
-                updateProcess->setProcessChannelMode(QProcess::MergedChannels);
-                connect(updateProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onProcessFinished(int, QProcess::ExitStatus)));
-                updateProcess->start(terminal.binary, QStringList() << terminal.args << "yay -Syu");
-            }
-        }
+            QProcess* updateProcess = new QProcess(this);
+            updateProcess->setProcessChannelMode(QProcess::MergedChannels);
+            updateProcess->start(terminal.binary,QStringList() << terminal.args << "yay" << "-Syu");
+        } else
+            sendNotification(tr("Обновление"), tr("Доступных обновлений нет!"));
     }
-}
-
-void MainWindow::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
-{
-    Q_UNUSED(exitCode);
-    Q_UNUSED(exitStatus);
-
-    QProcess* process = qobject_cast<QProcess*>(sender());
-
-    if (process)
-        process->deleteLater();
 }
 
 void MainWindow::loadingListWidget()
