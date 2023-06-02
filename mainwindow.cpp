@@ -834,18 +834,23 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 void MainWindow::checkVersionAndClear() {
     QString kLausDir = QDir::homePath() + "/kLaus";
     QString settingsFilePath = kLausDir + "/settings.ini";
-    QString currentVersion = "2.4";
+    QString currentVersion = "2.5";
     QSettings settings(settingsFilePath, QSettings::IniFormat);
     QString storedVersion = settings.value("Version").toString();
+    QString storedLanguage = settings.value("Language").toString();
 
     if (storedVersion.isEmpty() || storedVersion != currentVersion) {
         QDir directory(kLausDir);
         directory.removeRecursively();
         settings.setValue("Version", currentVersion);
+        settings.setValue("Language", storedLanguage);
         settings.sync();
         sendNotification(tr("Обновление kLaus"), tr("Версия kLaus поменялась, конфигурация сброшена!"));
+        qApp->quit();
+        QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
     }
 }
+
 MainWindow::~MainWindow()
 {
     delete ui;
