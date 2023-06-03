@@ -26,7 +26,7 @@ int table4; // популярность
 int table5; // последнее обновление
 int fav; // последнее обновление
 QString lang;
-QString currentVersion = "2.7";
+QString currentVersion = "2.8";
 
 QTime timeupdate;
 
@@ -94,7 +94,6 @@ void MainWindow::on_action_17_triggered()
     ui->action_20->setVisible(true);
     ui->action_21->setVisible(true);
     ui->action_22->setVisible(true);
-    ui->action_23->setVisible(true);
     showLoadingAnimation(false);
 }
 
@@ -368,11 +367,6 @@ void MainWindow::on_action_21_triggered()
 void MainWindow::on_action_22_triggered()
 {
     openDirectory("/.icons");
-}
-
-void MainWindow::on_action_23_triggered()
-{
-    openDirectory("/.local/share/plasma/plasmoids");
 }
 
 void MainWindow::on_action_27_triggered()
@@ -946,7 +940,6 @@ void MainWindow::mrpropper() //зачистка говна перед начал
     ui->action_20->setVisible(false);
     ui->action_21->setVisible(false);
     ui->action_22->setVisible(false);
-    ui->action_23->setVisible(false);
     ui->action_24->setVisible(false);
     ui->action_25->setVisible(false);
     ui->action_26->setVisible(false);

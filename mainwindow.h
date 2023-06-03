@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "qtoolbar.h"
 #include <QMainWindow>
 #include <QListWidgetItem>
 #include <QNetworkAccessManager>
@@ -28,7 +29,6 @@ Terminal getTerminal();
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
-
 
 class MainWindow : public QMainWindow
 {
@@ -69,7 +69,6 @@ public slots:
     void on_action_20_triggered();
     void on_action_21_triggered();
     void on_action_22_triggered();
-    void on_action_23_triggered();
     void on_action_24_triggered();
     void on_action_25_triggered();
     void on_action_26_triggered();
