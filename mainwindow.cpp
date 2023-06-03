@@ -877,7 +877,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 void MainWindow::checkVersionAndClear() {
     QString kLausDir = QDir::homePath() + "/kLaus";
     QString settingsFilePath = kLausDir + "/settings.ini";
-    QString currentVersion = "2.5";
+    QString currentVersion = "2.6";
     QSettings settings(settingsFilePath, QSettings::IniFormat);
     QString storedVersion = settings.value("Version").toString();
     QString storedLanguage = settings.value("Language").toString();
