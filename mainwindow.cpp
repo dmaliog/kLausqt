@@ -26,6 +26,8 @@ int table4; // популярность
 int table5; // последнее обновление
 int fav; // последнее обновление
 QString lang;
+QString currentVersion = "2.7";
+
 QTime timeupdate;
 
 bool runScriptVK = false; // проверка на VK скрипт
@@ -239,6 +241,7 @@ void MainWindow::on_action_3_triggered()
 
    QObject::connect(ui->webEngineView->page(), &QWebEnginePage::loadFinished, this, [=]() {
         if (page == 6) {
+            ui->action_35->setVisible(false);
             showLoadingAnimation(false);
             ui->webEngineView->show();
         }
@@ -263,6 +266,7 @@ void MainWindow::on_action_8_triggered()
     QObject::connect(pagez, &QWebEnginePage::loadFinished, this, [=]() {
 
         if (runScriptVK && page == 7) {
+            ui->action_35->setVisible(false);
             QFile scriptFile(":/vk_dark_theme.user.js");
             if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
                 QTextStream stream(&scriptFile);
@@ -280,7 +284,7 @@ void MainWindow::on_action_10_triggered()
     if (page == 8) return;
     mrpropper();
     page = 8;
-    ui->label1->setText(tr("Информация о приложении"));
+    ui->label1->setText(tr("Информация о приложении (версия %1)").arg(currentVersion));
     ui->tabWidget->setVisible(true);
     ui->tabWidget->setCurrentIndex(2);
     showLoadingAnimation(false);
@@ -439,28 +443,34 @@ void MainWindow::on_action_34_triggered()
         int currentRow = ui->table_aur->currentRow();
         QTableWidgetItem *item = ui->table_aur->item(currentRow, 0);
         QString url = item->data(Qt::UserRole).toString();
-        if (url != nullptr) {
-            if (!url.isEmpty()) {
+        if (!url.isEmpty()) {
+            QWebEnginePage* page = ui->webEngineView->page();
 
-                QWebEnginePage* pagez = ui->webEngineView->page();
-                pagez->load(QUrl(url));
+            // Флаг для отслеживания показа уведомления об ошибке
+            bool errorShown = false;
 
-                QObject::connect(pagez, &QWebEnginePage::loadFinished, this, [=]() {
+            QObject::connect(page, &QWebEnginePage::loadFinished, this, [=](bool success) mutable {
+                if (success) {
                     ui->action_16->setVisible(false);
                     ui->action_34->setVisible(false);
                     ui->action_35->setVisible(true);
                     showLoadingAnimation(false);
                     ui->webEngineView->show();
-                });
-            } else {
-                sendNotification(tr("Внимание"), tr("URL отсутствует!"));
-            }
-        } else {
+                } else {
+                    // Проверяем, было ли уже показано уведомление об ошибке
+                    if (!errorShown) {
+                        sendNotification(tr("Ошибка"), tr("Страница не найдена (ошибка 404)"));
+                        errorShown = true;  // Устанавливаем флаг, что уведомление было показано
+                    }
+                    showLoadingAnimation(false);
+                }
+            });
+
+            page->load(QUrl(url));
+        } else
             sendNotification(tr("Внимание"), tr("URL отсутствует!"));
-        }
-    } else {
+    } else
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для просмотра информации!"));
-    }
 }
 
 void MainWindow::on_action_35_triggered()
@@ -877,7 +887,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 void MainWindow::checkVersionAndClear() {
     QString kLausDir = QDir::homePath() + "/kLaus";
     QString settingsFilePath = kLausDir + "/settings.ini";
-    QString currentVersion = "2.6";
     QSettings settings(settingsFilePath, QSettings::IniFormat);
     QString storedVersion = settings.value("Version").toString();
     QString storedLanguage = settings.value("Language").toString();
