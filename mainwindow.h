@@ -81,7 +81,6 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
-    void checkUpdates();
     void checkVersionAndClear();
     void loadScripts(const QStringList& resourcePaths, const QString& baseDir, QListWidget* listWidgete);
     void loadSound(int soundIndex);

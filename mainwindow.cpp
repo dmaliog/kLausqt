@@ -26,7 +26,7 @@ int table4; // популярность
 int table5; // последнее обновление
 int fav; // последнее обновление
 QString lang;
-QString currentVersion = "2.8";
+QString currentVersion = "2.9";
 
 QTime timeupdate;
 
@@ -494,16 +494,15 @@ void MainWindow::on_action_33_triggered()
 
 void MainWindow::on_action_11_triggered()
 {
-    checkUpdates();
+    Terminal terminal = getTerminal();
+    QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -Syu");
 }
 
 void MainWindow::on_action_24_triggered()
 {
     Terminal terminal = getTerminal();
-    QProcess process;
-    process.setProcessChannelMode(QProcess::MergedChannels);
-    process.start(terminal.binary, QStringList() << terminal.args << "bash" << "-c" << "yay -Rs $(yay -Qdtq)");
-    process.waitForFinished();
+    QString command = QString("bash -c 'yay -Rs $(yay -Qdtq)'");
+    QProcess::startDetached(terminal.binary, QStringList() << terminal.args << command);
 }
 
 void MainWindow::on_action_25_triggered()
@@ -511,18 +510,22 @@ void MainWindow::on_action_25_triggered()
     Terminal terminal = getTerminal();
 
     switch(yaycache) {
-    case 0:
-        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -Sc");
-        break;
-    case 1:
-        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -Scc");
-        break;
-    case 2:
-        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "paccache -rvk3");
-        break;
-    default:
-        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -Sc");
-        break;
+        case 0: {
+            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -Sc");
+            break;
+        }
+        case 1: {
+            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -Scc");
+            break;
+        }
+        case 2: {
+            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "paccache -rvk3");
+            break;
+        }
+        default: {
+            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -Sc");
+            break;
+        }
     }
 }
 
@@ -1038,11 +1041,11 @@ void MainWindow::onTimeChanged(const QTime& time)
         interval += 24 * 60 * 60 * 1000; // 24 часа в миллисекундах
 
     // Устанавливаем таймер для первого вызова функции
-    QTimer::singleShot(interval, this, &MainWindow::checkUpdates);
+    QTimer::singleShot(interval, this, &MainWindow::on_action_11_triggered);
 
     // Устанавливаем таймер для повторных вызовов функции каждый день
     QTimer* timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &MainWindow::checkUpdates);
+    connect(timer, &QTimer::timeout, this, &MainWindow::on_action_11_triggered);
     timer->start(24 * 60 * 60 * 1000); // 24 часа в миллисекундах
 }
 
@@ -1175,9 +1178,9 @@ void MainWindow::handleServerResponse(QNetworkReply *reply)
                     QFont font = item2->font();
                     font.setStrikeOut(true);
                     item2->setFont(font);
-                } else {
+                } else
                     item2->setFlags(item2->flags() ^ Qt::ItemIsEditable);
-                }
+
                 ui->table_aur->setItem(i, 2, item2);
 
                 QTableWidgetItem *item3 = new QTableWidgetItem();
@@ -1301,35 +1304,6 @@ void MainWindow::loadContent() {
             }
         }
     });
-}
-
-void MainWindow::checkUpdates()
-{
-    Terminal terminal = getTerminal();
-
-    QProcess process;
-    process.setProcessChannelMode(QProcess::MergedChannels);
-
-    // Запуск команды "yay -Qu | wc -l"
-    process.start("bash", QStringList() << "-c" << "yay -Qu | wc -l");
-    process.waitForFinished();
-
-    // Получение вывода команды
-    QByteArray output = process.readAllStandardOutput();
-    QString countStr = QString(output).trimmed();
-
-    if (!countStr.isEmpty()) {
-        int count = countStr.toInt();
-        if (count > 0) {
-            QString message = QString(tr("Доступно %1 обновлений. Пожалуйста, обновите систему.")).arg(count);
-            sendNotification(tr("Обновление"), message);
-
-            QProcess* updateProcess = new QProcess(this);
-            updateProcess->setProcessChannelMode(QProcess::MergedChannels);
-            updateProcess->start(terminal.binary,QStringList() << terminal.args << "yay" << "-Syu");
-        } else
-            sendNotification(tr("Обновление"), tr("Доступных обновлений нет!"));
-    }
 }
 
 void MainWindow::loadingListWidget()
