@@ -80,5 +80,7 @@
         <file>other/list_en.txt</file>
         <file>other/translations_ru_RU.txt</file>
         <file>other/translations_en_US.txt</file>
+        <file>img/34.png</file>
+        <file>img/35.png</file>
     </qresource>
 </RCC>

@@ -1526,6 +1526,7 @@ QToolBar#toolBar_2 QToolButton:hover {
    <attribute name="toolBarBreak">
     <bool>true</bool>
    </attribute>
+   <addaction name="action_35"/>
    <addaction name="action_4"/>
    <addaction name="action_5"/>
    <addaction name="action_6"/>
@@ -1548,6 +1549,7 @@ QToolBar#toolBar_2 QToolButton:hover {
    <addaction name="action_31"/>
    <addaction name="action_32"/>
    <addaction name="action_33"/>
+   <addaction name="action_34"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="action_1">
@@ -1837,6 +1839,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    <property name="text">
     <string>Ярлыки</string>
    </property>
+   <property name="toolTip">
+    <string> </string>
+   </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
@@ -1848,6 +1853,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="text">
     <string>Темы</string>
+   </property>
+   <property name="toolTip">
+    <string> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -1861,6 +1869,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    <property name="text">
     <string>Иконки</string>
    </property>
+   <property name="toolTip">
+    <string> </string>
+   </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
@@ -1873,6 +1884,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    <property name="text">
     <string>Цвет. схемы</string>
    </property>
+   <property name="toolTip">
+    <string> </string>
+   </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
@@ -1884,6 +1898,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="text">
     <string>Курсоры</string>
+   </property>
+   <property name="toolTip">
+    <string> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -1898,7 +1915,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Виджеты</string>
    </property>
    <property name="toolTip">
-    <string>Виджеты</string>
+    <string> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -1913,7 +1930,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Сироты</string>
    </property>
    <property name="toolTip">
-    <string>Сироты</string>
+    <string> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -1928,7 +1945,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Кэш пакетов</string>
    </property>
    <property name="toolTip">
-    <string>Кэш пакетов</string>
+    <string> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -1943,7 +1960,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Применить</string>
    </property>
    <property name="toolTip">
-    <string>Применить</string>
+    <string> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -1958,7 +1975,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Журналы</string>
    </property>
    <property name="toolTip">
-    <string>Журналы</string>
+    <string> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -1973,7 +1990,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Приложение</string>
    </property>
    <property name="toolTip">
-    <string>Приложение</string>
+    <string> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -1988,7 +2005,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>AUR</string>
    </property>
    <property name="toolTip">
-    <string>AUR</string>
+    <string> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -2003,7 +2020,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>PKGBUILD</string>
    </property>
    <property name="toolTip">
-    <string>PKGBUILD</string>
+    <string> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -2018,7 +2035,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Домашняя</string>
    </property>
    <property name="toolTip">
-    <string>Домашняя</string>
+    <string> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -2033,7 +2050,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Обновить</string>
    </property>
    <property name="toolTip">
-    <string>Обновить</string>
+    <string> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -2048,7 +2065,37 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Скопировать</string>
    </property>
    <property name="toolTip">
-    <string>Скопировать</string>
+    <string> </string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_34">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/34.png</normaloff>:/img/34.png</iconset>
+   </property>
+   <property name="text">
+    <string>О пакете</string>
+   </property>
+   <property name="toolTip">
+    <string> </string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_35">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/35.png</normaloff>:/img/35.png</iconset>
+   </property>
+   <property name="text">
+    <string>Назад</string>
+   </property>
+   <property name="toolTip">
+    <string> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>

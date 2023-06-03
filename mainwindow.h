@@ -42,6 +42,9 @@ public:
 
     QColor generateRandomColor();
 
+private:
+    QString packageURL;
+
 protected: // события сворачивания окна
     void closeEvent(QCloseEvent *event) override; // объявление метода closeEvent()
 
@@ -112,6 +115,8 @@ private slots:
     void on_action_32_triggered();
     void on_action_33_triggered();
     void on_combo_lang_currentIndexChanged(int index);
+    void on_action_34_triggered();
+    void on_action_35_triggered();
 };
 
 #endif // MAINWINDOW_H

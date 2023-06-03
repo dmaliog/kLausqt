@@ -70,6 +70,7 @@ void MainWindow::on_action_2_triggered()
     ui->action_6->setVisible(true);
     ui->action_16->setVisible(true);
     ui->action_30->setVisible(true);
+    ui->action_34->setVisible(true);
     ui->table_aur->setVisible(true); //Показываем список устнановить
     ui->searchApp->setVisible(true);
     showLoadingAnimation(false);
@@ -394,6 +395,7 @@ void MainWindow::on_action_31_triggered()
 
     if (page == 6)
     {
+        showLoadingAnimation(true);
         runScriptVK = false; // reset the flag
         if (lang == "en_US")
             pagez->load(QUrl("https://wiki.archlinux.org/title/General_recommendations"));
@@ -409,6 +411,7 @@ void MainWindow::on_action_31_triggered()
     }
     else if (page == 7)
     {
+        showLoadingAnimation(true);
         runScriptVK = true; // set the flag to true
         pagez->load(QUrl("https://vk.com/@linux2-main"));
 
@@ -428,6 +431,46 @@ void MainWindow::on_action_31_triggered()
         });
     }
 }
+
+void MainWindow::on_action_34_triggered()
+{
+    if (ui->table_aur->currentItem() != nullptr) {
+        showLoadingAnimation(true);
+        int currentRow = ui->table_aur->currentRow();
+        QTableWidgetItem *item = ui->table_aur->item(currentRow, 0);
+        QString url = item->data(Qt::UserRole).toString();
+        if (url != nullptr) {
+            if (!url.isEmpty()) {
+
+                QWebEnginePage* pagez = ui->webEngineView->page();
+                pagez->load(QUrl(url));
+
+                QObject::connect(pagez, &QWebEnginePage::loadFinished, this, [=]() {
+                    ui->action_16->setVisible(false);
+                    ui->action_34->setVisible(false);
+                    ui->action_35->setVisible(true);
+                    showLoadingAnimation(false);
+                    ui->webEngineView->show();
+                });
+            } else {
+                sendNotification(tr("Внимание"), tr("URL отсутствует!"));
+            }
+        } else {
+            sendNotification(tr("Внимание"), tr("URL отсутствует!"));
+        }
+    } else {
+        sendNotification(tr("Внимание"), tr("Выберите пакет из списка для просмотра информации!"));
+    }
+}
+
+void MainWindow::on_action_35_triggered()
+{
+    ui->action_16->setVisible(true);
+    ui->action_34->setVisible(true);
+    ui->action_35->setVisible(false);
+    ui->webEngineView->hide();
+}
+
 
 void MainWindow::on_action_32_triggered()
 {
@@ -867,7 +910,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 }
 
-
 void MainWindow::mrpropper() //зачистка говна перед началом каждой вкладки
 {
     ui->table_aur->setVisible(false);
@@ -883,6 +925,7 @@ void MainWindow::mrpropper() //зачистка говна перед начал
     ui->label4_grub->setVisible(false);
     ui->tabWidget->setVisible(false);
     ui->searchApp->setVisible(false);
+    ui->action_35->setVisible(false);
     ui->action_4->setVisible(false);
     ui->action_5->setVisible(false);
     ui->action_6->setVisible(false);
@@ -905,10 +948,10 @@ void MainWindow::mrpropper() //зачистка говна перед начал
     ui->action_31->setVisible(false);
     ui->action_32->setVisible(false);
     ui->action_33->setVisible(false);
+    ui->action_34->setVisible(false);
     ui->webEngineView->setVisible(false);
     ui->label2->setVisible(false);
-
-    ui->label1->show();
+    ui->label1->setVisible(true);
 
     if(soundon == 0)
         loadSound(0);
@@ -1089,6 +1132,7 @@ void MainWindow::handleServerResponse(QNetworkReply *reply)
             ui->table_aur->setColumnWidth(3, 70);
             ui->table_aur->setColumnWidth(4, 110);
             ui->table_aur->setColumnWidth(5, 170);
+
             ui->table_aur->setHorizontalHeaderLabels({tr("Название"), tr("Описание"), tr("Версия"), tr("Голоса"), tr("Популярность"), tr("Последнее обновление")});
 
             ui->table_aur->setColumnHidden(1, table1 == 0);
@@ -1105,6 +1149,7 @@ void MainWindow::handleServerResponse(QNetworkReply *reply)
                 double popularity = results[i].toObject()["Popularity"].toDouble();
                 qint64 timestamp = results[i].toObject()["LastModified"].toInt();
                 int outofdate = results[i].toObject()["OutOfDate"].toInt();
+                QString packageURL = results[i].toObject()["URL"].toString();
 
                 QColor color = generateRandomColor();
 
@@ -1148,6 +1193,10 @@ void MainWindow::handleServerResponse(QNetworkReply *reply)
                 QTableWidgetItem *item5 = new QTableWidgetItem(date);
                 item5->setForeground(color);
                 ui->table_aur->setItem(i, 5, item5);
+
+                item->setForeground(color);
+                item->setData(Qt::UserRole, packageURL); // Установка данных пользовательской роли
+                ui->table_aur->setItem(i, 0, item);
             }
         }
         // установка атрибутов сортировки и выбора для ячеек заголовка столбца
