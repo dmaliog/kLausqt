@@ -6,6 +6,8 @@
 #include "ui_mainwindow.h"
 #include <QtWebEngineWidgets>
 #include <QSoundEffect>
+#include <unistd.h>
+#include <sys/utsname.h>
 
 //---#####################################################################################################################################################
 //--############################################################## ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ################################################################
@@ -13,24 +15,7 @@
 QString kLausDir = QDir::homePath();
 QString filePath = kLausDir + "/kLaus/settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-
-int page; // какая страница используется
-int trayon; // закрывать без трея
-int soundon; // убрать звуки
-int mainpage; // главная страница
-int yaycache; // кэш
-int table1; // описание
-int table2; // версия
-int table3; // голоса
-int table4; // популярность
-int table5; // последнее обновление
-int fav; // последнее обновление
-QString lang;
-QString currentVersion = "2.9";
-
-QTime timeupdate;
-
-bool runScriptVK = false; // проверка на VK скрипт
+QString currentVersion = "3.0";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -84,16 +69,11 @@ void MainWindow::on_action_17_triggered()
     mrpropper();
     page = 3;
     ui->label1->setText(tr("Очистка системы"));
-
     ui->label2->setVisible(true);
     ui->list_clear->setVisible(true);
     ui->list_sh->setVisible(true);
     ui->action_sh->setVisible(true);
     ui->action_18->setVisible(true);
-    ui->action_19->setVisible(true);
-    ui->action_20->setVisible(true);
-    ui->action_21->setVisible(true);
-    ui->action_22->setVisible(true);
     showLoadingAnimation(false);
 }
 
@@ -152,13 +132,11 @@ void MainWindow::on_action_9_triggered()
     mrpropper();
     page = 5;
     ui->label1->setText(tr("Параметры ядра"));
-
     ui->action_26->setVisible(true);
     ui->action_27->setVisible(true);
     ui->line_grub->setVisible(true);
     ui->spin_grub->setVisible(true);
     ui->label_grub->setVisible(true);
-    ui->label2_grub->setVisible(true);
     ui->label3_grub->setVisible(true);
     ui->label4_grub->setVisible(true);
     ui->list_grub->setVisible(true);
@@ -216,7 +194,6 @@ void MainWindow::on_action_9_triggered()
         ui->spin_grub->setValue(timeout); // устанавливаем значение в QSpinBox
         ui->line_grub->setText(grubContent);
     }
-
     showLoadingAnimation(false);
 }
 
@@ -229,53 +206,53 @@ void MainWindow::on_action_3_triggered()
     ui->action_31->setVisible(true);
     ui->action_32->setVisible(true);
     ui->action_33->setVisible(true);
-
-    QWebEnginePage* pagez = ui->webEngineView->page();
-    runScriptVK = false; // reset the flag
+    ui->action_35->setVisible(true);
 
     if (lang == "en_US")
-        pagez->load(QUrl("https://wiki.archlinux.org/title/General_recommendations"));
+        ui->webEngineView->page()->load(QUrl("https://wiki.archlinux.org/title/General_recommendations"));
     else
-        pagez->load(QUrl("https://wiki.archlinux.org/title/General_recommendations_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)"));
-
-   QObject::connect(ui->webEngineView->page(), &QWebEnginePage::loadFinished, this, [=]() {
-        if (page == 6) {
-            ui->action_35->setVisible(false);
-            showLoadingAnimation(false);
-            ui->webEngineView->show();
-        }
-    });
+        ui->webEngineView->page()->load(QUrl("https://wiki.archlinux.org/title/General_recommendations_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)"));
 }
 
 void MainWindow::on_action_8_triggered()
 {
     if (page == 7) return;
+    QProcess process;
+    process.start("yay", QStringList() << "-Qs" << "ocs-url");
+    if (process.waitForFinished()) {
+        QString output = QString::fromUtf8(process.readAllStandardOutput());
+        if (!output.contains("ocs-url")) {
+            sendNotification(tr("Ошибка"), tr("Установите пакет ocs-url для установки тем!"));
+            return;
+        }
+    }
+
     mrpropper();
     page = 7;
     ui->label1->hide();
     ui->action_31->setVisible(true);
     ui->action_32->setVisible(true);
     ui->action_33->setVisible(true);
+    ui->action_35->setVisible(true);
 
-    QWebEnginePage* pagez = ui->webEngineView->page();
-    runScriptVK = true;
-
-    pagez->load(QUrl("https://vk.com/@linux2-main"));
-
-    QObject::connect(pagez, &QWebEnginePage::loadFinished, this, [=]() {
-
-        if (runScriptVK && page == 7) {
-            ui->action_35->setVisible(false);
-            QFile scriptFile(":/vk_dark_theme.user.js");
-            if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-                QTextStream stream(&scriptFile);
-                QString script = stream.readAll();
-                pagez->runJavaScript(script);
-                showLoadingAnimation(false);
-                ui->webEngineView->show();
-            }
-        }
-    });
+    if (currentDesktop == "KDE")
+        ui->webEngineView->page()->load(QUrl("https://store.kde.org/browse/"));
+    else if (currentDesktop == "GNOME")
+        ui->webEngineView->page()->load(QUrl("https://www.pling.com/s/Gnome/browse/"));
+    else if (currentDesktop == "XFCE")
+        ui->webEngineView->page()->load(QUrl("https://www.pling.com/s/XFCE/browse/"));
+    else if (currentDesktop == "LXQt")
+        ui->webEngineView->page()->load(QUrl("https://store.kde.org/browse?cat=446"));
+    else if (currentDesktop == "Cinnamon")
+        ui->webEngineView->page()->load(QUrl("https://www.pling.com/s/Cinnamon/browse/"));
+    else if (currentDesktop == "MATE")
+        ui->webEngineView->page()->load(QUrl("https://www.pling.com/s/Mate/browse/"));
+    else if (currentDesktop == "Enlightenment")
+        ui->webEngineView->page()->load(QUrl("https://www.pling.com/s/Enlightenment/browse/"));
+    else {
+        sendNotification(tr("Ошибка"), tr("Для вашего окружения тем не найдено!"));
+        return;
+    }
 }
 
 void MainWindow::on_action_10_triggered()
@@ -319,14 +296,6 @@ void MainWindow::on_action_12_triggered()
     showLoadingAnimation(false);
 }
 
-void MainWindow::on_action_13_triggered()
-{
-    if (page == 10) return;
-    mrpropper();
-    page = 10;
-    showLoadingAnimation(false);
-}
-
 //---#####################################################################################################################################################
 //--################################################################## БЫСТРЫЕ ФУНКЦИИ ##################################################################
 //-#####################################################################################################################################################
@@ -338,10 +307,7 @@ void MainWindow::openDirectory(const QString &directoryPath)
 
 void MainWindow::on_action_sh_triggered()
 {
-    if (lang == "en_US")
-        openDirectory("/kLaus/en/sh/");
-    else
-        openDirectory("/kLaus/sh/");
+    openDirectory("/kLaus/sh/");
 }
 
 void MainWindow::on_action_18_triggered()
@@ -349,32 +315,9 @@ void MainWindow::on_action_18_triggered()
     openDirectory("/.local/share/applications");
 }
 
-void MainWindow::on_action_19_triggered()
-{
-    openDirectory("/.local/share/plasma/desktoptheme");
-}
-
-void MainWindow::on_action_20_triggered()
-{
-    openDirectory("/.local/share/icons");
-}
-
-void MainWindow::on_action_21_triggered()
-{
-    openDirectory("/.local/share/color-schemes");
-}
-
-void MainWindow::on_action_22_triggered()
-{
-    openDirectory("/.icons");
-}
-
 void MainWindow::on_action_27_triggered()
 {
-    if (lang == "en_US")
-        openDirectory("/kLaus/en/journals/");
-    else
-        openDirectory("/kLaus/journals/");
+    openDirectory("/kLaus/journals/");
 }
 
 void MainWindow::on_action_28_triggered()
@@ -394,39 +337,32 @@ void MainWindow::on_action_31_triggered()
     if (page == 6)
     {
         showLoadingAnimation(true);
-        runScriptVK = false; // reset the flag
         if (lang == "en_US")
             pagez->load(QUrl("https://wiki.archlinux.org/title/General_recommendations"));
         else
             pagez->load(QUrl("https://wiki.archlinux.org/title/General_recommendations_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)"));
-
-        QObject::connect(pagez, &QWebEnginePage::loadFinished, this, [=]() {
-            if (page == 6) {
-                showLoadingAnimation(false);
-                ui->webEngineView->show();
-            }
-        });
     }
     else if (page == 7)
     {
         showLoadingAnimation(true);
-        runScriptVK = true; // set the flag to true
-        pagez->load(QUrl("https://vk.com/@linux2-main"));
-
-        QObject::connect(pagez, &QWebEnginePage::loadFinished, this, [=]() {
-
-            // execute the script only if the flag is set to true
-            if (runScriptVK && page == 7) {
-                QFile scriptFile(":/vk_dark_theme.user.js"); // путь к файлу vk_dark_theme.user.js
-                if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-                    QTextStream stream(&scriptFile);
-                    QString script = stream.readAll();
-                    pagez->runJavaScript(script);
-                    showLoadingAnimation(false);
-                    ui->webEngineView->show();
-                }
-            }
-        });
+        if(currentDesktop == "KDE")
+            pagez->load(QUrl("https://store.kde.org/browse/"));
+        else if(currentDesktop == "GNOME")
+            pagez->load(QUrl("https://www.pling.com/s/Gnome/browse/"));
+        else if(currentDesktop == "XFCE")
+            pagez->load(QUrl("https://www.pling.com/s/XFCE/browse/"));
+        else if(currentDesktop == "LXQt")
+            pagez->load(QUrl("https://store.kde.org/browse?cat=446"));
+        else if(currentDesktop == "Cinnamon")
+            pagez->load(QUrl("https://www.pling.com/s/Cinnamon/browse/"));
+        else if(currentDesktop == "MATE")
+            pagez->load(QUrl("https://www.pling.com/s/Mate/browse/"));
+        else if (currentDesktop == "Enlightenment")
+            pagez->load(QUrl("https://www.pling.com/s/Enlightenment/browse/"));
+        else {
+            sendNotification(tr("Ошибка"), tr("Для вашего окружения тем не найдено!"));
+            return;
+        }
     }
 }
 
@@ -438,29 +374,7 @@ void MainWindow::on_action_34_triggered()
         QTableWidgetItem *item = ui->table_aur->item(currentRow, 0);
         QString url = item->data(Qt::UserRole).toString();
         if (!url.isEmpty()) {
-            QWebEnginePage* page = ui->webEngineView->page();
-
-            // Флаг для отслеживания показа уведомления об ошибке
-            bool errorShown = false;
-
-            QObject::connect(page, &QWebEnginePage::loadFinished, this, [=](bool success) mutable {
-                if (success) {
-                    ui->action_16->setVisible(false);
-                    ui->action_34->setVisible(false);
-                    ui->action_35->setVisible(true);
-                    showLoadingAnimation(false);
-                    ui->webEngineView->show();
-                } else {
-                    // Проверяем, было ли уже показано уведомление об ошибке
-                    if (!errorShown) {
-                        sendNotification(tr("Ошибка"), tr("Страница не найдена (ошибка 404)"));
-                        errorShown = true;  // Устанавливаем флаг, что уведомление было показано
-                    }
-                    showLoadingAnimation(false);
-                }
-            });
-
-            page->load(QUrl(url));
+            ui->webEngineView->page()->load(QUrl(url));
         } else
             sendNotification(tr("Внимание"), tr("URL отсутствует!"));
     } else
@@ -469,17 +383,21 @@ void MainWindow::on_action_34_triggered()
 
 void MainWindow::on_action_35_triggered()
 {
+    if (page == 6 || page == 7)
+    {
+        ui->webEngineView->back();
+        return;
+    }
+
     ui->action_16->setVisible(true);
     ui->action_34->setVisible(true);
     ui->action_35->setVisible(false);
     ui->webEngineView->hide();
 }
 
-
 void MainWindow::on_action_32_triggered()
 {
     ui->webEngineView->reload();
-    sendNotification(tr("Обновление"), tr("Страница успешно обновлена!"));
 }
 
 void MainWindow::on_action_33_triggered()
@@ -510,23 +428,25 @@ void MainWindow::on_action_25_triggered()
     Terminal terminal = getTerminal();
 
     switch(yaycache) {
-        case 0: {
+        case 0:
             QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -Sc");
             break;
-        }
-        case 1: {
+        case 1:
             QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -Scc");
             break;
-        }
-        case 2: {
+        case 2:
             QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "paccache -rvk3");
             break;
-        }
-        default: {
+        default:
             QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -Sc");
             break;
-        }
     }
+}
+
+void MainWindow::on_action_13_triggered()
+{
+    loadSystemInfo();
+    sendNotification(tr("Информация"), tr("Информация успешно обновлена!"));
 }
 
 void MainWindow::on_action_5_triggered()
@@ -627,7 +547,6 @@ void MainWindow::on_action_6_triggered()
     }
 }
 
-
 void MainWindow::on_action_4_triggered()
 {
     if (page == 2)
@@ -712,8 +631,7 @@ void MainWindow::on_action_16_triggered()
     {
         sourceFilePath = ":/other/list_en.txt";
         targetFilePath = QDir::homePath() + "/kLaus/other/list_en.txt";
-    } else
-    {
+    } else {
         sourceFilePath = ":/other/list.txt";
         targetFilePath = QDir::homePath() + "/kLaus/other/list.txt";
     }
@@ -725,7 +643,6 @@ void MainWindow::on_action_16_triggered()
             sendNotification(tr("Ошибка"), tr("Не удалось создать каталог: ") + fileInfo.absoluteDir().path());
             return;
         }
-
         if (!QFile::copy(sourceFilePath, targetFilePath)) {
             sendNotification(tr("Ошибка"), tr("Не удалось скопировать файл из ") + sourceFilePath + tr(" в ") + targetFilePath);
             return;
@@ -830,54 +747,10 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     removeToolButtonTooltips(ui->toolBar);
     checkVersionAndClear();
-    mrpropper(); //зачистка говна
     loadSettings(); //загрузка настроек
     loadContent(); //загрузка списков приложений игр и тп
-
     loadingListWidget();
-
-    switch(mainpage) {
-    case 0:
-        on_action_10_triggered();
-        ui->label1->setText(tr("Добро пожаловать в kLaus - Arch Manager!"));
-        break;
-    case 1:
-        on_action_2_triggered();
-        break;
-    case 2:
-        on_action_17_triggered();
-        break;
-    case 3:
-        on_action_7_triggered();
-        break;
-    case 4:
-        on_action_9_triggered();
-        break;
-    case 5:
-        on_action_3_triggered();
-        break;
-    case 6:
-        on_action_8_triggered();
-        break;
-    case 7:
-        on_action_10_triggered();
-        break;
-    case 8:
-        on_action_12_triggered();
-        break;
-    default:
-        on_action_10_triggered();
-        ui->label1->setText(tr("Добро пожаловать в kLaus - Arch Manager!"));
-        break;
-    }
-
-    connect(ui->spin_grub, SIGNAL(valueChanged(int)), this, SLOT(on_spinBox_grub_valueChanged(int)));
-    connect(ui->time_update, &QTimeEdit::timeChanged, this, &MainWindow::onTimeChanged);
-    connect(ui->spin_rating, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::on_spin_rating_valueChanged);
-
-    QTableWidget *table = ui->table_aur;
-    table->setSelectionBehavior(QAbstractItemView::SelectRows);
-
+    loadSystemInfo();
     showLoadingAnimation(false);
 }
 
@@ -926,7 +799,6 @@ void MainWindow::mrpropper() //зачистка говна перед начал
     ui->line_grub->setVisible(false);
     ui->spin_grub->setVisible(false);
     ui->label_grub->setVisible(false);
-    ui->label2_grub->setVisible(false);
     ui->label3_grub->setVisible(false);
     ui->label4_grub->setVisible(false);
     ui->tabWidget->setVisible(false);
@@ -939,10 +811,6 @@ void MainWindow::mrpropper() //зачистка говна перед начал
     ui->action_16->setVisible(false);
     ui->action_sh->setVisible(false);
     ui->action_18->setVisible(false);
-    ui->action_19->setVisible(false);
-    ui->action_20->setVisible(false);
-    ui->action_21->setVisible(false);
-    ui->action_22->setVisible(false);
     ui->action_24->setVisible(false);
     ui->action_25->setVisible(false);
     ui->action_26->setVisible(false);
@@ -995,6 +863,9 @@ void MainWindow::loadSettings()
 
     timeupdate = QTime::fromString(settings.value("TimeUpdate").toString(), "HH:mm");
 
+    QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
+    currentDesktop = environment.value("XDG_CURRENT_DESKTOP");
+
     ui->webEngineView->setZoomFactor(0.9);
     ui->toolBar_2->setFixedWidth(100);
     //запретить выключать панели
@@ -1002,6 +873,222 @@ void MainWindow::loadSettings()
     ui->toolBar_2->setContextMenuPolicy(Qt::PreventContextMenu);
     // Запрещаем редактирование ячеек
     ui->table_aur->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    switch(mainpage) {
+    case 0:
+        on_action_10_triggered();
+        ui->label1->setText(tr("Добро пожаловать в kLaus - Arch Manager!"));
+        break;
+    case 1:
+        on_action_2_triggered();
+        break;
+    case 2:
+        on_action_17_triggered();
+        break;
+    case 3:
+        on_action_7_triggered();
+        break;
+    case 4:
+        on_action_9_triggered();
+        break;
+    case 5:
+        on_action_3_triggered();
+        break;
+    case 6:
+        on_action_8_triggered();
+        break;
+    case 7:
+        on_action_10_triggered();
+        break;
+    case 8:
+        on_action_12_triggered();
+        break;
+    default:
+        on_action_10_triggered();
+        ui->label1->setText(tr("Добро пожаловать в kLaus - Arch Manager!"));
+        break;
+    }
+
+    connect(ui->spin_grub, SIGNAL(valueChanged(int)), this, SLOT(on_spinBox_grub_valueChanged(int)));
+    connect(ui->time_update, &QTimeEdit::timeChanged, this, &MainWindow::onTimeChanged);
+    connect(ui->spin_rating, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::on_spin_rating_valueChanged);
+
+    QWebEngineProfile* profile = QWebEngineProfile::defaultProfile();
+    profile->setHttpCacheType(QWebEngineProfile::MemoryHttpCache);
+
+    QObject::connect(ui->webEngineView->page(), &QWebEnginePage::loadStarted, this, [=]() {
+        if (page == 2 || page == 6 || page == 7)
+        {
+            QFile scriptFile(":/loading.browser.js"); // Путь к вашему файлу скрипта
+            if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                QTextStream stream(&scriptFile);
+                QString script = stream.readAll();
+                ui->webEngineView->page()->runJavaScript(script);
+            }
+        }
+    });
+
+    // Флаг для отслеживания показа уведомления об ошибке
+    bool errorShown = false;
+
+    QObject::connect(ui->webEngineView->page(), &QWebEnginePage::loadFinished, this, [=](bool success) mutable{
+        if (success) {
+            if (page == 6 || page == 7)
+                ui->webEngineView->show();
+            else if (page == 2)
+            {
+                ui->action_16->setVisible(false);
+                ui->action_34->setVisible(false);
+                ui->action_35->setVisible(true);
+                ui->webEngineView->show();
+            }
+        } else {
+            // Проверяем, было ли уже показано уведомление об ошибке
+            if (!errorShown) {
+                if (page == 2 || page == 6 || page == 7)
+                {
+                    sendNotification(tr("Ошибка"), tr("Страница не найдена (ошибка 404)"));
+                    errorShown = true;  // Устанавливаем флаг, что уведомление было показано
+                }
+            }
+        }
+        showLoadingAnimation(false);
+    });
+    QTableWidget *table = ui->table_aur;
+    table->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    //копирование информации о системе
+    QList<QAction*> actionList;
+    actionList << ui->action_memory << ui->action_cpu << ui->action_gpu << ui->action_hostname << ui->action_os
+               << ui->action_packages << ui->action_release << ui->action_screen;
+    for (QAction* action : actionList) {
+        QObject::connect(action, &QAction::triggered, [action, this]() {
+            // Копирование текста в буфер обмена
+            QString text = action->text();
+            QClipboard* clipboard = QApplication::clipboard();
+            clipboard->setText(text);
+
+            // Копирование пользовательских данных в буфер обмена
+            QVariant data = action->data();
+            if (data.isValid()) {
+                QString customData = data.toString();
+                clipboard->setText(customData);
+            }
+            sendNotification(tr("Буфер обмена"), tr("Информация скопирована в буфер обмена"));
+        });
+    }
+}
+
+void MainWindow::loadSystemInfo()
+{
+//-##################################################################################
+//-############################ СИСТЕМНАЯ ИНФОРМАЦИЯ ################################
+//-##################################################################################
+    char* username = getlogin();
+    if (username != nullptr) {
+        QString name_2 = QString::fromUtf8(username);
+        QString welcomeMessage = QString(tr("Добро пожаловать, %1!")).arg(name_2);
+        ui->menu_2->setTitle(welcomeMessage);
+    }
+
+    char hostname[256];
+    gethostname(hostname, sizeof(hostname));
+    QString hostnameMessage = QString(hostname);
+    ui->action_hostname->setText(hostnameMessage);
+
+    // Получаем информацию о системе
+    struct utsname systemInfo;
+    if (uname(&systemInfo) == 0) {
+        QString release = QString::fromUtf8(systemInfo.release);
+        QString machine = QString::fromUtf8(systemInfo.machine);
+
+        QProcess distributionProcess;
+        distributionProcess.start("lsb_release", QStringList() << "-s" << "-d");
+        distributionProcess.waitForFinished();
+        QString distribution = QString::fromUtf8(distributionProcess.readAllStandardOutput()).trimmed();
+
+        // Отобразить информацию о системе в меню
+        QString osText = QString("%1 (%2)").arg(distribution, machine);
+        ui->action_os->setText(osText);
+
+        QString release_text = QString(tr("Ядро: %1")).arg(release);
+        ui->action_release->setText(release_text);
+    }
+
+    // Получаем количество пакетов pacman
+    QProcess pacmanProcess;
+    pacmanProcess.start("sh", QStringList() << "-c" << "yay -Qq | wc -l");
+    pacmanProcess.waitForFinished(-1);
+    QString pacmanPackagesCount = QString::fromUtf8(pacmanProcess.readAllStandardOutput()).trimmed();
+
+    // Получаем количество пакетов flatpak
+    QProcess flatpakProcess;
+    flatpakProcess.start("sh", QStringList() << "-c" << "flatpak list --app | wc -l");
+    flatpakProcess.waitForFinished(-1);
+    QString flatpakPackagesCount = QString::fromUtf8(flatpakProcess.readAllStandardOutput()).trimmed();
+
+    QString packagesText = QString("Pacman: %1, Flatpak: %2").arg(pacmanPackagesCount, flatpakPackagesCount);
+    ui->action_packages->setText(packagesText);
+
+    // Получаем разрешение
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QSize screenSize = screen->size();
+    int screenWidth = screenSize.width();
+    int screenHeight = screenSize.height();
+
+    QString resolutionText = QString(tr("Разрешение: %1x%2")).arg(screenWidth).arg(screenHeight);
+    ui->action_screen->setText(resolutionText);
+
+    // Получаем CPU
+    QProcess cpuProcess;
+    cpuProcess.start("sh", QStringList() << "-c" << "LC_ALL=C lscpu");
+    cpuProcess.waitForFinished(-1);
+    QString cpuOutput = QString::fromUtf8(cpuProcess.readAllStandardOutput());
+
+    QStringList cpuLines = cpuOutput.split('\n');
+    QString cpuInfo;
+    for (const QString& line : cpuLines) {
+        if (line.startsWith("Model name:")) {
+            cpuInfo = line.mid(12).trimmed();
+            break;
+        }
+    }
+    ui->action_cpu->setText(cpuInfo);
+
+    // Получаем GPU
+    QProcess gpuProcess;
+    gpuProcess.start("sh", QStringList() << "-c" << "lspci | grep -i 'VGA'");
+    if (gpuProcess.waitForFinished()) {
+        QString output = QString::fromUtf8(gpuProcess.readAllStandardOutput()).trimmed();
+
+        QStringList parts = output.split(':');
+        if (parts.size() > 2) {
+            QString gpuInfo = parts[2].trimmed();
+            ui->action_gpu->setText(gpuInfo);
+        }
+    }
+
+    // Получаем Memory
+    QProcess memoryProcess;
+    memoryProcess.start("sh", QStringList() << "-c" << "free -m");
+    memoryProcess.waitForFinished();
+    QString memoryOutput = QString::fromUtf8(memoryProcess.readAllStandardOutput());
+
+    QStringList memoryLines = memoryOutput.split('\n');
+    QString memoryInfo;
+    for (const QString& line : memoryLines) {
+        if (line.startsWith("Mem:")) {
+            QStringList memoryParts = line.split(' ', Qt::SkipEmptyParts);
+            memoryParts.removeAll("");
+            if (memoryParts.length() >= 7) {
+                QString totalMemory = memoryParts.at(1);
+                QString usedMemory = memoryParts.at(2);
+                memoryInfo = QString(tr("Память: %1 / %2")).arg(usedMemory, totalMemory);
+                break;
+            }
+        }
+    }
+    ui->action_memory->setText(memoryInfo);
 }
 
 QColor MainWindow::generateRandomColor()

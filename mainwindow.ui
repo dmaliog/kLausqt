@@ -168,7 +168,7 @@ background: url(:/img/background.png) no-repeat bottom right;
 background-color: #322F85;
 }
 
-QListWidget {
+QListWidget,QWebEngineView {
     background-color: #242424;
     border: 5px solid #28276b;
     border-radius: 13px;
@@ -228,7 +228,7 @@ QMenuBar::item:pressed { border-radius:5px;background-color: #916ee4; }</string>
      </font>
     </property>
     <property name="text">
-     <string>Добро пожаловать в kLaus App Store!</string>
+     <string>Добро пожаловать в kLaus - Arch Manager!</string>
     </property>
     <property name="textFormat">
      <enum>Qt::AutoText</enum>
@@ -328,7 +328,7 @@ QTableWidget QHeaderView::section:first {
     </property>
     <property name="styleSheet">
      <string notr="true">QLineEdit#searchApp {
-    padding: 0 30px;
+	padding: 0 10px 0 30px;
     border-radius: 15px;
     background-image: url(:/img/m4.png);
 	border:0;
@@ -398,6 +398,9 @@ QTableWidget QHeaderView::section:first {
     <property name="contextMenuPolicy">
      <enum>Qt::PreventContextMenu</enum>
     </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
     <property name="styleSheet">
      <string notr="true"/>
     </property>
@@ -453,7 +456,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_settings">
      <attribute name="title">
@@ -464,7 +467,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
        <rect>
         <x>20</x>
         <y>20</y>
-        <width>201</width>
+        <width>911</width>
         <height>21</height>
        </rect>
       </property>
@@ -481,8 +484,8 @@ QTabWidget#tabWidget QTabBar::tab:selected {
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>190</y>
-        <width>201</width>
+        <y>240</y>
+        <width>371</width>
         <height>21</height>
        </rect>
       </property>
@@ -499,8 +502,8 @@ QTabWidget#tabWidget QTabBar::tab:selected {
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>220</y>
-        <width>371</width>
+        <y>270</y>
+        <width>391</width>
         <height>161</height>
        </rect>
       </property>
@@ -515,7 +518,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>359</width>
+         <width>379</width>
          <height>149</height>
         </rect>
        </property>
@@ -524,7 +527,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
          <rect>
           <x>20</x>
           <y>20</y>
-          <width>321</width>
+          <width>291</width>
           <height>42</height>
          </rect>
         </property>
@@ -551,6 +554,9 @@ QTabWidget#tabWidget QTabBar::tab:selected {
            </property>
            <property name="contextMenuPolicy">
             <enum>Qt::NoContextMenu</enum>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
@@ -621,8 +627,8 @@ QTabWidget#tabWidget QTabBar::tab:selected {
        <rect>
         <x>20</x>
         <y>50</y>
-        <width>931</width>
-        <height>121</height>
+        <width>921</width>
+        <height>81</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -636,15 +642,15 @@ QTabWidget#tabWidget QTabBar::tab:selected {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>919</width>
-         <height>109</height>
+         <width>909</width>
+         <height>69</height>
         </rect>
        </property>
        <widget class="QWidget" name="layoutWidget_4">
         <property name="geometry">
          <rect>
           <x>20</x>
-          <y>0</y>
+          <y>10</y>
           <width>871</width>
           <height>48</height>
          </rect>
@@ -687,53 +693,59 @@ QTabWidget#tabWidget QTabBar::tab:selected {
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="layoutWidget_6">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>50</y>
-          <width>291</width>
-          <height>51</height>
-         </rect>
-        </property>
-        <layout class="QHBoxLayout" name="horizontal_rating">
-         <property name="topMargin">
-          <number>4</number>
-         </property>
-         <property name="bottomMargin">
-          <number>4</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="label_rating">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Рейтинг для показа звезды</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="spin_rating">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="contextMenuPolicy">
-            <enum>Qt::NoContextMenu</enum>
-           </property>
-           <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
       </widget>
+     </widget>
+     <widget class="QWidget" name="layoutWidget_6">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>150</y>
+        <width>271</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontal_rating">
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_rating">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Рейтинг для показа звезды</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spin_rating">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="contextMenuPolicy">
+          <enum>Qt::NoContextMenu</enum>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="frame">
+          <bool>true</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_aursettings">
@@ -772,8 +784,8 @@ QTabWidget#tabWidget QTabBar::tab:selected {
      <widget class="QScrollArea" name="scroll_othersettings">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>150</y>
+        <x>20</x>
+        <y>160</y>
         <width>451</width>
         <height>161</height>
        </rect>
@@ -844,7 +856,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
            </item>
            <item>
             <property name="text">
-             <string>Запущенные пакеты</string>
+             <string>Автоматизация</string>
             </property>
            </item>
            <item>
@@ -859,12 +871,12 @@ QTabWidget#tabWidget QTabBar::tab:selected {
            </item>
            <item>
             <property name="text">
-             <string>Arch Wiki</string>
+             <string>Помощь по Arch</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Новости Linux</string>
+             <string>Кастомизация</string>
             </property>
            </item>
            <item>
@@ -933,8 +945,8 @@ QTabWidget#tabWidget QTabBar::tab:selected {
      <widget class="QLabel" name="label_othersettings">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>120</y>
+        <x>20</x>
+        <y>130</y>
         <width>451</width>
         <height>21</height>
        </rect>
@@ -1223,7 +1235,7 @@ border:0;</string>
         <locale language="Russian" country="Russia"/>
        </property>
        <property name="text">
-        <string>Ожидание загрузочного меню</string>
+        <string>Ожидание загрузочного меню в секундах</string>
        </property>
        <property name="textFormat">
         <enum>Qt::AutoText</enum>
@@ -1239,7 +1251,7 @@ border:0;</string>
      <item>
       <widget class="QSpinBox" name="spin_grub">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -1253,20 +1265,11 @@ border: 5px solid #28276b;
 border-radius: 13px;
 padding: 5px;</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
        <property name="correctionMode">
         <enum>QAbstractSpinBox::CorrectToPreviousValue</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label2_grub">
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>секунд</string>
        </property>
       </widget>
      </item>
@@ -1288,7 +1291,11 @@ padding: 5px;</string>
      <string notr="true">background-color: #242424;
 border: 5px solid #28276b;
 border-radius:13px;
-padding: 5px 7px;</string>
+padding: 0 10px 0 35px;
+border-radius: 15px;
+background-image: url(:/img/m5.png);
+background-repeat: no-repeat;
+background-position: left center;</string>
     </property>
    </widget>
    <zorder>list_grub</zorder>
@@ -1368,11 +1375,19 @@ padding: 5px 7px;</string>
      <bool>false</bool>
     </property>
     <property name="title">
-     <string>Вы не авторизовались</string>
+     <string>Добро пожаловать, %user%!</string>
     </property>
+    <addaction name="action_hostname"/>
+    <addaction name="separator"/>
+    <addaction name="action_os"/>
+    <addaction name="action_release"/>
+    <addaction name="action_packages"/>
+    <addaction name="action_screen"/>
+    <addaction name="action_memory"/>
+    <addaction name="action_cpu"/>
+    <addaction name="action_gpu"/>
+    <addaction name="separator"/>
     <addaction name="action_13"/>
-    <addaction name="action_14"/>
-    <addaction name="action_15"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -1540,10 +1555,6 @@ QToolBar#toolBar_2 QToolButton:hover {
    <addaction name="action_29"/>
    <addaction name="action_28"/>
    <addaction name="action_18"/>
-   <addaction name="action_19"/>
-   <addaction name="action_20"/>
-   <addaction name="action_21"/>
-   <addaction name="action_22"/>
    <addaction name="action_24"/>
    <addaction name="action_25"/>
    <addaction name="action_26"/>
@@ -1603,10 +1614,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <normaloff>:/img/3.png</normaloff>:/img/3.png</iconset>
    </property>
    <property name="text">
-    <string>Arch Wiki</string>
+    <string>Помощь по Arch</string>
    </property>
    <property name="toolTip">
-    <string>Arch Wiki</string>
+    <string> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -1648,13 +1659,13 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="icon">
     <iconset resource="klausres.qrc">
-     <normaloff>:/img/6.png</normaloff>:/img/6.png</iconset>
+     <normaloff>:/img/25.png</normaloff>:/img/25.png</iconset>
    </property>
    <property name="text">
-    <string>Новости Linux</string>
+    <string>Кастомизация</string>
    </property>
    <property name="toolTip">
-    <string>Новости Linux</string>
+    <string>Кастомизация</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -1706,51 +1717,6 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="toolTip">
     <string>Дополнительные настройки</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_13">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/10.png</normaloff>:/img/10.png</iconset>
-   </property>
-   <property name="text">
-    <string>Авторизация</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_14">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/11.png</normaloff>:/img/11.png</iconset>
-   </property>
-   <property name="text">
-    <string>Регистрация</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_15">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/12.png</normaloff>:/img/12.png</iconset>
-   </property>
-   <property name="text">
-    <string>Забыли пароль</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -1844,66 +1810,6 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="toolTip">
     <string>Ярлыки</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_19">
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/21.png</normaloff>:/img/21.png</iconset>
-   </property>
-   <property name="text">
-    <string>Темы</string>
-   </property>
-   <property name="toolTip">
-    <string>Темы</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_20">
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/22.png</normaloff>:/img/22.png</iconset>
-   </property>
-   <property name="text">
-    <string>Иконки</string>
-   </property>
-   <property name="toolTip">
-    <string>Иконки</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_21">
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/23.png</normaloff>:/img/23.png</iconset>
-   </property>
-   <property name="text">
-    <string>Цвет. схемы</string>
-   </property>
-   <property name="toolTip">
-    <string>Цвет. схемы</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_22">
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/24.png</normaloff>:/img/24.png</iconset>
-   </property>
-   <property name="text">
-    <string>Курсоры</string>
-   </property>
-   <property name="toolTip">
-    <string>Курсоры</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -2087,6 +1993,87 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_hostname">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/7.png</normaloff>:/img/7.png</iconset>
+   </property>
+   <property name="text">
+    <string>Информации о Hostname нет</string>
+   </property>
+  </action>
+  <action name="action_os">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/6.png</normaloff>:/img/6.png</iconset>
+   </property>
+   <property name="text">
+    <string>Информации о дистрибутиве нет</string>
+   </property>
+  </action>
+  <action name="action_release">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/10.png</normaloff>:/img/10.png</iconset>
+   </property>
+   <property name="text">
+    <string>Информации о релизе нет</string>
+   </property>
+  </action>
+  <action name="action_packages">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/5.png</normaloff>:/img/5.png</iconset>
+   </property>
+   <property name="text">
+    <string>Информации о пакетах нет</string>
+   </property>
+  </action>
+  <action name="action_screen">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/12.png</normaloff>:/img/12.png</iconset>
+   </property>
+   <property name="text">
+    <string>Информации о разрешении нет</string>
+   </property>
+  </action>
+  <action name="action_cpu">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/36.png</normaloff>:/img/36.png</iconset>
+   </property>
+   <property name="text">
+    <string>Информации о CPU нет</string>
+   </property>
+  </action>
+  <action name="action_gpu">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/21.png</normaloff>:/img/21.png</iconset>
+   </property>
+   <property name="text">
+    <string>Информации о GPU нет</string>
+   </property>
+  </action>
+  <action name="action_memory">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/11.png</normaloff>:/img/11.png</iconset>
+   </property>
+   <property name="text">
+    <string>Информации о памяти нет</string>
+   </property>
+  </action>
+  <action name="action_13">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/32.png</normaloff>:/img/32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Обновить информацию</string>
    </property>
   </action>
  </widget>

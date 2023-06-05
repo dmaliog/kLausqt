@@ -1,7 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "qtoolbar.h"
 #include <QMainWindow>
 #include <QListWidgetItem>
 #include <QNetworkAccessManager>
@@ -18,7 +17,6 @@ const QVector<Terminal> m_terminalList = {
     {"/usr/bin/konsole", "-e"},
     {"/usr/bin/gnome-terminal", "--"},
     {"/usr/bin/xfce4-terminal", "-x"},
-    {"/usr/bin/mate-terminal", "-e"},
     {"/usr/bin/lxterminal", "-e"},
     {"/usr/bin/alacritty", "-e"},
     {"/usr/bin/xterm", "-e"}
@@ -44,6 +42,20 @@ public:
 
 private:
     QString packageURL;
+    int page; // какая страница используется
+    int trayon; // закрывать без трея
+    int soundon; // убрать звуки
+    int mainpage; // главная страница
+    int yaycache; // кэш
+    int table1; // описание
+    int table2; // версия
+    int table3; // голоса
+    int table4; // популярность
+    int table5; // последнее обновление
+    int fav; // последнее обновление
+    QString lang;
+    QString currentDesktop;
+    QTime timeupdate;
 
 protected: // события сворачивания окна
     void closeEvent(QCloseEvent *event) override; // объявление метода closeEvent()
@@ -61,14 +73,9 @@ public slots:
     void on_action_10_triggered();
     void on_action_11_triggered();
     void on_action_12_triggered();
-    void on_action_13_triggered();
     void on_action_16_triggered();
     void on_action_17_triggered();
     void on_action_18_triggered();
-    void on_action_19_triggered();
-    void on_action_20_triggered();
-    void on_action_21_triggered();
-    void on_action_22_triggered();
     void on_action_24_triggered();
     void on_action_25_triggered();
     void on_action_26_triggered();
@@ -86,6 +93,7 @@ private slots:
     void loadSound(int soundIndex);
     void loadSettings();
     void loadContent();
+    void loadSystemInfo();
     void loadingListWidget();
     void mrpropper();
     void showLoadingAnimation(bool show);
@@ -115,6 +123,7 @@ private slots:
     void on_combo_lang_currentIndexChanged(int index);
     void on_action_34_triggered();
     void on_action_35_triggered();
+    void on_action_13_triggered();
 };
 
 #endif // MAINWINDOW_H

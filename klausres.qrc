@@ -11,7 +11,6 @@
         <file>img/8.png</file>
         <file>img/9.png</file>
         <file>kLausPro.pro</file>
-        <file>img/header.jpg</file>
         <file>img/10.png</file>
         <file>img/11.png</file>
         <file>img/12.png</file>
@@ -21,7 +20,6 @@
         <file>img/load_1.png</file>
         <file>img/load_2.png</file>
         <file>img/load_3.png</file>
-        <file>vk_dark_theme.user.js</file>
         <file>img/16.png</file>
         <file>img/17.png</file>
         <file>img/18.png</file>
@@ -29,7 +27,6 @@
         <file>img/20.png</file>
         <file>img/21.png</file>
         <file>sh/root.sh</file>
-        <file>img/splash.gif</file>
         <file>img/22.png</file>
         <file>img/23.png</file>
         <file>img/24.png</file>
@@ -82,5 +79,8 @@
         <file>other/translations_en_US.txt</file>
         <file>img/34.png</file>
         <file>img/35.png</file>
+        <file>loading.browser.js</file>
+        <file>img/36.png</file>
+        <file>img/m5.png</file>
     </qresource>
 </RCC>
