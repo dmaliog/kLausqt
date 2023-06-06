@@ -15,7 +15,7 @@
 QString kLausDir = QDir::homePath();
 QString filePath = kLausDir + "/kLaus/settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "3.0";
+QString currentVersion = "3.1";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -277,7 +277,6 @@ void MainWindow::on_action_12_triggered()
     ui->tabWidget->setVisible(true);
 
     ui->check_trayon->setChecked(trayon == 1);
-    ui->check_soundon->setChecked(soundon == 1);
     ui->check_description->setChecked(table1 == 1);
     ui->check_version->setChecked(table2 == 1);
     ui->check_voices->setChecked(table3 == 1);
@@ -287,6 +286,9 @@ void MainWindow::on_action_12_triggered()
     ui->time_update->setTime(timeupdate);
     ui->spin_rating->setValue(fav);
     ui->tabWidget->setCurrentIndex(0);
+
+    ui->dial_volmenu->setValue(volumemenu);
+    ui->dial_volnotify->setValue(volumenotify);
 
     if(lang == "ru_RU")
         ui->combo_lang->setCurrentIndex(0);
@@ -825,11 +827,9 @@ void MainWindow::mrpropper() //зачистка говна перед начал
     ui->webEngineView->setVisible(false);
     ui->label2->setVisible(false);
     ui->label1->setVisible(true);
-
-    if(soundon == 0)
-        loadSound(0);
-
     showLoadingAnimation(true);
+
+    loadSound(0);
 }
 
 void MainWindow::loadSound(int soundIndex)
@@ -843,7 +843,19 @@ void MainWindow::loadSound(int soundIndex)
         soundPath = "qrc:/media/sound.wav";
 
     beep->setSource(QUrl(soundPath));
-    beep->setVolume(1.0f);
+
+    if (soundIndex == 1)
+    {
+        float volnotify = static_cast<float>(volumenotify) / 100.0f;
+        volnotify = static_cast<float>(static_cast<int>(volnotify * 10.0f)) / 10.0f;
+        beep->setVolume(volnotify);
+    } else {
+        float volmenu = static_cast<float>(volumemenu) / 100.0f;
+        volmenu = static_cast<float>(static_cast<int>(volmenu * 10.0f)) / 10.0f;
+        beep->setVolume(volmenu);
+    }
+
+
     beep->play();
 }
 
@@ -852,7 +864,8 @@ void MainWindow::loadSettings()
     mainpage = settings.value("MainPage", 0).toInt();
     yaycache = settings.value("YayCache", 0).toInt();
     trayon = settings.value("TrayOn", 0).toInt();
-    soundon = settings.value("SoundOn", 0).toInt();
+    volumenotify = settings.value("VolumeNotify", 30).toInt();
+    volumemenu = settings.value("VolumeMenu", 50).toInt();
     table1 = settings.value("Table1", 1).toInt();
     table2 = settings.value("Table2", 1).toInt();
     table3 = settings.value("Table3", 0).toInt();
@@ -977,6 +990,12 @@ void MainWindow::loadSettings()
             sendNotification(tr("Буфер обмена"), tr("Информация скопирована в буфер обмена"));
         });
     }
+
+    //Считываем volume
+    QString labelvolmenu = QString(tr("Звук меню: %1/100")).arg(volumemenu);
+    ui->label_volmenu->setText(labelvolmenu);
+    QString labelvolnotify = QString(tr("Звук уведомлений: %1/100")).arg(volumenotify);
+    ui->label_volnotify->setText(labelvolnotify);
 }
 
 void MainWindow::loadSystemInfo()
@@ -1541,10 +1560,21 @@ void MainWindow::on_check_trayon_stateChanged()
     settings.setValue("TrayOn", trayon);
 }
 
-void MainWindow::on_check_soundon_stateChanged()
+void MainWindow::on_dial_volmenu_valueChanged(int value)
 {
-    soundon = ui->check_soundon->isChecked() ? 1 : 0;
-    settings.setValue("SoundOn", soundon);
+    volumemenu = value;
+    settings.setValue("VolumeMenu", value);
+
+    QString labelvolmenu = QString(tr("Звук меню: %1/100")).arg(volumemenu);
+    ui->label_volmenu->setText(labelvolmenu);
+}
+
+void MainWindow::on_dial_volnotify_valueChanged(int value)
+{
+    volumenotify = value;
+    settings.setValue("VolumeNotify", value);
+    QString labelvolnotify = QString(tr("Звук уведомлений: %1/100")).arg(volumenotify);
+    ui->label_volnotify->setText(labelvolnotify);
 }
 
 void MainWindow::on_check_description_stateChanged()
@@ -1661,3 +1691,4 @@ void MainWindow::removeToolButtonTooltips(QToolBar* toolbar) {
         }
     }
 }
+

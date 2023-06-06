@@ -44,7 +44,8 @@ private:
     QString packageURL;
     int page; // какая страница используется
     int trayon; // закрывать без трея
-    int soundon; // убрать звуки
+    int volumenotify; // громкость уведомлений
+    int volumemenu; // громкость меню
     int mainpage; // главная страница
     int yaycache; // кэш
     int table1; // описание
@@ -109,7 +110,6 @@ private slots:
     void on_spin_rating_valueChanged(int arg1);
     void on_time_update_timeChanged(const QTime &time);
     void on_check_trayon_stateChanged();
-    void on_check_soundon_stateChanged();
     void on_combo_mainpage_currentIndexChanged();
     void on_combo_cache_currentIndexChanged();
     void on_check_description_stateChanged();
@@ -124,6 +124,8 @@ private slots:
     void on_action_34_triggered();
     void on_action_35_triggered();
     void on_action_13_triggered();
+    void on_dial_volmenu_valueChanged(int value);
+    void on_dial_volnotify_valueChanged(int value);
 };
 
 #endif // MAINWINDOW_H

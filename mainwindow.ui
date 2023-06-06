@@ -756,7 +756,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>30</y>
+        <y>21</y>
         <width>281</width>
         <height>20</height>
        </rect>
@@ -765,27 +765,11 @@ QTabWidget#tabWidget QTabBar::tab:selected {
        <string>Закрывать без сворачивания в трей</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="check_soundon">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>70</y>
-        <width>281</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Выключить звуки меню</string>
-      </property>
-     </widget>
      <widget class="QScrollArea" name="scroll_othersettings">
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>160</y>
+        <y>277</y>
         <width>451</width>
         <height>161</height>
        </rect>
@@ -946,7 +930,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>130</y>
+        <y>247</y>
         <width>451</width>
         <height>21</height>
        </rect>
@@ -959,6 +943,99 @@ QTabWidget#tabWidget QTabBar::tab:selected {
       <property name="text">
        <string>Другие настройки</string>
       </property>
+     </widget>
+     <widget class="QLabel" name="label_volume">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>70</y>
+        <width>451</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Настройки звука</string>
+      </property>
+     </widget>
+     <widget class="QScrollArea" name="scroll_volume">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>100</y>
+        <width>391</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollArea_volume">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>379</width>
+         <height>119</height>
+        </rect>
+       </property>
+       <widget class="QDial" name="dial_volnotify">
+        <property name="geometry">
+         <rect>
+          <x>238</x>
+          <y>12</y>
+          <width>81</width>
+          <height>71</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QDial" name="dial_volmenu">
+        <property name="geometry">
+         <rect>
+          <x>38</x>
+          <y>12</y>
+          <width>81</width>
+          <height>71</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_volmenu">
+        <property name="geometry">
+         <rect>
+          <x>-2</x>
+          <y>82</y>
+          <width>161</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Звук меню: 0/100</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_volnotify">
+        <property name="geometry">
+         <rect>
+          <x>198</x>
+          <y>82</y>
+          <width>171</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Звук уведомлений: 0/100</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_info">
@@ -1219,7 +1296,7 @@ border:0;</string>
      <rect>
       <x>30</x>
       <y>140</y>
-      <width>351</width>
+      <width>381</width>
       <height>41</height>
      </rect>
     </property>
@@ -1251,10 +1328,34 @@ border:0;</string>
      <item>
       <widget class="QSpinBox" name="spin_grub">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>90</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="sizeIncrement">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="baseSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
        </property>
        <property name="contextMenuPolicy">
         <enum>Qt::NoContextMenu</enum>
@@ -1263,10 +1364,14 @@ border:0;</string>
         <string notr="true">background-color: #242424;
 border: 5px solid #28276b;
 border-radius: 13px;
-padding: 5px;</string>
+padding: 0 10px 0 30px;
+border-radius: 15px;
+background-image: url(:/img/m6.png);
+background-repeat: no-repeat;
+background-position: left center;</string>
        </property>
        <property name="alignment">
-        <set>Qt::AlignCenter</set>
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
        </property>
        <property name="correctionMode">
         <enum>QAbstractSpinBox::CorrectToPreviousValue</enum>
@@ -1274,6 +1379,8 @@ padding: 5px;</string>
       </widget>
      </item>
     </layout>
+    <zorder>spin_grub</zorder>
+    <zorder>label_grub</zorder>
    </widget>
    <widget class="QLineEdit" name="line_grub">
     <property name="geometry">
@@ -1299,18 +1406,18 @@ background-position: left center;</string>
     </property>
    </widget>
    <zorder>list_grub</zorder>
-   <zorder>layoutWidget</zorder>
-   <zorder>list_sh</zorder>
    <zorder>list_manager</zorder>
    <zorder>table_aur</zorder>
-   <zorder>searchApp</zorder>
    <zorder>list_clear</zorder>
+   <zorder>webEngineView</zorder>
+   <zorder>layoutWidget</zorder>
+   <zorder>list_sh</zorder>
+   <zorder>searchApp</zorder>
    <zorder>label1</zorder>
    <zorder>label2</zorder>
    <zorder>label3_grub</zorder>
    <zorder>label4_grub</zorder>
    <zorder>line_grub</zorder>
-   <zorder>webEngineView</zorder>
    <zorder>tabWidget</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
