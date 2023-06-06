@@ -58,6 +58,35 @@ private:
     QString currentDesktop;
     QTime timeupdate;
 
+    QStringList shResourcePaths = {":/sh/1c.sh",
+                                   ":/sh/wayland.sh",
+                                   ":/sh/imgneofetch.sh",
+                                   ":/sh/root.sh",
+                                   ":/sh/PKGBUILD.sh",
+                                   ":/sh/save.sh",
+                                   ":/sh/load.sh",
+                                   ":/sh/zen.sh"};
+
+    QStringList clearResourcePaths = {":/clear/clear_trash.sh",
+                                      ":/clear/yay.sh",
+                                      ":/clear/pacman.sh"};
+
+    QStringList journalsResourcePaths = {":/journals/neofetch.sh",
+                                         ":/journals/systemd-analyze.sh",
+                                         ":/journals/lspci.sh",
+                                         ":/journals/lsusb.sh",
+                                         ":/journals/inxi.sh",
+                                         ":/journals/hwinfo.sh",
+                                         ":/journals/lsblk.sh",
+                                         ":/journals/fdisk.sh",
+                                         ":/journals/native-pkg.sh",
+                                         ":/journals/foreign-pkg.sh",
+                                         ":/journals/xorg-log.sh",
+                                         ":/journals/grub-cfg.sh",
+                                         ":/journals/fstab.sh",
+                                         ":/journals/pacman.sh",
+                                         ":/journals/top-pkg.sh"};
+
 protected: // события сворачивания окна
     void closeEvent(QCloseEvent *event) override; // объявление метода closeEvent()
 
@@ -90,7 +119,12 @@ public slots:
 
 private slots:
     void checkVersionAndClear();
-    void loadScripts(const QStringList& resourcePaths, const QString& baseDir, QListWidget* listWidgete);
+    void loadScripts(const QString& baseDir, QListWidget* listWidget);
+    void saveScripts(const QStringList& resourcePaths, const QString& baseDir);
+    void removeScripts(const QStringList& resourcePaths, const QString& baseDir);
+
+    QString getScriptContent(const QString& filePath);
+
     void loadSound(int soundIndex);
     void loadSettings();
     void loadContent();
@@ -126,6 +160,9 @@ private slots:
     void on_action_13_triggered();
     void on_dial_volmenu_valueChanged(int value);
     void on_dial_volnotify_valueChanged(int value);
+    void on_action_addsh_triggered();
+    void on_action_rmsh_triggered();
+    void on_action_editsh_triggered();
 };
 
 #endif // MAINWINDOW_H

@@ -51,6 +51,11 @@
 	border:0;
 }
 
+#centralwidget{
+	background: url(:/img/background.png) no-repeat bottom right;
+	background-color: #322F85;
+}
+
 QProgressBar {
     /* Общие стили для QProgressBar */
     background-color: #636363; /* Цвет фона */
@@ -162,11 +167,6 @@ QComboBox::down-arrow {
 
 QAbstractSpinBox::up-button { width: 0; height: 0; }
 QAbstractSpinBox::down-button { width: 0; height: 0; }
-
-#centralwidget{
-background: url(:/img/background.png) no-repeat bottom right;
-background-color: #322F85;
-}
 
 QListWidget,QWebEngineView {
     background-color: #242424;
@@ -1652,6 +1652,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    <attribute name="toolBarBreak">
     <bool>true</bool>
    </attribute>
+   <addaction name="action_addsh"/>
+   <addaction name="action_rmsh"/>
+   <addaction name="action_editsh"/>
    <addaction name="action_35"/>
    <addaction name="action_4"/>
    <addaction name="action_5"/>
@@ -2181,6 +2184,42 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="text">
     <string>Обновить информацию</string>
+   </property>
+  </action>
+  <action name="action_addsh">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/37.png</normaloff>:/img/37.png</iconset>
+   </property>
+   <property name="text">
+    <string>Добавить</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_rmsh">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/38.png</normaloff>:/img/38.png</iconset>
+   </property>
+   <property name="text">
+    <string>Удалить</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_editsh">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/39.png</normaloff>:/img/39.png</iconset>
+   </property>
+   <property name="text">
+    <string>Изменить</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
    </property>
   </action>
  </widget>

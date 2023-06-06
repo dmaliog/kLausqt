@@ -2,6 +2,7 @@
 #include <QtWidgets>
 #include <QTranslator>
 #include <QObject>
+#include <QDialog>
 
 bool isPackageInstalled(const QString& packageName)
 {
@@ -16,10 +17,9 @@ bool isPackageInstalled(const QString& packageName)
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-
+    QString baseDir = QDir::homePath() + "/kLaus/";
     // Создаем объект QSettings для чтения из файла INI
-    QString kLausDir = QDir::homePath();
-    QString filePath = kLausDir + "/kLaus/settings.ini";
+    QString filePath = baseDir + "kLaus/settings.ini";
     QSettings settings(filePath, QSettings::IniFormat);
 
     QString locale;
