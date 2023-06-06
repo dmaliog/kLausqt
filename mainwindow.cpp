@@ -15,7 +15,7 @@
 QString kLausDir = QDir::homePath();
 QString filePath = kLausDir + "/kLaus/settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "3.1";
+QString currentVersion = "3.2";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -48,6 +48,7 @@ void MainWindow::on_action_1_triggered()
 void MainWindow::on_action_2_triggered()
 {
     if (page == 2) return;
+    ui->webEngineView->page()->triggerAction(QWebEnginePage::Stop);
     mrpropper();
     page = 2;
     ui->label1->setText(tr("Каталог пакетов из AUR"));
@@ -200,6 +201,7 @@ void MainWindow::on_action_9_triggered()
 void MainWindow::on_action_3_triggered()
 {
     if (page == 6) return;
+    ui->webEngineView->page()->triggerAction(QWebEnginePage::Stop);
     mrpropper();
     page = 6;
     ui->label1->hide();
@@ -226,7 +228,7 @@ void MainWindow::on_action_8_triggered()
             return;
         }
     }
-
+    ui->webEngineView->page()->triggerAction(QWebEnginePage::Stop);
     mrpropper();
     page = 7;
     ui->label1->hide();

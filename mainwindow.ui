@@ -1409,7 +1409,6 @@ background-position: left center;</string>
    <zorder>list_manager</zorder>
    <zorder>table_aur</zorder>
    <zorder>list_clear</zorder>
-   <zorder>webEngineView</zorder>
    <zorder>layoutWidget</zorder>
    <zorder>list_sh</zorder>
    <zorder>searchApp</zorder>
@@ -1419,6 +1418,7 @@ background-position: left center;</string>
    <zorder>label4_grub</zorder>
    <zorder>line_grub</zorder>
    <zorder>tabWidget</zorder>
+   <zorder>webEngineView</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="enabled">
@@ -1724,7 +1724,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Помощь по Arch</string>
    </property>
    <property name="toolTip">
-    <string> </string>
+    <string>Помощь по Arch</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
