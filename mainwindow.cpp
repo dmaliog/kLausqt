@@ -11,10 +11,10 @@
 //---#####################################################################################################################################################
 //--############################################################## ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ################################################################
 //-#####################################################################################################################################################
-QString baseDir = QDir::homePath() + "/kLaus/";
+QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "3.5";
+QString currentVersion = "3.6";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -331,7 +331,7 @@ void MainWindow::openDirectory(const QString &directoryPath)
 
 void MainWindow::on_action_sh_triggered()
 {
-    openDirectory("/kLaus/sh/");
+    openDirectory("/.config/kLaus/sh/");
 }
 
 void MainWindow::on_action_18_triggered()
@@ -341,7 +341,7 @@ void MainWindow::on_action_18_triggered()
 
 void MainWindow::on_action_27_triggered()
 {
-    openDirectory("/kLaus/journals/");
+    openDirectory("/.config/kLaus/journals/");
 }
 
 void MainWindow::on_action_28_triggered()

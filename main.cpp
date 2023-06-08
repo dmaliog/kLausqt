@@ -17,7 +17,7 @@ bool isPackageInstalled(const QString& packageName)
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QString baseDir = QDir::homePath() + "/kLaus/";
+    QString baseDir = QDir::homePath() + "/.config/kLaus/";
     // Создаем объект QSettings для чтения из файла INI
     QString filePath = baseDir + "settings.ini";
     QSettings settings(filePath, QSettings::IniFormat);
