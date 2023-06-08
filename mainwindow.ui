@@ -456,7 +456,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_settings">
      <attribute name="title">
@@ -506,6 +506,9 @@ QTabWidget#tabWidget QTabBar::tab:selected {
         <width>391</width>
         <height>161</height>
        </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
       </property>
       <property name="styleSheet">
        <string notr="true">background:#272727;</string>
@@ -746,6 +749,66 @@ QTabWidget#tabWidget QTabBar::tab:selected {
         </widget>
        </item>
       </layout>
+     </widget>
+     <widget class="QScrollArea" name="scroll_repair">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>270</y>
+        <width>431</width>
+        <height>161</height>
+       </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background:#272727;</string>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollArea_other_2">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>419</width>
+         <height>149</height>
+        </rect>
+       </property>
+       <widget class="QCheckBox" name="check_repair">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>24</y>
+          <width>361</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="tabletTracking">
+         <bool>false</bool>
+        </property>
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string>Создать резервную копию при удалении конфигураций</string>
+        </property>
+        <property name="autoRepeat">
+         <bool>false</bool>
+        </property>
+        <property name="autoExclusive">
+         <bool>false</bool>
+        </property>
+        <property name="tristate">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_aursettings">
@@ -1474,7 +1537,6 @@ background-position: left center;</string>
     </property>
    </widget>
    <zorder>table_aur</zorder>
-   <zorder>tabWidget</zorder>
    <zorder>list_grub</zorder>
    <zorder>layoutWidget</zorder>
    <zorder>searchApp</zorder>
@@ -1490,6 +1552,7 @@ background-position: left center;</string>
    <zorder>push_repair</zorder>
    <zorder>list_manager</zorder>
    <zorder>webEngineView</zorder>
+   <zorder>tabWidget</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="enabled">

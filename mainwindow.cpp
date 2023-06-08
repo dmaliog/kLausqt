@@ -12,9 +12,9 @@
 //--############################################################## ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ################################################################
 //-#####################################################################################################################################################
 QString baseDir = QDir::homePath() + "/kLaus/";
-QString filePath = baseDir + "/kLaus/settings.ini";
+QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "3.4";
+QString currentVersion = "3.5";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -284,6 +284,7 @@ void MainWindow::on_action_12_triggered()
     ui->tabWidget->setVisible(true);
 
     ui->check_trayon->setChecked(trayon == 1);
+    ui->check_repair->setChecked(repair == 1);
     ui->check_description->setChecked(table1 == 1);
     ui->check_version->setChecked(table2 == 1);
     ui->check_voices->setChecked(table3 == 1);
@@ -308,6 +309,20 @@ void MainWindow::on_action_12_triggered()
 //---#####################################################################################################################################################
 //--################################################################## БЫСТРЫЕ ФУНКЦИИ ##################################################################
 //-#####################################################################################################################################################
+void MainWindow::on_push_repair_clicked()
+{
+    // Открываем диалог выбора архива с помощью Zenity
+    QProcess process;
+    process.start("zenity", QStringList() << "--file-selection" << tr("--title=Выберите архив") << "--file-filter=*.zip");
+
+    if (process.waitForFinished() && process.exitCode() == 0) {
+        // Получаем путь выбранного архива
+        QString archivePath = process.readAllStandardOutput().trimmed();
+
+        // Восстанавливаем архив
+        restoreArchive(archivePath);
+    }
+}
 
 void MainWindow::openDirectory(const QString &directoryPath)
 {
@@ -1016,7 +1031,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     loadingListWidget();
     loadSystemInfo();
 
-
     showLoadingAnimation(false);
 }
 
@@ -1030,9 +1044,22 @@ void MainWindow::checkVersionAndClear() {
         settings.setValue("Version", currentVersion);
         settings.setValue("Language", storedLanguage);
         settings.sync();
+
+        QStringList excludedFolders = {"clear", "journals", "other", "sh"};
+        QDir baseDirDir(baseDir);
+
+        QStringList subDirs = baseDirDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+        for (const QString& subDir : subDirs) {
+            if (!excludedFolders.contains(subDir)) {
+                QDir subDirDir(baseDirDir.absoluteFilePath(subDir));
+                subDirDir.removeRecursively();
+            }
+        }
+
         removeScripts(shResourcePaths, baseDir + "/sh/");
         removeScripts(clearResourcePaths, baseDir + "/clear/");
         removeScripts(journalsResourcePaths, baseDir + "/journals/");
+
         sendNotification(tr("Обновление kLaus"), tr("Версия kLaus поменялась, конфигурация сброшена!"));
     }
 }
@@ -1157,6 +1184,7 @@ void MainWindow::loadSettings()
     mainpage = settings.value("MainPage", 0).toInt();
     yaycache = settings.value("YayCache", 0).toInt();
     trayon = settings.value("TrayOn", 0).toInt();
+    repair = settings.value("RepairBackup", 1).toInt();
     volumenotify = settings.value("VolumeNotify", 30).toInt();
     volumemenu = settings.value("VolumeMenu", 50).toInt();
     table1 = settings.value("Table1", 1).toInt();
@@ -1767,6 +1795,148 @@ void MainWindow::sendNotification(const QString& title, const QString& message)
     loadSound(1);
 }
 
+void MainWindow::createArchive(const QString& folderPath, const QString& folderName)
+{
+    if (repair == 0) {
+        QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), tr("Вы уверены, что хотите удалить каталог \"%1\" с конфигурацией?").arg(folderPath + folderName), QMessageBox::Yes | QMessageBox::No);
+        if (reply == QMessageBox::No) return;
+
+        QDir folderDir(folderPath);
+        // Переходим в папку перед запуском процесса архивации
+        if (!folderDir.cd(folderPath)) {
+            sendNotification(tr("Ошибка"), tr("Не удалось перейти в каталог конфигурации!"));
+            return;
+        }
+
+        // Удаляем папку и ее содержимое
+        QDir folder2(folderPath + folderName);
+        folder2.removeRecursively();
+        loadFolders();
+        sendNotification(tr("Конфигурация"), tr("Конфигурация успешно удалена!"));
+        return;
+    }
+
+    QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), tr("Вы уверены, что хотите удалить каталог \"%1\" и создать резервную копию?\n\nВажно: Архивы начинающиеся с точки - это конфигурации из домашней директории (они скрыты по умолчанию/включите видимость скрытых файлов)").arg(folderPath + folderName), QMessageBox::Yes | QMessageBox::No);
+    if (reply == QMessageBox::No) return;
+
+    QProcess process;
+    process.start("zenity", QStringList() << "--file-selection" << "--directory" << tr("--title=Выберите путь сохранения архива"));
+    process.waitForFinished();
+
+    if (process.exitCode() != 0) return;
+        QString selectedPath = process.readAllStandardOutput().trimmed();
+
+    if (selectedPath.isEmpty()) return;
+    QDir folderDir(folderPath);
+
+    // Проверяем, существует ли папка
+    if (!folderDir.exists()) {
+        sendNotification(tr("Ошибка"), tr("Каталог конфигурации не существует!"));
+        return;
+    }
+
+    QString archivePath = selectedPath + "/" + folderName + ".zip";
+
+    // Переходим в папку перед запуском процесса архивации
+    if (!folderDir.cd(folderPath)) {
+        sendNotification(tr("Ошибка"), tr("Не удалось перейти в каталог конфигурации!"));
+        return;
+    }
+
+    QProcess zipProcess;
+    zipProcess.setWorkingDirectory(folderDir.absolutePath());
+    zipProcess.start("zip", QStringList() << "-r" << archivePath << folderName);
+    zipProcess.waitForFinished();
+
+    if (zipProcess.exitCode() != 0) {
+        sendNotification(tr("Ошибка"), tr("Резервная копия %1 не создана!").arg(archivePath));
+        return;
+    }
+
+    // Удаляем папку и ее содержимое
+    QDir folder2(folderPath + folderName);
+    folder2.removeRecursively();
+    loadFolders();
+    sendNotification(tr("Конфигурация"), tr("Резервная копия %1 успешно создана! Конфигурация удалена!").arg(archivePath));
+}
+
+void MainWindow::loadFolders()
+{
+    QString homeDirectory = QDir::homePath();
+    QString configDirectory = homeDirectory + "/.config/";
+    QDir configDir(configDirectory);
+    QDir homeDir(homeDirectory);
+
+    if (!homeDir.exists() || !configDir.exists())
+        return; // Каталоги не существуют
+
+    ui->list_repair->clear();
+    int itemCount = 0;
+    // Загрузка папок из папки .config
+    QStringList configFolderList = configDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+
+    for (const QString& folderName : configFolderList) {
+
+        ui->list_repair->addItem(folderName);
+        itemCount++;
+    }
+
+    // Загрузка папок из домашнего каталога
+    QFileInfoList homeFolderList = homeDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden);
+
+    for (const QFileInfo& fileInfo : homeFolderList) {
+        QString folderName = fileInfo.fileName();
+        // Проверяем, начинается ли имя папки с точки
+        // и не соответствует ли она заданным исключениям
+        if (!folderName.startsWith('.') ||
+            folderName == ".config" ||
+            folderName == ".local" ||
+            folderName == ".themes" ||
+            folderName == ".var" ||
+            folderName == ".icons" ||
+            folderName == ".cache")
+            continue; // Пропускаем папки без точек или исключения
+        ui->list_repair->addItem(folderName);
+        itemCount++;
+    }
+
+    ui->label_repair->setText(tr("Конфигурации приложений: %1").arg(itemCount));
+}
+
+
+void MainWindow::restoreArchive(const QString& archivePath)
+{
+    // Получаем имя архива без расширения
+    QFileInfo fileInfo(archivePath);
+    QString archiveName = fileInfo.fileName();
+
+    // Определяем целевую директорию в зависимости от имени архива
+    QString targetDir; // Путь к целевой директории
+
+    if (!archiveName.isEmpty() && archiveName.startsWith("."))
+        targetDir = QDir::homePath(); // Если имя архива начинается с ".", размещаем в домашней директории
+    else
+        targetDir = QDir::homePath() + "/.config"; // Иначе размещаем в папке ".config"
+
+    // Создаем целевую директорию, если она не существует
+    QDir targetFolder(targetDir);
+
+
+    // Запускаем процесс распаковки архива в целевую директорию
+    QProcess process;
+    process.setWorkingDirectory(targetDir);
+    process.start("unzip", QStringList() << "-q" << archivePath);
+    process.waitForFinished();
+
+    if (process.exitCode() == 0) {
+        // Успешно распаковано
+        sendNotification(tr("Резервная копия"), tr("Резервная копия успешно восстановлена в папку: ") + targetDir);
+        loadFolders();
+    } else
+        sendNotification(tr("Ошибка"), tr("Не удалось восстановить конфигурацию через архив"));
+}
+
+
 //---#####################################################################################################################################################
 //--################################################################## СОБЫТИЯ ФУНКЦИЙ ##################################################################
 //-#####################################################################################################################################################
@@ -1817,6 +1987,12 @@ void MainWindow::on_check_trayon_stateChanged()
 {
     trayon = ui->check_trayon->isChecked() ? 1 : 0;
     settings.setValue("TrayOn", trayon);
+}
+
+void MainWindow::on_check_repair_stateChanged()
+{
+    repair = ui->check_repair->isChecked() ? 1 : 0;
+    settings.setValue("RepairBackup", repair);
 }
 
 void MainWindow::on_dial_volmenu_valueChanged(int value)
@@ -1946,145 +2122,4 @@ void MainWindow::on_list_repair_itemDoubleClicked(QListWidgetItem *item)
         folderPath = QDir::homePath() + "/.config/";
 
     createArchive(folderPath, folderName);
-}
-
-void MainWindow::createArchive(const QString& folderPath, const QString& folderName)
-{
-    QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), tr("Вы уверены, что хотите удалить папку \"%1\" и создать резервную копию, чтобы можно было восстановить все обратно?\n\nВажно: Архивы начинающиеся с точки - это конфигурации из домашней директории (они могут быть скрыты по умолчанию/включите видимость скрытых файлов)").arg(folderPath + folderName), QMessageBox::Yes | QMessageBox::No);
-    if (reply == QMessageBox::No) return;
-
-    QProcess process;
-    process.start("zenity", QStringList() << "--file-selection" << "--directory" << tr("--title=Выберите путь сохранения архива"));
-    process.waitForFinished();
-
-    if (process.exitCode() == 0) {
-        QString selectedPath = process.readAllStandardOutput().trimmed();
-
-        if (!selectedPath.isEmpty()) {
-            QDir folderDir(folderPath);
-
-            // Проверяем, существует ли папка
-            if (!folderDir.exists()) {
-                sendNotification(tr("Ошибка"), tr("Папка конфигурации не существует!"));
-                return;
-            }
-
-            QString archivePath = selectedPath + "/" + folderName + ".zip";
-
-            // Переходим в папку перед запуском процесса архивации
-            if (!folderDir.cd(folderPath)) {
-                sendNotification(tr("Ошибка"), tr("Не удалось перейти в папку с конфигурацией!"));
-                return;
-            }
-
-            QProcess zipProcess;
-            zipProcess.setWorkingDirectory(folderDir.absolutePath());
-            zipProcess.start("zip", QStringList() << "-r" << archivePath << folderName);
-            zipProcess.waitForFinished();
-
-            if (zipProcess.exitCode() == 0) {
-                sendNotification(tr("Конфигурация"), tr("Резервная копия %1 успешно создана!").arg(archivePath));
-
-                // Удаляем папку и ее содержимое
-                QDir folder2(folderPath + folderName);
-                folder2.removeRecursively();
-                loadFolders();
-            } else {
-                sendNotification(tr("Ошибка"), tr("Резервная копия %1 не создана!").arg(archivePath));
-            }
-        }
-    }
-}
-
-void MainWindow::loadFolders()
-{
-    QString homeDirectory = QDir::homePath();
-    QString configDirectory = homeDirectory + "/.config/";
-    QDir configDir(configDirectory);
-    QDir homeDir(homeDirectory);
-
-    if (!homeDir.exists() || !configDir.exists())
-        return; // Каталоги не существуют
-
-    ui->list_repair->clear();
-    int itemCount = 0;
-    // Загрузка папок из папки .config
-    QStringList configFolderList = configDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-
-    for (const QString& folderName : configFolderList) {
-
-        ui->list_repair->addItem(folderName);
-        itemCount++;
-    }
-
-    // Загрузка папок из домашнего каталога
-    QFileInfoList homeFolderList = homeDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden);
-
-    for (const QFileInfo& fileInfo : homeFolderList) {
-        QString folderName = fileInfo.fileName();
-        // Проверяем, начинается ли имя папки с точки
-        // и не соответствует ли она заданным исключениям
-        if (!folderName.startsWith('.') ||
-            folderName == ".config" ||
-            folderName == ".local" ||
-            folderName == ".themes" ||
-            folderName == ".var" ||
-            folderName == ".icons" ||
-            folderName == ".cache")
-            continue; // Пропускаем папки без точек или исключения
-        ui->list_repair->addItem(folderName);
-        itemCount++;
-    }
-
-    ui->label_repair->setText(tr("Конфигурации приложений: %1").arg(itemCount));
-}
-
-
-void MainWindow::on_push_repair_clicked()
-{
-    // Открываем диалог выбора архива с помощью Zenity
-    QProcess process;
-    process.start("zenity", QStringList() << "--file-selection" << tr("--title=Выберите архив") << "--file-filter=*.zip");
-
-    if (process.waitForFinished() && process.exitCode() == 0) {
-        // Получаем путь выбранного архива
-        QString archivePath = process.readAllStandardOutput().trimmed();
-
-        // Восстанавливаем архив
-        restoreArchive(archivePath);
-    }
-}
-
-void MainWindow::restoreArchive(const QString& archivePath)
-{
-    // Получаем имя архива без расширения
-    QFileInfo fileInfo(archivePath);
-    QString archiveName = fileInfo.fileName();
-
-    // Определяем целевую директорию в зависимости от имени архива
-    QString targetDir; // Путь к целевой директории
-
-    if (!archiveName.isEmpty() && archiveName.startsWith("."))
-        targetDir = QDir::homePath(); // Если имя архива начинается с ".", размещаем в домашней директории
-    else
-        targetDir = QDir::homePath() + "/.config"; // Иначе размещаем в папке ".config"
-
-    // Создаем целевую директорию, если она не существует
-    QDir targetFolder(targetDir);
-
-
-    // Запускаем процесс распаковки архива в целевую директорию
-    QProcess process;
-    process.setWorkingDirectory(targetDir);
-    process.start("unzip", QStringList() << "-q" << archivePath);
-    process.waitForFinished();
-
-    if (process.exitCode() == 0) {
-        // Успешно распаковано
-        sendNotification(tr("Восстановление архива"), tr("Архив успешно восстановлен в папку: ") + targetDir);
-        loadFolders();
-    } else {
-        // Ошибка при распаковке
-        sendNotification(tr("Ошибка"), tr("Не удалось восстановить архив"));
-    }
 }

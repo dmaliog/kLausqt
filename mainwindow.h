@@ -44,6 +44,7 @@ private:
     QString packageURL;
     int page; // какая страница используется
     int trayon; // закрывать без трея
+    int repair; // создавать бэкап при удалении или нет
     int volumenotify; // громкость уведомлений
     int volumemenu; // громкость меню
     int mainpage; // главная страница
@@ -170,6 +171,7 @@ private slots:
     void on_action_editsh_triggered();
     void on_list_repair_itemDoubleClicked(QListWidgetItem *item);
     void on_push_repair_clicked();
+    void on_check_repair_stateChanged();
 };
 
 #endif // MAINWINDOW_H
