@@ -57,6 +57,7 @@ private:
     QString lang;
     QString currentDesktop;
     QTime timeupdate;
+    bool errorShown = false;
 
     QStringList shResourcePaths = {":/sh/1c.sh",
                                    ":/sh/wayland.sh",
@@ -118,11 +119,15 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
+    void createArchive(const QString& folderPath, const QString& folderName);
+    void loadFolders();
+    void restoreArchive(const QString& archivePath);
+
     void checkVersionAndClear();
+
     void loadScripts(const QString& baseDir, QListWidget* listWidget);
     void saveScripts(const QStringList& resourcePaths, const QString& baseDir);
     void removeScripts(const QStringList& resourcePaths, const QString& baseDir);
-
     QString getScriptContent(const QString& filePath);
 
     void loadSound(int soundIndex);
@@ -163,6 +168,8 @@ private slots:
     void on_action_addsh_triggered();
     void on_action_rmsh_triggered();
     void on_action_editsh_triggered();
+    void on_list_repair_itemDoubleClicked(QListWidgetItem *item);
+    void on_push_repair_clicked();
 };
 
 #endif // MAINWINDOW_H

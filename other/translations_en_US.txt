@@ -54,3 +54,10 @@ yay="Yay Packages"
 yay_clear="The $HOME/.cache/yay/ directory has been cleared"
 
 enter_ok="Press Enter to continue..."
+
+neofetch="You don't have the neofetch package installed. Do you want to install it? (y/n) "
+okinstall="Package installation "
+noinstall="Installation canceled"
+install="Installation"
+
+inxi="You don't have the inxi package installed. Do you want to install it? (y/n) "

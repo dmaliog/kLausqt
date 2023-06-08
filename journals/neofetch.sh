@@ -12,5 +12,16 @@ fi
 # Загрузка файла перевода
 translations_file="translations_$language.txt"
 source "$HOME/kLaus/other/$translations_file"
+
+# Проверка наличия установленного neofetch
+if ! command -v neofetch &>/dev/null; then
+    read -p "${neofetch}" answer
+    if [[ "$answer" == [yY] ]]; then
+        yay -S neofetch
+    else
+        notify-send "${install} neofetch" "${noinstall}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+        exit 0
+    fi
+fi
 neofetch
 read -p "${enter_ok}"
