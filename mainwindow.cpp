@@ -14,7 +14,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "3.6";
+QString currentVersion = "3.7";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -23,7 +23,7 @@ QString currentVersion = "3.6";
 Terminal getTerminal()
 {
     // Итерируемся по списку, пока не найдем установленный терминал
-    for (const Terminal &terminal : m_terminalList) {
+    for (const Terminal& terminal : m_terminalList) {
         if (QFile::exists(terminal.binary))
             return terminal;
     }
@@ -334,14 +334,15 @@ void MainWindow::on_action_sh_triggered()
     openDirectory("/.config/kLaus/sh/");
 }
 
-void MainWindow::on_action_18_triggered()
-{
-    openDirectory("/.local/share/applications");
-}
-
 void MainWindow::on_action_27_triggered()
 {
     openDirectory("/.config/kLaus/journals/");
+}
+
+
+void MainWindow::on_action_18_triggered()
+{
+    openDirectory("/.local/share/applications");
 }
 
 void MainWindow::on_action_28_triggered()
@@ -436,8 +437,17 @@ void MainWindow::on_action_33_triggered()
 
 void MainWindow::on_action_11_triggered()
 {
-    Terminal terminal = getTerminal();
-    QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -Syu");
+    UpdateIcon();
+    if (hasUpdates) {
+        Terminal terminal = getTerminal();
+        QProcess process;
+        process.start(terminal.binary, QStringList() << terminal.args << "yay -Syu");
+        process.waitForFinished();
+        if (process.exitCode() == QProcess::NormalExit) {
+            UpdateIcon();
+        }
+    } else
+        sendNotification(tr("Обновление"), tr("Система в актуальном состоянии!"));
 }
 
 void MainWindow::on_action_24_triggered()
@@ -578,7 +588,7 @@ void MainWindow::on_action_4_triggered()
         if (ui->table_aur->currentItem() != nullptr) {
             QString packageName = ui->table_aur->item(ui->table_aur->currentRow(), 0)->text();
             Terminal terminal = getTerminal();
-            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -S " + packageName);
+            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -Syu " + packageName);
          } else
             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
 
@@ -587,7 +597,7 @@ void MainWindow::on_action_4_triggered()
             QString packageName = ui->list_manager->currentItem()->text();
             packageName = packageName.left(packageName.indexOf(" "));
             Terminal terminal = getTerminal();
-            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -S " + packageName);
+            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -Syu " + packageName);
         } else
              sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
     }
@@ -1023,11 +1033,11 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 //-##################################################################################
 
     removeToolButtonTooltips(ui->toolBar);
-    loadSettings(); //загрузка настроек
+    loadSettings();         //загрузка настроек
     checkVersionAndClear();
-
-    loadContent(); //загрузка списков приложений игр и тп
-    loadFolders();//загрузка конфигов
+    UpdateIcon();           //получаем иконку трея
+    loadContent();          //загрузка списков приложений игр и тп
+    loadFolders();          //загрузка конфигов
     loadingListWidget();
     loadSystemInfo();
 
@@ -1098,8 +1108,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
         QApplication::quit();
     else
     {
-        hide(); // Скрываем главное окно
-        event->ignore(); // Игнорируем событие закрытия
+        hide();             // Скрываем главное окно
+        event->ignore();    // Игнорируем событие закрытия
     }
 }
 
@@ -1164,8 +1174,7 @@ void MainWindow::loadSound(int soundIndex)
 
     beep->setSource(QUrl(soundPath));
 
-    if (soundIndex == 1)
-    {
+    if (soundIndex == 1) {
         float volnotify = static_cast<float>(volumenotify) / 100.0f;
         volnotify = static_cast<float>(static_cast<int>(volnotify * 10.0f)) / 10.0f;
         beep->setVolume(volnotify);
@@ -1174,7 +1183,6 @@ void MainWindow::loadSound(int soundIndex)
         volmenu = static_cast<float>(static_cast<int>(volmenu * 10.0f)) / 10.0f;
         beep->setVolume(volmenu);
     }
-
 
     beep->play();
 }
@@ -1247,13 +1255,16 @@ void MainWindow::loadSettings()
     connect(ui->time_update, &QTimeEdit::timeChanged, this, &MainWindow::onTimeChanged);
     connect(ui->spin_rating, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::on_spin_rating_valueChanged);
 
-    //веб-часть
+    //-##################################################################################
+    //-############################# ВЕБ ЧАСТЬ / СКРИПТЫ ################################
+    //-##################################################################################
     QWebEngineProfile* profile = QWebEngineProfile::defaultProfile();
     profile->setHttpCacheType(QWebEngineProfile::MemoryHttpCache);
 
     QObject::connect(ui->webEngineView->page(), &QWebEnginePage::loadStarted, this, [=]() {
-        if (page == 2 || page == 6 || page == 7)
-        {
+
+        if (page == 2 || page == 6 || page == 7) {
+
             QFile scriptFile(":/loading.browser.js"); // Путь к вашему файлу скрипта
             if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
                 QTextStream stream(&scriptFile);
@@ -1263,13 +1274,12 @@ void MainWindow::loadSettings()
         }
     });
 
-
     QObject::connect(ui->webEngineView->page(), &QWebEnginePage::loadFinished, this, [=](bool success) mutable{
         if (success) {
             if (page == 6 || page == 7)
                 ui->webEngineView->show();
-            else if (page == 2)
-            {
+
+            else if (page == 2) {
                 ui->action_16->setVisible(false);
                 ui->action_34->setVisible(false);
                 ui->action_35->setVisible(true);
@@ -1284,12 +1294,16 @@ void MainWindow::loadSettings()
     QTableWidget *table = ui->table_aur;
     table->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-    //копирование информации о системе
+    //-##################################################################################
+    //-###################### КОПИРОВАНИЕ ИНФОРМАЦИИ О СИСТЕМЕ ##########################
+    //-##################################################################################
     QList<QAction*> actionList;
     actionList << ui->action_memory << ui->action_cpu << ui->action_gpu << ui->action_hostname << ui->action_os
                << ui->action_packages << ui->action_release << ui->action_screen;
     for (QAction* action : actionList) {
+
         QObject::connect(action, &QAction::triggered, this, [action, this]() {
+
             // Копирование текста в буфер обмена
             QString text = action->text();
             QClipboard* clipboard = QApplication::clipboard();
@@ -1305,18 +1319,64 @@ void MainWindow::loadSettings()
         });
     }
 
-    //Считываем volume
+    //-##################################################################################
+    //-########################### ГРОМКОСТЬ УВЕДОМЛЕНИЙ ################################
+    //-##################################################################################
     QString labelvolmenu = QString(tr("Звук меню: %1/100")).arg(volumemenu);
     ui->label_volmenu->setText(labelvolmenu);
     QString labelvolnotify = QString(tr("Звук уведомлений: %1/100")).arg(volumenotify);
     ui->label_volnotify->setText(labelvolnotify);
+
+    //-##################################################################################
+    //-############################# ТАЙМЕР ИКОНКИ ТРЕЯ #################################
+    //-##################################################################################
+    updateIconTimer = new QTimer(this);
+    updateIconTimer->setInterval(3600000); // 1 час
+    updateIconTimer->setSingleShot(false);
+    connect(updateIconTimer, &QTimer::timeout, this, &MainWindow::UpdateIcon);
+    updateIconTimer->start();
+
+    //-##################################################################################
+    //-################################# ИКОНКИ ТРЕЯ ####################################
+    //-##################################################################################
+    trayIcon.setIcon(QIcon(":/img/2.png"));
+    trayIcon.setToolTip("kLaus ;)");
+    trayIcon.show();
+}
+
+void MainWindow::setHasUpdates(bool updates)
+{
+    trayIcon.setIcon(QIcon(updates ? ":/img/tray.png" : ":/img/2.png"));
+    hasUpdates = updates; // Обновление значения переменной hasUpdates
+}
+
+void MainWindow::UpdateIcon()
+{
+    QProcess process;
+    process.setReadChannel(QProcess::StandardOutput);
+    process.start("sh", QStringList() << "-c" << "checkupdates | wc -l");
+    process.waitForFinished();
+
+    if (process.exitCode() == QProcess::NormalExit) {
+        QByteArray output = process.readAll();
+        int numUpdates = output.trimmed().toInt();
+
+        if (numUpdates == 0) {
+            setHasUpdates(false);
+            updateIconTimer->start();
+        } else {
+            setHasUpdates(true);
+            updateIconTimer->stop();
+        }
+    } else
+        setHasUpdates(false); // Обработка ошибки при выполнении команды
 }
 
 void MainWindow::loadSystemInfo()
 {
-//-##################################################################################
-//-############################ СИСТЕМНАЯ ИНФОРМАЦИЯ ################################
-//-##################################################################################
+    //-##################################################################################
+    //-############################ СИСТЕМНАЯ ИНФОРМАЦИЯ ################################
+    //-##################################################################################
     char* username = getlogin();
     if (username != nullptr) {
         QString name_2 = QString::fromUtf8(username);

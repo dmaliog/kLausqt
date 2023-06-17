@@ -134,11 +134,7 @@ int main(int argc, char *argv[])
 
     w.show();
 
-    // Создание иконки для трея
-    QSystemTrayIcon trayIcon(QIcon(":/img/2.png"));
-    trayIcon.setToolTip("kLaus ;)");
-
-    // Создание контекстного меню для иконки трея
+     // Создание контекстного меню для иконки трея
     QMenu *trayMenu = new QMenu();
 
     // Создание действия
@@ -167,7 +163,7 @@ int main(int argc, char *argv[])
     trayMenu->addAction(exitAction);
 
     // Установка контекстного меню для иконки трея
-    trayIcon.setContextMenu(trayMenu);
+    w.trayIcon.setContextMenu(trayMenu);
 
     // Связывание событий нажатия на пункты меню с обработчиками
     QObject::connect(action_2, &QAction::triggered, &w, [&](){ w.show(); w.on_action_2_triggered(); });
@@ -178,7 +174,7 @@ int main(int argc, char *argv[])
     QObject::connect(exitAction, &QAction::triggered, &a, &QApplication::quit);
 
     // Связываем событие клика на иконке с обработчиком
-    QObject::connect(&trayIcon, &QSystemTrayIcon::activated, &w, [&](QSystemTrayIcon::ActivationReason reason) {
+    QObject::connect(&w.trayIcon, &QSystemTrayIcon::activated, &w, [&](QSystemTrayIcon::ActivationReason reason) {
         // Проверяем, что клик был левым кликом
         if (reason == QSystemTrayIcon::Trigger) {
             // Проверяем, было ли главное окно свернуто
@@ -188,9 +184,6 @@ int main(int argc, char *argv[])
                 w.hide(); // Если главное окно открыто, сворачиваем его
         }
     });
-
-    // Отображение иконки в трее
-    trayIcon.show();
 
     return a.exec();
 }

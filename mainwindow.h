@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QSystemTrayIcon>
 #include <QMainWindow>
 #include <QListWidgetItem>
 #include <QNetworkAccessManager>
@@ -34,6 +35,7 @@ class MainWindow : public QMainWindow
 
 public:
     Ui::MainWindow *ui;
+    QSystemTrayIcon trayIcon;
 
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
@@ -59,6 +61,10 @@ private:
     QString currentDesktop;
     QTime timeupdate;
     bool errorShown = false;
+    bool hasUpdates;
+
+    QTimer *updateIconTimer;
+
 
     QStringList shResourcePaths = {":/sh/1c.sh",
                                    ":/sh/wayland.sh",
@@ -120,6 +126,9 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
+    void UpdateIcon();
+    void setHasUpdates(bool updates);
+
     void createArchive(const QString& folderPath, const QString& folderName);
     void loadFolders();
     void restoreArchive(const QString& archivePath);
