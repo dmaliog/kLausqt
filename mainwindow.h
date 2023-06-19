@@ -59,12 +59,19 @@ private:
     int fav; // последнее обновление
     QString lang;
     QString currentDesktop;
+    QString teatext;
+    QString worktext;
+
     QTime timeupdate;
+    QTime timetea;
+    QTime timework;
+
     bool errorShown = false;
     bool hasUpdates;
 
     QTimer *updateIconTimer;
-
+    QTimer* teaTimer;
+    QTimer* workTimer;
 
     QStringList shResourcePaths = {":/sh/1c.sh",
                                    ":/sh/wayland.sh",
@@ -149,6 +156,9 @@ private slots:
     void showLoadingAnimation(bool show);
 
     void onTimeChanged(const QTime& time);
+    void TeaTimer();
+    void WorkTimer();
+
     void handleServerResponse(QNetworkReply* reply);
     void openDirectory(const QString &dirPath);
     void removeToolButtonTooltips(QToolBar* toolbar);
@@ -181,6 +191,14 @@ private slots:
     void on_list_repair_itemDoubleClicked(QListWidgetItem *item);
     void on_push_repair_clicked();
     void on_check_repair_stateChanged();
+    void on_action_timer_triggered();
+    void on_action_host_triggered();
+    void on_action_19_triggered();
+
+    void on_line_tea_textChanged(const QString &arg1);
+    void on_line_work_textChanged(const QString &arg1);
+    void on_time_tea_timeChanged(const QTime &time);
+    void on_time_work_timeChanged(const QTime &time);
 };
 
 #endif // MAINWINDOW_H

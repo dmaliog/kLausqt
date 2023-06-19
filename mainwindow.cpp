@@ -14,7 +14,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "3.7";
+QString currentVersion = "3.8";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -269,7 +269,7 @@ void MainWindow::on_action_10_triggered()
     page = 8;
     ui->label1->setText(tr("Информация о приложении (версия %1)").arg(currentVersion));
     ui->tabWidget->setVisible(true);
-    ui->tabWidget->setCurrentIndex(2);
+    ui->tabWidget->setCurrentIndex(4);
     showLoadingAnimation(false);
 }
 
@@ -281,28 +281,11 @@ void MainWindow::on_action_12_triggered()
     ui->label1->setText(tr("Дополнительные настройки"));
     ui->action_28->setVisible(true);
     ui->action_29->setVisible(true);
+    ui->action_timer->setVisible(true);
+    ui->action_host->setVisible(true);
     ui->tabWidget->setVisible(true);
 
-    ui->check_trayon->setChecked(trayon == 1);
-    ui->check_repair->setChecked(repair == 1);
-    ui->check_description->setChecked(table1 == 1);
-    ui->check_version->setChecked(table2 == 1);
-    ui->check_voices->setChecked(table3 == 1);
-    ui->check_popularity->setChecked(table4 == 1);
-    ui->check_lastupdate->setChecked(table5 == 1);
-    ui->combo_mainpage->setCurrentIndex(mainpage);
-    ui->time_update->setTime(timeupdate);
-    ui->spin_rating->setValue(fav);
     ui->tabWidget->setCurrentIndex(0);
-
-    ui->dial_volmenu->setValue(volumemenu);
-    ui->dial_volnotify->setValue(volumenotify);
-
-    if(lang == "ru_RU")
-        ui->combo_lang->setCurrentIndex(0);
-    else if(lang == "en_US")
-        ui->combo_lang->setCurrentIndex(1);
-
     showLoadingAnimation(false);
 }
 
@@ -347,12 +330,28 @@ void MainWindow::on_action_18_triggered()
 
 void MainWindow::on_action_28_triggered()
 {
-    ui->tabWidget->setCurrentIndex(1);
+    ui->tabWidget->setCurrentIndex(3);
 }
 
 void MainWindow::on_action_29_triggered()
 {
     ui->tabWidget->setCurrentIndex(0);
+}
+
+void MainWindow::on_action_timer_triggered()
+{
+    ui->tabWidget->setCurrentIndex(2);
+}
+
+void MainWindow::on_action_host_triggered()
+{
+    ui->tabWidget->setCurrentIndex(1);
+}
+
+void MainWindow::on_action_19_triggered()
+{
+    on_action_12_triggered();
+    ui->tabWidget->setCurrentIndex(2);
 }
 
 void MainWindow::on_action_31_triggered()
@@ -982,57 +981,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 {
     ui->setupUi(this);
 
-//-##################################################################################
-//-############################### ЗАНЯТОЕ МЕСТО ####################################
-//-##################################################################################
-    QProgressBar* progressBar = new QProgressBar();
-    progressBar->setFixedSize(50, 30);
-
-    // Получаем информацию о корневом каталоге
-    QStorageInfo storageInfo = QStorageInfo::root();
-
-    // Получаем количество свободных байтов на диске
-    qint64 freeBytes = storageInfo.bytesAvailable();
-
-    // Вычисляем процент занятого места на диске
-    int usedPercentage = 100 - static_cast<int>((freeBytes * 100) / storageInfo.bytesTotal());
-
-    // Устанавливаем значение прогресс-бара в процентах
-    progressBar->setValue(usedPercentage);
-
-    // Устанавливаем текст на прогресс-баре, отображающий количество свободных гигабайтов
-    progressBar->setFormat("");
-
-    QLabel* label = new QLabel(tr("свободно %1 ГиБ").arg(QString::number(freeBytes / (1024.0 * 1024.0 * 1024.0), 'f', 2)));
-
-    QWidget* containerWidget = new QWidget();
-    QHBoxLayout* layout = new QHBoxLayout(containerWidget);
-    layout->addStretch(); // Добавляем растягивающий элемент, чтобы выровнять элементы по правому краю
-    layout->addWidget(progressBar);
-    layout->addWidget(label);
-    layout->setContentsMargins(0, 0, 0, 0);
-
-    ui->statusBar->addPermanentWidget(containerWidget, 1); // Установите растягиваемый элемент с индексом 1
-
-    // Устанавливаем цвет для прогресс-бара
-    QColor customColor(42, 40, 112);
-    QPalette palette = progressBar->palette();
-    palette.setColor(QPalette::Highlight, customColor);
-    progressBar->setPalette(palette);
-
-    // Выравниваем содержимое статусного бара по правому краю
-    QHBoxLayout* statusBarLayout = qobject_cast<QHBoxLayout*>(ui->statusBar->layout());
-    if (statusBarLayout)
-        statusBarLayout->setAlignment(Qt::AlignRight);
-
-    // Выравниваем текст метки по правому краю
-    label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-
-//-##################################################################################
-//-############################### ПРОДОЛЖАЕМ... ####################################
-//-##################################################################################
-
-    removeToolButtonTooltips(ui->toolBar);
     loadSettings();         //загрузка настроек
     checkVersionAndClear();
     UpdateIcon();           //получаем иконку трея
@@ -1040,6 +988,31 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     loadFolders();          //загрузка конфигов
     loadingListWidget();
     loadSystemInfo();
+
+
+    ui->check_trayon->setChecked(trayon == 1);
+    ui->check_repair->setChecked(repair == 1);
+    ui->check_description->setChecked(table1 == 1);
+    ui->check_version->setChecked(table2 == 1);
+    ui->check_voices->setChecked(table3 == 1);
+    ui->check_popularity->setChecked(table4 == 1);
+    ui->check_lastupdate->setChecked(table5 == 1);
+    ui->combo_mainpage->setCurrentIndex(mainpage);
+    ui->spin_rating->setValue(fav);
+
+    ui->time_update->setTime(timeupdate);
+    ui->time_tea->setTime(timetea);
+    ui->time_work->setTime(timework);
+    ui->line_tea->setText(teatext);
+    ui->line_work->setText(worktext);
+
+    ui->dial_volmenu->setValue(volumemenu);
+    ui->dial_volnotify->setValue(volumenotify);
+
+    if(lang == "ru_RU")
+        ui->combo_lang->setCurrentIndex(0);
+    else if(lang == "en_US")
+        ui->combo_lang->setCurrentIndex(1);
 
     showLoadingAnimation(false);
 }
@@ -1155,6 +1128,8 @@ void MainWindow::mrpropper() //зачистка говна перед начал
     ui->action_32->setVisible(false);
     ui->action_33->setVisible(false);
     ui->action_34->setVisible(false);
+    ui->action_timer->setVisible(false);
+    ui->action_host->setVisible(false);
     ui->webEngineView->setVisible(false);
     ui->label2->setVisible(false);
     ui->label1->setVisible(true);
@@ -1202,17 +1177,23 @@ void MainWindow::loadSettings()
     table5 = settings.value("Table5", 0).toInt();
     fav = settings.value("Favorite", 50).toInt();
     lang = settings.value("Language").toString();
+    teatext = settings.value("TeaText").toString();
+    worktext = settings.value("WorkText").toString();
 
     timeupdate = QTime::fromString(settings.value("TimeUpdate").toString(), "HH:mm");
+    timetea = QTime::fromString(settings.value("TimeTea").toString(), "HH:mm");
+    timework = QTime::fromString(settings.value("TimeWork").toString(), "HH:mm");
 
     QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
     currentDesktop = environment.value("XDG_CURRENT_DESKTOP");
 
     ui->webEngineView->setZoomFactor(0.9);
     ui->toolBar_2->setFixedWidth(100);
+
     //запретить выключать панели
     ui->toolBar->setContextMenuPolicy(Qt::PreventContextMenu);
     ui->toolBar_2->setContextMenuPolicy(Qt::PreventContextMenu);
+
     // Запрещаем редактирование ячеек
     ui->table_aur->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
@@ -1252,8 +1233,57 @@ void MainWindow::loadSettings()
     }
 
     connect(ui->spin_grub, SIGNAL(valueChanged(int)), this, SLOT(on_spinBox_grub_valueChanged(int)));
+
     connect(ui->time_update, &QTimeEdit::timeChanged, this, &MainWindow::onTimeChanged);
+
     connect(ui->spin_rating, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::on_spin_rating_valueChanged);
+    removeToolButtonTooltips(ui->toolBar);
+
+    //-##################################################################################
+    //-############################### ЗАНЯТОЕ МЕСТО ####################################
+    //-##################################################################################
+    QProgressBar* progressBar = new QProgressBar();
+    progressBar->setFixedSize(50, 30);
+
+    // Получаем информацию о корневом каталоге
+    QStorageInfo storageInfo = QStorageInfo::root();
+
+    // Получаем количество свободных байтов на диске
+    qint64 freeBytes = storageInfo.bytesAvailable();
+
+    // Вычисляем процент занятого места на диске
+    int usedPercentage = 100 - static_cast<int>((freeBytes * 100) / storageInfo.bytesTotal());
+
+    // Устанавливаем значение прогресс-бара в процентах
+    progressBar->setValue(usedPercentage);
+
+    // Устанавливаем текст на прогресс-баре, отображающий количество свободных гигабайтов
+    progressBar->setFormat("");
+
+    QLabel* label = new QLabel(tr("свободно %1 ГиБ").arg(QString::number(freeBytes / (1024.0 * 1024.0 * 1024.0), 'f', 2)));
+
+    QWidget* containerWidget = new QWidget();
+    QHBoxLayout* layout = new QHBoxLayout(containerWidget);
+    layout->addStretch(); // Добавляем растягивающий элемент, чтобы выровнять элементы по правому краю
+    layout->addWidget(progressBar);
+    layout->addWidget(label);
+    layout->setContentsMargins(0, 0, 0, 0);
+
+    ui->statusBar->addPermanentWidget(containerWidget, 1); // Установите растягиваемый элемент с индексом 1
+
+    // Устанавливаем цвет для прогресс-бара
+    QColor customColor(42, 40, 112);
+    QPalette palette = progressBar->palette();
+    palette.setColor(QPalette::Highlight, customColor);
+    progressBar->setPalette(palette);
+
+    // Выравниваем содержимое статусного бара по правому краю
+    QHBoxLayout* statusBarLayout = qobject_cast<QHBoxLayout*>(ui->statusBar->layout());
+    if (statusBarLayout)
+        statusBarLayout->setAlignment(Qt::AlignRight);
+
+    // Выравниваем текст метки по правому краю
+    label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     //-##################################################################################
     //-############################# ВЕБ ЧАСТЬ / СКРИПТЫ ################################
@@ -1337,11 +1367,36 @@ void MainWindow::loadSettings()
     updateIconTimer->start();
 
     //-##################################################################################
+    //-############################## ТАЙМЕР COFFETIME ##################################
+    //-##################################################################################
+    teaTimer = new QTimer(this);
+    connect(teaTimer, &QTimer::timeout, this, &MainWindow::TeaTimer);
+
+    workTimer = new QTimer(this);
+    connect(workTimer, &QTimer::timeout, this, &MainWindow::WorkTimer);
+
+    //-##################################################################################
     //-################################# ИКОНКИ ТРЕЯ ####################################
     //-##################################################################################
     trayIcon.setIcon(QIcon(":/img/2.png"));
     trayIcon.setToolTip("kLaus ;)");
     trayIcon.show();
+}
+
+void MainWindow::TeaTimer()
+{
+    if (teatext.isEmpty())
+        sendNotification(tr("Отдохни!"), tr("Пора пить чай!"));
+    else
+        sendNotification(tr("Отдохни!"), teatext);
+}
+
+void MainWindow::WorkTimer()
+{
+    if (worktext.isEmpty())
+        sendNotification(tr("Отдохни!"), tr("Пора сделать зарядку!"));
+    else
+        sendNotification(tr("Отдохни!"), worktext);
 }
 
 void MainWindow::setHasUpdates(bool updates)
@@ -1377,16 +1432,11 @@ void MainWindow::loadSystemInfo()
     //-##################################################################################
     //-############################ СИСТЕМНАЯ ИНФОРМАЦИЯ ################################
     //-##################################################################################
-    char* username = getlogin();
-    if (username != nullptr) {
-        QString name_2 = QString::fromUtf8(username);
-        QString welcomeMessage = QString(tr("Добро пожаловать, %1!")).arg(name_2);
-        ui->menu_2->setTitle(welcomeMessage);
-    }
-
     char hostname[256];
+    char* username = getlogin();
+    QString name_2 = QString::fromUtf8(username);
     gethostname(hostname, sizeof(hostname));
-    QString hostnameMessage = QString(hostname);
+    QString hostnameMessage = QString("%1 (%2)").arg(hostname, name_2);
     ui->action_hostname->setText(hostnameMessage);
 
     // Получаем информацию о системе
@@ -1521,7 +1571,9 @@ void MainWindow::onTimeChanged(const QTime& time)
 
     // Устанавливаем таймер для повторных вызовов функции каждый день
     QTimer* timer = new QTimer(this);
+
     connect(timer, &QTimer::timeout, this, &MainWindow::on_action_11_triggered);
+
     timer->start(24 * 60 * 60 * 1000); // 24 часа в миллисекундах
 }
 
@@ -1963,7 +2015,6 @@ void MainWindow::loadFolders()
     ui->label_repair->setText(tr("Конфигурации приложений: %1").arg(itemCount));
 }
 
-
 void MainWindow::restoreArchive(const QString& archivePath)
 {
     // Получаем имя архива без расширения
@@ -1977,10 +2028,6 @@ void MainWindow::restoreArchive(const QString& archivePath)
         targetDir = QDir::homePath(); // Если имя архива начинается с ".", размещаем в домашней директории
     else
         targetDir = QDir::homePath() + "/.config"; // Иначе размещаем в папке ".config"
-
-    // Создаем целевую директорию, если она не существует
-    QDir targetFolder(targetDir);
-
 
     // Запускаем процесс распаковки архива в целевую директорию
     QProcess process;
@@ -2041,6 +2088,60 @@ void MainWindow::on_time_update_timeChanged(const QTime &time)
         settings.setValue("TimeUpdate", timeupdate.toString("HH:mm")); // Сохраняем значение времени в настройках
     } else
         sendNotification(tr("Ошибка"), tr("Неверный формат времени."));
+}
+
+void MainWindow::on_time_tea_timeChanged(const QTime &time)
+{
+    // Проверяем, что время корректно
+    if (time.isValid()) {
+        timetea = time; // Обновляем глобальную переменную timetea
+        settings.setValue("TimeTea", timetea.toString("HH:mm")); // Сохраняем значение времени в настройках
+
+        int msecsToTea = QTime(0, 0).msecsTo(timetea);
+
+        if (msecsToTea == 0) {
+            teaTimer->stop();
+            ui->action_tea->setText(tr("Заваривание чая (выкл.)"));
+        } else {
+            teaTimer->setInterval(msecsToTea);
+            teaTimer->start();
+            ui->action_tea->setText(tr("Заваривание чая (каждые %1)").arg(timetea.toString("HH:mm")));
+        }
+    } else
+        sendNotification(tr("Ошибка"), tr("Неверный формат времени."));
+}
+
+void MainWindow::on_time_work_timeChanged(const QTime &time)
+{
+    // Проверяем, что время корректно
+    if (time.isValid()) {
+        timework = time; // Обновляем глобальную переменную timetea
+        settings.setValue("TimeWork", timework.toString("HH:mm")); // Сохраняем значение времени в настройках
+
+        int msecsToTea = QTime(0, 0).msecsTo(timework);
+
+        if (msecsToTea == 0) {
+            workTimer->stop();
+            ui->action_work->setText(tr("Зарядка (выкл.)"));
+        } else {
+            workTimer->setInterval(msecsToTea);
+            workTimer->start();
+            ui->action_work->setText(tr("Зарядка (каждые %1)").arg(timework.toString("HH:mm")));
+        }
+    } else
+        sendNotification(tr("Ошибка"), tr("Неверный формат времени."));
+}
+
+void MainWindow::on_line_tea_textChanged(const QString &arg1)
+{
+    teatext = arg1;
+    settings.setValue("TeaText", arg1);
+}
+
+void MainWindow::on_line_work_textChanged(const QString &arg1)
+{
+    worktext = arg1;
+    settings.setValue("WorkText", arg1);
 }
 
 void MainWindow::on_check_trayon_stateChanged()
@@ -2183,3 +2284,4 @@ void MainWindow::on_list_repair_itemDoubleClicked(QListWidgetItem *item)
 
     createArchive(folderPath, folderName);
 }
+

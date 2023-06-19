@@ -124,7 +124,7 @@ QToolBar {
 	padding:5px;
 }
 
-QTimeEdit, QSpinBox, QScrollArea {
+QTimeEdit, QSpinBox, QScrollArea,QLineEdit {
     background-color:#272727;
 	border-radius:10px;
 	border:1px solid #3d3d3d; /* Цвет фона */
@@ -183,7 +183,7 @@ QListWidget::item {
 QMenu,QComboBox QAbstractItemView  {
     background-color:#272727;
 	border:1px solid #2c2e2d; /* Цвет фона */
-    padding: 5px; /* Внутренний отступ */
+    padding: 10px; /* Внутренний отступ */
  }
 
 QMenu::item {
@@ -207,8 +207,8 @@ QMenu::icon {
     padding-left: 15px; /* Отступ между иконкой и текстом */
 }
 
-QMenuBar { background-color: #1f1f1f; color: #ffffff;padding:3px; }
-QMenuBar::item { spacing: 3px; padding: 5px 10px;}
+QMenuBar {background-color:#1f1f1f;color:#ffffff;padding:3px;}
+QMenuBar::item { spacing: 3px; padding:5px 10px;border:0;}
 QMenuBar::item:selected { border-radius:5px;background-color: #916ee4; }
 QMenuBar::item:pressed { border-radius:5px;background-color: #916ee4; }</string>
   </property>
@@ -458,7 +458,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
     <property name="currentIndex">
      <number>0</number>
     </property>
-    <widget class="QWidget" name="tab_settings">
+    <widget class="QWidget" name="tab_aursettings">
      <attribute name="title">
       <string>Настройки AUR</string>
      </attribute>
@@ -702,7 +702,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
       <property name="geometry">
        <rect>
         <x>40</x>
-        <y>150</y>
+        <y>155</y>
         <width>271</width>
         <height>41</height>
        </rect>
@@ -811,7 +811,424 @@ QTabWidget#tabWidget QTabBar::tab:selected {
       </widget>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_aursettings">
+    <widget class="QWidget" name="tab_host">
+     <attribute name="title">
+      <string>Страница</string>
+     </attribute>
+     <widget class="QLabel" name="label_othersettings_5">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>20</y>
+        <width>451</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Ваш сайт</string>
+      </property>
+     </widget>
+     <widget class="QScrollArea" name="scroll_othersettings_5">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>50</y>
+        <width>568</width>
+        <height>381</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QWidget {background: #272727 url(:/img/page.png) no-repeat; padding:0; border-radius:0;}</string>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollArea_othersettings_7">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>566</width>
+         <height>379</height>
+        </rect>
+       </property>
+       <widget class="QLineEdit" name="lineEdit">
+        <property name="geometry">
+         <rect>
+          <x>140</x>
+          <y>46</y>
+          <width>341</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background:#3c3c3c;</string>
+        </property>
+        <property name="placeholderText">
+         <string>Введите название нового сайта</string>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+     <widget class="QLabel" name="label_othersettings_6">
+      <property name="geometry">
+       <rect>
+        <x>620</x>
+        <y>20</y>
+        <width>301</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Проверять доступность</string>
+      </property>
+     </widget>
+     <widget class="QScrollArea" name="scroll_othersettings_6">
+      <property name="geometry">
+       <rect>
+        <x>620</x>
+        <y>50</y>
+        <width>311</width>
+        <height>381</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background:#272727;</string>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollArea_othersettings_8">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>299</width>
+         <height>369</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QLineEdit" name="lineEdit_9">
+          <property name="placeholderText">
+           <string>Введите имя сайта, например: distrowatch.com</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEdit_3">
+          <property name="placeholderText">
+           <string>Введите имя сайта или его IP-адрес</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEdit_8">
+          <property name="placeholderText">
+           <string>Введите имя сайта или его IP-адрес</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEdit_7">
+          <property name="placeholderText">
+           <string>Введите имя сайта или его IP-адрес</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEdit_6">
+          <property name="placeholderText">
+           <string>Введите имя сайта или его IP-адрес</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEdit_5">
+          <property name="placeholderText">
+           <string>Введите имя сайта или его IP-адрес</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEdit_4">
+          <property name="placeholderText">
+           <string>Введите имя сайта или его IP-адрес</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEdit_2">
+          <property name="placeholderText">
+           <string>Введите имя сайта или его IP-адрес</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_timer">
+     <property name="styleSheet">
+      <string notr="true">QWidget {background: url(:/img/coffebreak.png) no-repeat bottom right;}
+</string>
+     </property>
+     <attribute name="title">
+      <string>Страница</string>
+     </attribute>
+     <widget class="QScrollArea" name="scroll_tea">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>50</y>
+        <width>451</width>
+        <height>171</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background:#272727;</string>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollArea_tea">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>439</width>
+         <height>159</height>
+        </rect>
+       </property>
+       <widget class="QLineEdit" name="line_tea">
+        <property name="geometry">
+         <rect>
+          <x>100</x>
+          <y>10</y>
+          <width>331</width>
+          <height>91</height>
+         </rect>
+        </property>
+        <property name="contextMenuPolicy">
+         <enum>Qt::NoContextMenu</enum>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background: #313131 url(:/img/notifypic.png);
+padding-right:55px;</string>
+        </property>
+        <property name="maxLength">
+         <number>100</number>
+        </property>
+        <property name="placeholderText">
+         <string>Например: Пора пить чай!</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_teatext">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>71</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Текст</string>
+        </property>
+       </widget>
+       <widget class="QTimeEdit" name="time_tea">
+        <property name="geometry">
+         <rect>
+          <x>356</x>
+          <y>110</y>
+          <width>75</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="contextMenuPolicy">
+         <enum>Qt::NoContextMenu</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_teatime">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>120</y>
+          <width>171</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Время напоминания</string>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+     <widget class="QLabel" name="label_tea">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>20</y>
+        <width>451</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Заваривание чая</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_work">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>240</y>
+        <width>451</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Сделай зарядку</string>
+      </property>
+     </widget>
+     <widget class="QScrollArea" name="scroll_work">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>270</y>
+        <width>451</width>
+        <height>171</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background:#272727;</string>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollArea_work">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>439</width>
+         <height>159</height>
+        </rect>
+       </property>
+       <widget class="QLineEdit" name="line_work">
+        <property name="geometry">
+         <rect>
+          <x>100</x>
+          <y>10</y>
+          <width>331</width>
+          <height>91</height>
+         </rect>
+        </property>
+        <property name="contextMenuPolicy">
+         <enum>Qt::NoContextMenu</enum>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background: #313131 url(:/img/notifypic.png);
+padding-right:55px;</string>
+        </property>
+        <property name="maxLength">
+         <number>100</number>
+        </property>
+        <property name="placeholderText">
+         <string>Например: Пора сделать зарядку!</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_worktext">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>71</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Текст</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_worktime">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>120</y>
+          <width>171</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Время напоминания</string>
+        </property>
+       </widget>
+       <widget class="QTimeEdit" name="time_work">
+        <property name="geometry">
+         <rect>
+          <x>356</x>
+          <y>110</y>
+          <width>75</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="contextMenuPolicy">
+         <enum>Qt::NoContextMenu</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_settings">
+     <property name="styleSheet">
+      <string notr="true">QWidget {background: url(:/img/settings.png) no-repeat bottom right;}</string>
+     </property>
      <attribute name="title">
       <string>Настройки приложения</string>
      </attribute>
@@ -823,6 +1240,9 @@ QTabWidget#tabWidget QTabBar::tab:selected {
         <width>281</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
       </property>
       <property name="text">
        <string>Закрывать без сворачивания в трей</string>
@@ -1003,6 +1423,9 @@ QTabWidget#tabWidget QTabBar::tab:selected {
         <pointsize>12</pointsize>
        </font>
       </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
       <property name="text">
        <string>Другие настройки</string>
       </property>
@@ -1021,6 +1444,9 @@ QTabWidget#tabWidget QTabBar::tab:selected {
         <pointsize>12</pointsize>
        </font>
       </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
       <property name="text">
        <string>Настройки звука</string>
       </property>
@@ -1033,6 +1459,9 @@ QTabWidget#tabWidget QTabBar::tab:selected {
         <width>391</width>
         <height>131</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background:#272727;</string>
       </property>
       <property name="widgetResizable">
        <bool>true</bool>
@@ -1563,8 +1992,14 @@ background-position: left center;</string>
      <x>0</x>
      <y>0</y>
      <width>1162</width>
-     <height>30</height>
+     <height>32</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
    </property>
    <property name="mouseTracking">
     <bool>true</bool>
@@ -1574,6 +2009,9 @@ background-position: left center;</string>
    </property>
    <property name="acceptDrops">
     <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
    </property>
    <property name="inputMethodHints">
     <set>Qt::ImhNone</set>
@@ -1587,6 +2025,9 @@ background-position: left center;</string>
    <widget class="QMenu" name="menu">
     <property name="acceptDrops">
      <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="tearOffEnabled">
      <bool>false</bool>
@@ -1615,8 +2056,15 @@ background-position: left center;</string>
     <property name="acceptDrops">
      <bool>false</bool>
     </property>
+    <property name="tearOffEnabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
-     <string>Добро пожаловать, %user%!</string>
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="klausres.qrc">
+      <normaloff>:/img/7.png</normaloff>:/img/7.png</iconset>
     </property>
     <addaction name="action_hostname"/>
     <addaction name="separator"/>
@@ -1630,8 +2078,62 @@ background-position: left center;</string>
     <addaction name="separator"/>
     <addaction name="action_13"/>
    </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>539</x>
+      <y>112</y>
+      <width>211</width>
+      <height>153</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="tearOffEnabled">
+     <bool>false</bool>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="klausres.qrc">
+      <normaloff>:/img/11.png</normaloff>:/img/11.png</iconset>
+    </property>
+    <property name="separatorsCollapsible">
+     <bool>false</bool>
+    </property>
+    <property name="toolTipsVisible">
+     <bool>false</bool>
+    </property>
+    <addaction name="action_iphost"/>
+    <addaction name="action_iplocal"/>
+    <addaction name="separator"/>
+    <addaction name="action_ipno"/>
+   </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="klausres.qrc">
+      <normaloff>:/img/40.png</normaloff>:/img/40.png</iconset>
+    </property>
+    <addaction name="action_tea"/>
+    <addaction name="action_work"/>
+    <addaction name="separator"/>
+    <addaction name="action_19"/>
+   </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
+   <addaction name="menu_3"/>
+   <addaction name="menu_4"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="sizePolicy">
@@ -1808,6 +2310,8 @@ QToolBar#toolBar_2 QToolButton:hover {
    <addaction name="action_32"/>
    <addaction name="action_33"/>
    <addaction name="action_34"/>
+   <addaction name="action_timer"/>
+   <addaction name="action_host"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="action_1">
@@ -2354,6 +2858,102 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_timer">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/40.png</normaloff>:/img/40.png</iconset>
+   </property>
+   <property name="text">
+    <string>Таймеры</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_host">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/11.png</normaloff>:/img/11.png</iconset>
+   </property>
+   <property name="text">
+    <string>Серверы</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_iphost">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/41.png</normaloff>:/img/41.png</iconset>
+   </property>
+   <property name="text">
+    <string>Внешний IP: 0.0.0.0</string>
+   </property>
+   <property name="visible">
+    <bool>true</bool>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+   <property name="shortcutVisibleInContextMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="action_iplocal">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/16.png</normaloff>:/img/16.png</iconset>
+   </property>
+   <property name="text">
+    <string>Внутренний IP: 0.0.0.0</string>
+   </property>
+  </action>
+  <action name="action_ipno">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/43.png</normaloff>:/img/43.png</iconset>
+   </property>
+   <property name="text">
+    <string>Серверов не найдено</string>
+   </property>
+  </action>
+  <action name="action_tea">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/tea.png</normaloff>:/img/tea.png</iconset>
+   </property>
+   <property name="text">
+    <string>Заваривание чая (выкл.)</string>
+   </property>
+  </action>
+  <action name="action_work">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/work.png</normaloff>:/img/work.png</iconset>
+   </property>
+   <property name="text">
+    <string>Зарядка (выкл.)</string>
+   </property>
+  </action>
+  <action name="action_19">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/44.png</normaloff>:/img/44.png</iconset>
+   </property>
+   <property name="text">
+    <string>Настроить таймеры</string>
    </property>
   </action>
  </widget>
