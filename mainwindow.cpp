@@ -14,7 +14,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "3.8";
+QString currentVersion = "3.9";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -440,13 +440,20 @@ void MainWindow::on_action_11_triggered()
     if (hasUpdates) {
         Terminal terminal = getTerminal();
         QProcess process;
-        process.start(terminal.binary, QStringList() << terminal.args << "yay -Syu");
-        process.waitForFinished();
+        process.setProgram(terminal.binary);
+        process.setArguments(QStringList() << terminal.args << "yay" << "-Syu");
+        process.setProcessChannelMode(QProcess::MergedChannels);
+        process.start();
+        process.waitForFinished(-1);
+        QString output = process.readAll();
+
         if (process.exitCode() == QProcess::NormalExit) {
             UpdateIcon();
         }
-    } else
+
+    } else {
         sendNotification(tr("Обновление"), tr("Система в актуальном состоянии!"));
+    }
 }
 
 void MainWindow::on_action_24_triggered()
