@@ -14,7 +14,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "3.9";
+QString currentVersion = "4.0";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -438,6 +438,7 @@ void MainWindow::on_action_11_triggered()
 {
     UpdateIcon();
     if (hasUpdates) {
+        hide();
         Terminal terminal = getTerminal();
         QProcess process;
         process.setProgram(terminal.binary);
@@ -449,6 +450,7 @@ void MainWindow::on_action_11_triggered()
 
         if (process.exitCode() == QProcess::NormalExit) {
             UpdateIcon();
+            show();
         }
 
     } else {
@@ -1388,6 +1390,20 @@ void MainWindow::loadSettings()
     trayIcon.setIcon(QIcon(":/img/2.png"));
     trayIcon.setToolTip("kLaus ;)");
     trayIcon.show();
+
+    //-##################################################################################
+    //-############################## ПЕРЕКЛЮЧЕНИЕ МЕНЮ #################################
+    //-##################################################################################
+
+    connect(ui->toolBar, &QToolBar::actionTriggered, [=](QAction* action) {
+        QList<QAction*> actions = ui->toolBar->actions();
+
+        for (QAction* toolbarAction : actions) {
+            if (toolbarAction != action) {
+                toolbarAction->setChecked(false);
+            }
+        }
+    });
 }
 
 void MainWindow::TeaTimer()

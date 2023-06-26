@@ -39,6 +39,9 @@
     <pointsize>10</pointsize>
    </font>
   </property>
+  <property name="focusPolicy">
+   <enum>Qt::NoFocus</enum>
+  </property>
   <property name="contextMenuPolicy">
    <enum>Qt::DefaultContextMenu</enum>
   </property>
@@ -48,58 +51,55 @@
   <property name="styleSheet">
    <string notr="true">* {
     color: #ffffff;
-	border:0;
+    border: 0;
 }
 
-#centralwidget{
-	background: url(:/img/background.png) no-repeat bottom right;
-	background-color: #322F85;
+#centralwidget {
+    background: url(:/img/background.png) no-repeat bottom right;
+    background-color: #322F85;
 }
 
 QProgressBar {
-    /* Общие стили для QProgressBar */
-    background-color: #636363; /* Цвет фона */
-    border-radius: 2px; /* Закругление углов */
-    height: 4px; /* Высота прогресс-бара */
-    min-height:4px; /* Минимальная высота прогресс-бара */
-    max-height:4px; /* Максимальная высота прогресс-бара */
-    padding: 0; /* Удаление отступов */
-	margin:16px 0;
+    background-color: #636363;
+    border-radius: 2px;
+    height: 4px;
+    min-height: 4px;
+    max-height: 4px;
+    padding: 0;
+    margin: 16px 0;
 }
 
 QProgressBar::chunk {
-    /* Стили для заполненной части прогресс-бара */
-    background-color: #2a2a68; /* Цвет заполненной части */
-    border-radius: 2px; /* Закругление углов */
+    background-color: #2a2a68;
+    border-radius: 2px;
 }
 
-QScrollBar:vertical {
-    width: 8px; /* Ширина полосы прокрутки */
-	background-color: #656766;
-	border-radius: 4px;
-}
-
+QScrollBar:vertical,
 QScrollBar:horizontal {
-    height: 8px; /* Высота полосы прокрутки */
-	background-color: #656766;
-	border-radius: 4px;
+    width: 8px;
+    height: 8px;
+    background-color: #656766;
+    border-radius: 4px;
 }
 
 QScrollBar::handle {
-	padding:60px 0;
+    padding: 60px 0;
     background-color: #916ee4;
     border-radius: 4px;
-} 
-
-QScrollBar::add-page, QScrollBar::sub-page {
-    background: none; /* Remove the background */
 }
 
-QScrollBar::add-line, QScrollBar::sub-line {
-    width: 0px; /* Set the width of the arrow buttons to 0 */
+QScrollBar::add-page,
+QScrollBar::sub-page {
+    background: none;
 }
 
-QListWidget::item:selected, QTableView::item:selected {
+QScrollBar::add-line,
+QScrollBar::sub-line {
+    width: 0px;
+}
+
+QListWidget::item:selected,
+QTableView::item:selected {
     background-color: #1e1e1e;
     color: white;
     outline: none;
@@ -110,107 +110,130 @@ QListWidget::item:hover {
 }
 
 QMessageBox {
-    background-color: #1f1f1f; /* Цвет фона MessageBox */
-    color: #FFFFFF; /* Цвет текста MessageBox */
-	font-size:10pt;
+    background-color: #1f1f1f;
+    color: #FFFFFF;
+    font-size: 10pt;
 }
 
 QStatusBar {
-    background-color: #1f1f1f; /* Замените #FF0000 на желаемый цвет */
-    color: #FFFFFF; /* Замените #FFFFFF на желаемый цвет текста */
+    background-color: #1f1f1f;
+    color: #FFFFFF;
 }
 
 QToolBar {
-	padding:5px;
+    padding: 5px;
 }
 
-QTimeEdit, QSpinBox, QScrollArea,QLineEdit {
-    background-color:#272727;
-	border-radius:10px;
-	border:1px solid #3d3d3d; /* Цвет фона */
-    padding: 5px; /* Внутренний отступ */
- }
+QTimeEdit,
+QSpinBox,
+QScrollArea,
+QLineEdit {
+    background-color: #272727;
+    border-radius: 10px;
+    border: 1px solid #3d3d3d;
+    padding: 5px;
+}
 
 QCheckBox {
-    spacing: 5px; /* Отступ между флажком и текстом */
+    spacing: 5px;
 }
 
 QCheckBox::indicator {
-    width: 24px; /* Ширина флажка */
-    height: 24px; /* Высота флажка */
-    image: url(:/img/m2.png); /* Путь к пользовательской картинке */
+    width: 24px;
+    height: 24px;
+    image: url(:/img/m2.png);
 }
 
 QCheckBox::indicator:checked {
-	image: url(:/img/m3.png); /* Картинка для выбранного состояния */
+    image: url(:/img/m3.png);
 }
 
-QComboBox,QPushButton {
+QComboBox,
+QPushButton {
     padding: 0 10px;
-    background-color: #252525; /* Цвет фона при выборе */
-    border-radius: 10px; /* Закругление углов */
-    border: 1px solid #3d3d3d; /* Цвет границы */
-    color: #FFFFFF; /* Цвет текста */
+    background-color: #252525;
+    border-radius: 10px;
+    border: 1px solid #3d3d3d;
+    color: #FFFFFF;
 }
 
 QComboBox::drop-down {
     subcontrol-origin: padding;
     subcontrol-position: top right;
-	padding-right:10px;
-    width: 15px; /* Ширина стрелки выпадающего списка */
-    image: url(:/img/m1.png); /* Изображение стрелки (замените на свое) */
+    padding-right: 10px;
+    width: 15px;
+    image: url(:/img/m1.png);
 }
 
 QComboBox::down-arrow {
-    image: none; /* Убираем стандартное изображение стрелки */
+    image: none;
 }
 
-QAbstractSpinBox::up-button { width: 0; height: 0; }
-QAbstractSpinBox::down-button { width: 0; height: 0; }
+QAbstractSpinBox::up-button,
+QAbstractSpinBox::down-button {
+    width: 0;
+    height: 0;
+}
 
-QListWidget,QWebEngineView {
+QListWidget,
+QWebEngineView {
     background-color: #242424;
     border: 5px solid #28276b;
     border-radius: 13px;
-	padding:6px 0;
+    padding: 6px 0;
 }
 
 QListWidget::item {
-    padding:10px;
-	border:0;
+    padding: 10px;
+    border: 0;
 }
 
-QMenu,QComboBox QAbstractItemView  {
-    background-color:#272727;
-	border:1px solid #2c2e2d; /* Цвет фона */
-    padding: 10px; /* Внутренний отступ */
- }
+QMenu,
+QComboBox QAbstractItemView {
+    background-color: #272727;
+    border: 1px solid #2c2e2d;
+    padding: 10px;
+}
 
 QMenu::item {
-    padding: 5px 20px; /* Внутренний отступ сверху и снизу, а также слева и справа */
+    padding: 5px 20px;
 }
 
-QMenu::item:selected, QMessageBox QPushButton {
-	border-radius:10px;
-	padding: 5px 20px; /* Внутренний отступ сверху и снизу, а также слева и справа */
-    background-color: #916ee4; /* Цвет фона при выборе */
-    color: #FFFFFF; /* Цвет текста при выборе */
+QMenu::item:selected,
+QMessageBox QPushButton {
+    border-radius: 10px;
+    padding: 5px 20px;
+    background-color: #916ee4;
+    color: #FFFFFF;
 }
 
 QMenu::separator {
-    height: 1px; /* Высота разделителя */
-    background-color: #2c2e2d; /* Цвет разделителя */
-    margin: 2px 0; /* Внешний отступ сверху и снизу */
+    height: 1px;
+    background-color: #2c2e2d;
+    margin: 2px 0;
 }
 
 QMenu::icon {
-    padding-left: 15px; /* Отступ между иконкой и текстом */
+    padding-left: 15px;
 }
 
-QMenuBar {background-color:#1f1f1f;color:#ffffff;padding:3px;}
-QMenuBar::item { spacing: 3px; padding:5px 10px;border:0;}
-QMenuBar::item:selected { border-radius:5px;background-color: #916ee4; }
-QMenuBar::item:pressed { border-radius:5px;background-color: #916ee4; }</string>
+QMenuBar {
+    background-color: #1f1f1f;
+    color: #ffffff;
+    padding: 3px;
+}
+
+QMenuBar::item {
+    spacing: 3px;
+    padding: 5px 10px;
+    border: 0;
+}
+
+QMenuBar::item:selected,
+QMenuBar::item:pressed {
+    border-radius: 5px;
+    background-color: #916ee4;
+}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="label1">
@@ -2022,33 +2045,6 @@ background-position: left center;</string>
    <property name="nativeMenuBar">
     <bool>false</bool>
    </property>
-   <widget class="QMenu" name="menu">
-    <property name="acceptDrops">
-     <bool>false</bool>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="tearOffEnabled">
-     <bool>false</bool>
-    </property>
-    <property name="title">
-     <string>Главное меню</string>
-    </property>
-    <addaction name="action_1"/>
-    <addaction name="separator"/>
-    <addaction name="action_2"/>
-    <addaction name="separator"/>
-    <addaction name="action_17"/>
-    <addaction name="action_7"/>
-    <addaction name="separator"/>
-    <addaction name="action_3"/>
-    <addaction name="action_8"/>
-    <addaction name="action_9"/>
-    <addaction name="action_10"/>
-    <addaction name="separator"/>
-    <addaction name="action_12"/>
-   </widget>
    <widget class="QMenu" name="menu_2">
     <property name="enabled">
      <bool>true</bool>
@@ -2076,6 +2072,7 @@ background-position: left center;</string>
     <addaction name="action_cpu"/>
     <addaction name="action_gpu"/>
     <addaction name="separator"/>
+    <addaction name="action_9"/>
     <addaction name="action_13"/>
    </widget>
    <widget class="QMenu" name="menu_3">
@@ -2084,7 +2081,7 @@ background-position: left center;</string>
     </property>
     <property name="geometry">
      <rect>
-      <x>539</x>
+      <x>407</x>
       <y>112</y>
       <width>211</width>
       <height>153</height>
@@ -2130,10 +2127,49 @@ background-position: left center;</string>
     <addaction name="separator"/>
     <addaction name="action_19"/>
    </widget>
+   <widget class="QMenu" name="menu_5">
+    <property name="title">
+     <string>Другое</string>
+    </property>
+    <property name="icon">
+     <iconset resource="klausres.qrc">
+      <normaloff>:/img/8.png</normaloff>:/img/8.png</iconset>
+    </property>
+    <addaction name="action_10"/>
+    <addaction name="action_3"/>
+   </widget>
+   <widget class="QMenu" name="menu">
+    <property name="acceptDrops">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="tearOffEnabled">
+     <bool>false</bool>
+    </property>
+    <property name="title">
+     <string>Главное меню</string>
+    </property>
+    <addaction name="action_1"/>
+    <addaction name="separator"/>
+    <addaction name="action_2"/>
+    <addaction name="separator"/>
+    <addaction name="action_17"/>
+    <addaction name="action_7"/>
+    <addaction name="separator"/>
+    <addaction name="action_3"/>
+    <addaction name="action_8"/>
+    <addaction name="action_9"/>
+    <addaction name="action_10"/>
+    <addaction name="separator"/>
+    <addaction name="action_12"/>
+   </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
    <addaction name="menu_3"/>
    <addaction name="menu_4"/>
+   <addaction name="menu_5"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="sizePolicy">
@@ -2171,10 +2207,10 @@ width:60px;
 padding: 10px 0;
 border-radius:10px;
 }
-QToolBar#toolBar QToolButton:hover {
+QToolBar#toolBar QToolButton:hover,
+QToolBar#toolBar QToolButton:checked {
 background-color:#1a1a1a;
- }
-</string>
+ }</string>
    </property>
    <property name="movable">
     <bool>false</bool>
@@ -2205,12 +2241,11 @@ background-color:#1a1a1a;
    </attribute>
    <addaction name="action_1"/>
    <addaction name="action_2"/>
+   <addaction name="action_game"/>
    <addaction name="action_17"/>
    <addaction name="action_7"/>
    <addaction name="action_9"/>
-   <addaction name="action_3"/>
    <addaction name="action_8"/>
-   <addaction name="action_10"/>
    <addaction name="action_12"/>
   </widget>
   <widget class="QToolBar" name="toolBar_2">
@@ -2315,6 +2350,9 @@ QToolBar#toolBar_2 QToolButton:hover {
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="action_1">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -2345,6 +2383,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
   </action>
   <action name="action_2">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="klausres.qrc">
      <normaloff>:/img/2.png</normaloff>:/img/2.png</iconset>
@@ -2384,6 +2425,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
   </action>
   <action name="action_7">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="enabled">
     <bool>true</bool>
    </property>
@@ -2402,6 +2446,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
   </action>
   <action name="action_8">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="enabled">
     <bool>true</bool>
    </property>
@@ -2420,6 +2467,12 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
   </action>
   <action name="action_9">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="klausres.qrc">
      <normaloff>:/img/7.png</normaloff>:/img/7.png</iconset>
@@ -2451,6 +2504,9 @@ QToolBar#toolBar_2 QToolButton:hover {
   </action>
   <action name="action_12">
    <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
     <bool>false</bool>
    </property>
    <property name="enabled">
@@ -2534,6 +2590,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
   </action>
   <action name="action_17">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="klausres.qrc">
      <normaloff>:/img/4.png</normaloff>:/img/4.png</iconset>
@@ -2954,6 +3013,24 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="text">
     <string>Настроить таймеры</string>
+   </property>
+  </action>
+  <action name="action_game">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/45.png</normaloff>:/img/45.png</iconset>
+   </property>
+   <property name="text">
+    <string>Игры</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
    </property>
   </action>
  </widget>
