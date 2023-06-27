@@ -14,7 +14,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "4.0";
+QString currentVersion = "4.1";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -726,22 +726,6 @@ void MainWindow::on_action_16_triggered()
     }
 }
 
-void MainWindow::removeToolButtonTooltips(QToolBar* toolbar) {
-    // Получение стиля текущей темы
-    QStyle* style = qApp->style();
-    QList<QAction*> actions = toolbar->actions();
-
-    // Отключение отображения подсказок для виджетов
-    for (QAction* action : actions) {
-        QWidget* widget = toolbar->widgetForAction(action);
-        if (widget) {
-            widget->setToolTip("");
-            widget->setStyle(style);
-            widget->setToolTipDuration(0); // Отключение подсказок
-        }
-    }
-}
-
 void MainWindow::on_action_addsh_triggered()
 {
     // Создание диалогового окна
@@ -1095,57 +1079,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 }
 
-void MainWindow::mrpropper() //зачистка говна перед началом каждой вкладки
-{
-    ui->webEngineView->page()->triggerAction(QWebEnginePage::Stop);
-    errorShown = true;
-
-    ui->action_addsh->setVisible(false);
-    ui->action_rmsh->setVisible(false);
-    ui->action_editsh->setVisible(false);
-    ui->table_aur->setVisible(false);
-    ui->list_clear->setVisible(false);
-    ui->list_sh->setVisible(false);
-    ui->label_repair->setVisible(false);
-    ui->list_repair->setVisible(false);
-    ui->push_repair->setVisible(false);
-    ui->list_manager->setVisible(false);
-    ui->list_grub->setVisible(false);
-    ui->line_grub->setVisible(false);
-    ui->spin_grub->setVisible(false);
-    ui->label_grub->setVisible(false);
-    ui->label3_grub->setVisible(false);
-    ui->label4_grub->setVisible(false);
-    ui->tabWidget->setVisible(false);
-    ui->searchApp->setVisible(false);
-    ui->action_35->setVisible(false);
-    ui->action_4->setVisible(false);
-    ui->action_5->setVisible(false);
-    ui->action_6->setVisible(false);
-    ui->action_11->setVisible(false);
-    ui->action_16->setVisible(false);
-    ui->action_sh->setVisible(false);
-    ui->action_18->setVisible(false);
-    ui->action_24->setVisible(false);
-    ui->action_25->setVisible(false);
-    ui->action_26->setVisible(false);
-    ui->action_27->setVisible(false);
-    ui->action_28->setVisible(false);
-    ui->action_29->setVisible(false);
-    ui->action_30->setVisible(false);
-    ui->action_31->setVisible(false);
-    ui->action_32->setVisible(false);
-    ui->action_33->setVisible(false);
-    ui->action_34->setVisible(false);
-    ui->action_timer->setVisible(false);
-    ui->action_host->setVisible(false);
-    ui->webEngineView->setVisible(false);
-    ui->label2->setVisible(false);
-    ui->label1->setVisible(true);
-    showLoadingAnimation(true);
-    loadSound(0);
-}
-
 void MainWindow::loadSound(int soundIndex)
 {
     QSoundEffect* beep = new QSoundEffect(this);
@@ -1403,7 +1336,82 @@ void MainWindow::loadSettings()
                 toolbarAction->setChecked(false);
             }
         }
+
+        // Установка флага checked для текущего действия
+        action->setChecked(true);
+
+        // Отключение отображения подсказок для виджетов в панели инструментов
+        QWidget* widget = ui->toolBar->widgetForAction(action);
+        if (widget) {
+            widget->setToolTip("");
+            widget->setToolTipDuration(0); // Отключение подсказок
+        }
     });
+}
+
+void MainWindow::removeToolButtonTooltips(QToolBar* toolbar) {
+    // Получение стиля текущей темы
+    QList<QAction*> actions = toolbar->actions();
+
+    // Отключение отображения подсказок для виджетов
+    for (QAction* action : actions) {
+        QWidget* widget = toolbar->widgetForAction(action);
+        if (widget) {
+            widget->setToolTip("");
+            widget->setToolTipDuration(0); // Отключение подсказок
+        }
+    }
+}
+
+void MainWindow::mrpropper() //зачистка говна перед началом каждой вкладки
+{
+    ui->webEngineView->page()->triggerAction(QWebEnginePage::Stop);
+    errorShown = true;
+
+    ui->action_addsh->setVisible(false);
+    ui->action_rmsh->setVisible(false);
+    ui->action_editsh->setVisible(false);
+    ui->table_aur->setVisible(false);
+    ui->list_clear->setVisible(false);
+    ui->list_sh->setVisible(false);
+    ui->label_repair->setVisible(false);
+    ui->list_repair->setVisible(false);
+    ui->push_repair->setVisible(false);
+    ui->list_manager->setVisible(false);
+    ui->list_grub->setVisible(false);
+    ui->line_grub->setVisible(false);
+    ui->spin_grub->setVisible(false);
+    ui->label_grub->setVisible(false);
+    ui->label3_grub->setVisible(false);
+    ui->label4_grub->setVisible(false);
+    ui->tabWidget->setVisible(false);
+    ui->searchApp->setVisible(false);
+    ui->action_35->setVisible(false);
+    ui->action_4->setVisible(false);
+    ui->action_5->setVisible(false);
+    ui->action_6->setVisible(false);
+    ui->action_11->setVisible(false);
+    ui->action_16->setVisible(false);
+    ui->action_sh->setVisible(false);
+    ui->action_18->setVisible(false);
+    ui->action_24->setVisible(false);
+    ui->action_25->setVisible(false);
+    ui->action_26->setVisible(false);
+    ui->action_27->setVisible(false);
+    ui->action_28->setVisible(false);
+    ui->action_29->setVisible(false);
+    ui->action_30->setVisible(false);
+    ui->action_31->setVisible(false);
+    ui->action_32->setVisible(false);
+    ui->action_33->setVisible(false);
+    ui->action_34->setVisible(false);
+    ui->action_timer->setVisible(false);
+    ui->action_host->setVisible(false);
+    ui->webEngineView->setVisible(false);
+    ui->label2->setVisible(false);
+    ui->label1->setVisible(true);
+    showLoadingAnimation(true);
+    loadSound(0);
 }
 
 void MainWindow::TeaTimer()
