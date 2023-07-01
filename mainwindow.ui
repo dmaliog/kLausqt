@@ -3408,10 +3408,10 @@ QToolBar#toolBar_2 QToolButton:hover {
   <widget class="QStatusBar" name="statusBar"/>
   <action name="action_1">
    <property name="checkable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="enabled">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="klausres.qrc">
@@ -4050,10 +4050,10 @@ QToolBar#toolBar_2 QToolButton:hover {
   </action>
   <action name="action_game">
    <property name="checkable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="enabled">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="klausres.qrc">
@@ -4068,7 +4068,10 @@ QToolBar#toolBar_2 QToolButton:hover {
   </action>
   <action name="action_host">
    <property name="checkable">
-    <bool>true</bool>
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="klausres.qrc">
