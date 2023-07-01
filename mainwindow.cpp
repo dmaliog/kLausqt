@@ -7,6 +7,7 @@
 #include <QSoundEffect>
 #include <unistd.h>
 #include <sys/utsname.h>
+#include <QHostInfo>
 
 //---#####################################################################################################################################################
 //--############################################################## ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ################################################################
@@ -14,7 +15,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "4.1";
+QString currentVersion = "4.2";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -50,7 +51,7 @@ void MainWindow::on_action_2_triggered()
     mrpropper();
     page = 2;
     ui->label1->setText(tr("Каталог пакетов из AUR"));
-
+    ui->searchApp->setGeometry(750, 5, 221, 31);
     ui->action_4->setVisible(true);
     ui->action_5->setVisible(true);
     ui->action_6->setVisible(true);
@@ -87,7 +88,7 @@ void MainWindow::on_action_7_triggered()
     if (page == 4) return;
     mrpropper();
     page = 4;
-
+    ui->searchApp->setGeometry(440, 5, 221, 31);
     // Выполняем команду yay -Qe | wc -l и получаем вывод
     QProcess process;
     process.start("sh", QStringList() << "-c" << "yay -Qe | wc -l");
@@ -282,16 +283,78 @@ void MainWindow::on_action_12_triggered()
     ui->action_28->setVisible(true);
     ui->action_29->setVisible(true);
     ui->action_timer->setVisible(true);
-    ui->action_host->setVisible(true);
     ui->tabWidget->setVisible(true);
-
     ui->tabWidget->setCurrentIndex(0);
     showLoadingAnimation(false);
 }
 
+void MainWindow::on_action_host_triggered()
+{
+    if (page == 10) return;
+    mrpropper();
+    page = 10;
+    ui->label1->setText(tr("Веб-сервер"));
+    ui->action_5->setVisible(true);
+    ui->action_restart->setVisible(true);
+    ui->action_stop->setVisible(true);
+    ui->action_catalog->setVisible(true);
+    ui->scroll_site->setVisible(true);
+    showLoadingAnimation(false);
+}
+
+void MainWindow::on_action_game_triggered()
+{
+    if (page == 11) return;
+    mrpropper();
+    page = 11;
+    ui->label1->setText(tr("Игровая зона"));
+    showLoadingAnimation(false);
+}
+
+
 //---#####################################################################################################################################################
 //--################################################################## БЫСТРЫЕ ФУНКЦИИ ##################################################################
 //-#####################################################################################################################################################
+void MainWindow::on_push_server_clicked()
+{
+    QProcess httpd;
+    httpd.start("sh", QStringList() << "-c" << "httpd -v");
+    httpd.waitForFinished(-1);
+    QString output = QString::fromUtf8(httpd.readAllStandardOutput()).trimmed();
+    sendNotification(tr("Информация"), output);
+}
+
+void MainWindow::on_push_php_clicked()
+{
+    QProcess php;
+    php.start("sh", QStringList() << "-c" << "php -v");
+    php.waitForFinished(-1);
+    QString output = QString::fromUtf8(php.readAllStandardOutput()).trimmed();
+    sendNotification(tr("Информация"), output);
+}
+
+void MainWindow::on_action_restart_triggered()
+{
+    Terminal terminal = getTerminal();
+    QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "sudo systemctl restart httpd");
+}
+
+void MainWindow::on_action_stop_triggered()
+{
+    Terminal terminal = getTerminal();
+    QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "sudo systemctl stop httpd");
+}
+
+void MainWindow::on_action_catalog_triggered()
+{
+    QDesktopServices::openUrl(QUrl::fromLocalFile("/srv/http/"));
+}
+
+void MainWindow::on_push_conf_clicked()
+{
+    QDesktopServices::openUrl(QUrl::fromLocalFile("/etc/httpd/conf/httpd.conf"));
+}
+
 void MainWindow::on_push_repair_clicked()
 {
     // Открываем диалог выбора архива с помощью Zenity
@@ -311,7 +374,6 @@ void MainWindow::openDirectory(const QString &directoryPath)
 {
     QDesktopServices::openUrl(QUrl::fromLocalFile(QDir::homePath() + directoryPath));
 }
-
 void MainWindow::on_action_sh_triggered()
 {
     openDirectory("/.config/kLaus/sh/");
@@ -321,7 +383,6 @@ void MainWindow::on_action_27_triggered()
 {
     openDirectory("/.config/kLaus/journals/");
 }
-
 
 void MainWindow::on_action_18_triggered()
 {
@@ -341,11 +402,6 @@ void MainWindow::on_action_29_triggered()
 void MainWindow::on_action_timer_triggered()
 {
     ui->tabWidget->setCurrentIndex(2);
-}
-
-void MainWindow::on_action_host_triggered()
-{
-    ui->tabWidget->setCurrentIndex(1);
 }
 
 void MainWindow::on_action_19_triggered()
@@ -527,8 +583,14 @@ void MainWindow::on_action_5_triggered()
             process->start("yay", QStringList() << "-Qi" << packageName);
         } else
             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для запуска!"));
-
-    } else {
+    }
+    if (page == 10)
+    {
+        Terminal terminal = getTerminal();
+        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "sudo systemctl start httpd");
+    }
+    else
+    {
         if (ui->list_manager->currentItem() != nullptr) {
             QString packageName = ui->list_manager->currentItem()->text();
             packageName = packageName.left(packageName.indexOf(" "));
@@ -1271,7 +1333,7 @@ void MainWindow::loadSettings()
     //-##################################################################################
     QList<QAction*> actionList;
     actionList << ui->action_memory << ui->action_cpu << ui->action_gpu << ui->action_hostname << ui->action_os
-               << ui->action_packages << ui->action_release << ui->action_screen;
+               << ui->action_packages << ui->action_release << ui->action_screen << ui->action_iphost << ui->action_iplocal;
     for (QAction* action : actionList) {
 
         QObject::connect(action, &QAction::triggered, this, [action, this]() {
@@ -1328,7 +1390,7 @@ void MainWindow::loadSettings()
     //-############################## ПЕРЕКЛЮЧЕНИЕ МЕНЮ #################################
     //-##################################################################################
 
-    connect(ui->toolBar, &QToolBar::actionTriggered, [=](QAction* action) {
+    connect(ui->toolBar, &QToolBar::actionTriggered, this, [=](QAction* action) {
         QList<QAction*> actions = ui->toolBar->actions();
 
         for (QAction* toolbarAction : actions) {
@@ -1336,17 +1398,11 @@ void MainWindow::loadSettings()
                 toolbarAction->setChecked(false);
             }
         }
-
-        // Установка флага checked для текущего действия
         action->setChecked(true);
 
-        // Отключение отображения подсказок для виджетов в панели инструментов
-        QWidget* widget = ui->toolBar->widgetForAction(action);
-        if (widget) {
-            widget->setToolTip("");
-            widget->setToolTipDuration(0); // Отключение подсказок
-        }
+        removeToolButtonTooltips(ui->toolBar);
     });
+
 }
 
 void MainWindow::removeToolButtonTooltips(QToolBar* toolbar) {
@@ -1363,55 +1419,51 @@ void MainWindow::removeToolButtonTooltips(QToolBar* toolbar) {
     }
 }
 
+bool isDescendantOfTabWidget(QWidget* widget) {
+    while (widget) {
+        if (qobject_cast<QTabWidget*>(widget->parentWidget())) {
+            return true;
+        }
+        widget = widget->parentWidget();
+    }
+    return false;
+}
+
 void MainWindow::mrpropper() //зачистка говна перед началом каждой вкладки
 {
+    //останавливаем страницы и ошибки
     ui->webEngineView->page()->triggerAction(QWebEnginePage::Stop);
     errorShown = true;
 
-    ui->action_addsh->setVisible(false);
-    ui->action_rmsh->setVisible(false);
-    ui->action_editsh->setVisible(false);
+    //удаляем все listwidget-ы
+    QList<QListWidget*> allListWidgets = findChildren<QListWidget*>();
+    for (QListWidget* listWidget : allListWidgets) {
+        listWidget->setVisible(false);
+    }
+
+    //удаляем все action-ы
+    QList<QAction*> allActions = ui->toolBar_2->actions();
+    for (QAction* action : allActions) {
+        action->setVisible(false);
+    }
+
+    showLoadingAnimation(true);
+    loadSound(0);
+
     ui->table_aur->setVisible(false);
-    ui->list_clear->setVisible(false);
-    ui->list_sh->setVisible(false);
-    ui->label_repair->setVisible(false);
-    ui->list_repair->setVisible(false);
     ui->push_repair->setVisible(false);
-    ui->list_manager->setVisible(false);
-    ui->list_grub->setVisible(false);
     ui->line_grub->setVisible(false);
     ui->spin_grub->setVisible(false);
+    ui->tabWidget->setVisible(false);
+    ui->searchApp->setVisible(false);
+    ui->webEngineView->setVisible(false);
+    ui->scroll_site->setVisible(false);
+    ui->label_repair->setVisible(false);
     ui->label_grub->setVisible(false);
     ui->label3_grub->setVisible(false);
     ui->label4_grub->setVisible(false);
-    ui->tabWidget->setVisible(false);
-    ui->searchApp->setVisible(false);
-    ui->action_35->setVisible(false);
-    ui->action_4->setVisible(false);
-    ui->action_5->setVisible(false);
-    ui->action_6->setVisible(false);
-    ui->action_11->setVisible(false);
-    ui->action_16->setVisible(false);
-    ui->action_sh->setVisible(false);
-    ui->action_18->setVisible(false);
-    ui->action_24->setVisible(false);
-    ui->action_25->setVisible(false);
-    ui->action_26->setVisible(false);
-    ui->action_27->setVisible(false);
-    ui->action_28->setVisible(false);
-    ui->action_29->setVisible(false);
-    ui->action_30->setVisible(false);
-    ui->action_31->setVisible(false);
-    ui->action_32->setVisible(false);
-    ui->action_33->setVisible(false);
-    ui->action_34->setVisible(false);
-    ui->action_timer->setVisible(false);
-    ui->action_host->setVisible(false);
-    ui->webEngineView->setVisible(false);
     ui->label2->setVisible(false);
     ui->label1->setVisible(true);
-    showLoadingAnimation(true);
-    loadSound(0);
 }
 
 void MainWindow::TeaTimer()
@@ -1563,6 +1615,33 @@ void MainWindow::loadSystemInfo()
         }
     }
     ui->action_memory->setText(memoryInfo);
+
+    QString externalIp;
+    QProcess process;
+    process.start("curl", QStringList() << "ifconfig.me");
+    process.waitForFinished();
+    if (process.exitCode() == QProcess::NormalExit) {
+        QByteArray response = process.readAllStandardOutput();
+        externalIp = QString::fromUtf8(response).trimmed();
+    }
+
+    QString localIp;
+    QList<QNetworkInterface> interfaces = QNetworkInterface::allInterfaces();
+    for (const QNetworkInterface& interface : interfaces) {
+        if (interface.flags().testFlag(QNetworkInterface::IsUp) &&
+            !interface.flags().testFlag(QNetworkInterface::IsLoopBack)) {
+            QList<QNetworkAddressEntry> addresses = interface.addressEntries();
+            for (const QNetworkAddressEntry& entry : addresses) {
+                if (entry.ip().protocol() == QAbstractSocket::IPv4Protocol) {
+                    localIp = entry.ip().toString();
+                    break;
+                }
+            }
+        }
+    }
+
+    ui->action_iphost->setText(tr("Внешний IP: %1").arg(externalIp));
+    ui->action_iplocal->setText(tr("Внутренний IP: %1").arg(localIp));
 }
 
 QColor MainWindow::generateRandomColor()
@@ -1692,7 +1771,7 @@ void MainWindow::handleServerResponse(QNetworkReply *reply)
             ui->table_aur->verticalHeader()->setVisible(false); // Убираем отображение номеров строк
             ui->table_aur->setColumnWidth(0, 250);
             ui->table_aur->setColumnWidth(1, 550);
-            ui->table_aur->setColumnWidth(2, 130);
+            ui->table_aur->setColumnWidth(2, 110);
             ui->table_aur->setColumnWidth(3, 70);
             ui->table_aur->setColumnWidth(4, 110);
             ui->table_aur->setColumnWidth(5, 170);
@@ -2315,4 +2394,3 @@ void MainWindow::on_list_repair_itemDoubleClicked(QListWidgetItem *item)
 
     createArchive(folderPath, folderName);
 }
-

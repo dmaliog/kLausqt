@@ -131,7 +131,6 @@ int main(int argc, char *argv[])
         w.sendNotification(QObject::tr("Ошибка"), QObject::tr("Требуется любой из терминалов: konsole, gnome-terminal, xfce4-terminal, lxterminal, xterm, alacritty!"));
         return 1;
     }
-
     w.show();
 
      // Создание контекстного меню для иконки трея

@@ -1,6 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "qlabel.h"
+#include "qprogressbar.h"
+#include "qwebengineview.h"
 #include <QSystemTrayIcon>
 #include <QMainWindow>
 #include <QListWidgetItem>
@@ -72,6 +75,7 @@ private:
     QTimer *updateIconTimer;
     QTimer* teaTimer;
     QTimer* workTimer;
+    QWebEngineView* webView;
 
     QStringList shResourcePaths = {":/sh/1c.sh",
                                    ":/sh/wayland.sh",
@@ -104,6 +108,7 @@ private:
 
 protected: // события сворачивания окна
     void closeEvent(QCloseEvent *event) override; // объявление метода closeEvent()
+
 
 public slots:
     void on_action_1_triggered();
@@ -199,6 +204,13 @@ private slots:
     void on_line_work_textChanged(const QString &arg1);
     void on_time_tea_timeChanged(const QTime &time);
     void on_time_work_timeChanged(const QTime &time);
+    void on_action_stop_triggered();
+    void on_action_restart_triggered();
+    void on_action_catalog_triggered();
+    void on_push_server_clicked();
+    void on_push_conf_clicked();
+    void on_push_php_clicked();
+    void on_action_game_triggered();
 };
 
 #endif // MAINWINDOW_H
