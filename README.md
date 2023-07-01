@@ -1,18 +1,17 @@
-# kLausqt
-kLaus - Arch Manager позволяющий скачивать, устанавливать, удалять пакеты (с редактированием PKGBUILD) и отображение рейтинга и прочего.
+kLaus - Arch Manager that allows you to download, install, delete packages (with PKGBUILD editing) and display the rating and other things.
 
-Возможности менеджера:
-- Загрузка/Установка/Удаление пакетов из AUR и редактирование PKGBUILD до установки пакетов
-- Система скриптов для автоматизации ваших процессов
-- Журналы системы
-- Настройки для редактирования модулей ядра и время загрузки
-- Настройки для автообновлений пакетов и чистки кэша
-- Показ установленных пакетов
-- Обновление системы/ удаление сирот и кэша пакетов
-- Рекомендованные приложения
+Manager's features:
+- Download/Installing / Removing packages from AUR and editing PKGBUILD before installing packages
+- A system of scripts to automate your processes
+- System Logs
+- Settings for editing kernel modules and loading time
+- Settings for auto-updating packages and clearing the cache
+- Showing installed packages
+- System update/ removal of orphans and package cache
+- Recommended apps
 
-![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/642218ae-fcd7-4b5a-8c7f-33dee51e1f47)
-![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/3d66f153-bc20-4b08-985a-3ecde3837edd)
-![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/746b5ac2-e8fd-4c9f-bc2f-5472751bef06)
-![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/d129afd9-d89b-4f00-8fc6-b5726ab9108e)
-![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/f6580849-8519-4182-b8bb-e72a7b053d77)
+![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/0ab652eb-d5fc-4601-ba93-ca7a4c49befc)
+![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/50823081-57a9-49f3-8ba3-f7aef50c400b)
+![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/e0cb6016-7bd5-41dc-a194-84b4adf91538)
+![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/88790534-d38c-40bf-b110-7898cde853ef)
+![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/ace90be6-73c6-4556-96ab-60ef3afca61f)
