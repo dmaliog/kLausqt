@@ -11,8 +11,8 @@ fi
 
 # Загрузка файла перевода
 translations_file="translations_$language.txt"
-source "$HOME/kLaus/other/$translations_file"
+source "$HOME/.config/kLaus/other/$translations_file"
 
 TRASH_DIR=$(find ~/ -name Trash)
 rm -rf "$TRASH_DIR"/*
-notify-send "${trash}" "${trash_ok}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+notify-send "${trash}" "${trash_ok}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000

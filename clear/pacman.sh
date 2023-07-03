@@ -11,15 +11,15 @@ fi
 
 # Загрузка файла перевода
 translations_file="translations_$language.txt"
-source "$HOME/kLaus/other/$translations_file"
+source "$HOME/.config/kLaus/other/$translations_file"
 
 # Подсчет размера папки /var/cache/pacman/pkg/
 folder_size=$(du -sh /var/cache/pacman/pkg/ | awk '{print $1}')
 
 # Вывод размера папки
-notify-send "${pacman}" "${size_clear}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+notify-send "${pacman}" "${size_clear}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
 
 # Очистка папки /var/cache/pacman/pkg/
 sudo rm -rf /var/cache/pacman/pkg/*
-notify-send "${pacman}" "${pacman_clear}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+notify-send "${pacman}" "${pacman_clear}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
 

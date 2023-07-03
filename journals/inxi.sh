@@ -11,7 +11,7 @@ fi
 
 # Загрузка файла перевода
 translations_file="translations_$language.txt"
-source "$HOME/kLaus/other/$translations_file"
+source "$HOME/.config/kLaus/other/$translations_file"
 
 # Проверка наличия установленного inxi
 if ! command -v inxi &>/dev/null; then
@@ -19,7 +19,7 @@ if ! command -v inxi &>/dev/null; then
     if [[ "$answer" == [yY] ]]; then
         yay -S inxi
     else
-        notify-send "${install} inxi" "${noinstall}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+        notify-send "${install} inxi" "${noinstall}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
         exit 0
     fi
 fi
