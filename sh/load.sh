@@ -11,7 +11,7 @@ fi
 
 # Загрузка файла перевода
 translations_file="translations_$language.txt"
-source "$HOME/kLaus/other/$translations_file"
+source "$HOME/.config/kLaus/other/$translations_file"
 
 # Запрос пути к архиву программы
 archive_path=$(zenity --file-selection --title="${path}")
@@ -27,5 +27,5 @@ if [ -n "$archive_path" ]; then
     yay -U "$HOME/.cache/yay/$package_name"/*.pkg.tar.zst
 
 else
-    notify-send "${local_setup}" "${no_ark}" -i "$HOME/kLaus/other/notify.png" -a "kLaus" -t 10000
+    notify-send "${local_setup}" "${no_ark}" -i "$HOME/.config/kLaus/other/notify.png" -a "kLaus" -t 10000
 fi

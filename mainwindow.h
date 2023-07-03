@@ -1,8 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "qlabel.h"
-#include "qprogressbar.h"
 #include "qwebengineview.h"
 #include <QSystemTrayIcon>
 #include <QMainWindow>
@@ -50,6 +48,7 @@ private:
     int page; // какая страница используется
     int trayon; // закрывать без трея
     int repair; // создавать бэкап при удалении или нет
+    int updinst; //проверять систему перед установкой пакетов или нет
     int volumenotify; // громкость уведомлений
     int volumemenu; // громкость меню
     int mainpage; // главная страница
@@ -60,6 +59,7 @@ private:
     int table4; // популярность
     int table5; // последнее обновление
     int fav; // последнее обновление
+    int host;
     QString lang;
     QString currentDesktop;
     QString teatext;
@@ -157,7 +157,7 @@ private slots:
     void loadContent();
     void loadSystemInfo();
     void loadingListWidget();
-    void mrpropper();
+    void mrpropper(int value);
     void showLoadingAnimation(bool show);
 
     void onTimeChanged(const QTime& time);
@@ -174,8 +174,12 @@ private slots:
     void on_spin_rating_valueChanged(int arg1);
     void on_time_update_timeChanged(const QTime &time);
     void on_check_trayon_stateChanged();
+
     void on_combo_mainpage_currentIndexChanged();
     void on_combo_cache_currentIndexChanged();
+    void on_combo_host_currentIndexChanged(int index);
+    void on_combo_lang_currentIndexChanged(int index);
+
     void on_check_description_stateChanged();
     void on_check_version_stateChanged();
     void on_check_voices_stateChanged();
@@ -184,7 +188,6 @@ private slots:
     void on_action_31_triggered();
     void on_action_32_triggered();
     void on_action_33_triggered();
-    void on_combo_lang_currentIndexChanged(int index);
     void on_action_34_triggered();
     void on_action_35_triggered();
     void on_action_13_triggered();
@@ -196,6 +199,7 @@ private slots:
     void on_list_repair_itemDoubleClicked(QListWidgetItem *item);
     void on_push_repair_clicked();
     void on_check_repair_stateChanged();
+    void on_check_updateinstall_stateChanged();
     void on_action_timer_triggered();
     void on_action_host_triggered();
     void on_action_19_triggered();
@@ -211,6 +215,10 @@ private slots:
     void on_push_conf_clicked();
     void on_push_php_clicked();
     void on_action_game_triggered();
+    void on_push_site_clicked();
+
+    void openUrl(const QString& url);
+
 };
 
 #endif // MAINWINDOW_H

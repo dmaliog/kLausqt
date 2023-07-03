@@ -11,7 +11,7 @@ fi
 
 # Загрузка файла перевода
 translations_file="translations_$language.txt"
-source "$HOME/kLaus/other/$translations_file"
+source "$HOME/.config/kLaus/other/$translations_file"
 
 # Проверка наличия установленных Zen пакетов
 if [ -n "$(yay -Qs linux-zen)" ] || [ -n "$(yay -Qs linux-zen-headers)" ]; then
@@ -22,11 +22,11 @@ if [ -n "$(yay -Qs linux-zen)" ] || [ -n "$(yay -Qs linux-zen-headers)" ]; then
 
         # Проверка наличия Grub
         if [ ! -f "/boot/grub/grub.cfg" ]; then
-            notify-send "${zen}" "${grub_no}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+            notify-send "${zen}" "${grub_no}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
         else
             # Обновление Grub
             sudo grub-mkconfig -o /boot/grub/grub.cfg
-            notify-send "${zen}" "${delete_ok}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+            notify-send "${zen}" "${delete_ok}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
         fi
     fi
 else
@@ -35,10 +35,10 @@ else
 
     # Проверка наличия Grub
     if [ ! -f "/boot/grub/grub.cfg" ]; then
-        notify-send "${zen}" "${grub_no}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+        notify-send "${zen}" "${grub_no}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
     else
         # Обновление Grub
         sudo grub-mkconfig -o /boot/grub/grub.cfg
-        notify-send "${zen}" "${install_ok}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+        notify-send "${zen}" "${install_ok}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
     fi
 fi

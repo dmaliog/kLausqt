@@ -11,7 +11,7 @@ fi
 
 # Загрузка файла перевода
 translations_file="translations_$language.txt"
-source "$HOME/kLaus/other/$translations_file"
+source "$HOME/.config/kLaus/other/$translations_file"
 
 # Проверка наличия пакетов
 packages=("enchant1.6" "webkitgtk2-bin" "pkgextract" "imagemagick")
@@ -44,7 +44,7 @@ archive=$(zenity --file-selection --title="${path}" --file-filter='*.tar.gz' --f
 
 # Проверка наличия архива
 if [ -z "$archive" ]; then
-    notify-send "${c_notify}" "${no_ark}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+    notify-send "${c_notify}" "${no_ark}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
     exit 0
 fi
 
@@ -56,7 +56,7 @@ run_file=$(find /tmp -name "*.run" -type f -print -quit)
 
 # Проверка наличия .run файла
 if [ -z "$run_file" ]; then
-    notify-send "${c_notify}" "${c_norun}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+    notify-send "${c_notify}" "${c_norun}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
     exit 0
 fi
 

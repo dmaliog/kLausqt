@@ -15,7 +15,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "4.2";
+QString currentVersion = "4.3";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -40,16 +40,18 @@ Terminal getTerminal()
 void MainWindow::on_action_1_triggered()
 {
     if (page == 1) return;
-    mrpropper();
-    page = 1;
+    mrpropper(1);
     ui->label1->setText(tr("Добавить пакет в AUR"));
+    ui->tabWidget->setVisible(true);
+    ui->tabWidget->setCurrentIndex(1);
+
+    showLoadingAnimation(false);
 }
 
 void MainWindow::on_action_2_triggered()
 {
     if (page == 2) return;
-    mrpropper();
-    page = 2;
+    mrpropper(2);
     ui->label1->setText(tr("Каталог пакетов из AUR"));
     ui->searchApp->setGeometry(750, 5, 221, 31);
     ui->action_4->setVisible(true);
@@ -66,8 +68,7 @@ void MainWindow::on_action_2_triggered()
 void MainWindow::on_action_17_triggered()
 {
     if (page == 3) return;
-    mrpropper();
-    page = 3;
+    mrpropper(3);
     ui->label1->setText(tr("Очистка системы"));
     ui->label2->setVisible(true);
     ui->list_clear->setVisible(true);
@@ -86,8 +87,7 @@ void MainWindow::on_action_17_triggered()
 void MainWindow::on_action_7_triggered()
 {
     if (page == 4) return;
-    mrpropper();
-    page = 4;
+    mrpropper(4);
     ui->searchApp->setGeometry(440, 5, 221, 31);
     // Выполняем команду yay -Qe | wc -l и получаем вывод
     QProcess process;
@@ -135,8 +135,7 @@ void MainWindow::on_action_7_triggered()
 void MainWindow::on_action_9_triggered()
 {
     if (page == 5) return;
-    mrpropper();
-    page = 5;
+    mrpropper(5);
     ui->label1->setText(tr("Параметры ядра"));
     ui->action_26->setVisible(true);
     ui->action_27->setVisible(true);
@@ -209,8 +208,7 @@ void MainWindow::on_action_9_triggered()
 void MainWindow::on_action_3_triggered()
 {
     if (page == 6) return;
-    mrpropper();
-    page = 6;
+    mrpropper(6);
     ui->label1->hide();
     ui->action_31->setVisible(true);
     ui->action_32->setVisible(true);
@@ -235,8 +233,7 @@ void MainWindow::on_action_8_triggered()
             return;
         }
     }
-    mrpropper();
-    page = 7;
+    mrpropper(7);
     ui->label1->hide();
     ui->action_31->setVisible(true);
     ui->action_32->setVisible(true);
@@ -266,8 +263,7 @@ void MainWindow::on_action_8_triggered()
 void MainWindow::on_action_10_triggered()
 {
     if (page == 8) return;
-    mrpropper();
-    page = 8;
+    mrpropper(8);
     ui->label1->setText(tr("Информация о приложении (версия %1)").arg(currentVersion));
     ui->tabWidget->setVisible(true);
     ui->tabWidget->setCurrentIndex(4);
@@ -277,8 +273,7 @@ void MainWindow::on_action_10_triggered()
 void MainWindow::on_action_12_triggered()
 {
     if (page == 9) return;
-    mrpropper();
-    page = 9;
+    mrpropper(9);
     ui->label1->setText(tr("Дополнительные настройки"));
     ui->action_28->setVisible(true);
     ui->action_29->setVisible(true);
@@ -291,8 +286,7 @@ void MainWindow::on_action_12_triggered()
 void MainWindow::on_action_host_triggered()
 {
     if (page == 10) return;
-    mrpropper();
-    page = 10;
+    mrpropper(10);
     ui->label1->setText(tr("Веб-сервер"));
     ui->action_5->setVisible(true);
     ui->action_restart->setVisible(true);
@@ -305,9 +299,11 @@ void MainWindow::on_action_host_triggered()
 void MainWindow::on_action_game_triggered()
 {
     if (page == 11) return;
-    mrpropper();
-    page = 11;
+    mrpropper(11);
     ui->label1->setText(tr("Игровая зона"));
+    ui->tabWidget->setVisible(true);
+    ui->tabWidget->setCurrentIndex(5);
+
     showLoadingAnimation(false);
 }
 
@@ -317,11 +313,15 @@ void MainWindow::on_action_game_triggered()
 //-#####################################################################################################################################################
 void MainWindow::on_push_server_clicked()
 {
-    QProcess httpd;
-    httpd.start("sh", QStringList() << "-c" << "httpd -v");
-    httpd.waitForFinished(-1);
-    QString output = QString::fromUtf8(httpd.readAllStandardOutput()).trimmed();
-    sendNotification(tr("Информация"), output);
+    if(host == 1)
+    {
+        QProcess httpd;
+        httpd.start("sh", QStringList() << "-c" << "httpd -v");
+        httpd.waitForFinished(-1);
+        QString output = QString::fromUtf8(httpd.readAllStandardOutput()).trimmed();
+        sendNotification(tr("Информация"), output);
+    } else
+        sendNotification(tr("Ошибка"), tr("Сервер не выбран!"));
 }
 
 void MainWindow::on_push_php_clicked()
@@ -335,24 +335,58 @@ void MainWindow::on_push_php_clicked()
 
 void MainWindow::on_action_restart_triggered()
 {
-    Terminal terminal = getTerminal();
-    QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "sudo systemctl restart httpd");
+    if(host == 1)
+    {
+        QProcess httpProcess;
+        httpProcess.start("pkexec", QStringList() << "sudo" << "systemctl" << "restart" << "httpd");
+        httpProcess.closeWriteChannel();
+        httpProcess.waitForFinished();
+    }
+    else if(host == 2)
+    {
+        QProcess httpProcess;
+        httpProcess.start("pkexec", QStringList() << "sudo" << "systemctl" << "restart" << "xampp.service");
+        httpProcess.closeWriteChannel();
+        httpProcess.waitForFinished();
+    }
+    else
+        sendNotification(tr("Ошибка"), tr("Сервер не выбран!"));
 }
 
 void MainWindow::on_action_stop_triggered()
 {
-    Terminal terminal = getTerminal();
-    QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "sudo systemctl stop httpd");
+    if (host == 1)
+    {
+        QProcess httpProcess;
+        httpProcess.start("pkexec", QStringList() << "sudo" << "systemctl" << "stop" << "httpd");
+        httpProcess.closeWriteChannel();
+        httpProcess.waitForFinished();
+    }
+    else if(host == 2)
+    {
+        QProcess httpProcess;
+        httpProcess.start("pkexec", QStringList() << "sudo" << "systemctl" << "stop" << "xampp.service");
+        httpProcess.closeWriteChannel();
+        httpProcess.waitForFinished();
+    }
+    else
+        sendNotification(tr("Ошибка"), tr("Сервер не выбран!"));
 }
 
 void MainWindow::on_action_catalog_triggered()
 {
-    QDesktopServices::openUrl(QUrl::fromLocalFile("/srv/http/"));
+    if(host == 1)
+        QDesktopServices::openUrl(QUrl::fromLocalFile("/srv/http/"));
+    else
+        sendNotification(tr("Ошибка"), tr("Сервер не выбран!"));
 }
 
 void MainWindow::on_push_conf_clicked()
 {
-    QDesktopServices::openUrl(QUrl::fromLocalFile("/etc/httpd/conf/httpd.conf"));
+    if(host == 1)
+        QDesktopServices::openUrl(QUrl::fromLocalFile("/etc/httpd/conf/httpd.conf"));
+    else
+        sendNotification(tr("Ошибка"), tr("Сервер не выбран!"));
 }
 
 void MainWindow::on_push_repair_clicked()
@@ -508,10 +542,8 @@ void MainWindow::on_action_11_triggered()
             UpdateIcon();
             show();
         }
-
-    } else {
+    } else
         sendNotification(tr("Обновление"), tr("Система в актуальном состоянии!"));
-    }
 }
 
 void MainWindow::on_action_24_triggered()
@@ -586,8 +618,22 @@ void MainWindow::on_action_5_triggered()
     }
     if (page == 10)
     {
-        Terminal terminal = getTerminal();
-        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "sudo systemctl start httpd");
+        if(host == 1)
+        {
+            QProcess httpProcess;
+            httpProcess.start("pkexec", QStringList() << "sudo" << "systemctl" << "start" << "httpd");
+            httpProcess.closeWriteChannel();
+            httpProcess.waitForFinished();
+        }
+        else if(host == 2)
+        {
+            QProcess httpProcess;
+            httpProcess.start("pkexec", QStringList() << "sudo" << "systemctl" << "start" << "xampp.service");
+            httpProcess.closeWriteChannel();
+            httpProcess.waitForFinished();
+        }
+        else
+            sendNotification(tr("Ошибка"), tr("Сервер не выбран!"));
     }
     else
     {
@@ -653,12 +699,16 @@ void MainWindow::on_action_6_triggered()
 
 void MainWindow::on_action_4_triggered()
 {
+    if (hasUpdates && updinst == 1) {
+        sendNotification(tr("Внимание"), tr("Перед установкой пакетов требуется обновить систему до актуального состояния! Это поможет предотвратить конфликт зависимостей и избежать кучи других проблем!"));
+        return;
+    }
     if (page == 2)
     {
         if (ui->table_aur->currentItem() != nullptr) {
             QString packageName = ui->table_aur->item(ui->table_aur->currentRow(), 0)->text();
             Terminal terminal = getTerminal();
-            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -Syu " + packageName);
+            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -S " + packageName);
          } else
             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
 
@@ -667,7 +717,7 @@ void MainWindow::on_action_4_triggered()
             QString packageName = ui->list_manager->currentItem()->text();
             packageName = packageName.left(packageName.indexOf(" "));
             Terminal terminal = getTerminal();
-            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -Syu " + packageName);
+            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -S " + packageName);
         } else
              sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
     }
@@ -1047,6 +1097,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     ui->check_trayon->setChecked(trayon == 1);
     ui->check_repair->setChecked(repair == 1);
+    ui->check_updateinstall->setChecked(updinst == 1);
     ui->check_description->setChecked(table1 == 1);
     ui->check_version->setChecked(table2 == 1);
     ui->check_voices->setChecked(table3 == 1);
@@ -1068,6 +1119,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
         ui->combo_lang->setCurrentIndex(0);
     else if(lang == "en_US")
         ui->combo_lang->setCurrentIndex(1);
+
+    ui->combo_host->setCurrentIndex(host);
 
     showLoadingAnimation(false);
 }
@@ -1172,6 +1225,7 @@ void MainWindow::loadSettings()
     yaycache = settings.value("YayCache", 0).toInt();
     trayon = settings.value("TrayOn", 0).toInt();
     repair = settings.value("RepairBackup", 1).toInt();
+    updinst = settings.value("UpdateInstall", 1).toInt();
     volumenotify = settings.value("VolumeNotify", 30).toInt();
     volumemenu = settings.value("VolumeMenu", 50).toInt();
     table1 = settings.value("Table1", 1).toInt();
@@ -1181,6 +1235,7 @@ void MainWindow::loadSettings()
     table5 = settings.value("Table5", 0).toInt();
     fav = settings.value("Favorite", 50).toInt();
     lang = settings.value("Language").toString();
+    host = settings.value("Host").toInt();
     teatext = settings.value("TeaText").toString();
     worktext = settings.value("WorkText").toString();
 
@@ -1399,10 +1454,8 @@ void MainWindow::loadSettings()
             }
         }
         action->setChecked(true);
-
         removeToolButtonTooltips(ui->toolBar);
     });
-
 }
 
 void MainWindow::removeToolButtonTooltips(QToolBar* toolbar) {
@@ -1429,8 +1482,10 @@ bool isDescendantOfTabWidget(QWidget* widget) {
     return false;
 }
 
-void MainWindow::mrpropper() //зачистка говна перед началом каждой вкладки
+void MainWindow::mrpropper(int value) //зачистка говна перед началом каждой вкладки
 {
+    page = value;
+
     //останавливаем страницы и ошибки
     ui->webEngineView->page()->triggerAction(QWebEnginePage::Stop);
     errorShown = true;
@@ -2164,6 +2219,76 @@ void MainWindow::on_combo_mainpage_currentIndexChanged()
     settings.setValue("MainPage", mainpage);
 }
 
+void MainWindow::on_combo_host_currentIndexChanged(int index)
+{
+    host = index;
+    settings.setValue("Host", host);
+
+    if (host == 1)
+    {
+        QProcess process;
+        process.start("httpd", QStringList() << "-v");
+        process.waitForFinished();
+
+        if (process.exitCode() == 0) {
+            // Apache установлен
+            ui->combo_host->setCurrentIndex(1);
+        }
+        else {
+            // Apache не установлен, предложить установку
+            int reply = QMessageBox::question(this, "Установка Apache", "Apache не установлен. Хотите установить Apache?", QMessageBox::Yes | QMessageBox::No);
+            if (reply == QMessageBox::Yes) {
+                QProcess installProcess;
+                installProcess.setProcessChannelMode(QProcess::MergedChannels);
+
+                Terminal terminal = getTerminal();
+                installProcess.start(terminal.binary, QStringList() << terminal.args << "yay -S apache");
+
+                                installProcess.closeWriteChannel();
+                installProcess.waitForFinished();
+                if (installProcess.exitCode() == 0)
+                    ui->combo_host->setCurrentIndex(1);
+                else {
+                    QMessageBox::critical(this, "Ошибка установки", "Произошла ошибка при установке Apache");
+                    ui->combo_host->setCurrentIndex(0);
+                }
+            } else
+                ui->combo_host->setCurrentIndex(0);
+        }
+    }
+    else if (host == 2)
+    {
+        QProcess process;
+        process.start("/opt/lampp/lampp", QStringList() << "status");
+        process.waitForFinished();
+
+        if (process.exitCode() == 0) {
+            ui->combo_host->setCurrentIndex(2);
+        }
+        else {
+            int reply = QMessageBox::question(this, "Установка XAMPP", "XAMPP не установлен. Хотите установить XAMPP?", QMessageBox::Yes | QMessageBox::No);
+            if (reply == QMessageBox::Yes) {
+                QProcess installProcess;
+                installProcess.setProcessChannelMode(QProcess::MergedChannels);
+
+                Terminal terminal = getTerminal();
+                installProcess.start(terminal.binary, QStringList() << terminal.args << "yay -S xampp");
+
+
+                installProcess.closeWriteChannel();
+                installProcess.waitForFinished();
+                if (installProcess.exitCode() == 0)
+                    ui->combo_host->setCurrentIndex(2);
+                else {
+                    QMessageBox::critical(this, "Ошибка установки", "Произошла ошибка при установке XAMPP");
+                    ui->combo_host->setCurrentIndex(0);
+                }
+            } else
+                ui->combo_host->setCurrentIndex(0);
+        }
+    }
+}
+
 void MainWindow::on_combo_lang_currentIndexChanged(int index)
 {
     QString lang;
@@ -2264,6 +2389,12 @@ void MainWindow::on_check_repair_stateChanged()
 {
     repair = ui->check_repair->isChecked() ? 1 : 0;
     settings.setValue("RepairBackup", repair);
+}
+
+void MainWindow::on_check_updateinstall_stateChanged()
+{
+    updinst = ui->check_updateinstall->isChecked() ? 1 : 0;
+    settings.setValue("UpdateInstall", updinst);
 }
 
 void MainWindow::on_dial_volmenu_valueChanged(int value)
@@ -2393,4 +2524,34 @@ void MainWindow::on_list_repair_itemDoubleClicked(QListWidgetItem *item)
         folderPath = QDir::homePath() + "/.config/";
 
     createArchive(folderPath, folderName);
+}
+
+void MainWindow::on_push_site_clicked()
+{
+    openUrl("http://localhost/");
+}
+
+void MainWindow::openUrl(const QString& url)
+{
+    QProcess process;
+    process.start("xdg-open", QStringList() << url);
+    process.waitForFinished();
+
+    // Проверяем код возврата
+    if (process.exitCode() != 0) {
+        // Проверяем наличие Firefox
+        QString firefoxPath = QStandardPaths::findExecutable("firefox");
+        if (!firefoxPath.isEmpty()) {
+            QProcess processSettings;
+            processSettings.start("xdg-settings", QStringList() << "set default-web-browser firefox.desktop");
+            processSettings.waitForFinished();
+
+            QProcess process;
+            process.start("xdg-open", QStringList() << url);
+            process.waitForFinished();
+        }
+        else {
+            sendNotification(tr("Ошибка"), tr("Установите Firefox или выберите рабочий браузер в качестве основного в настройках системы!"));
+        }
+    }
 }

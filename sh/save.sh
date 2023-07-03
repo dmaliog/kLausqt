@@ -11,7 +11,7 @@ fi
 
 # Загрузка файла перевода
 translations_file="translations_$language.txt"
-source "$HOME/kLaus/other/$translations_file"
+source "$HOME/.config/kLaus/other/$translations_file"
 
 # Запрос названия пакета
 read -p "${pkgsave_name}" package_name
@@ -32,10 +32,10 @@ if [ -n "$save_dir" ]; then
 
         # Создание архива скачанных пакетов
         tar czvf "$save_dir/$package_name".tar.gz -C ~/.cache/yay/ "$package_name"
-        notify-send "${pkgsave}" "${pkgsave_ok}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+        notify-send "${pkgsave}" "${pkgsave_ok}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
     else
-        notify-send "${pkgsave}" "${pkgsave_error}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+        notify-send "${pkgsave}" "${pkgsave_error}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
     fi
 else
-    notify-send "${pkgsave}" "${no_direct}" -i $HOME/kLaus/other/notify.png -a "kLaus" -t 10000
+    notify-send "${pkgsave}" "${no_direct}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
 fi
