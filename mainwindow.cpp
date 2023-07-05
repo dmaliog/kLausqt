@@ -15,7 +15,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "4.3";
+QString currentVersion = "4.4";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -69,19 +69,67 @@ void MainWindow::on_action_17_triggered()
 {
     if (page == 3) return;
     mrpropper(3);
-    ui->label1->setText(tr("Очистка системы"));
-    ui->label2->setVisible(true);
-    ui->list_clear->setVisible(true);
+    ui->label1->setText(tr("Полезные скрипты"));
     ui->list_sh->setVisible(true);
-    ui->action_sh->setVisible(true);
-    ui->action_18->setVisible(true);
     ui->action_addsh->setVisible(true);
     ui->action_editsh->setVisible(true);
     ui->action_rmsh->setVisible(true);
-    ui->label_repair->setVisible(true);
-    ui->list_repair->setVisible(true);
-    ui->push_repair->setVisible(true);
+
     showLoadingAnimation(false);
+}
+
+QIcon getPackageIcon(const QString& packageName) {
+    QString appName = packageName.split(' ')[0];
+
+    // Удаляем окончания
+    if (appName.endsWith("-bin") || appName.endsWith("-git") || appName.endsWith("-qt") ||
+        appName.endsWith("-qt4") || appName.endsWith("-qt5") || appName.endsWith("-qt6") ||
+        appName.endsWith("qt-") || appName.endsWith("qt4-") || appName.endsWith("qt5-") ||
+        appName.endsWith("qt6-") || appName.endsWith("-gtk") || appName.endsWith("-gtk2") ||
+        appName.endsWith("-gtk3")) {
+        appName = appName.left(appName.length() - 4);
+    }
+
+    QStringList searchPaths;
+    searchPaths << "/usr/share/applications"
+                << QDir::homePath() + "/.local/share/applications"
+                << "/usr/local/share/applications"
+                << "/var/lib/snapd/desktop/applications";
+
+    // Ищем соответствующий файл .desktop во всех указанных путях
+    for (const QString& searchPath : searchPaths) {
+        QDir desktopFilesDir(searchPath);
+        QStringList desktopFiles = desktopFilesDir.entryList(QStringList() << "*.desktop", QDir::Files);
+
+        for (const QString& desktopFileName : desktopFiles) {
+            QString desktopFilePath = desktopFilesDir.absoluteFilePath(desktopFileName);
+
+            // Извлекаем имя приложения из имени файла .desktop
+            QString desktopAppName = desktopFileName.split('.').first();
+
+            // Удаляем окончания
+            if (desktopAppName.endsWith("-bin") || desktopAppName.endsWith("-git") ||
+                desktopAppName.endsWith("-qt") || desktopAppName.endsWith("-qt4") ||
+                desktopAppName.endsWith("-qt5") || desktopAppName.endsWith("-qt6") ||
+                desktopAppName.endsWith("qt-") || desktopAppName.endsWith("qt4-") ||
+                desktopAppName.endsWith("qt5-") || desktopAppName.endsWith("qt6-") ||
+                desktopAppName.endsWith("-gtk") || desktopAppName.endsWith("-gtk2") ||
+                desktopAppName.endsWith("-gtk3")) {
+                desktopAppName = desktopAppName.left(desktopAppName.length() - 4);
+            }
+
+            if (desktopAppName == appName) {
+                // Извлекаем имя иконки из имени файла .desktop
+                QString iconName = desktopFileName.split('.').first();
+
+                // Возвращаем иконку на основе имени
+                return QIcon::fromTheme(iconName);
+            }
+        }
+    }
+
+    // Если не удалось получить иконку из файла .desktop, возвращаем стандартную иконку
+    return QIcon::fromTheme("package");
 }
 
 void MainWindow::on_action_7_triggered()
@@ -119,10 +167,18 @@ void MainWindow::on_action_7_triggered()
     for (const QString& package : packages) {
         if (!package.isEmpty()) {
 
+            // Получаем иконку пакета
+            QIcon packageIcon = getPackageIcon(package);
+
             // Раскрашиваем
             QColor color = generateRandomColor();
-            QListWidgetItem* item = new QListWidgetItem(package);
+
+            // Создаем элемент списка с текстом и иконкой
+            QListWidgetItem* item = new QListWidgetItem(package, ui->list_manager);
             item->setForeground(color);
+            item->setIcon(packageIcon);
+
+            // Добавляем элемент в список
             ui->list_manager->addItem(item);
         }
     }
@@ -132,25 +188,22 @@ void MainWindow::on_action_7_triggered()
     showLoadingAnimation(false);
 }
 
+
 void MainWindow::on_action_9_triggered()
 {
     if (page == 5) return;
     mrpropper(5);
-    ui->label1->setText(tr("Параметры ядра"));
-    ui->action_26->setVisible(true);
+    ui->label1->setText(tr("Системные журналы и конфигурации"));
     ui->action_27->setVisible(true);
-    ui->line_grub->setVisible(true);
-    ui->spin_grub->setVisible(true);
-    ui->label_grub->setVisible(true);
-    ui->label3_grub->setVisible(true);
-    ui->label4_grub->setVisible(true);
+    ui->action_bench->setVisible(true);
+    ui->action_repair->setVisible(true);
     ui->list_grub->setVisible(true);
 
     QString filename = "/etc/default/grub";
     QFile file(filename);
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        ui->action_26->setDisabled(true);
+        ui->push_grub->setDisabled(true);
         ui->line_grub->setDisabled(true);
         ui->spin_grub->setDisabled(true);
         ui->line_grub->setText(tr("GRUB не установлен"));
@@ -274,10 +327,11 @@ void MainWindow::on_action_12_triggered()
 {
     if (page == 9) return;
     mrpropper(9);
-    ui->label1->setText(tr("Дополнительные настройки"));
+    ui->label1->setText(tr("Настройки AUR"));
     ui->action_28->setVisible(true);
     ui->action_29->setVisible(true);
     ui->action_timer->setVisible(true);
+    ui->action_system->setVisible(true);
     ui->tabWidget->setVisible(true);
     ui->tabWidget->setCurrentIndex(0);
     showLoadingAnimation(false);
@@ -408,41 +462,62 @@ void MainWindow::openDirectory(const QString &directoryPath)
 {
     QDesktopServices::openUrl(QUrl::fromLocalFile(QDir::homePath() + directoryPath));
 }
-void MainWindow::on_action_sh_triggered()
-{
-    openDirectory("/.config/kLaus/sh/");
-}
 
 void MainWindow::on_action_27_triggered()
 {
-    openDirectory("/.config/kLaus/journals/");
+    ui->label1->setText(tr("Системные журналы и конфигурации"));
+    ui->list_bench->setVisible(false);
+    ui->scroll_repair->setVisible(false);
+    ui->list_grub->setVisible(true);
 }
 
-void MainWindow::on_action_18_triggered()
+void MainWindow::on_action_bench_triggered()
 {
-    openDirectory("/.local/share/applications");
+    ui->label1->setText(tr("Бенчмарки"));
+    ui->list_grub->setVisible(false);
+    ui->scroll_repair->setVisible(false);
+    ui->list_bench->setVisible(true);
+}
+
+void MainWindow::on_action_repair_triggered()
+{
+    ui->label1->setText(tr("Оптимизиция"));
+    ui->list_grub->setVisible(false);
+    ui->list_bench->setVisible(false);
+    ui->scroll_repair->setVisible(true);
 }
 
 void MainWindow::on_action_28_triggered()
 {
+    ui->label1->setText(tr("Настройки приложения"));
     ui->tabWidget->setCurrentIndex(3);
 }
 
 void MainWindow::on_action_29_triggered()
 {
+    ui->label1->setText(tr("Настройки AUR"));
     ui->tabWidget->setCurrentIndex(0);
 }
 
 void MainWindow::on_action_timer_triggered()
 {
+    ui->label1->setText(tr("Настройки таймеров"));
     ui->tabWidget->setCurrentIndex(2);
 }
 
 void MainWindow::on_action_19_triggered()
 {
     on_action_12_triggered();
+    ui->label1->setText(tr("Настройки таймеров"));
     ui->tabWidget->setCurrentIndex(2);
 }
+
+void MainWindow::on_action_system_triggered()
+{
+    ui->label1->setText(tr("Настройки системы"));
+    ui->tabWidget->setCurrentIndex(6);
+}
+
 
 void MainWindow::on_action_31_triggered()
 {
@@ -733,7 +808,7 @@ void MainWindow::on_action_30_triggered()
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
 }
 
-void MainWindow::on_action_26_triggered()
+void MainWindow::on_push_grub_clicked()
 {
     QString filename = "/etc/default/grub";
     QString grubContent = ui->line_grub->text().trimmed();
@@ -1085,7 +1160,7 @@ void MainWindow::on_action_editsh_triggered()
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
+    ui->webEngineView->raise(); //браузер выше всех
     loadSettings();         //загрузка настроек
     checkVersionAndClear();
     UpdateIcon();           //получаем иконку трея
@@ -1126,7 +1201,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 }
 
 void MainWindow::checkVersionAndClear() {
-    QString settingsFilePath = baseDir + "/settings.ini";
+    QString settingsFilePath = baseDir + "settings.ini";
     QSettings settings(settingsFilePath, QSettings::IniFormat);
     QString storedVersion = settings.value("Version").toString();
     QString storedLanguage = settings.value("Language").toString();
@@ -1136,7 +1211,7 @@ void MainWindow::checkVersionAndClear() {
         settings.setValue("Language", storedLanguage);
         settings.sync();
 
-        QStringList excludedFolders = {"clear", "journals", "other", "sh"};
+        QStringList excludedFolders = {"clear", "journals", "bench", "other", "sh"};
         QDir baseDirDir(baseDir);
 
         QStringList subDirs = baseDirDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
@@ -1147,9 +1222,10 @@ void MainWindow::checkVersionAndClear() {
             }
         }
 
-        removeScripts(shResourcePaths, baseDir + "/sh/");
-        removeScripts(clearResourcePaths, baseDir + "/clear/");
-        removeScripts(journalsResourcePaths, baseDir + "/journals/");
+        removeScripts(shResourcePaths, baseDir + "sh/");
+        removeScripts(clearResourcePaths, baseDir + "clear/");
+        removeScripts(journalsResourcePaths, baseDir + "journals/");
+        removeScripts(benchResourcePaths, baseDir + "bench/");
 
         sendNotification(tr("Обновление kLaus"), tr("Версия kLaus поменялась, конфигурация сброшена!"));
     }
@@ -1493,7 +1569,20 @@ void MainWindow::mrpropper(int value) //зачистка говна перед �
     //удаляем все listwidget-ы
     QList<QListWidget*> allListWidgets = findChildren<QListWidget*>();
     for (QListWidget* listWidget : allListWidgets) {
-        listWidget->setVisible(false);
+        QWidget* parentWidget = listWidget->parentWidget();
+
+        bool isInsideScrollArea = false;
+        while (parentWidget) {
+            if (qobject_cast<QScrollArea*>(parentWidget)) {
+                isInsideScrollArea = true;
+                break;
+            }
+            parentWidget = parentWidget->parentWidget();
+        }
+
+        if (!isInsideScrollArea) {
+            listWidget->setVisible(false);
+        }
     }
 
     //удаляем все action-ы
@@ -1505,19 +1594,13 @@ void MainWindow::mrpropper(int value) //зачистка говна перед �
     showLoadingAnimation(true);
     loadSound(0);
 
+    ui->scroll_repair->setVisible(false);
+
     ui->table_aur->setVisible(false);
-    ui->push_repair->setVisible(false);
-    ui->line_grub->setVisible(false);
-    ui->spin_grub->setVisible(false);
     ui->tabWidget->setVisible(false);
     ui->searchApp->setVisible(false);
     ui->webEngineView->setVisible(false);
     ui->scroll_site->setVisible(false);
-    ui->label_repair->setVisible(false);
-    ui->label_grub->setVisible(false);
-    ui->label3_grub->setVisible(false);
-    ui->label4_grub->setVisible(false);
-    ui->label2->setVisible(false);
     ui->label1->setVisible(true);
 }
 
@@ -2004,14 +2087,17 @@ void MainWindow::loadingListWidget()
     ui->list_sh->clear();
     ui->list_clear->clear();
     ui->list_grub->clear();
+    ui->list_bench->clear();
 
     saveScripts(shResourcePaths, baseDir + "sh/");
     saveScripts(clearResourcePaths, baseDir + "clear/");
     saveScripts(journalsResourcePaths, baseDir + "journals/");
+    saveScripts(benchResourcePaths, baseDir + "bench/");
 
     loadScripts(baseDir + "sh/", ui->list_sh);
     loadScripts(baseDir + "clear/", ui->list_clear);
     loadScripts(baseDir + "journals/", ui->list_grub);
+    loadScripts(baseDir + "bench/", ui->list_bench);
 
     QString notifyFileName = QFileInfo(":/other/notify.png").fileName();
     QString notifyFilePath = baseDir + "other/" + notifyFileName;
@@ -2505,6 +2591,11 @@ void MainWindow::on_list_sh_itemDoubleClicked(QListWidgetItem *item) {
 
 void MainWindow::on_list_grub_itemDoubleClicked(QListWidgetItem *item) {
     QString scriptDir = baseDir + "journals/";
+    on_list_itemDoubleClicked(item, scriptDir);
+}
+
+void MainWindow::on_list_bench_itemDoubleClicked(QListWidgetItem *item) {
+    QString scriptDir = baseDir + "bench/";
     on_list_itemDoubleClicked(item, scriptDir);
 }
 

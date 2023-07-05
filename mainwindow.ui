@@ -48,6 +48,10 @@
   <property name="windowTitle">
    <string>kLaus - Arch Manager</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="klausres.qrc">
+    <normaloff>:/img/2.png</normaloff>:/img/2.png</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">* {
     color: #ffffff;
@@ -286,7 +290,7 @@ QMenuBar::item:pressed {
     </property>
     <property name="styleSheet">
      <string notr="true">QTableWidget {
-    background-color: #242424;
+	background-color: #242424;
     border: 5px solid #28276b;
     border-radius: 13px;
     padding: 2px;
@@ -481,7 +485,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>5</number>
+     <number>6</number>
     </property>
     <widget class="QWidget" name="tab_aursettings">
      <attribute name="title">
@@ -1569,29 +1573,233 @@ border:0;</string>
       <string>Страница</string>
      </attribute>
     </widget>
-   </widget>
-   <widget class="QListWidget" name="list_clear">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>40</y>
-      <width>341</width>
-      <height>211</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="focusPolicy">
-     <enum>Qt::NoFocus</enum>
-    </property>
+    <widget class="QWidget" name="tab_system">
+     <attribute name="title">
+      <string>Страница</string>
+     </attribute>
+     <widget class="QLabel" name="label3_grub">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>181</width>
+        <height>39</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Загрузчик Grub</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::AutoText</enum>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+      <property name="margin">
+       <number>0</number>
+      </property>
+     </widget>
+     <widget class="QScrollArea" name="scroll_grub">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>50</y>
+        <width>601</width>
+        <height>231</height>
+       </rect>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollArea_grub">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>589</width>
+         <height>219</height>
+        </rect>
+       </property>
+       <widget class="QWidget" name="layoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>50</x>
+          <y>130</y>
+          <width>481</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="label_grub">
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+            </font>
+           </property>
+           <property name="locale">
+            <locale language="Russian" country="Russia"/>
+           </property>
+           <property name="text">
+            <string>Ожидание загрузочного меню (секунды)</string>
+           </property>
+           <property name="textFormat">
+            <enum>Qt::AutoText</enum>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+           <property name="margin">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="spin_grub">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>90</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="sizeIncrement">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::NoContextMenu</enum>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">padding: 0 10px 0 30px;
+background-image: url(:/img/m6.png);
+background-repeat: no-repeat;
+background-position: left center;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+           <property name="correctionMode">
+            <enum>QAbstractSpinBox::CorrectToPreviousValue</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QLineEdit" name="line_grub">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>60</y>
+          <width>521</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="contextMenuPolicy">
+         <enum>Qt::NoContextMenu</enum>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-radius:13px;
+padding: 0 10px 0 35px;
+background-image: url(:/img/m5.png);
+background-repeat: no-repeat;
+background-position: left center;</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_grub_3">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>20</y>
+          <width>251</width>
+          <height>39</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
+        <property name="locale">
+         <locale language="Russian" country="Russia"/>
+        </property>
+        <property name="text">
+         <string>Модули ядра при старте системы</string>
+        </property>
+        <property name="textFormat">
+         <enum>Qt::AutoText</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="margin">
+         <number>0</number>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+     <widget class="QPushButton" name="push_grub">
+      <property name="geometry">
+       <rect>
+        <x>480</x>
+        <y>260</y>
+        <width>121</width>
+        <height>35</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background:#24242c;</string>
+      </property>
+      <property name="text">
+       <string>Применить</string>
+      </property>
+      <property name="icon">
+       <iconset resource="klausres.qrc">
+        <normaloff>:/img/27.png</normaloff>:/img/27.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
+      </property>
+      <property name="autoRepeat">
+       <bool>false</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </widget>
    </widget>
    <widget class="QListWidget" name="list_sh">
     <property name="geometry">
      <rect>
-      <x>360</x>
+      <x>10</x>
       <y>40</y>
       <width>511</width>
       <height>481</height>
@@ -1606,253 +1814,13 @@ border:0;</string>
      <enum>Qt::NoFocus</enum>
     </property>
    </widget>
-   <widget class="QLabel" name="label2">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>10</y>
-      <width>731</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Полезные скрипты</string>
-    </property>
-    <property name="textFormat">
-     <enum>Qt::AutoText</enum>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-    </property>
-    <property name="margin">
-     <number>0</number>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label3_grub">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>100</y>
-      <width>231</width>
-      <height>39</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Другие настройки</string>
-    </property>
-    <property name="textFormat">
-     <enum>Qt::AutoText</enum>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-    </property>
-    <property name="margin">
-     <number>0</number>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label4_grub">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>210</y>
-      <width>231</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Системные журналы</string>
-    </property>
-    <property name="textFormat">
-     <enum>Qt::AutoText</enum>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-    </property>
-    <property name="margin">
-     <number>0</number>
-    </property>
-   </widget>
    <widget class="QListWidget" name="list_grub">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>240</y>
-      <width>971</width>
-      <height>281</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="focusPolicy">
-     <enum>Qt::NoFocus</enum>
-    </property>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>140</y>
-      <width>381</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_grub">
-     <item>
-      <widget class="QLabel" name="label_grub">
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="locale">
-        <locale language="Russian" country="Russia"/>
-       </property>
-       <property name="text">
-        <string>Ожидание загрузочного меню в секундах</string>
-       </property>
-       <property name="textFormat">
-        <enum>Qt::AutoText</enum>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-       </property>
-       <property name="margin">
-        <number>0</number>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="spin_grub">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>90</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="sizeIncrement">
-        <size>
-         <width>0</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="baseSize">
-        <size>
-         <width>0</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="contextMenuPolicy">
-        <enum>Qt::NoContextMenu</enum>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: #242424;
-border: 5px solid #28276b;
-border-radius: 13px;
-padding: 0 10px 0 30px;
-border-radius: 15px;
-background-image: url(:/img/m6.png);
-background-repeat: no-repeat;
-background-position: left center;</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-       </property>
-       <property name="correctionMode">
-        <enum>QAbstractSpinBox::CorrectToPreviousValue</enum>
-       </property>
-      </widget>
-     </item>
-    </layout>
-    <zorder>spin_grub</zorder>
-    <zorder>label_grub</zorder>
-   </widget>
-   <widget class="QLineEdit" name="line_grub">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
       <y>40</y>
-      <width>751</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="contextMenuPolicy">
-     <enum>Qt::NoContextMenu</enum>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: #242424;
-border: 5px solid #28276b;
-border-radius:13px;
-padding: 0 10px 0 35px;
-border-radius: 15px;
-background-image: url(:/img/m5.png);
-background-repeat: no-repeat;
-background-position: left center;</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_repair">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>260</y>
-      <width>321</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Конфигурации приложений</string>
-    </property>
-    <property name="textFormat">
-     <enum>Qt::AutoText</enum>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-    </property>
-    <property name="margin">
-     <number>0</number>
-    </property>
-   </widget>
-   <widget class="QListWidget" name="list_repair">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>290</y>
-      <width>341</width>
-      <height>231</height>
+      <width>611</width>
+      <height>481</height>
      </rect>
     </property>
     <property name="font">
@@ -1862,29 +1830,6 @@ background-position: left center;</string>
     </property>
     <property name="focusPolicy">
      <enum>Qt::NoFocus</enum>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="push_repair">
-    <property name="geometry">
-     <rect>
-      <x>300</x>
-      <y>480</y>
-      <width>30</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="icon">
-     <iconset resource="klausres.qrc">
-      <normaloff>:/img/1.png</normaloff>:/img/1.png</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>20</width>
-      <height>20</height>
-     </size>
     </property>
    </widget>
    <widget class="QScrollArea" name="scroll_site">
@@ -3142,25 +3087,375 @@ background-position: left center;</string>
      </widget>
     </widget>
    </widget>
-   <zorder>webEngineView</zorder>
-   <zorder>table_aur</zorder>
-   <zorder>list_grub</zorder>
-   <zorder>layoutWidget</zorder>
-   <zorder>label1</zorder>
-   <zorder>label2</zorder>
-   <zorder>label3_grub</zorder>
-   <zorder>label4_grub</zorder>
-   <zorder>line_grub</zorder>
-   <zorder>label_repair</zorder>
-   <zorder>list_repair</zorder>
-   <zorder>list_clear</zorder>
-   <zorder>push_repair</zorder>
-   <zorder>list_manager</zorder>
-   <zorder>list_sh</zorder>
-   <zorder>searchApp</zorder>
+   <widget class="QListWidget" name="list_bench">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>611</width>
+      <height>481</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
+   </widget>
+   <widget class="QScrollArea" name="scroll_repair">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>661</width>
+      <height>481</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QScrollArea{
+    background-color: #242424;
+    border: 5px solid #28276b;
+    border-radius: 13px;
+}</string>
+    </property>
+    <property name="widgetResizable">
+     <bool>true</bool>
+    </property>
+    <widget class="QWidget" name="scrollArea_repair">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>641</width>
+       <height>461</height>
+      </rect>
+     </property>
+     <widget class="QListWidget" name="list_clear">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>301</width>
+        <height>401</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QListWidget#list_clear{
+    background-color: #272727;
+    border-radius: 10px;
+    border: 1px solid #3d3d3d;
+}</string>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="list_repair">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>40</y>
+        <width>301</width>
+        <height>401</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QListWidget#list_repair{
+    background-color: #272727;
+    border-radius: 10px;
+    border: 1px solid #3d3d3d;
+}</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_repair">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>10</y>
+        <width>281</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Конфигурации приложений</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::AutoText</enum>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+      <property name="margin">
+       <number>0</number>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="push_repair">
+      <property name="geometry">
+       <rect>
+        <x>590</x>
+        <y>423</y>
+        <width>30</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="klausres.qrc">
+        <normaloff>:/img/1.png</normaloff>:/img/1.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_clear">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>291</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Очистка системы</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::AutoText</enum>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+      <property name="margin">
+       <number>0</number>
+      </property>
+     </widget>
+    </widget>
+   </widget>
    <zorder>tabWidget</zorder>
    <zorder>scroll_site</zorder>
+   <zorder>webEngineView</zorder>
+   <zorder>table_aur</zorder>
+   <zorder>label1</zorder>
+   <zorder>list_manager</zorder>
+   <zorder>searchApp</zorder>
+   <zorder>list_bench</zorder>
+   <zorder>list_grub</zorder>
+   <zorder>list_sh</zorder>
+   <zorder>scroll_repair</zorder>
   </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+     <kerning>true</kerning>
+    </font>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::NoContextMenu</enum>
+   </property>
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QToolBar#toolBar {
+background-color:#1f1f1f;
+border:0;
+}
+QToolBar#toolBar QToolButton {
+border:0;
+width:60px;
+padding: 10px 0;
+border-radius:10px;
+}
+QToolBar#toolBar QToolButton:hover,
+QToolBar#toolBar QToolButton:checked {
+background-color:#1a1a1a;
+ }</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::NoToolBarArea</set>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Vertical</enum>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>30</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonIconOnly</enum>
+   </property>
+   <property name="floatable">
+    <bool>true</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="action_1"/>
+   <addaction name="action_2"/>
+   <addaction name="action_7"/>
+   <addaction name="action_host"/>
+   <addaction name="action_17"/>
+   <addaction name="action_9"/>
+   <addaction name="action_8"/>
+   <addaction name="action_12"/>
+  </widget>
+  <widget class="QToolBar" name="toolBar_2">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="mouseTracking">
+    <bool>false</bool>
+   </property>
+   <property name="tabletTracking">
+    <bool>false</bool>
+   </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::NoContextMenu</enum>
+   </property>
+   <property name="acceptDrops">
+    <bool>false</bool>
+   </property>
+   <property name="windowTitle">
+    <string>toolBar_2</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QToolBar#toolBar_2{
+	background-color:#2d2b79;
+	border:0;
+}
+QToolBar#toolBar_2 QToolButton {
+	border:0;
+	width:100px;
+	padding: 16px 0;
+	border-radius:16px;
+	font-size:9pt;
+	margin-top:7px;
+}
+QToolBar#toolBar_2 QToolButton:hover {
+	background-color:#29286f;
+}</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::NoToolBarArea</set>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Vertical</enum>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextUnderIcon</enum>
+   </property>
+   <property name="floatable">
+    <bool>true</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>true</bool>
+   </attribute>
+   <addaction name="action_11"/>
+   <addaction name="action_addsh"/>
+   <addaction name="action_rmsh"/>
+   <addaction name="action_editsh"/>
+   <addaction name="action_35"/>
+   <addaction name="action_4"/>
+   <addaction name="action_5"/>
+   <addaction name="action_6"/>
+   <addaction name="action_16"/>
+   <addaction name="action_29"/>
+   <addaction name="action_28"/>
+   <addaction name="action_24"/>
+   <addaction name="action_25"/>
+   <addaction name="action_27"/>
+   <addaction name="action_30"/>
+   <addaction name="action_31"/>
+   <addaction name="action_32"/>
+   <addaction name="action_33"/>
+   <addaction name="action_34"/>
+   <addaction name="action_timer"/>
+   <addaction name="action_restart"/>
+   <addaction name="action_stop"/>
+   <addaction name="action_catalog"/>
+   <addaction name="action_bench"/>
+   <addaction name="action_system"/>
+   <addaction name="action_repair"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
   <widget class="QMenuBar" name="menubar">
    <property name="enabled">
     <bool>true</bool>
@@ -3236,7 +3531,7 @@ background-position: left center;</string>
     </property>
     <property name="geometry">
      <rect>
-      <x>407</x>
+      <x>443</x>
       <y>112</y>
       <width>218</width>
       <height>179</height>
@@ -3326,188 +3621,6 @@ background-position: left center;</string>
    <addaction name="menu_4"/>
    <addaction name="menu_5"/>
   </widget>
-  <widget class="QToolBar" name="toolBar">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-     <kerning>true</kerning>
-    </font>
-   </property>
-   <property name="focusPolicy">
-    <enum>Qt::NoFocus</enum>
-   </property>
-   <property name="contextMenuPolicy">
-    <enum>Qt::NoContextMenu</enum>
-   </property>
-   <property name="windowTitle">
-    <string>toolBar</string>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QToolBar#toolBar {
-background-color:#1f1f1f;
-border:0;
-}
-QToolBar#toolBar QToolButton {
-border:0;
-width:60px;
-padding: 10px 0;
-border-radius:10px;
-}
-QToolBar#toolBar QToolButton:hover,
-QToolBar#toolBar QToolButton:checked {
-background-color:#1a1a1a;
- }</string>
-   </property>
-   <property name="movable">
-    <bool>false</bool>
-   </property>
-   <property name="allowedAreas">
-    <set>Qt::NoToolBarArea</set>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Vertical</enum>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>30</width>
-     <height>30</height>
-    </size>
-   </property>
-   <property name="toolButtonStyle">
-    <enum>Qt::ToolButtonIconOnly</enum>
-   </property>
-   <property name="floatable">
-    <bool>true</bool>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>LeftToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-   <addaction name="action_1"/>
-   <addaction name="action_2"/>
-   <addaction name="action_7"/>
-   <addaction name="action_game"/>
-   <addaction name="action_host"/>
-   <addaction name="action_17"/>
-   <addaction name="action_8"/>
-   <addaction name="action_12"/>
-  </widget>
-  <widget class="QToolBar" name="toolBar_2">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="mouseTracking">
-    <bool>false</bool>
-   </property>
-   <property name="tabletTracking">
-    <bool>false</bool>
-   </property>
-   <property name="contextMenuPolicy">
-    <enum>Qt::NoContextMenu</enum>
-   </property>
-   <property name="acceptDrops">
-    <bool>false</bool>
-   </property>
-   <property name="windowTitle">
-    <string>toolBar_2</string>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QToolBar#toolBar_2{
-	background-color:#2d2b79;
-	border:0;
-}
-QToolBar#toolBar_2 QToolButton {
-	border:0;
-	width:100px;
-	padding: 16px 0;
-	border-radius:16px;
-	font-size:9pt;
-	margin-top:7px;
-}
-QToolBar#toolBar_2 QToolButton:hover {
-	background-color:#29286f;
-}</string>
-   </property>
-   <property name="movable">
-    <bool>false</bool>
-   </property>
-   <property name="allowedAreas">
-    <set>Qt::NoToolBarArea</set>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Vertical</enum>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>20</width>
-     <height>20</height>
-    </size>
-   </property>
-   <property name="toolButtonStyle">
-    <enum>Qt::ToolButtonTextUnderIcon</enum>
-   </property>
-   <property name="floatable">
-    <bool>true</bool>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>LeftToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>true</bool>
-   </attribute>
-   <addaction name="action_11"/>
-   <addaction name="action_addsh"/>
-   <addaction name="action_rmsh"/>
-   <addaction name="action_editsh"/>
-   <addaction name="action_35"/>
-   <addaction name="action_4"/>
-   <addaction name="action_5"/>
-   <addaction name="action_6"/>
-   <addaction name="action_16"/>
-   <addaction name="action_sh"/>
-   <addaction name="action_29"/>
-   <addaction name="action_28"/>
-   <addaction name="action_18"/>
-   <addaction name="action_24"/>
-   <addaction name="action_25"/>
-   <addaction name="action_26"/>
-   <addaction name="action_27"/>
-   <addaction name="action_30"/>
-   <addaction name="action_31"/>
-   <addaction name="action_32"/>
-   <addaction name="action_33"/>
-   <addaction name="action_34"/>
-   <addaction name="action_timer"/>
-   <addaction name="action_restart"/>
-   <addaction name="action_stop"/>
-   <addaction name="action_catalog"/>
-  </widget>
-  <widget class="QStatusBar" name="statusBar"/>
   <action name="action_1">
    <property name="checkable">
     <bool>true</bool>
@@ -3566,18 +3679,6 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="toolTip">
     <string>Помощь по Arch</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_sh">
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/19.png</normaloff>:/img/19.png</iconset>
-   </property>
-   <property name="text">
-    <string>Скрипты</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -3739,28 +3840,13 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="icon">
     <iconset resource="klausres.qrc">
-     <normaloff>:/img/4.png</normaloff>:/img/4.png</iconset>
+     <normaloff>:/img/19.png</normaloff>:/img/19.png</iconset>
    </property>
    <property name="text">
     <string>Автоматизация</string>
    </property>
    <property name="toolTip">
     <string>Автоматизация</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_18">
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/20.png</normaloff>:/img/20.png</iconset>
-   </property>
-   <property name="text">
-    <string>Ярлыки</string>
-   </property>
-   <property name="toolTip">
-    <string>Ярлыки</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -3791,21 +3877,6 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="toolTip">
     <string>Кэш пакетов</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_26">
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/27.png</normaloff>:/img/27.png</iconset>
-   </property>
-   <property name="text">
-    <string>Применить</string>
-   </property>
-   <property name="toolTip">
-    <string>Применить</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4214,6 +4285,57 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="text">
     <string>Обновить</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_bench">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/4.png</normaloff>:/img/4.png</iconset>
+   </property>
+   <property name="text">
+    <string>Бенчмарки</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_system">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/7.png</normaloff>:/img/7.png</iconset>
+   </property>
+   <property name="text">
+    <string>Система</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_26">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/27.png</normaloff>:/img/27.png</iconset>
+   </property>
+   <property name="text">
+    <string>Применить</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_repair">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/42.png</normaloff>:/img/42.png</iconset>
+   </property>
+   <property name="text">
+    <string>Оптимизиция</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>

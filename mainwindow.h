@@ -106,6 +106,8 @@ private:
                                          ":/journals/pacman.sh",
                                          ":/journals/top-pkg.sh"};
 
+    QStringList benchResourcePaths = {};
+
 protected: // события сворачивания окна
     void closeEvent(QCloseEvent *event) override; // объявление метода closeEvent()
 
@@ -125,15 +127,12 @@ public slots:
     void on_action_12_triggered();
     void on_action_16_triggered();
     void on_action_17_triggered();
-    void on_action_18_triggered();
     void on_action_24_triggered();
     void on_action_25_triggered();
-    void on_action_26_triggered();
     void on_action_27_triggered();
     void on_action_28_triggered();
     void on_action_29_triggered();
     void on_action_30_triggered();
-    void on_action_sh_triggered();
 
     void sendNotification(const QString& title, const QString& message);
 
@@ -168,6 +167,7 @@ private slots:
     void openDirectory(const QString &dirPath);
     void removeToolButtonTooltips(QToolBar* toolbar);
     void on_list_itemDoubleClicked(QListWidgetItem *item, const QString& scriptDir);
+    void on_list_bench_itemDoubleClicked(QListWidgetItem *item);
     void on_list_sh_itemDoubleClicked(QListWidgetItem *item);
     void on_list_grub_itemDoubleClicked(QListWidgetItem *item);
     void on_list_clear_itemDoubleClicked(QListWidgetItem *item);
@@ -219,6 +219,10 @@ private slots:
 
     void openUrl(const QString& url);
 
+    void on_action_bench_triggered();
+    void on_action_system_triggered();
+    void on_push_grub_clicked();
+    void on_action_repair_triggered();
 };
 
 #endif // MAINWINDOW_H

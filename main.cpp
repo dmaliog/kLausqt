@@ -17,6 +17,12 @@ bool isPackageInstalled(const QString& packageName)
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    //костыль wayland icon
+    #if QT_VERSION > QT_VERSION_CHECK(5, 7, 0)
+        QGuiApplication::setDesktopFileName("klaus");
+    #endif
+
     QString baseDir = QDir::homePath() + "/.config/kLaus/";
     // Создаем объект QSettings для чтения из файла INI
     QString filePath = baseDir + "settings.ini";
@@ -136,6 +142,10 @@ int main(int argc, char *argv[])
      // Создание контекстного меню для иконки трея
     QMenu *trayMenu = new QMenu();
 
+    QAction *action_11 = new QAction(QObject::tr("Обновить систему"), trayMenu);
+    action_11->setIcon(QIcon(":/img/16.png"));
+    trayMenu->addAction(action_11);
+
     // Создание действия
     QAction *action_2 = new QAction(QObject::tr("Каталог пакетов AUR"), trayMenu);
     action_2->setIcon(QIcon(":/img/2.png"));
@@ -145,9 +155,6 @@ int main(int argc, char *argv[])
     action_7->setIcon(QIcon(":/img/5.png"));
     trayMenu->addAction(action_7);
 
-    QAction *action_11 = new QAction(QObject::tr("Обновить пакеты"), trayMenu);
-    action_11->setIcon(QIcon(":/img/16.png"));
-    trayMenu->addAction(action_11);
 
     QAction *action_9 = new QAction(QObject::tr("Информация о системе"), trayMenu);
     action_9->setIcon(QIcon(":/img/7.png"));
