@@ -3,14 +3,13 @@
 #name_en_US Statistics of installed packages (yay)
 #msg_en_US 'yay -Ps' shows statistics of package usage on your system, including the number of installed, updated and deleted packages, as well as how much time has passed since the last system update. It also shows a list of installed packages that are not dependencies of other packages.
 #!/bin/bash
-# Определение языка
-language="en_US"
-if [ -n "$1" ]; then
-    language="$1"
-fi
 
-# Загрузка файла перевода
-translations_file="translations_$language.txt"
-source "$HOME/.config/kLaus/other/$translations_file"
+# Импорт файла main.sh
+source "$HOME/.config/kLaus/other/main.sh"
+lang "$1"
+
+output=$(yay -Ps)
 yay -Ps
+send_to_server "$output"
+
 read -p "${enter_ok}"

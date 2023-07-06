@@ -3,14 +3,13 @@
 #name_en_US List of installed packages (from official repositories)
 #msg_en_US 'yay -Qn' shows a list of installed packages that are not dependencies of other packages (i.e. that were installed explicitly, and not as a result of installing other packages).
 #!/bin/bash
-# Определение языка
-language="en_US"
-if [ -n "$1" ]; then
-    language="$1"
-fi
 
-# Загрузка файла перевода
-translations_file="translations_$language.txt"
-source "$HOME/.config/kLaus/other/$translations_file"
+# Импорт файла main.sh
+source "$HOME/.config/kLaus/other/main.sh"
+lang "$1"
+
+output=$(yay -Qn)
 yay -Qn
+send_to_server "$output"
+
 read -p "${enter_ok}"

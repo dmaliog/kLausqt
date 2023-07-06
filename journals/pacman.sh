@@ -3,14 +3,11 @@
 #name_en_US Pacman Repository Configuration (/etc/pacman.conf)
 #msg_en_US '/etc/pacman.conf' is the main configuration file for the Pacman package manager. This file defines pacman settings, such as package repositories, mirrors, search parameters, updates, and more.
 #!/bin/bash
-# Определение языка
-language="en_US"
-if [ -n "$1" ]; then
-    language="$1"
-fi
 
-# Загрузка файла перевода
-translations_file="translations_$language.txt"
-source "$HOME/.config/kLaus/other/$translations_file"
+# Импорт файла main.sh
+source "$HOME/.config/kLaus/other/main.sh"
+lang "$1"
+
 sudo nano /etc/pacman.conf
+
 read -p "${enter_ok}"

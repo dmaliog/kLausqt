@@ -3,15 +3,10 @@
 #name_en_US Downloaded Pacman Packages
 #msg_en_US /var/cache/pacman/pkg: Downloaded Pacman packages are stored in this folder. If you do not plan to roll back to previous versions of packages, then you can delete the old packages to free up space. However, keep in mind that if you want to delete packages, you will need to download them again if necessary.
 #!/bin/bash
-# Определение языка
-language="en_US"
-if [ -n "$1" ]; then
-    language="$1"
-fi
 
-# Загрузка файла перевода
-translations_file="translations_$language.txt"
-source "$HOME/.config/kLaus/other/$translations_file"
+# Импорт файла main.sh
+source "$HOME/.config/kLaus/other/main.sh"
+lang "$1"
 
 # Подсчет размера папки /var/cache/pacman/pkg/
 folder_size=$(du -sh /var/cache/pacman/pkg/ | awk '{print $1}')

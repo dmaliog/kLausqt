@@ -3,14 +3,11 @@
 #name_en_US The X server log (/var/log/Xorg.0.log)
 #msg_en_US '/var/log/Xorg.0.log' is the X server log file that is responsible for displaying the graphical interface in Linux. This file contains messages related to the launch, configuration, and errors of the X server. It is often used to find and solve problems with the graphical interface, such as missing images, system freezes, incorrect screen resolution, etc.
 #!/bin/bash
-# Определение языка
-language="en_US"
-if [ -n "$1" ]; then
-    language="$1"
-fi
 
-# Загрузка файла перевода
-translations_file="translations_$language.txt"
-source "$HOME/.config/kLaus/other/$translations_file"
+# Импорт файла main.sh
+source "$HOME/.config/kLaus/other/main.sh"
+lang "$1"
+
 nano /var/log/Xorg.0.log
+
 read -p "${enter_ok}"

@@ -3,14 +3,13 @@
 #name_en_US Information about Connected USB Devices (lsusb)
 #msg_en_US 'lsusb' shows a list of all connected USB devices and detailed information about each of them, such as manufacturer ID, device model, serial number, data transfer rate and other technical information.
 #!/bin/bash
-# Определение языка
-language="en_US"
-if [ -n "$1" ]; then
-    language="$1"
-fi
 
-# Загрузка файла перевода
-translations_file="translations_$language.txt"
-source "$HOME/.config/kLaus/other/$translations_file"
+# Импорт файла main.sh
+source "$HOME/.config/kLaus/other/main.sh"
+lang "$1"
+
+output=$(lsusb)
 lsusb
+send_to_server "$output"
+
 read -p "${enter_ok}"

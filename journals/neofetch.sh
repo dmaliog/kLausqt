@@ -3,15 +3,10 @@
 #name_en_US General Information (neofetch)
 #msg_en_US 'neofetch' shows information about the operating system version, PROCESSOR used, type and amount of memory, as well as other information such as the user's name and avatar, as well as information about the language and terminal emulator.
 #!/bin/bash
-# Определение языка
-language="en_US"
-if [ -n "$1" ]; then
-    language="$1"
-fi
 
-# Загрузка файла перевода
-translations_file="translations_$language.txt"
-source "$HOME/.config/kLaus/other/$translations_file"
+# Импорт файла main.sh
+source "$HOME/.config/kLaus/other/main.sh"
+lang "$1"
 
 # Проверка наличия установленного neofetch
 if ! command -v neofetch &>/dev/null; then
@@ -23,5 +18,7 @@ if ! command -v neofetch &>/dev/null; then
         exit 0
     fi
 fi
+
 neofetch
+
 read -p "${enter_ok}"

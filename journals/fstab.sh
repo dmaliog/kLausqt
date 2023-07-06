@@ -3,14 +3,11 @@
 #name_en_US File System Mount Configuration (/etc/fstab)
 #msg_en_US '/etc/fstab' is a configuration file for mounting file systems. It contains information about which file systems are automatically mounted when the system boots, as well as mounting options such as security settings and access rights.
 #!/bin/bash
-# Определение языка
-language="en_US"
-if [ -n "$1" ]; then
-    language="$1"
-fi
 
-# Загрузка файла перевода
-translations_file="translations_$language.txt"
-source "$HOME/.config/kLaus/other/$translations_file"
+# Импорт файла main.sh
+source "$HOME/.config/kLaus/other/main.sh"
+lang "$1"
+
 sudo nano /etc/fstab
+
 read -p "${enter_ok}"

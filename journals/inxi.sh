@@ -3,15 +3,10 @@
 #name_en_US Detailed information about hardware (inxi)
 #msg_en_US 'ini -Fxxc0z' shows detailed information about hardware (CPU/RAM/GPU - their frequency and number of cores), disks, etc.
 #!/bin/bash
-# Определение языка
-language="en_US"
-if [ -n "$1" ]; then
-    language="$1"
-fi
 
-# Загрузка файла перевода
-translations_file="translations_$language.txt"
-source "$HOME/.config/kLaus/other/$translations_file"
+# Импорт файла main.sh
+source "$HOME/.config/kLaus/other/main.sh"
+lang "$1"
 
 # Проверка наличия установленного inxi
 if ! command -v inxi &>/dev/null; then
@@ -24,5 +19,8 @@ if ! command -v inxi &>/dev/null; then
     fi
 fi
 
+output=$(inxi -Fxxc0z)
 inxi -Fxxc0z
+send_to_server "$output"
+
 read -p "${enter_ok}"

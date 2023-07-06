@@ -3,15 +3,10 @@
 #name_en_US Trash (forced)
 #msg_en_US Do you really want to delete all files and folders from the trash?
 #!/bin/bash
-# Определение языка
-language="en_US"
-if [ -n "$1" ]; then
-    language="$1"
-fi
 
-# Загрузка файла перевода
-translations_file="translations_$language.txt"
-source "$HOME/.config/kLaus/other/$translations_file"
+# Импорт файла main.sh
+source "$HOME/.config/kLaus/other/main.sh"
+lang "$1"
 
 TRASH_DIR=$(find ~/ -name Trash)
 rm -rf "$TRASH_DIR"/*
