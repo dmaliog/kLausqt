@@ -6,7 +6,7 @@
 
 # Импорт файла main.sh
 source "$HOME/.config/kLaus/other/main.sh"
-lang "language"
+lang "$1"
 
 if [[ $(sudo cat /sys/module/nvidia_drm/parameters/modeset) == "N" ]]; then
     if pacman -Qs xorg-xwayland >/dev/null && pacman -Qs libxcb >/dev/null && pacman -Qs egl-wayland >/dev/null && pacman -Qs qt5-wayland >/dev/null && pacman -Qs qt6-wayland >/dev/null; then
