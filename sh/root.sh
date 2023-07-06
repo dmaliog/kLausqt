@@ -3,15 +3,11 @@
 #name_en_US Remove SUDO password (caution!)
 #msg_en_US Do you really want to remove sudo password for this user?
 #!/bin/bash
-# Определение языка
-language="en_US"
-if [ -n "$1" ]; then
-    language="$1"
-fi
 
-# Загрузка файла перевода
-translations_file="translations_$language.txt"
-source "$HOME/.config/kLaus/other/$translations_file"
+# Импорт файла main.sh
+source "$HOME/.config/kLaus/other/main.sh"
+lang "$1"
+
 
 # получаем имя текущего пользователя
 username=$(whoami)

@@ -3,15 +3,10 @@
 #name_en_US Install Local Package
 #msg_en_US Do you really want to install the local package? Note: Install only packages created using kLaus
 #!/bin/bash
-# Определение языка
-language="en_US"
-if [ -n "$1" ]; then
-    language="$1"
-fi
 
-# Загрузка файла перевода
-translations_file="translations_$language.txt"
-source "$HOME/.config/kLaus/other/$translations_file"
+# Импорт файла main.sh
+source "$HOME/.config/kLaus/other/main.sh"
+lang "$1"
 
 # Запрос пути к архиву программы
 archive_path=$(zenity --file-selection --title="${path}")

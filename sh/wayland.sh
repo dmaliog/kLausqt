@@ -3,16 +3,10 @@
 #name_en_US Add Wayland+Nvidia support to KDE
 #msg_en_US Do you really want to connect Wayland to Nvidia?
 #!/bin/bash
-#!/bin/bash
-# Определение языка
-language="en_US"
-if [ -n "$1" ]; then
-    language="$1"
-fi
 
-# Загрузка файла перевода
-translations_file="translations_$language.txt"
-source "$HOME/.config/kLaus/other/$translations_file"
+# Импорт файла main.sh
+source "$HOME/.config/kLaus/other/main.sh"
+lang "language"
 
 if [[ $(sudo cat /sys/module/nvidia_drm/parameters/modeset) == "N" ]]; then
     if pacman -Qs xorg-xwayland >/dev/null && pacman -Qs libxcb >/dev/null && pacman -Qs egl-wayland >/dev/null && pacman -Qs qt5-wayland >/dev/null && pacman -Qs qt6-wayland >/dev/null; then

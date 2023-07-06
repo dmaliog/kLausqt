@@ -3,15 +3,10 @@
 #name_en_US Install 1C Enterprise [Training Version]
 #msg_en_US Do you really want to install 1C Enterprise? To install, you will need to download the package from the 1C website (https://online.1c.ru/catalog/free/28766016 /) for Linux.
 #!/bin/bash
-# Определение языка
-language="en_US"
-if [ -n "$1" ]; then
-    language="$1"
-fi
 
-# Загрузка файла перевода
-translations_file="translations_$language.txt"
-source "$HOME/.config/kLaus/other/$translations_file"
+# Импорт файла main.sh
+source "$HOME/.config/kLaus/other/main.sh"
+lang "$1"
 
 # Проверка наличия пакетов
 packages=("enchant1.6" "webkitgtk2-bin" "pkgextract" "imagemagick")

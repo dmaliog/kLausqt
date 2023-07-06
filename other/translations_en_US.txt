@@ -61,3 +61,5 @@ noinstall="Installation canceled"
 install="Installation"
 
 inxi="You don't have the inxi package installed. Do you want to install it? (y/n) "
+
+link="Link:"

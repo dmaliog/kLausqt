@@ -3,15 +3,10 @@
 #name_en_US Change PKGBUILD package before installation
 #msg_en_US Do you really want to change the PKGBUILD package before installing?
 #!/bin/bash
-# Определение языка
-language="en_US"
-if [ -n "$1" ]; then
-    language="$1"
-fi
 
-# Загрузка файла перевода
-translations_file="translations_$language.txt"
-source "$HOME/.config/kLaus/other/$translations_file"
+# Импорт файла main.sh
+source "$HOME/.config/kLaus/other/main.sh"
+lang "$1"
 
 if [ -n "$2" ]; then
     program_name="$2"

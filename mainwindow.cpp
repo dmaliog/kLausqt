@@ -15,7 +15,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "4.5";
+QString currentVersion = "4.6";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -2118,16 +2118,12 @@ void MainWindow::loadingListWidget()
     loadScripts(baseDir + "journals/", ui->list_grub);
     loadScripts(baseDir + "bench/", ui->list_bench);
 
-    QString notifyFileName = QFileInfo(":/other/notify.png").fileName();
-    QString notifyFilePath = baseDir + "other/" + notifyFileName;
-    QString translationsEnFilePath = baseDir + "other/" + "translations_en_US.txt";
-    QString translationsRuFilePath = baseDir + "other/" + "translations_ru_RU.txt";
-
     QDir().mkpath(baseDir + "other/");
 
-    QFile::copy(":/other/notify.png", notifyFilePath);
-    QFile::copy(":/other/translations_en_US.txt", translationsEnFilePath);
-    QFile::copy(":/other/translations_ru_RU.txt", translationsRuFilePath);
+    QFile::copy(":/other/notify.png", baseDir + "other/notify.png");
+    QFile::copy(":/other/translations_en_US.txt", baseDir + "other/translations_en_US.txt");
+    QFile::copy(":/other/translations_ru_RU.txt", baseDir + "other/translations_ru_RU.txt");
+    QFile::copy(":/other/main.sh", baseDir + "other/main.sh");
 
 }
 
@@ -2619,6 +2615,7 @@ void MainWindow::on_list_sh_itemDoubleClicked(QListWidgetItem *item) {
     QString scriptDir = baseDir + "sh/";
     handleListItemDoubleClick(item, scriptDir);
 }
+
 
 void MainWindow::on_list_grub_itemDoubleClicked(QListWidgetItem *item) {
     QString scriptDir = baseDir + "journals/";
