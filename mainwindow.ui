@@ -52,6 +52,9 @@
    <iconset resource="klausres.qrc">
     <normaloff>:/img/2.png</normaloff>:/img/2.png</iconset>
   </property>
+  <property name="toolTipDuration">
+   <number>0</number>
+  </property>
   <property name="styleSheet">
    <string notr="true">* {
     color: #ffffff;
@@ -485,7 +488,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>6</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab_aursettings">
      <attribute name="title">
@@ -513,7 +516,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>210</y>
+        <y>140</y>
         <width>371</width>
         <height>21</height>
        </rect>
@@ -531,9 +534,9 @@ QTabWidget#tabWidget QTabBar::tab:selected {
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>240</y>
-        <width>601</width>
-        <height>211</height>
+        <y>170</y>
+        <width>611</width>
+        <height>271</height>
        </rect>
       </property>
       <property name="layoutDirection">
@@ -543,7 +546,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
        <string notr="true">background:#272727;</string>
       </property>
       <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOn</enum>
+       <enum>Qt::ScrollBarAsNeeded</enum>
       </property>
       <property name="horizontalScrollBarPolicy">
        <enum>Qt::ScrollBarAsNeeded</enum>
@@ -556,16 +559,22 @@ QTabWidget#tabWidget QTabBar::tab:selected {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>581</width>
-         <height>211</height>
+         <width>599</width>
+         <height>259</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="1" column="0" colspan="2">
+        <item row="1" column="0">
          <widget class="QLabel" name="label_cache">
           <property name="minimumSize">
            <size>
             <width>0</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
             <height>40</height>
            </size>
           </property>
@@ -579,11 +588,59 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           </property>
          </widget>
         </item>
-        <item row="2" column="0" colspan="2">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_update">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Частота обновления пакетов</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0" colspan="2">
+         <widget class="QCheckBox" name="check_updateinstall">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Проверять актуальность системы перед установкой новых пакетов</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
          <widget class="QLabel" name="label_rating">
           <property name="minimumSize">
            <size>
             <width>0</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
             <height>40</height>
            </size>
           </property>
@@ -597,13 +654,25 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           </property>
          </widget>
         </item>
-        <item row="2" column="2">
+        <item row="2" column="1">
          <widget class="QSpinBox" name="spin_rating">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
           </property>
           <property name="contextMenuPolicy">
            <enum>Qt::NoContextMenu</enum>
@@ -619,13 +688,25 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           </property>
          </widget>
         </item>
-        <item row="1" column="2">
+        <item row="1" column="1">
          <widget class="QComboBox" name="combo_cache">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>180</width>
+            <height>16777215</height>
+           </size>
           </property>
           <property name="styleSheet">
            <string notr="true"/>
@@ -653,25 +734,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           </item>
          </widget>
         </item>
-        <item row="0" column="0" colspan="2">
-         <widget class="QLabel" name="label_update">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Частота обновления пакетов</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
+        <item row="0" column="1">
          <widget class="QTimeEdit" name="time_update">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -685,6 +748,12 @@ QTabWidget#tabWidget QTabBar::tab:selected {
             <height>40</height>
            </size>
           </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
           <property name="contextMenuPolicy">
            <enum>Qt::NoContextMenu</enum>
           </property>
@@ -693,60 +762,16 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           </property>
          </widget>
         </item>
-        <item row="3" column="0" colspan="3">
-         <widget class="QScrollArea" name="scroll_otheraur">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>55</height>
-           </size>
-          </property>
-          <property name="layoutDirection">
-           <enum>Qt::LeftToRight</enum>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background:#272727;</string>
-          </property>
-          <property name="widgetResizable">
-           <bool>true</bool>
-          </property>
-          <widget class="QWidget" name="scrollArea_otheraur">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>551</width>
-             <height>43</height>
-            </rect>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_2">
-            <item>
-             <widget class="QCheckBox" name="check_updateinstall">
-              <property name="text">
-               <string>Проверять актуальность системы перед установкой новых пакетов</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </widget>
-        </item>
        </layout>
       </widget>
      </widget>
      <widget class="QScrollArea" name="scroll_elements">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>50</y>
-        <width>601</width>
-        <height>141</height>
+        <x>220</x>
+        <y>10</y>
+        <width>411</width>
+        <height>111</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -760,13 +785,18 @@ QTabWidget#tabWidget QTabBar::tab:selected {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>589</width>
-         <height>129</height>
+         <width>399</width>
+         <height>99</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="2">
          <widget class="QCheckBox" name="check_voices">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
           <property name="text">
            <string>Голоса</string>
           </property>
@@ -774,6 +804,11 @@ QTabWidget#tabWidget QTabBar::tab:selected {
         </item>
         <item row="0" column="1">
          <widget class="QCheckBox" name="check_version">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
           <property name="text">
            <string>Версия</string>
           </property>
@@ -781,6 +816,11 @@ QTabWidget#tabWidget QTabBar::tab:selected {
         </item>
         <item row="1" column="1">
          <widget class="QCheckBox" name="check_lastupdate">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
           <property name="text">
            <string>Последнее обновление</string>
           </property>
@@ -788,6 +828,11 @@ QTabWidget#tabWidget QTabBar::tab:selected {
         </item>
         <item row="1" column="0">
          <widget class="QCheckBox" name="check_popularity">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
           <property name="text">
            <string>Популярность</string>
           </property>
@@ -795,6 +840,11 @@ QTabWidget#tabWidget QTabBar::tab:selected {
         </item>
         <item row="0" column="0">
          <widget class="QCheckBox" name="check_description">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
           <property name="text">
            <string>Описание</string>
           </property>
@@ -1135,9 +1185,9 @@ padding-right:55px;</string>
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>260</y>
-        <width>591</width>
-        <height>191</height>
+        <y>170</y>
+        <width>611</width>
+        <height>272</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -1151,12 +1201,127 @@ padding-right:55px;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>571</width>
-         <height>210</height>
+         <width>599</width>
+         <height>260</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_4">
-        <item row="0" column="0">
+        <item row="3" column="0">
+         <widget class="QCheckBox" name="check_animload">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="tabletTracking">
+           <bool>false</bool>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>Показывать анимацию загрузки</string>
+          </property>
+          <property name="autoRepeat">
+           <bool>false</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+          <property name="tristate">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_lang">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Язык</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QComboBox" name="combo_lang">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <item>
+           <property name="text">
+            <string>Русский</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>English</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QComboBox" name="combo_animload">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>Химический процесс</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Косатки</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="1" column="0">
          <widget class="QLabel" name="label_mainpage">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -1186,13 +1351,19 @@ padding-right:55px;</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
+        <item row="1" column="1">
          <widget class="QComboBox" name="combo_mainpage">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>16777215</height>
+           </size>
           </property>
           <property name="styleSheet">
            <string notr="true"/>
@@ -1244,111 +1415,61 @@ padding-right:55px;</string>
           </item>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_lang">
+        <item row="4" column="0" colspan="2">
+         <widget class="QCheckBox" name="check_trayon">
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
             <height>40</height>
            </size>
           </property>
           <property name="font">
            <font>
-            <pointsize>12</pointsize>
+            <pointsize>10</pointsize>
            </font>
-          </property>
-          <property name="text">
-           <string>Язык</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0" colspan="2">
-         <widget class="QScrollArea" name="scroll_othersetting">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>100</height>
-           </size>
-          </property>
-          <property name="widgetResizable">
-           <bool>true</bool>
-          </property>
-          <widget class="QWidget" name="scrollAreaWidgetContents_2">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>541</width>
-             <height>88</height>
-            </rect>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout">
-            <item>
-             <widget class="QCheckBox" name="check_trayon">
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="text">
-               <string>Закрывать без сворачивания в трей</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="check_repair">
-              <property name="tabletTracking">
-               <bool>false</bool>
-              </property>
-              <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="text">
-               <string>Создать резервную копию при удалении конфигураций</string>
-              </property>
-              <property name="autoRepeat">
-               <bool>false</bool>
-              </property>
-              <property name="autoExclusive">
-               <bool>false</bool>
-              </property>
-              <property name="tristate">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QComboBox" name="combo_lang">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
           </property>
           <property name="styleSheet">
            <string notr="true"/>
           </property>
-          <item>
-           <property name="text">
-            <string>Русский</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>English</string>
-           </property>
-          </item>
+          <property name="text">
+           <string>Закрывать без сворачивания в трей</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0" colspan="2">
+         <widget class="QCheckBox" name="check_repair">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="tabletTracking">
+           <bool>false</bool>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>Создать резервную копию при удалении конфигураций</string>
+          </property>
+          <property name="autoRepeat">
+           <bool>false</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+          <property name="tristate">
+           <bool>false</bool>
+          </property>
          </widget>
         </item>
        </layout>
@@ -1358,7 +1479,7 @@ padding-right:55px;</string>
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>230</y>
+        <y>140</y>
         <width>451</width>
         <height>21</height>
        </rect>
@@ -1399,10 +1520,10 @@ padding-right:55px;</string>
      <widget class="QScrollArea" name="scroll_volume">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>50</y>
-        <width>591</width>
-        <height>161</height>
+        <x>240</x>
+        <y>10</y>
+        <width>391</width>
+        <height>111</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -1416,17 +1537,11 @@ padding-right:55px;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>579</width>
-         <height>149</height>
+         <width>379</width>
+         <height>99</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_5">
-        <item row="0" column="0">
-         <widget class="QDial" name="dial_volmenu"/>
-        </item>
-        <item row="0" column="1">
-         <widget class="QDial" name="dial_volnotify"/>
-        </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_volmenu">
           <property name="text">
@@ -1437,6 +1552,9 @@ padding-right:55px;</string>
           </property>
          </widget>
         </item>
+        <item row="0" column="1">
+         <widget class="QDial" name="dial_volnotify"/>
+        </item>
         <item row="1" column="1">
          <widget class="QLabel" name="label_volnotify">
           <property name="text">
@@ -1446,6 +1564,9 @@ padding-right:55px;</string>
            <set>Qt::AlignCenter</set>
           </property>
          </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QDial" name="dial_volmenu"/>
         </item>
        </layout>
       </widget>
@@ -1801,7 +1922,7 @@ background-position: left center;</string>
      <rect>
       <x>10</x>
       <y>40</y>
-      <width>511</width>
+      <width>611</width>
       <height>481</height>
      </rect>
     </property>
@@ -3262,7 +3383,6 @@ background-position: left center;</string>
      </widget>
     </widget>
    </widget>
-   <zorder>tabWidget</zorder>
    <zorder>scroll_site</zorder>
    <zorder>webEngineView</zorder>
    <zorder>table_aur</zorder>
@@ -3270,9 +3390,10 @@ background-position: left center;</string>
    <zorder>list_manager</zorder>
    <zorder>searchApp</zorder>
    <zorder>list_bench</zorder>
+   <zorder>scroll_repair</zorder>
    <zorder>list_grub</zorder>
    <zorder>list_sh</zorder>
-   <zorder>scroll_repair</zorder>
+   <zorder>tabWidget</zorder>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="enabled">
@@ -3298,6 +3419,9 @@ background-position: left center;</string>
    </property>
    <property name="windowTitle">
     <string>toolBar</string>
+   </property>
+   <property name="toolTipDuration">
+    <number>0</number>
    </property>
    <property name="layoutDirection">
     <enum>Qt::LeftToRight</enum>
@@ -3383,6 +3507,12 @@ background-color:#1a1a1a;
    </property>
    <property name="windowTitle">
     <string>toolBar_2</string>
+   </property>
+   <property name="toolTip">
+    <string notr="true"/>
+   </property>
+   <property name="toolTipDuration">
+    <number>0</number>
    </property>
    <property name="styleSheet">
     <string notr="true">QToolBar#toolBar_2{
@@ -3794,6 +3924,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    <property name="text">
     <string>Запустить</string>
    </property>
+   <property name="toolTip">
+    <string notr="true"> </string>
+   </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
@@ -3805,6 +3938,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="text">
     <string>Удалить</string>
+   </property>
+   <property name="toolTip">
+    <string notr="true"> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -3818,6 +3954,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    <property name="text">
     <string>Установить</string>
    </property>
+   <property name="toolTip">
+    <string notr="true"> </string>
+   </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
@@ -3829,6 +3968,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="text">
     <string>Наш выбор</string>
+   </property>
+   <property name="toolTip">
+    <string notr="true"> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -3861,7 +4003,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Сироты</string>
    </property>
    <property name="toolTip">
-    <string>Сироты</string>
+    <string notr="true"> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -3876,7 +4018,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Кэш пакетов</string>
    </property>
    <property name="toolTip">
-    <string>Кэш пакетов</string>
+    <string notr="true"> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -3891,7 +4033,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Журналы</string>
    </property>
    <property name="toolTip">
-    <string>Журналы</string>
+    <string notr="true"> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -3906,7 +4048,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Приложение</string>
    </property>
    <property name="toolTip">
-    <string>Приложение</string>
+    <string notr="true"> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -3921,7 +4063,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>AUR</string>
    </property>
    <property name="toolTip">
-    <string>AUR</string>
+    <string notr="true"> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -3936,7 +4078,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>PKGBUILD</string>
    </property>
    <property name="toolTip">
-    <string>PKGBUILD</string>
+    <string notr="true"> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -3951,7 +4093,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Домашняя</string>
    </property>
    <property name="toolTip">
-    <string>Домашняя</string>
+    <string notr="true"> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -3966,7 +4108,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Обновить</string>
    </property>
    <property name="toolTip">
-    <string>Обновить</string>
+    <string notr="true"> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -3981,7 +4123,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Скопировать</string>
    </property>
    <property name="toolTip">
-    <string>Скопировать</string>
+    <string notr="true"> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -3996,7 +4138,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>О пакете</string>
    </property>
    <property name="toolTip">
-    <string>О пакете</string>
+    <string notr="true"> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4011,7 +4153,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Назад</string>
    </property>
    <property name="toolTip">
-    <string>Назад</string>
+    <string notr="true"> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4106,6 +4248,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    <property name="text">
     <string>Добавить</string>
    </property>
+   <property name="toolTip">
+    <string notr="true"> </string>
+   </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
@@ -4117,6 +4262,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="text">
     <string>Удалить</string>
+   </property>
+   <property name="toolTip">
+    <string notr="true"> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4130,6 +4278,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    <property name="text">
     <string>Изменить</string>
    </property>
+   <property name="toolTip">
+    <string notr="true"> </string>
+   </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
@@ -4141,6 +4292,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="text">
     <string>Таймеры</string>
+   </property>
+   <property name="toolTip">
+    <string notr="true"> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4250,6 +4404,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    <property name="text">
     <string>Рестарт</string>
    </property>
+   <property name="toolTip">
+    <string notr="true"> </string>
+   </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
@@ -4261,6 +4418,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="text">
     <string>Остановить</string>
+   </property>
+   <property name="toolTip">
+    <string notr="true"> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4274,6 +4434,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    <property name="text">
     <string>Каталог</string>
    </property>
+   <property name="toolTip">
+    <string notr="true"> </string>
+   </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
@@ -4285,6 +4448,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="text">
     <string>Обновить</string>
+   </property>
+   <property name="toolTip">
+    <string notr="true"> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4301,6 +4467,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    <property name="text">
     <string>Бенчмарки</string>
    </property>
+   <property name="toolTip">
+    <string notr="true"> </string>
+   </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
@@ -4312,6 +4481,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="text">
     <string>Система</string>
+   </property>
+   <property name="toolTip">
+    <string notr="true"> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4336,6 +4508,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="text">
     <string>Оптимизиция</string>
+   </property>
+   <property name="toolTip">
+    <string notr="true"> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>

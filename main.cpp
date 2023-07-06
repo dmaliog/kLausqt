@@ -1,8 +1,5 @@
 #include "mainwindow.h"
 #include <QtWidgets>
-#include <QTranslator>
-#include <QObject>
-#include <QDialog>
 
 bool isPackageInstalled(const QString& packageName)
 {

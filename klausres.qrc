@@ -16,9 +16,6 @@
         <file>img/13.png</file>
         <file>img/14.png</file>
         <file>img/15.png</file>
-        <file>img/load_1.png</file>
-        <file>img/load_2.png</file>
-        <file>img/load_3.png</file>
         <file>img/16.png</file>
         <file>img/17.png</file>
         <file>img/18.png</file>
@@ -103,5 +100,8 @@
         <file>img/m8.png</file>
         <file>img/m9.png</file>
         <file>img/bg.png</file>
+        <file>img/loading.gif</file>
+        <file>bench/unixbench.sh</file>
+        <file>img/loading2.gif</file>
     </qresource>
 </RCC>

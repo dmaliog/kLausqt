@@ -15,7 +15,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "4.4";
+QString currentVersion = "4.5";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -23,8 +23,17 @@ QString currentVersion = "4.4";
 
 Terminal getTerminal()
 {
+    QVector<Terminal> terminalList = {
+        {"/usr/bin/konsole", "-e"},
+        {"/usr/bin/gnome-terminal", "--"},
+        {"/usr/bin/xfce4-terminal", "-x"},
+        {"/usr/bin/lxterminal", "-e"},
+        {"/usr/bin/alacritty", "-e"},
+        {"/usr/bin/xterm", "-e"}
+    };
+
     // Итерируемся по списку, пока не найдем установленный терминал
-    for (const Terminal& terminal : m_terminalList) {
+    for (const Terminal& terminal : terminalList) {
         if (QFile::exists(terminal.binary))
             return terminal;
     }
@@ -102,7 +111,6 @@ QIcon getPackageIcon(const QString& packageName) {
         QStringList desktopFiles = desktopFilesDir.entryList(QStringList() << "*.desktop", QDir::Files);
 
         for (const QString& desktopFileName : desktopFiles) {
-            QString desktopFilePath = desktopFilesDir.absoluteFilePath(desktopFileName);
 
             // Извлекаем имя приложения из имени файла .desktop
             QString desktopAppName = desktopFileName.split('.').first();
@@ -327,13 +335,13 @@ void MainWindow::on_action_12_triggered()
 {
     if (page == 9) return;
     mrpropper(9);
-    ui->label1->setText(tr("Настройки AUR"));
+    ui->label1->setText(tr("Настройки приложения"));
     ui->action_28->setVisible(true);
     ui->action_29->setVisible(true);
     ui->action_timer->setVisible(true);
     ui->action_system->setVisible(true);
     ui->tabWidget->setVisible(true);
-    ui->tabWidget->setCurrentIndex(0);
+    ui->tabWidget->setCurrentIndex(3);
     showLoadingAnimation(false);
 }
 
@@ -521,33 +529,29 @@ void MainWindow::on_action_system_triggered()
 
 void MainWindow::on_action_31_triggered()
 {
-    QWebEnginePage* pagez = ui->webEngineView->page();
-
     if (page == 6)
     {
-        showLoadingAnimation(true);
         if (lang == "en_US")
-            pagez->load(QUrl("https://wiki.archlinux.org/title/General_recommendations"));
+            ui->webEngineView->load(QUrl("https://wiki.archlinux.org/title/General_recommendations"));
         else
-            pagez->load(QUrl("https://wiki.archlinux.org/title/General_recommendations_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)"));
+            ui->webEngineView->load(QUrl("https://wiki.archlinux.org/title/General_recommendations_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)"));
     }
     else if (page == 7)
     {
-        showLoadingAnimation(true);
         if(currentDesktop == "KDE")
-            pagez->load(QUrl("https://store.kde.org/browse/"));
+            ui->webEngineView->load(QUrl("https://store.kde.org/browse/"));
         else if(currentDesktop == "GNOME")
-            pagez->load(QUrl("https://www.pling.com/s/Gnome/browse/"));
+            ui->webEngineView->load(QUrl("https://www.pling.com/s/Gnome/browse/"));
         else if(currentDesktop == "XFCE")
-            pagez->load(QUrl("https://www.pling.com/s/XFCE/browse/"));
+            ui->webEngineView->load(QUrl("https://www.pling.com/s/XFCE/browse/"));
         else if(currentDesktop == "LXQt")
-            pagez->load(QUrl("https://store.kde.org/browse?cat=446"));
+            ui->webEngineView->load(QUrl("https://store.kde.org/browse?cat=446"));
         else if(currentDesktop == "Cinnamon")
-            pagez->load(QUrl("https://www.pling.com/s/Cinnamon/browse/"));
+            ui->webEngineView->load(QUrl("https://www.pling.com/s/Cinnamon/browse/"));
         else if(currentDesktop == "MATE")
-            pagez->load(QUrl("https://www.pling.com/s/Mate/browse/"));
+            ui->webEngineView->load(QUrl("https://www.pling.com/s/Mate/browse/"));
         else if (currentDesktop == "Enlightenment")
-            pagez->load(QUrl("https://www.pling.com/s/Enlightenment/browse/"));
+            ui->webEngineView->load(QUrl("https://www.pling.com/s/Enlightenment/browse/"));
         else {
             sendNotification(tr("Ошибка"), tr("Для вашего окружения тем не найдено!"));
             return;
@@ -611,7 +615,6 @@ void MainWindow::on_action_11_triggered()
         process.setProcessChannelMode(QProcess::MergedChannels);
         process.start();
         process.waitForFinished(-1);
-        QString output = process.readAll();
 
         if (process.exitCode() == QProcess::NormalExit) {
             UpdateIcon();
@@ -1160,7 +1163,8 @@ void MainWindow::on_action_editsh_triggered()
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->webEngineView->raise(); //браузер выше всех
+    showLoadingAnimation(true);
+
     loadSettings();         //загрузка настроек
     checkVersionAndClear();
     UpdateIcon();           //получаем иконку трея
@@ -1172,6 +1176,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     ui->check_trayon->setChecked(trayon == 1);
     ui->check_repair->setChecked(repair == 1);
+    ui->check_animload->setChecked(animload == 1);
     ui->check_updateinstall->setChecked(updinst == 1);
     ui->check_description->setChecked(table1 == 1);
     ui->check_version->setChecked(table2 == 1);
@@ -1179,6 +1184,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->check_popularity->setChecked(table4 == 1);
     ui->check_lastupdate->setChecked(table5 == 1);
     ui->combo_mainpage->setCurrentIndex(mainpage);
+    ui->combo_animload->setCurrentIndex(animloadpage);
     ui->spin_rating->setValue(fav);
 
     ui->time_update->setTime(timeupdate);
@@ -1297,10 +1303,23 @@ void MainWindow::loadSound(int soundIndex)
 
 void MainWindow::loadSettings()
 {
+    //-##################################################################################
+    //-########################## НАСТРОЕННЫЕ ПЕРЕМЕННЫЕ ################################
+    //-##################################################################################
+    previousAction = ui->action_1; //предыдущий action [заглушка]
+    ui->webEngineView->raise(); //браузер выше всех
+    removeToolButtonTooltips(ui->toolBar);
+    removeToolButtonTooltips(ui->toolBar_2);
+
+    //-##################################################################################
+    //-############################## ОСНОВНАЯ ЧАСТЬ ####################################
+    //-##################################################################################
     mainpage = settings.value("MainPage", 0).toInt();
+    animloadpage = settings.value("AnimLoadPage", 0).toInt();
     yaycache = settings.value("YayCache", 0).toInt();
     trayon = settings.value("TrayOn", 0).toInt();
     repair = settings.value("RepairBackup", 1).toInt();
+    animload = settings.value("AnimLoad", 1).toInt();
     updinst = settings.value("UpdateInstall", 1).toInt();
     volumenotify = settings.value("VolumeNotify", 30).toInt();
     volumemenu = settings.value("VolumeMenu", 50).toInt();
@@ -1367,12 +1386,12 @@ void MainWindow::loadSettings()
         break;
     }
 
+    //-##################################################################################
+    //-############################## СИГНАЛЫ И СЛОТЫ ###################################
+    //-##################################################################################
     connect(ui->spin_grub, SIGNAL(valueChanged(int)), this, SLOT(on_spinBox_grub_valueChanged(int)));
-
     connect(ui->time_update, &QTimeEdit::timeChanged, this, &MainWindow::onTimeChanged);
-
     connect(ui->spin_rating, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::on_spin_rating_valueChanged);
-    removeToolButtonTooltips(ui->toolBar);
 
     //-##################################################################################
     //-############################### ЗАНЯТОЕ МЕСТО ####################################
@@ -1520,17 +1539,12 @@ void MainWindow::loadSettings()
     //-##################################################################################
     //-############################## ПЕРЕКЛЮЧЕНИЕ МЕНЮ #################################
     //-##################################################################################
-
     connect(ui->toolBar, &QToolBar::actionTriggered, this, [=](QAction* action) {
-        QList<QAction*> actions = ui->toolBar->actions();
+        if (previousAction)
+            previousAction->setChecked(false);
 
-        for (QAction* toolbarAction : actions) {
-            if (toolbarAction != action) {
-                toolbarAction->setChecked(false);
-            }
-        }
         action->setChecked(true);
-        removeToolButtonTooltips(ui->toolBar);
+        previousAction = action;
     });
 }
 
@@ -1562,6 +1576,9 @@ void MainWindow::mrpropper(int value) //зачистка говна перед �
 {
     page = value;
 
+    showLoadingAnimation(true);
+    loadSound(0);
+
     //останавливаем страницы и ошибки
     ui->webEngineView->page()->triggerAction(QWebEnginePage::Stop);
     errorShown = true;
@@ -1590,9 +1607,6 @@ void MainWindow::mrpropper(int value) //зачистка говна перед �
     for (QAction* action : allActions) {
         action->setVisible(false);
     }
-
-    showLoadingAnimation(true);
-    loadSound(0);
 
     ui->scroll_repair->setVisible(false);
 
@@ -1827,70 +1841,75 @@ void MainWindow::onTimeChanged(const QTime& time)
 
 void MainWindow::showLoadingAnimation(bool show)
 {
-    static QLabel* label = nullptr;
-    static QTimer* hideTimer = nullptr;
+    if (animload == 0) return;
+
+    static QWidget* overlayWidget = nullptr;
+    static QLabel* loadingLabel = nullptr;
+    static QPushButton* closeButton = nullptr;
 
     if (show) {
-        // Если иконка уже показывается, не делаем ничего
-        if (label != nullptr)
-            return;
-
-        // Создаем новый QLabel и загружаем в него изображение
-        QPixmap pixmap(":/img/load_1.png");
-        label = new QLabel(this);
-        label->setPixmap(pixmap);
-        label->setAlignment(Qt::AlignCenter);
-        label->setMaximumSize(30, 30);
-
-        // Устанавливаем QLabel в статусбар
-        ui->statusBar->addWidget(label);
-
-        // Меняем картинки с определенной задержкой
-        QTimer *timer = new QTimer(this);
-        int counter = 2;
-        connect(timer, &QTimer::timeout, this, [=]() mutable {
-            QString fileName = QString(":/img/load_%1.png").arg(counter);
-
-            QPixmap pixmap(fileName);
-            if (label != nullptr)
-                label->setPixmap(pixmap);
-
-            if (counter >= 3)
-                counter = 1;
+        if (!overlayWidget) {
+            overlayWidget = new QWidget(this);
+            overlayWidget->setGeometry(rect());
+            overlayWidget->setObjectName("OverlayWidget");
+            if (animloadpage == 0)
+                overlayWidget->setStyleSheet("QWidget#OverlayWidget { background-color: #472e91; }");
             else
-                counter++;
-        });
-        timer->start(200);
-
-        // Отключаем таймер для скрытия иконки
-        if (hideTimer != nullptr) {
-            hideTimer->stop();
-            hideTimer = nullptr;
+                overlayWidget->setStyleSheet("QWidget#OverlayWidget { background-color: #2d2b79; }");
+            overlayWidget->raise();
         }
+        overlayWidget->show();
+
+        if (!loadingLabel) {
+            loadingLabel = new QLabel(overlayWidget);
+            loadingLabel->setObjectName("LoadingLabel");
+            loadingLabel->setAlignment(Qt::AlignCenter);
+            loadingLabel->setFixedSize(800, 600);
+        }
+
+        QMovie* loadingMovie = (animloadpage == 0) ? new QMovie(":/img/loading.gif") : new QMovie(":/img/loading2.gif");
+
+        loadingLabel->setMovie(loadingMovie);
+        loadingMovie->start();
+
+        loadingLabel->move((width() - loadingLabel->width()) / 2, (height() - loadingLabel->height()) / 2);
+        loadingLabel->show();
+
+        if (!closeButton) {
+            closeButton = new QPushButton(overlayWidget);
+            closeButton->setObjectName("CloseButton");
+            closeButton->setIcon(QIcon(":/img/18.png"));
+            closeButton->setFixedSize(30, 30);
+            closeButton->move(width() - closeButton->width() - 10, 10);
+            connect(closeButton, &QPushButton::clicked, this, [this]() {
+                showLoadingAnimation(false);
+            });
+        }
+        closeButton->show();
+
     } else {
-        // Если иконка не показывается, не делаем ничего
-        if (label == nullptr)
-            return;
+        if (overlayWidget) {
+            overlayWidget->hide();
+            overlayWidget->deleteLater();
+            overlayWidget = nullptr;
+        }
 
-        // Запускаем таймер для скрытия иконки через 3 секунды
-        hideTimer = new QTimer(this);
-        hideTimer->setSingleShot(true);
-        connect(hideTimer, &QTimer::timeout, this, [=]() mutable {
-            // Отключаем таймер и отключаем связанный с ним слот
-            if (label != nullptr) {
-                QTimer* timer = label->findChild<QTimer*>();
-                if (timer != nullptr) {
-                    QObject::disconnect(timer, &QTimer::timeout, nullptr, nullptr);
-                }
+        if (loadingLabel) {
+            loadingLabel->hide();
+            loadingLabel->clear();
+            loadingLabel->deleteLater();
+            loadingLabel = nullptr;
+        }
 
-                ui->statusBar->removeWidget(label);
-                delete label;
-                label = nullptr;
-            } else
-                qDebug() << "QLabel is not created yet!";
-        });
-        hideTimer->start(300);
+        if (closeButton) {
+            closeButton->hide();
+            closeButton->deleteLater();
+            closeButton = nullptr;
+        }
     }
+
+    //удаление подсказок
+    removeToolButtonTooltips(ui->toolBar);
     removeToolButtonTooltips(ui->toolBar_2);
 }
 
@@ -2305,6 +2324,12 @@ void MainWindow::on_combo_mainpage_currentIndexChanged()
     settings.setValue("MainPage", mainpage);
 }
 
+void MainWindow::on_combo_animload_currentIndexChanged()
+{
+    animloadpage = ui->combo_animload->currentIndex();
+    settings.setValue("AnimLoadPage", animloadpage);
+}
+
 void MainWindow::on_combo_host_currentIndexChanged(int index)
 {
     host = index;
@@ -2477,6 +2502,12 @@ void MainWindow::on_check_repair_stateChanged()
     settings.setValue("RepairBackup", repair);
 }
 
+void MainWindow::on_check_animload_stateChanged()
+{
+    animload = ui->check_animload->isChecked() ? 1 : 0;
+    settings.setValue("AnimLoad", animload);
+}
+
 void MainWindow::on_check_updateinstall_stateChanged()
 {
     updinst = ui->check_updateinstall->isChecked() ? 1 : 0;
@@ -2547,7 +2578,7 @@ void MainWindow::on_spin_rating_valueChanged(int arg1)
     loadContent();
 }
 
-void MainWindow::on_list_itemDoubleClicked(QListWidgetItem *item, const QString& scriptDir) {
+void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString& scriptDir) {
     QString scriptPath;
     QString msg;
     QString itemName = item->text();
@@ -2586,22 +2617,22 @@ void MainWindow::on_list_itemDoubleClicked(QListWidgetItem *item, const QString&
 
 void MainWindow::on_list_sh_itemDoubleClicked(QListWidgetItem *item) {
     QString scriptDir = baseDir + "sh/";
-    on_list_itemDoubleClicked(item, scriptDir);
+    handleListItemDoubleClick(item, scriptDir);
 }
 
 void MainWindow::on_list_grub_itemDoubleClicked(QListWidgetItem *item) {
     QString scriptDir = baseDir + "journals/";
-    on_list_itemDoubleClicked(item, scriptDir);
+    handleListItemDoubleClick(item, scriptDir);
 }
 
 void MainWindow::on_list_bench_itemDoubleClicked(QListWidgetItem *item) {
     QString scriptDir = baseDir + "bench/";
-    on_list_itemDoubleClicked(item, scriptDir);
+    handleListItemDoubleClick(item, scriptDir);
 }
 
 void MainWindow::on_list_clear_itemDoubleClicked(QListWidgetItem *item) {
     QString scriptDir = baseDir + "clear/";
-    on_list_itemDoubleClicked(item, scriptDir);
+    handleListItemDoubleClick(item, scriptDir);
 }
 
 void MainWindow::on_list_repair_itemDoubleClicked(QListWidgetItem *item)

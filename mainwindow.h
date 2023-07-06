@@ -6,22 +6,10 @@
 #include <QMainWindow>
 #include <QListWidgetItem>
 #include <QNetworkAccessManager>
-#include <QProcess>
-#include <QString>
-#include <QVector>
 
 struct Terminal {
     QString binary;
     QString args;
-};
-
-const QVector<Terminal> m_terminalList = {
-    {"/usr/bin/konsole", "-e"},
-    {"/usr/bin/gnome-terminal", "--"},
-    {"/usr/bin/xfce4-terminal", "-x"},
-    {"/usr/bin/lxterminal", "-e"},
-    {"/usr/bin/alacritty", "-e"},
-    {"/usr/bin/xterm", "-e"}
 };
 
 Terminal getTerminal();
@@ -44,10 +32,13 @@ public:
     QColor generateRandomColor();
 
 private:
+    QAction* previousAction; // Предыдущий QAction
     QString packageURL;
     int page; // какая страница используется
+    int animloadpage;
     int trayon; // закрывать без трея
     int repair; // создавать бэкап при удалении или нет
+    int animload; // анимация загрузки
     int updinst; //проверять систему перед установкой пакетов или нет
     int volumenotify; // громкость уведомлений
     int volumemenu; // громкость меню
@@ -106,7 +97,7 @@ private:
                                          ":/journals/pacman.sh",
                                          ":/journals/top-pkg.sh"};
 
-    QStringList benchResourcePaths = {};
+    QStringList benchResourcePaths = {":/bench/unixbench.sh"};
 
 protected: // события сворачивания окна
     void closeEvent(QCloseEvent *event) override; // объявление метода closeEvent()
@@ -166,7 +157,7 @@ private slots:
     void handleServerResponse(QNetworkReply* reply);
     void openDirectory(const QString &dirPath);
     void removeToolButtonTooltips(QToolBar* toolbar);
-    void on_list_itemDoubleClicked(QListWidgetItem *item, const QString& scriptDir);
+    void handleListItemDoubleClick(QListWidgetItem *item, const QString& scriptDir);
     void on_list_bench_itemDoubleClicked(QListWidgetItem *item);
     void on_list_sh_itemDoubleClicked(QListWidgetItem *item);
     void on_list_grub_itemDoubleClicked(QListWidgetItem *item);
@@ -174,8 +165,10 @@ private slots:
     void on_spin_rating_valueChanged(int arg1);
     void on_time_update_timeChanged(const QTime &time);
     void on_check_trayon_stateChanged();
+    void on_check_animload_stateChanged();
 
     void on_combo_mainpage_currentIndexChanged();
+    void on_combo_animload_currentIndexChanged();
     void on_combo_cache_currentIndexChanged();
     void on_combo_host_currentIndexChanged(int index);
     void on_combo_lang_currentIndexChanged(int index);
