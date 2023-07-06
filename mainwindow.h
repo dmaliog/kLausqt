@@ -32,6 +32,9 @@ public:
     QColor generateRandomColor();
 
 private:
+    QMap<QString, QString> execMap;
+    QMap<QString, QString> iconMap; // Статический словарь для кэширования информации об иконках
+
     QAction* previousAction; // Предыдущий QAction
     QString packageURL;
     int page; // какая страница используется
@@ -99,6 +102,9 @@ private:
 
     QStringList benchResourcePaths = {":/bench/unixbench.sh"};
 
+    QStringList endingsToRemove = QStringList() << "-bin" << "-git" << "-qt" << "-qt4" << "-qt5" << "-qt6"
+                                                << "qt-" << "qt4-" << "qt5-" << "qt6-" << "-gtk"
+                                                << "-gtk2" << "-gtk3";
 protected: // события сворачивания окна
     void closeEvent(QCloseEvent *event) override; // объявление метода closeEvent()
 
@@ -128,6 +134,8 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
+    QIcon getPackageIcon(const QString& packageName);
+
     void UpdateIcon();
     void setHasUpdates(bool updates);
 

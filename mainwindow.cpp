@@ -15,7 +15,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "4.6";
+QString currentVersion = "4.7";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -64,7 +64,6 @@ void MainWindow::on_action_2_triggered()
     ui->label1->setText(tr("Каталог пакетов из AUR"));
     ui->searchApp->setGeometry(750, 5, 221, 31);
     ui->action_4->setVisible(true);
-    ui->action_5->setVisible(true);
     ui->action_6->setVisible(true);
     ui->action_16->setVisible(true);
     ui->action_30->setVisible(true);
@@ -87,53 +86,69 @@ void MainWindow::on_action_17_triggered()
     showLoadingAnimation(false);
 }
 
-QIcon getPackageIcon(const QString& packageName) {
+QIcon MainWindow::getPackageIcon(const QString& packageName) {
+
     QString appName = packageName.split(' ')[0];
 
     // Удаляем окончания
-    if (appName.endsWith("-bin") || appName.endsWith("-git") || appName.endsWith("-qt") ||
-        appName.endsWith("-qt4") || appName.endsWith("-qt5") || appName.endsWith("-qt6") ||
-        appName.endsWith("qt-") || appName.endsWith("qt4-") || appName.endsWith("qt5-") ||
-        appName.endsWith("qt6-") || appName.endsWith("-gtk") || appName.endsWith("-gtk2") ||
-        appName.endsWith("-gtk3")) {
-        appName = appName.left(appName.length() - 4);
+    for (const QString& ending : endingsToRemove) {
+        if (appName.endsWith(ending)) {
+            appName.chop(ending.length());
+            break;
+        }
     }
 
-    QStringList searchPaths;
-    searchPaths << "/usr/share/applications"
-                << QDir::homePath() + "/.local/share/applications"
-                << "/usr/local/share/applications"
-                << "/var/lib/snapd/desktop/applications";
+    if (iconMap.isEmpty() || execMap.isEmpty()) {
+        QStringList searchPaths = QStringList() << "/usr/share/applications"
+                                                << QDir::homePath() + "/.local/share/applications"
+                                                << "/usr/local/share/applications"
+                                                << "/var/lib/snapd/desktop/applications";
 
-    // Ищем соответствующий файл .desktop во всех указанных путях
-    for (const QString& searchPath : searchPaths) {
-        QDir desktopFilesDir(searchPath);
-        QStringList desktopFiles = desktopFilesDir.entryList(QStringList() << "*.desktop", QDir::Files);
+        // Ищем соответствующие файлы .desktop во всех указанных путях
+        for (const QString& searchPath : searchPaths) {
+            QDir desktopFilesDir(searchPath);
+            QStringList desktopFiles = desktopFilesDir.entryList(QStringList() << "*.desktop", QDir::Files);
 
-        for (const QString& desktopFileName : desktopFiles) {
+            for (const QString& desktopFileName : desktopFiles) {
+                QFile desktopFile(desktopFilesDir.filePath(desktopFileName));
+                if (desktopFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                    QTextStream stream(&desktopFile);
 
-            // Извлекаем имя приложения из имени файла .desktop
-            QString desktopAppName = desktopFileName.split('.').first();
+                    // Парсим содержимое файла .desktop и получаем имя иконки и команду запуска
+                    QString iconName;
+                    QString execCommand;
+                    while (!stream.atEnd()) {
+                        QString line = stream.readLine().trimmed();
+                        if (line.startsWith("Icon=")) {
+                            iconName = line.mid(5).trimmed();
+                        } else if (line.startsWith("Exec=")) {
+                            execCommand = line.mid(5).trimmed();
+                        }
 
-            // Удаляем окончания
-            if (desktopAppName.endsWith("-bin") || desktopAppName.endsWith("-git") ||
-                desktopAppName.endsWith("-qt") || desktopAppName.endsWith("-qt4") ||
-                desktopAppName.endsWith("-qt5") || desktopAppName.endsWith("-qt6") ||
-                desktopAppName.endsWith("qt-") || desktopAppName.endsWith("qt4-") ||
-                desktopAppName.endsWith("qt5-") || desktopAppName.endsWith("qt6-") ||
-                desktopAppName.endsWith("-gtk") || desktopAppName.endsWith("-gtk2") ||
-                desktopAppName.endsWith("-gtk3")) {
-                desktopAppName = desktopAppName.left(desktopAppName.length() - 4);
-            }
+                        // Прерываем цикл, если мы уже получили оба значения
+                        if (!iconName.isEmpty() && !execCommand.isEmpty()) {
+                            break;
+                        }
+                    }
 
-            if (desktopAppName == appName) {
-                // Извлекаем имя иконки из имени файла .desktop
-                QString iconName = desktopFileName.split('.').first();
+                    desktopFile.close();
 
-                // Возвращаем иконку на основе имени
-                return QIcon::fromTheme(iconName);
+                    // Если удалось получить имя иконки и команду запуска, сохраняем информацию в словарях
+                    if (!iconName.isEmpty() && !execCommand.isEmpty()) {
+                        QString desktopAppName = desktopFileName.split('.').first();
+                        iconMap[desktopAppName] = iconName;
+                        execMap[desktopAppName] = execCommand;
+                    }
+                }
             }
         }
+    }
+
+    // Проверяем, есть ли информация об иконке и команде запуска для данного приложения в словарях
+    if (iconMap.contains(appName) && execMap.contains(appName)) {
+        // Здесь вы можете использовать execMap[appName] для запуска приложения по команде
+        // В данном случае возвращаем только иконку
+        return QIcon::fromTheme(iconMap[appName]);
     }
 
     // Если не удалось получить иконку из файла .desktop, возвращаем стандартную иконку
@@ -659,41 +674,6 @@ void MainWindow::on_action_13_triggered()
 
 void MainWindow::on_action_5_triggered()
 {
-    if (page == 2)
-    {
-        if (ui->table_aur->currentItem() != nullptr) {
-            QString packageName = ui->table_aur->item(ui->table_aur->currentRow(), 0)->text();
-            QProcess* process = new QProcess(this);
-
-            // Обработчик вывода информации из процесса
-            connect(process, &QProcess::readyReadStandardOutput, this, [=]() {
-                QString output = process->readAllStandardOutput();
-                static QRegularExpression re("Название\\s+\\:\\s+(\\S+)");
-                QRegularExpressionMatch match = re.match(output);
-                if (match.hasMatch()) {
-                    QString appName = match.captured(1);
-                    QString program = appName.split('/').last();
-                    if (program.endsWith("-bin") || program.endsWith("-git") || program.endsWith("-qt") || program.endsWith("-qt4") || program.endsWith("-qt5") || program.endsWith("-qt6") || program.endsWith("qt-") || program.endsWith("qt4-") || program.endsWith("qt5-") || program.endsWith("qt6-") || program.endsWith("-gtk") || program.endsWith("-gtk2") || program.endsWith("-gtk3"))
-                        program.chop(4); // Убираем "-bin" или "-git" из имени программы
-
-                    Terminal terminal = getTerminal();
-                    QProcess::startDetached(terminal.binary, QStringList() << terminal.args << program);
-                } else
-                    sendNotification(tr("Пакет не найден"), tr("Пакет ") + packageName + tr(" не найден в системе!"));
-                process->deleteLater();
-            });
-
-            // Обработчик вывода ошибок из процесса
-            connect(process, &QProcess::readyReadStandardError, this, [=]() {
-                sendNotification(tr("Ошибка"), process->readAllStandardError());
-                process->deleteLater();
-            });
-
-            // Запускаем процесс
-            process->start("yay", QStringList() << "-Qi" << packageName);
-        } else
-            sendNotification(tr("Внимание"), tr("Выберите пакет из списка для запуска!"));
-    }
     if (page == 10)
     {
         if(host == 1)
@@ -718,8 +698,31 @@ void MainWindow::on_action_5_triggered()
         if (ui->list_manager->currentItem() != nullptr) {
             QString packageName = ui->list_manager->currentItem()->text();
             packageName = packageName.left(packageName.indexOf(" "));
-            Terminal terminal = getTerminal();
-            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << packageName);
+
+            // Выполняем команду `pacman -Ql packageName` и захватываем вывод
+            QProcess process;
+            process.start("pacman", QStringList() << "-Ql" << packageName);
+            process.waitForFinished(-1);
+            QString output = process.readAllStandardOutput();
+
+            // Ищем строку, содержащую путь к файлу .desktop
+            QString desktopFilePath;
+            QStringList lines = output.split('\n');
+            for (const QString& line : lines) {
+                if (line.contains(packageName) && line.contains(".desktop")) {
+                    desktopFilePath = line.split(' ').last();
+                    break;
+                }
+            }
+
+            if (!desktopFilePath.isEmpty()) {
+                // Запускаем файл .desktop
+                QString desktopFileName = QFileInfo(desktopFilePath).fileName();
+                QProcess::startDetached("gtk-launch", QStringList() << desktopFileName);
+            } else {
+                // Файл .desktop не найден
+                sendNotification(tr("Ошибка"), tr("Файл .desktop не найден для пакета ") + packageName);
+            }
         } else
             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для запуска!"));
     }
@@ -727,52 +730,13 @@ void MainWindow::on_action_5_triggered()
 
 void MainWindow::on_action_6_triggered()
 {
-    if (page == 2)
-    {
-        if (ui->table_aur->currentItem() != nullptr) {
-            QString packageName = ui->table_aur->item(ui->table_aur->currentRow(), 0)->text();
-            QProcess* process = new QProcess(this);
-
-            // Обработчик вывода информации из процесса
-            connect(process, &QProcess::readyReadStandardOutput, this, [=]() {
-                QString output = process->readAllStandardOutput();
-                static QRegularExpression re("Название\\s+\\:\\s+(\\S+)");
-                QRegularExpressionMatch match = re.match(output);
-                if (match.hasMatch()) {
-                    QString appName = match.captured(1);
-                    QString program = appName.split('/').last();
-                    if (program.endsWith("-bin") || program.endsWith("-git") || program.endsWith("-qt") || program.endsWith("-qt4") || program.endsWith("-qt5") || program.endsWith("-qt6") || program.endsWith("qt-") || program.endsWith("qt4-") || program.endsWith("qt5-") || program.endsWith("qt6-") || program.endsWith("-gtk") || program.endsWith("-gtk2") || program.endsWith("-gtk3"))
-                        program.chop(4); // Убираем "-bin" или "-git" из имени программы
-
-                    Terminal terminal = getTerminal();
-                    QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -R " + packageName);
-                } else
-                    sendNotification(tr("Пакет не найден"), tr("Пакет ") + packageName + tr(" не найден в системе!"));
-
-                process->deleteLater();
-            });
-
-            // Обработчик вывода ошибок из процесса
-            connect(process, &QProcess::readyReadStandardError, this, [=]() {
-                QString error = process->readAllStandardError();
-                sendNotification(tr("Ошибка"), error);
-                process->deleteLater();
-            });
-
-            // Запускаем процесс
-            process->start("yay", QStringList() << "-Qi" << packageName);
-        } else
-            sendNotification(tr("Внимание"), tr("Выберите пакет из списка для удаления!"));
-
-    } else {
-        if (ui->list_manager->currentItem() != nullptr) {
-            QString packageName = ui->list_manager->currentItem()->text();
-            packageName = packageName.left(packageName.indexOf(" "));
-            Terminal terminal = getTerminal();
-            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -R " + packageName);
-        } else
-             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для удаления!"));
-    }
+    if (ui->list_manager->currentItem() != nullptr) {
+        QString packageName = ui->list_manager->currentItem()->text();
+        packageName = packageName.left(packageName.indexOf(" "));
+        Terminal terminal = getTerminal();
+        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -R " + packageName);
+    } else
+         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для удаления!"));
 }
 
 void MainWindow::on_action_4_triggered()
