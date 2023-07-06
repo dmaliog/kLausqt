@@ -3,11 +3,10 @@
 #name_en_US
 #msg_en_US
 #!/bin/bash
-# Определение языка
-language="en_US"
-if [ -n "$1" ]; then
-    language="$1"
-fi
+
+# Импорт файла main.sh
+source "$HOME/.config/kLaus/other/main.sh"
+lang "$1"
 
 # Загрузка файла перевода
 translations_file="translations_$language.txt"
