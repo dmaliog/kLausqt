@@ -488,7 +488,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_aursettings">
      <attribute name="title">
@@ -719,7 +719,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           </property>
           <item>
            <property name="text">
-            <string>Удаленных пакетов</string>
+            <string>Неустановленных пакетов</string>
            </property>
           </item>
           <item>
@@ -729,7 +729,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           </item>
           <item>
            <property name="text">
-            <string>Последних трех пакетов</string>
+            <string>Всех кроме 3 последних версий каждого пакета</string>
            </property>
           </item>
          </widget>
@@ -3569,8 +3569,6 @@ QToolBar#toolBar_2 QToolButton:hover {
    <addaction name="action_16"/>
    <addaction name="action_29"/>
    <addaction name="action_28"/>
-   <addaction name="action_24"/>
-   <addaction name="action_25"/>
    <addaction name="action_27"/>
    <addaction name="action_30"/>
    <addaction name="action_31"/>
@@ -3989,36 +3987,6 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="toolTip">
     <string>Автоматизация</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_24">
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/26.png</normaloff>:/img/26.png</iconset>
-   </property>
-   <property name="text">
-    <string>Сироты</string>
-   </property>
-   <property name="toolTip">
-    <string notr="true"> </string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_25">
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/26.png</normaloff>:/img/26.png</iconset>
-   </property>
-   <property name="text">
-    <string>Кэш пакетов</string>
-   </property>
-   <property name="toolTip">
-    <string notr="true"> </string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>

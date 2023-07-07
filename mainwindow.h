@@ -35,6 +35,10 @@ private:
     QMap<QString, QString> execMap;
     QMap<QString, QString> iconMap; // Статический словарь для кэширования информации об иконках
 
+    QListWidgetItem* orphanButton;
+    QListWidgetItem* cacheButtonYay;
+    QListWidgetItem* cacheButtonPacman;
+
     QAction* previousAction; // Предыдущий QAction
     QString packageURL;
     int page; // какая страница используется
@@ -80,9 +84,7 @@ private:
                                    ":/sh/load.sh",
                                    ":/sh/zen.sh"};
 
-    QStringList clearResourcePaths = {":/clear/clear_trash.sh",
-                                      ":/clear/yay.sh",
-                                      ":/clear/pacman.sh"};
+    QStringList clearResourcePaths = {":/clear/clear_trash.sh"};
 
     QStringList journalsResourcePaths = {":/journals/neofetch.sh",
                                          ":/journals/systemd-analyze.sh",
@@ -124,8 +126,6 @@ public slots:
     void on_action_12_triggered();
     void on_action_16_triggered();
     void on_action_17_triggered();
-    void on_action_24_triggered();
-    void on_action_25_triggered();
     void on_action_27_triggered();
     void on_action_28_triggered();
     void on_action_29_triggered();
@@ -224,6 +224,8 @@ private slots:
     void on_action_system_triggered();
     void on_push_grub_clicked();
     void on_action_repair_triggered();
+
+    void removeDirectory(const QString& dirPath);
 };
 
 #endif // MAINWINDOW_H

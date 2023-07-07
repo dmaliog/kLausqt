@@ -2,8 +2,6 @@
     <qresource prefix="/">
         <file>bench/unixbench.sh</file>
         <file>clear/clear_trash.sh</file>
-        <file>clear/pacman.sh</file>
-        <file>clear/yay.sh</file>
         <file>img/1.png</file>
         <file>img/10.png</file>
         <file>img/11.png</file>

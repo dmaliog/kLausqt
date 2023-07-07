@@ -15,7 +15,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "4.8";
+QString currentVersion = "4.9";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -175,8 +175,6 @@ void MainWindow::on_action_7_triggered()
     ui->action_5->setVisible(true);
     ui->action_6->setVisible(true);
     ui->action_11->setVisible(true);
-    ui->action_24->setVisible(true);
-    ui->action_25->setVisible(true);
     ui->list_manager->show();
     ui->list_manager->clear();
 
@@ -577,14 +575,15 @@ void MainWindow::on_action_31_triggered()
 void MainWindow::on_action_34_triggered()
 {
     if (ui->table_aur->currentItem() != nullptr) {
-        showLoadingAnimation(true);
         int currentRow = ui->table_aur->currentRow();
         QTableWidgetItem *item = ui->table_aur->item(currentRow, 0);
         QString url = item->data(Qt::UserRole).toString();
         if (!url.isEmpty()) {
+            showLoadingAnimation(true);
             ui->webEngineView->page()->load(QUrl(url));
-        } else
+        } else {
             sendNotification(tr("Внимание"), tr("URL отсутствует!"));
+        }
     } else
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для просмотра информации!"));
 }
@@ -637,33 +636,6 @@ void MainWindow::on_action_11_triggered()
         }
     } else
         sendNotification(tr("Обновление"), tr("Система в актуальном состоянии!"));
-}
-
-void MainWindow::on_action_24_triggered()
-{
-    Terminal terminal = getTerminal();
-    QString command = QString("bash -c 'yay -Rs $(yay -Qdtq)'");
-    QProcess::startDetached(terminal.binary, QStringList() << terminal.args << command);
-}
-
-void MainWindow::on_action_25_triggered()
-{
-    Terminal terminal = getTerminal();
-
-    switch(yaycache) {
-        case 0:
-            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -Sc");
-            break;
-        case 1:
-            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -Scc");
-            break;
-        case 2:
-            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "paccache -rvk3");
-            break;
-        default:
-            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -Sc");
-            break;
-    }
 }
 
 void MainWindow::on_action_13_triggered()
@@ -1228,9 +1200,9 @@ void MainWindow::checkVersionAndClear() {
         }
 
         removeScripts(shResourcePaths, baseDir + "sh/");
-        removeScripts(clearResourcePaths, baseDir + "clear/");
-        removeScripts(journalsResourcePaths, baseDir + "journals/");
-        removeScripts(benchResourcePaths, baseDir + "bench/");
+        removeDirectory(baseDir + "clear/");
+        removeDirectory(baseDir + "journals/");
+        removeDirectory(baseDir + "bench/");
 
         sendNotification(tr("Обновление kLaus"), tr("Версия kLaus поменялась, конфигурация сброшена!"));
     }
@@ -1244,6 +1216,14 @@ void MainWindow::removeScripts(const QStringList& resourcePaths, const QString& 
         QString fileName = QFileInfo(path).fileName();
         QString filePath = baseDir + fileName;
         QFile::remove(filePath);
+    }
+}
+
+void MainWindow::removeDirectory(const QString& dirPath)
+{
+    QDir dir(dirPath);
+    if (dir.exists()) {
+        dir.removeRecursively(); // Удаляем папку и ее содержимое рекурсивно
     }
 }
 
@@ -2113,7 +2093,15 @@ void MainWindow::loadingListWidget()
     saveScripts(benchResourcePaths, baseDir + "bench/");
 
     loadScripts(baseDir + "sh/", ui->list_sh);
+
     loadScripts(baseDir + "clear/", ui->list_clear);
+    cacheButtonYay = new QListWidgetItem(tr("Кэш пакетов Yay"), ui->list_clear);
+    cacheButtonPacman = new QListWidgetItem(tr("Кэш пакетов Pacman"), ui->list_clear);
+    orphanButton = new QListWidgetItem(tr("Пакеты сироты"), ui->list_clear);
+    cacheButtonYay->setForeground(generateRandomColor());
+    cacheButtonPacman->setForeground(generateRandomColor());
+    orphanButton->setForeground(generateRandomColor());
+
     loadScripts(baseDir + "journals/", ui->list_grub);
     loadScripts(baseDir + "bench/", ui->list_bench);
 
@@ -2574,6 +2562,49 @@ void MainWindow::on_spin_rating_valueChanged(int arg1)
 }
 
 void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString& scriptDir) {
+    Terminal terminal = getTerminal();
+
+    if (item == orphanButton) {
+        QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), tr("Обычно, когда пакет становится сиротой, это означает, что он был установлен в качестве зависимости другого пакета, но этот пакет был удален, и больше нет других пакетов, которые бы зависели от данного. Удаление сирот из системы помогает поддерживать систему более чистой и оптимизированной. Вы действительно хотите удалить пакеты сироты?"), QMessageBox::Yes | QMessageBox::No);
+        if (reply == QMessageBox::Yes) {
+            QString command = QString("bash -c 'yay -Rs $(yay -Qdtq)'");
+            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << command);
+        }
+        return;
+    }
+    if (item == cacheButtonYay || item == cacheButtonPacman) {
+        QString command;
+        QMessageBox::StandardButton replymod = QMessageBox::No; // Инициализация значением по умолчанию
+        switch (yaycache) {
+            case 0: {
+                replymod = QMessageBox::question(this, tr("Вопрос"), tr("При обновлении пакетов старые версии пакетов сохраняются в кэше, чтобы вы могли откатиться к предыдущим версиям, если это необходимо. Однако, если вы не планируете откатываться к предыдущим версиям пакетов, удаление кэша может помочь вам освободить дополнительное место на диске. Вы действительно хотите удалить кэш только неустановленных пакетов (можно изменить в настройках)?"), QMessageBox::Yes | QMessageBox::No);
+                command = (item == cacheButtonYay) ? "yay -Sc" : "sudo pacman -Sc";
+                break;
+            }
+            case 1: {
+                replymod = QMessageBox::question(this, tr("Вопрос"), tr("При обновлении пакетов старые версии пакетов сохраняются в кэше, чтобы вы могли откатиться к предыдущим версиям, если это необходимо. Однако, если вы не планируете откатываться к предыдущим версиям пакетов, удаление кэша может помочь вам освободить дополнительное место на диске. Вы действительно хотите удалить кэш пакетов всех пакетов (можно изменить в настройках)?"), QMessageBox::Yes | QMessageBox::No);
+                command = (item == cacheButtonYay) ? "yay -Scc" : "sudo pacman -Scc";
+                break;
+            }
+            case 2: {
+                if(item == cacheButtonYay)
+                    sendNotification(tr("Ошибка"), tr("Yay так не умеет, измените настройки удаления кэша"));
+                else
+                {
+                    replymod = QMessageBox::question(this, tr("Вопрос"), tr("При обновлении пакетов старые версии пакетов сохраняются в кэше, чтобы вы могли откатиться к предыдущим версиям, если это необходимо. Однако, если вы не планируете откатываться к предыдущим версиям пакетов, удаление кэша может помочь вам освободить дополнительное место на диске. Вы действительно хотите удалить кэш всех пакетов кроме последних трех версий (можно изменить в настройках)?"), QMessageBox::Yes | QMessageBox::No);
+                    command = "paccache -rvk3";
+                }
+                break;
+            }
+        }
+
+        if (replymod == QMessageBox::Yes)
+            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << command);
+
+        return;
+    }
+
+
     QString scriptPath;
     QString msg;
     QString itemName = item->text();
@@ -2604,10 +2635,8 @@ void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString&
         scriptPath = scriptDir + itemName;
 
     QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), msg, QMessageBox::Yes | QMessageBox::No);
-    if (reply == QMessageBox::Yes) {
-        Terminal terminal = getTerminal();
+    if (reply == QMessageBox::Yes)
         QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << scriptPath << lang);
-    }
 }
 
 void MainWindow::on_list_sh_itemDoubleClicked(QListWidgetItem *item) {
