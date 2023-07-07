@@ -15,7 +15,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "4.7";
+QString currentVersion = "4.8";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -730,13 +730,48 @@ void MainWindow::on_action_5_triggered()
 
 void MainWindow::on_action_6_triggered()
 {
-    if (ui->list_manager->currentItem() != nullptr) {
-        QString packageName = ui->list_manager->currentItem()->text();
-        packageName = packageName.left(packageName.indexOf(" "));
-        Terminal terminal = getTerminal();
-        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -R " + packageName);
-    } else
-         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для удаления!"));
+    if (page == 2)
+    {
+        if (ui->table_aur->currentItem() != nullptr) {
+            QString packageName = ui->table_aur->item(ui->table_aur->currentRow(), 0)->text();
+            QProcess* process = new QProcess(this);
+
+            // Обработчик вывода информации из процесса
+            connect(process, &QProcess::readyReadStandardOutput, this, [=]() {
+                QString output = process->readAllStandardOutput();
+                static QRegularExpression re("Название\\s+\\:\\s+(\\S+)");
+                QRegularExpressionMatch match = re.match(output);
+                if (match.hasMatch()) {
+
+                    Terminal terminal = getTerminal();
+                    QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -R " + packageName);
+                } else
+                    sendNotification(tr("Пакет не найден"), tr("Пакет ") + packageName + tr(" не найден в системе!"));
+
+                process->deleteLater();
+            });
+
+            // Обработчик вывода ошибок из процесса
+            connect(process, &QProcess::readyReadStandardError, this, [=]() {
+                QString error = process->readAllStandardError();
+                sendNotification(tr("Ошибка"), error);
+                process->deleteLater();
+            });
+
+            // Запускаем процесс
+            process->start("yay", QStringList() << "-Qi" << packageName);
+        } else
+            sendNotification(tr("Внимание"), tr("Выберите пакет из списка для удаления!"));
+
+    } else {
+        if (ui->list_manager->currentItem() != nullptr) {
+            QString packageName = ui->list_manager->currentItem()->text();
+            packageName = packageName.left(packageName.indexOf(" "));
+            Terminal terminal = getTerminal();
+            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -R " + packageName);
+        } else
+             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для удаления!"));
+    }
 }
 
 void MainWindow::on_action_4_triggered()
