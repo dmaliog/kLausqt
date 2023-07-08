@@ -104,5 +104,9 @@
         <file>sh/wayland.sh</file>
         <file>sh/zen.sh</file>
         <file>journals/native-pkg.sh</file>
+        <file>bench/interbench.sh</file>
+        <file>bench/ttcp.sh</file>
+        <file>bench/iperf.sh</file>
+        <file>bench/time.sh</file>
     </qresource>
 </RCC>

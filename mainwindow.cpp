@@ -15,7 +15,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "4.9";
+QString currentVersion = "5.0";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -98,7 +98,7 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
         }
     }
 
-    if (iconMap.isEmpty() || execMap.isEmpty()) {
+    if (iconMap.isEmpty()) {
         QStringList searchPaths = QStringList() << "/usr/share/applications"
                                                 << QDir::homePath() + "/.local/share/applications"
                                                 << "/usr/local/share/applications"
@@ -116,17 +116,14 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
 
                     // Парсим содержимое файла .desktop и получаем имя иконки и команду запуска
                     QString iconName;
-                    QString execCommand;
                     while (!stream.atEnd()) {
                         QString line = stream.readLine().trimmed();
                         if (line.startsWith("Icon=")) {
                             iconName = line.mid(5).trimmed();
-                        } else if (line.startsWith("Exec=")) {
-                            execCommand = line.mid(5).trimmed();
                         }
 
                         // Прерываем цикл, если мы уже получили оба значения
-                        if (!iconName.isEmpty() && !execCommand.isEmpty()) {
+                        if (!iconName.isEmpty()) {
                             break;
                         }
                     }
@@ -134,20 +131,17 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
                     desktopFile.close();
 
                     // Если удалось получить имя иконки и команду запуска, сохраняем информацию в словарях
-                    if (!iconName.isEmpty() && !execCommand.isEmpty()) {
+                    if (!iconName.isEmpty()) {
                         QString desktopAppName = desktopFileName.split('.').first();
                         iconMap[desktopAppName] = iconName;
-                        execMap[desktopAppName] = execCommand;
                     }
                 }
             }
         }
     }
 
-    // Проверяем, есть ли информация об иконке и команде запуска для данного приложения в словарях
-    if (iconMap.contains(appName) && execMap.contains(appName)) {
-        // Здесь вы можете использовать execMap[appName] для запуска приложения по команде
-        // В данном случае возвращаем только иконку
+    // Проверяем, есть ли информация об иконке для данного приложения в словарях
+    if (iconMap.contains(appName)) {
         return QIcon::fromTheme(iconMap[appName]);
     }
 
@@ -370,18 +364,6 @@ void MainWindow::on_action_host_triggered()
     ui->scroll_site->setVisible(true);
     showLoadingAnimation(false);
 }
-
-void MainWindow::on_action_game_triggered()
-{
-    if (page == 11) return;
-    mrpropper(11);
-    ui->label1->setText(tr("Игровая зона"));
-    ui->tabWidget->setVisible(true);
-    ui->tabWidget->setCurrentIndex(5);
-
-    showLoadingAnimation(false);
-}
-
 
 //---#####################################################################################################################################################
 //--################################################################## БЫСТРЫЕ ФУНКЦИИ ##################################################################

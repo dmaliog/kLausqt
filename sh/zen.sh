@@ -10,7 +10,7 @@ lang "$1"
 
 # Проверка наличия установленных Zen пакетов
 if [ -n "$(yay -Qs linux-zen)" ] || [ -n "$(yay -Qs linux-zen-headers)" ]; then
-    echo "${zen_ok}"
+    echo "${pkg} linux-zen ${no_found}. ${instq} linux-zen & linux-zen-headers? (y/n): "
     read answer
     if [ "$answer" == "y" ]; then
         yay -R --noconfirm linux-zen linux-zen-headers

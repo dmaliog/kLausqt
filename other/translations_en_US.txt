@@ -1,4 +1,3 @@
-c_ok="1C is already installed. Do you want to delete 1C Enterprise? (y/n): "
 c_notify="1C installer"
 c_norun=".run file not found"
 
@@ -28,8 +27,8 @@ createfile_ok="File successfully created"
 pkgsave_name="Enter the name of the download package: "
 path_pkgsave="Select the directory to save the archive"
 pkgsave="Creating local packages"
-pkgsave_ok="Packages $package_name and its dependencies are successfully saved in the archive"
-pkgsave_error="Error when downloading package $package_name"
+pkgsave_ok="Packages $package_name and its dependencies have been successfully archived"
+pkgsave_error="Error downloading package $package_name"
 no_direct="Directory not selected"
 
 wayland_nvidia="Wayland+Nvidia support"
@@ -37,7 +36,6 @@ pkginstall_ok="All packages are already installed"
 grubmoduleadd_ok="You have already added modules to GRUB"
 grubmodule_ok="You have already installed modules nvidia.drm.modeset"
 
-zen_ok="You already have Zen core installed! Do you want to remove it and update GRUB? (y/n)"
 zen="ZEN Installation"
 grub_no="Grub not detected"
 delete_ok="Removal completed successfully"
@@ -55,11 +53,15 @@ yay_clear="The $HOME/.cache/yay/ directory has been cleared"
 
 enter_ok="Press Enter to continue..."
 
-neofetch="You don't have the neofetch package installed. Do you want to install it? (y/n) "
-okinstall="Package installation "
-noinstall="Installation canceled"
-install="Installation"
-
-inxi="You don't have the inxi package installed. Do you want to install it? (y/n) "
-
 link="Link:"
+
+error="Error"
+pkg="Package"
+no_found="not found"
+
+install="Install"
+noinstall="Installation canceled"
+
+instq="Do you really want to install"
+
+time="Let's launch the klaus application and calculate how long it started, for example: time klauspro\n"

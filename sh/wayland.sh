@@ -9,7 +9,7 @@ source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
 if [[ $(sudo cat /sys/module/nvidia_drm/parameters/modeset) == "N" ]]; then
-    if pacman -Qs xorg-xwayland >/dev/null && pacman -Qs libxcb >/dev/null && pacman -Qs egl-wayland >/dev/null && pacman -Qs qt5-wayland >/dev/null && pacman -Qs qt6-wayland >/dev/null; then
+    if yay -Qs xorg-xwayland >/dev/null && yay -Qs libxcb >/dev/null && yay -Qs egl-wayland >/dev/null && yay -Qs qt5-wayland >/dev/null && yay -Qs qt6-wayland >/dev/null; then
         notify-send "${wayland_nvidia}" "${pkginstall_ok}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
     else
         yay -S --noconfirm xorg-xwayland libxcb egl-wayland qt5-wayland qt6-wayland

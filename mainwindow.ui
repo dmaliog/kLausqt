@@ -4426,7 +4426,7 @@ QToolBar#toolBar_2 QToolButton:hover {
   </action>
   <action name="action_bench">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="klausres.qrc">
