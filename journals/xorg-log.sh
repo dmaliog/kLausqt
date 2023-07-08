@@ -10,4 +10,5 @@ lang "$1"
 
 nano /var/log/Xorg.0.log
 
-read -p "${enter_ok}"
+echo -e "\n${enter_ok}"
+read

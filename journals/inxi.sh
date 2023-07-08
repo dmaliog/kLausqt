@@ -9,8 +9,8 @@ source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
 # Проверка наличия установленного inxi
-if ! command -v inxi &>/dev/null; then
-    read -p "${inxi}" answer
+if ! yay -Qs inxi &>/dev/null; then
+    read -p "${pkg} inxi ${no_found}. ${instq} inxi? (y/n): " answer
     if [[ "$answer" == [yY] ]]; then
         yay -S inxi
     else
@@ -23,4 +23,5 @@ output=$(inxi -Fxxc0z)
 inxi -Fxxc0z
 send_to_server "$output"
 
-read -p "${enter_ok}"
+echo -e "\n${enter_ok}"
+read

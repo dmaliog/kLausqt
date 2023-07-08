@@ -12,4 +12,5 @@ output=$(systemd-analyze blame)
 systemd-analyze blame
 send_to_server "$output"
 
-read -p "${enter_ok}"
+echo -e "\n${enter_ok}"
+read

@@ -12,4 +12,5 @@ output=$(yay -Qn)
 yay -Qn
 send_to_server "$output"
 
-read -p "${enter_ok}"
+echo -e "\n${enter_ok}"
+read

@@ -10,4 +10,5 @@ lang "$1"
 
 sudo nano /boot/grub/grub.cfg
 
-read -p "${enter_ok}"
+echo -e "\n${enter_ok}"
+read

@@ -9,8 +9,8 @@ source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
 # Проверка наличия установленного neofetch
-if ! command -v neofetch &>/dev/null; then
-    read -p "${neofetch}" answer
+if ! yay -Qs neofetch &>/dev/null; then
+    read -p "${pkg} neofetch ${no_found}. ${instq} neofetch? (y/n): " answer
     if [[ "$answer" == [yY] ]]; then
         yay -S neofetch
     else
@@ -21,4 +21,5 @@ fi
 
 neofetch
 
-read -p "${enter_ok}"
+echo -e "\n${enter_ok}"
+read

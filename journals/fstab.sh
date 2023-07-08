@@ -10,4 +10,5 @@ lang "$1"
 
 sudo nano /etc/fstab
 
-read -p "${enter_ok}"
+echo -e "\n${enter_ok}"
+read
