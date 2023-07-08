@@ -58,10 +58,13 @@ link="Link:"
 error="Error"
 pkg="Package"
 no_found="not found"
+found="found"
 
 install="Install"
 noinstall="Installation canceled"
 
-instq="Do you really want to install"
+instq="Do you really want to set "
+delq="Do you really want to delete"
 
 time="Let's launch the klaus application and calculate how long it started, for example: time klauspro\n"
+name_pkg="Enter the package name: "

@@ -11,7 +11,7 @@ lang "$1"
 if [ -n "$2" ]; then
     program_name="$2"
 else
-    read -p "Введите название пакета: " program_name
+    read -p "${name_pkg}" program_name
 fi
 
 if [ ! -d "$HOME/.config/kLaus/pkg/" ]; then

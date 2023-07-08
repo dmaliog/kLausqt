@@ -26,7 +26,7 @@ fi
 # Проверка наличия папки /opt/1cv8t/
 if [ -d "/opt/1cv8t/" ]; then
     # Папка существует, спросить пользователя о удалении 1С Предприятие
-    read -p "${pkg} 1C ${no_found}. ${instq} 1C? (y/n): " answer
+    read -p "${pkg} 1C ${found}. ${delq} 1C? (y/n): " answer
     if [ "$answer" = "y" ]; then
         # Удаление предыдущей версии 1С Предприятие
         version=$(ls /opt/1cv8t/x86_64/)
