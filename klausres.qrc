@@ -108,5 +108,10 @@
         <file>bench/ttcp.sh</file>
         <file>bench/iperf.sh</file>
         <file>bench/time.sh</file>
+        <file>bench/hdparm.sh</file>
+        <file>bench/gnome-disks.sh</file>
+        <file>bench/kdiskmark.sh</file>
+        <file>bench/systemd-analyze.sh</file>
+        <file>bench/dd.sh</file>
     </qresource>
 </RCC>

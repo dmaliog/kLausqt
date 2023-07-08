@@ -108,7 +108,12 @@ private:
                                       ":/bench/interbench.sh",
                                       ":/bench/ttcp.sh",
                                       ":/bench/iperf.sh",
-                                      ":/bench/time.sh"};
+                                      ":/bench/time.sh",
+                                      ":/bench/hdparm.sh",
+                                      ":/bench/gnome-disks.sh",
+                                      ":/bench/kdiskmark.sh",
+                                      ":/bench/systemd-analyze.sh",
+                                      ":/bench/dd.sh"};
 
     QStringList endingsToRemove = QStringList() << "-bin" << "-git" << "-qt" << "-qt4" << "-qt5" << "-qt6"
                                                 << "qt-" << "qt4-" << "qt5-" << "qt6-" << "-gtk"
