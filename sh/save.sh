@@ -1,7 +1,11 @@
 #name_ru_RU Создать локальный пакет
 #msg_ru_RU Вы действительно хотите создать локальный пакет?
+
 #name_en_US Create a local package
 #msg_en_US Do you really want to create a local package?
+
+#icon 5
+
 #!/bin/bash
 
 # Импорт файла main.sh

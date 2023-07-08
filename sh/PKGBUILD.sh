@@ -1,7 +1,11 @@
 #name_ru_RU Изменить PKGBUILD пакета перед установкой
 #msg_ru_RU Вы действительно хотите изменить PKGBUILD пакета перед установкой?
+
 #name_en_US Change PKGBUILD package before installation
 #msg_en_US Do you really want to change the PKGBUILD package before installing?
+
+#icon 27
+
 #!/bin/bash
 
 # Импорт файла main.sh

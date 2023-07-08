@@ -1,7 +1,11 @@
 #name_ru_RU Добавить картинку в neofetch
 #msg_ru_RU Вы действительно хотите поменять в neofetch картинку?
+
 #name_en_US Add a picture to neofetch
 #msg_en_US Do you really want to change the picture in neofetch?
+
+#icon 21
+
 #!/bin/bash
 
 # Импорт файла main.sh

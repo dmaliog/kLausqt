@@ -1,7 +1,11 @@
 #name_ru_RU hdparm - измеряет производительность дисков
 #msg_ru_RU hdparm - позволяет оценить пропускную способность чтения данных с жесткого диска и его кеша, что может быть полезно при анализе и тестировании производительности хранилища данных.
+
 #name_en_US hdparm - measures disk performance
 #msg_en_US hdparm - allows you to estimate the throughput of reading data from the hard disk and its cache, which can be useful in analyzing and testing the performance of data storage.
+
+#icon 53
+
 #!/bin/bash
 
 # Импорт файла main.sh

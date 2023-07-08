@@ -1,7 +1,11 @@
 #name_ru_RU systemd-analyze - анализирует время загрузки компонентов и служб
 #msg_ru_RU systemd-analyze - анализирует время загрузки различных компонентов и служб во время запуска и создает графическое представление, которое показывает зависимости и последовательность выполнения этих компонентов.
+
 #name_en_US systemd-analyze - analyzes the loading time of components and services
 #msg_en_US systemd-analyze - analyzes the loading time of various components and services during startup and creates a graphical representation that shows the dependencies and the sequence of execution of these components.
+
+#icon 53
+
 #!/bin/bash
 
 # Импорт файла main.sh

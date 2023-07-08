@@ -1,7 +1,11 @@
 #name_ru_RU Установить Zen-ядро
 #msg_ru_RU Вы действительно хотите установить Zen ядро?
+
 #name_en_US Install Zen Core
 #msg_en_US Do you really want to install Zen kernel?
+
+#icon 10
+
 #!/bin/bash
 
 # Импорт файла main.sh

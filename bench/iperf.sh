@@ -1,7 +1,11 @@
 #name_ru_RU iperf - измеряет пропускную способность сетевого соединения
 #msg_ru_RU iperf - это инструмент для измерения пропускной способности сети. Он позволяет тестировать скорость передачи данных между двумя узлами в сети, чтобы оценить производительность сетевого соединения. iperf может быть использован для проведения тестов на локальной сети или через интернет между удаленными узлами.
+
 #name_en_US iperf - measures the bandwidth of a network connection
 #msg_en_US iperf is a tool for measuring network bandwidth. It allows you to test the data transfer rate between two nodes in a network to evaluate the performance of a network connection. iperf can be used to conduct tests on a local network or over the Internet between remote nodes.
+
+#icon 53
+
 #!/bin/bash
 
 # Импорт файла main.sh

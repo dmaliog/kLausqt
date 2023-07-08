@@ -1,7 +1,11 @@
 #name_ru_RU Установить локальный пакет
 #msg_ru_RU Вы действительно хотите установить локальный пакет? Примечание: Устанавливайте только пакеты, созданные с помощью kLaus
+
 #name_en_US Install Local Package
 #msg_en_US Do you really want to install the local package? Note: Install only packages created using kLaus
+
+#icon 5
+
 #!/bin/bash
 
 # Импорт файла main.sh

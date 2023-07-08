@@ -113,5 +113,8 @@
         <file>bench/kdiskmark.sh</file>
         <file>bench/systemd-analyze.sh</file>
         <file>bench/dd.sh</file>
+        <file>img/51.png</file>
+        <file>img/53.png</file>
+        <file>img/wayland.png</file>
     </qresource>
 </RCC>

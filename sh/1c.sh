@@ -1,7 +1,11 @@
 #name_ru_RU Установить 1С Предприятие [Учебная версия]
 #msg_ru_RU Вы действительно хотите установить 1С Предприятие? Для установки вам понадобится скачать пакет с сайта 1С (https://online.1c.ru/catalog/free/28766016/) для Linux.
+
 #name_en_US Install 1C Enterprise [Training Version]
 #msg_en_US Do you really want to install 1C Enterprise? To install, you will need to download the package from the 1C website (https://online.1c.ru/catalog/free/28766016 /) for Linux.
+
+#icon 29
+
 #!/bin/bash
 
 # Импорт файла main.sh

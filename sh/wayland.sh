@@ -1,7 +1,11 @@
 #name_ru_RU Добавить поддержку Wayland+Nvidia в KDE
 #msg_ru_RU Вы действительно хотите подключить Wayland для Nvidia?
+
 #name_en_US Add Wayland+Nvidia support to KDE
 #msg_en_US Do you really want to connect Wayland to Nvidia?
+
+#icon wayland
+
 #!/bin/bash
 
 # Импорт файла main.sh

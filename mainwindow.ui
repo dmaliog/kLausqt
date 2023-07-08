@@ -1947,6 +1947,7 @@ background-position: left center;</string>
     <property name="font">
      <font>
       <pointsize>12</pointsize>
+      <bold>false</bold>
      </font>
     </property>
     <property name="focusPolicy">
@@ -3220,6 +3221,7 @@ background-position: left center;</string>
     <property name="font">
      <font>
       <pointsize>12</pointsize>
+      <bold>false</bold>
      </font>
     </property>
     <property name="focusPolicy">

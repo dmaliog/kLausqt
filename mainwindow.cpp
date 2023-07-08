@@ -15,7 +15,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "5.2";
+QString currentVersion = "5.3";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -924,6 +924,8 @@ void MainWindow::on_action_addsh_triggered()
                 stream << "#name_ru_RU " << nameRuLineEdit->text() << "\n";
                 stream << "#msg_ru_RU " << msgRuLineEdit->text() << "\n";
             }
+            stream << "#icon 31" << "\n";
+            stream << "#!/bin/bash" << "\n";
             stream << scriptTextEdit->toPlainText();
 
             file.close();
@@ -2080,6 +2082,11 @@ void MainWindow::loadingListWidget()
     cacheButtonYay = new QListWidgetItem(tr("Кэш пакетов Yay"), ui->list_clear);
     cacheButtonPacman = new QListWidgetItem(tr("Кэш пакетов Pacman"), ui->list_clear);
     orphanButton = new QListWidgetItem(tr("Пакеты сироты"), ui->list_clear);
+
+    cacheButtonYay->setIcon(QIcon(":/img/14.png"));
+    cacheButtonPacman->setIcon(QIcon(":/img/14.png"));
+    orphanButton->setIcon(QIcon(":/img/14.png"));
+
     cacheButtonYay->setForeground(generateRandomColor());
     cacheButtonPacman->setForeground(generateRandomColor());
     orphanButton->setForeground(generateRandomColor());
@@ -2112,6 +2119,7 @@ void MainWindow::loadScripts(const QString& baseDir, QListWidget* listWidget)
         QString fileName = fileInfo.fileName();
 
         QString itemName = fileName;
+        QString iconPath = "";
 
         QFile scriptFile(filePath);
         if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -2123,7 +2131,11 @@ void MainWindow::loadScripts(const QString& baseDir, QListWidget* listWidget)
                 if (line.startsWith("#name_" + lang))
                 {
                     itemName = line.mid(12).trimmed();
-                    break;
+                }
+                else if (line.startsWith("#icon"))
+                {
+                    QString iconNumber = line.mid(6).trimmed();
+                    iconPath = QString(":/img/%1.png").arg(iconNumber);
                 }
             }
             scriptFile.close();
@@ -2131,6 +2143,12 @@ void MainWindow::loadScripts(const QString& baseDir, QListWidget* listWidget)
 
         QListWidgetItem* item = new QListWidgetItem(itemName, listWidget);
         item->setForeground(generateRandomColor());
+
+        if (!iconPath.isEmpty())
+        {
+            QIcon icon(iconPath);
+            item->setIcon(icon);
+        }
     }
 }
 

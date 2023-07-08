@@ -1,7 +1,11 @@
 #name_ru_RU Убрать пароль SUDO (осторожно!)
 #msg_ru_RU Вы действительно хотите убрать пароль sudo для этого пользователя?
+
 #name_en_US Remove SUDO password (caution!)
 #msg_en_US Do you really want to remove sudo password for this user?
+
+#icon 51
+
 #!/bin/bash
 
 # Импорт файла main.sh
