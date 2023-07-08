@@ -1,7 +1,11 @@
 #name_ru_RU Детальная информация о железе (inxi)
 #msg_ru_RU 'inxi -Fxxc0z' показывает детальную информацию о железе (CPU/RAM/GPU - их частоте и количестве ядер), дисках и т.д.
+
 #name_en_US Detailed information about hardware (inxi)
 #msg_en_US 'ini -Fxxc0z' shows detailed information about hardware (CPU/RAM/GPU - their frequency and number of cores), disks, etc.
+
+#icon 31
+
 #!/bin/bash
 
 # Импорт файла main.sh

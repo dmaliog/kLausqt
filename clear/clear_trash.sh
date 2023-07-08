@@ -1,7 +1,11 @@
 #name_ru_RU Корзина (принудительно)
 #msg_ru_RU Вы действительно хотите удалить все файлы и папки из корзины?
+
 #name_en_US Trash (forced)
 #msg_en_US Do you really want to delete all files and folders from the trash?
+
+#icon 14
+
 #!/bin/bash
 
 # Импорт файла main.sh
