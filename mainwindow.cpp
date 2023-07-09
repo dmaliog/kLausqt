@@ -15,7 +15,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "5.4";
+QString currentVersion = "5.5";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -213,7 +213,7 @@ void MainWindow::on_action_9_triggered()
     ui->action_bench->setVisible(true);
     ui->action_repair->setVisible(true);
 
-    ui->list_grub->setVisible(true);
+    ui->list_journal->setVisible(true);
     showLoadingAnimation(false);
 }
 
@@ -308,6 +308,8 @@ void MainWindow::on_action_host_triggered()
     ui->scroll_site->setVisible(true);
     showLoadingAnimation(false);
 }
+
+//11-12 page заняты!
 
 //---#####################################################################################################################################################
 //--################################################################## БЫСТРЫЕ ФУНКЦИИ ##################################################################
@@ -412,28 +414,35 @@ void MainWindow::openDirectory(const QString &directoryPath)
 
 void MainWindow::on_action_27_triggered()
 {
+    page = 11;
     ui->label1->setText(tr("Системные журналы и конфигурации"));
     ui->list_bench->setVisible(false);
     ui->scroll_repair->setVisible(false);
     ui->combo_bench->setVisible(false);
-    ui->list_grub->setVisible(true);
+    ui->searchApp->setGeometry(390, 5, 221, 31);
+    ui->searchApp->setVisible(true);
+    ui->list_journal->setVisible(true);
 }
 
 void MainWindow::on_action_bench_triggered()
 {
+    page = 12;
     ui->label1->setText(tr("Бенчмарки"));
-    ui->list_grub->setVisible(false);
+    ui->list_journal->setVisible(false);
     ui->scroll_repair->setVisible(false);
-    ui->list_bench->setVisible(true);
     ui->combo_bench->setVisible(true);
+    ui->searchApp->setGeometry(390, 5, 221, 31);
+    ui->searchApp->setVisible(true);
+    ui->list_bench->setVisible(true);
 }
 
 void MainWindow::on_action_repair_triggered()
 {
     ui->label1->setText(tr("Оптимизиция"));
-    ui->list_grub->setVisible(false);
+    ui->list_journal->setVisible(false);
     ui->list_bench->setVisible(false);
     ui->combo_bench->setVisible(false);
+    ui->searchApp->setVisible(false);
     ui->scroll_repair->setVisible(true);
 }
 
@@ -2080,21 +2089,30 @@ void MainWindow::loadContent() {
             });
         }
         else {
-            //поиск по listWidgetManager
-            QList<QListWidgetItem*> matchingItems = ui->list_manager->findItems(text, Qt::MatchContains);
-            if (!matchingItems.empty()) {
-                ui->list_manager->setCurrentItem(matchingItems.first());
-                ui->list_manager->scrollToItem(matchingItems.first(), QAbstractItemView::PositionAtCenter);
-            }
+            if (page == 11)
+                searchAndScroll(ui->list_journal, text);
+            else if (page == 12)
+                searchAndScroll(ui->list_bench, text);
+            else
+                searchAndScroll(ui->list_manager, text);
         }
     });
+}
+
+void MainWindow::searchAndScroll(QListWidget* listWidget, const QString& text)
+{
+    QList<QListWidgetItem*> matchingItems = listWidget->findItems(text, Qt::MatchContains);
+    if (!matchingItems.empty()) {
+        listWidget->setCurrentItem(matchingItems.first());
+        listWidget->scrollToItem(matchingItems.first(), QAbstractItemView::PositionAtCenter);
+    }
 }
 
 void MainWindow::loadingListWidget()
 {
     ui->list_sh->clear();
     ui->list_clear->clear();
-    ui->list_grub->clear();
+    ui->list_journal->clear();
     ui->list_bench->clear();
 
     saveScripts(shResourcePaths, baseDir + "sh/");
@@ -2117,7 +2135,7 @@ void MainWindow::loadingListWidget()
     cacheButtonPacman->setForeground(generateRandomColor());
     orphanButton->setForeground(generateRandomColor());
 
-    loadScripts(baseDir + "journals/", ui->list_grub);
+    loadScripts(baseDir + "journals/", ui->list_journal);
     loadScripts(baseDir + "bench/", ui->list_bench);
 
     QDir().mkpath(baseDir + "other/");
@@ -2139,6 +2157,11 @@ void MainWindow::loadScripts(const QString& baseDir, QListWidget* listWidget)
     QStringList filter;
     filter << "*.sh"; // Фильтр для выбора только файлов со скриптами
     QFileInfoList fileList = dir.entryInfoList(filter);
+
+    // Создаем два отдельных списка для скриптов
+    QList<QListWidgetItem*> iconSortScripts;
+    QList<QListWidgetItem*> otherScripts;
+
     for (const QFileInfo& fileInfo : fileList)
     {
         QString filePath = fileInfo.filePath();
@@ -2167,13 +2190,48 @@ void MainWindow::loadScripts(const QString& baseDir, QListWidget* listWidget)
             scriptFile.close();
         }
 
-        QListWidgetItem* item = new QListWidgetItem(itemName, listWidget);
+        QListWidgetItem* item = new QListWidgetItem(itemName);
         item->setForeground(generateRandomColor());
 
         if (!iconPath.isEmpty())
         {
             QIcon icon(iconPath);
             item->setIcon(icon);
+        }
+
+        // Сортировка
+        if (benchlist == 1)
+        {
+            if (iconPath == ":/img/29.png" || iconPath == ":/img/53.png")
+                iconSortScripts.append(item);
+        }
+        else if (benchlist == 2)
+        {
+            if (iconPath == ":/img/49.png")
+                iconSortScripts.append(item);
+        }
+        else if (benchlist == 3)
+        {
+            if (iconPath == ":/img/21.png")
+                iconSortScripts.append(item);
+        }
+        else
+            otherScripts.append(item);
+    }
+
+    if(benchlist >= 1)
+    {
+        // Добавление элементов списка в QListWidget
+        for (QListWidgetItem* item : iconSortScripts)
+        {
+            listWidget->addItem(item);
+        }
+    }
+    else
+    {
+        for (QListWidgetItem* item : otherScripts)
+        {
+            listWidget->addItem(item);
         }
     }
 }
@@ -2428,6 +2486,12 @@ void MainWindow::on_combo_lang_currentIndexChanged(int index)
     }
 }
 
+void MainWindow::on_combo_bench_currentIndexChanged(int index)
+{
+    benchlist = index;
+    loadScripts(baseDir + "bench/", ui->list_bench);
+}
+
 void MainWindow::on_combo_cache_currentIndexChanged()
 {
     yaycache = ui->combo_cache->currentIndex();
@@ -2670,7 +2734,7 @@ void MainWindow::on_list_sh_itemDoubleClicked(QListWidgetItem *item) {
 }
 
 
-void MainWindow::on_list_grub_itemDoubleClicked(QListWidgetItem *item) {
+void MainWindow::on_list_journal_itemDoubleClicked(QListWidgetItem *item) {
     QString scriptDir = baseDir + "journals/";
     handleListItemDoubleClick(item, scriptDir);
 }
@@ -2726,3 +2790,4 @@ void MainWindow::openUrl(const QString& url)
             sendNotification(tr("Ошибка"), tr("Установите Firefox или выберите рабочий браузер в качестве основного в настройках системы!"));
     }
 }
+

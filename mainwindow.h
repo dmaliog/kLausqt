@@ -57,6 +57,7 @@ private:
     int table5; // последнее обновление
     int fav; // последнее обновление
     int host;
+    int benchlist; //бенчлист
 
     QString packageURL;
     QString lang;
@@ -115,7 +116,25 @@ private:
                                       ":/bench/systemd-analyze.sh",
                                       ":/bench/dd.sh",
                                       ":/bench/7z.sh",
-                                      ":/bench/peakperf.sh"};
+                                      ":/bench/peakperf.sh",
+                                      ":/bench/basemark.sh",
+                                      ":/bench/blender-benchmark.sh",
+                                      ":/bench/GFXBench.sh",
+                                      ":/bench/glmark2.sh",
+                                      ":/bench/glxgears.sh",
+                                      ":/bench/gputest.sh",
+                                      ":/bench/intel-gpu-tools.sh",
+                                      ":/bench/unigine-sanctuary.sh",
+                                      ":/bench/unigine-tropics.sh",
+                                      ":/bench/unigine-heaven.sh",
+                                      ":/bench/unigine-valley.sh",
+                                      ":/bench/unigine-superposition.sh",
+                                      ":/bench/vkmark.sh",
+                                      ":/bench/bonnie.sh",
+                                      ":/bench/s-tui.sh",
+                                      ":/bench/phoronix-test-suite.sh",
+                                      ":/bench/hardinfo.sh",
+                                      ":/bench/iozone.sh"};
 
     QStringList endingsToRemove = QStringList() << "-bin" << "-git" << "-qt" << "-qt4" << "-qt5" << "-qt6"
                                                 << "qt-" << "qt4-" << "qt5-" << "qt6-" << "-gtk"
@@ -179,6 +198,7 @@ private slots:
     void WorkTimer();
     void handleServerResponse(QNetworkReply* reply);
     void handleListItemDoubleClick(QListWidgetItem *item, const QString& scriptDir);
+    void searchAndScroll(QListWidget* listWidget, const QString& text);
 
     void on_spin_rating_valueChanged(int arg1);
 
@@ -204,7 +224,7 @@ private slots:
     void on_list_repair_itemDoubleClicked(QListWidgetItem *item);
     void on_list_bench_itemDoubleClicked(QListWidgetItem *item);
     void on_list_sh_itemDoubleClicked(QListWidgetItem *item);
-    void on_list_grub_itemDoubleClicked(QListWidgetItem *item);
+    void on_list_journal_itemDoubleClicked(QListWidgetItem *item);
     void on_list_clear_itemDoubleClicked(QListWidgetItem *item);
 
     void on_line_tea_textChanged(const QString &arg1);
@@ -239,6 +259,7 @@ private slots:
     void on_push_grub_clicked();
     void on_push_site_clicked();
     void on_push_repair_clicked();
+    void on_combo_bench_currentIndexChanged(int index);
 };
 
 #endif // MAINWINDOW_H

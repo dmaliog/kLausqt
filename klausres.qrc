@@ -118,5 +118,24 @@
         <file>img/wayland.png</file>
         <file>bench/7z.sh</file>
         <file>bench/peakperf.sh</file>
+        <file>bench/basemark.sh</file>
+        <file>bench/blender-benchmark.sh</file>
+        <file>bench/GFXBench.sh</file>
+        <file>bench/glmark2.sh</file>
+        <file>bench/glxgears.sh</file>
+        <file>bench/gputest.sh</file>
+        <file>bench/intel-gpu-tools.sh</file>
+        <file>bench/unigine-sanctuary.sh</file>
+        <file>bench/unigine-valley.sh</file>
+        <file>bench/unigine-tropics.sh</file>
+        <file>bench/unigine-superposition.sh</file>
+        <file>bench/unigine-heaven.sh</file>
+        <file>bench/vkmark.sh</file>
+        <file>img/49.png</file>
+        <file>bench/bonnie.sh</file>
+        <file>bench/s-tui.sh</file>
+        <file>bench/phoronix-test-suite.sh</file>
+        <file>bench/hardinfo.sh</file>
+        <file>bench/iozone.sh</file>
     </qresource>
 </RCC>

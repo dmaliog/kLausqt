@@ -588,8 +588,14 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_update">
+        <item row="0" column="1">
+         <widget class="QTimeEdit" name="time_update">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -599,16 +605,14 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>40</height>
+            <height>16777215</height>
            </size>
           </property>
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
+          <property name="contextMenuPolicy">
+           <enum>Qt::NoContextMenu</enum>
           </property>
-          <property name="text">
-           <string>Частота обновления пакетов</string>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -734,14 +738,8 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           </item>
          </widget>
         </item>
-        <item row="0" column="1">
-         <widget class="QTimeEdit" name="time_update">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_update">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -751,14 +749,16 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>16777215</height>
+            <height>40</height>
            </size>
           </property>
-          <property name="contextMenuPolicy">
-           <enum>Qt::NoContextMenu</enum>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
           </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
+          <property name="text">
+           <string>Частота обновления пакетов</string>
           </property>
          </widget>
         </item>
@@ -1935,7 +1935,7 @@ background-position: left center;</string>
      <enum>Qt::NoFocus</enum>
     </property>
    </widget>
-   <widget class="QListWidget" name="list_grub">
+   <widget class="QListWidget" name="list_journal">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -3387,18 +3387,22 @@ background-position: left center;</string>
    </widget>
    <widget class="QComboBox" name="combo_bench">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
-      <x>430</x>
+      <x>190</x>
       <y>5</y>
-      <width>181</width>
+      <width>191</width>
       <height>31</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border:0;</string>
+     <string notr="true">QComboBox{
+	padding: 0 10px 0 15px;
+    border-radius: 15px;
+	border: 0;
+}</string>
     </property>
     <item>
      <property name="text">
@@ -3429,7 +3433,7 @@ background-position: left center;</string>
    <zorder>searchApp</zorder>
    <zorder>list_bench</zorder>
    <zorder>scroll_repair</zorder>
-   <zorder>list_grub</zorder>
+   <zorder>list_journal</zorder>
    <zorder>list_sh</zorder>
    <zorder>tabWidget</zorder>
    <zorder>combo_bench</zorder>
