@@ -116,5 +116,7 @@
         <file>img/51.png</file>
         <file>img/53.png</file>
         <file>img/wayland.png</file>
+        <file>bench/7z.sh</file>
+        <file>bench/peakperf.sh</file>
     </qresource>
 </RCC>

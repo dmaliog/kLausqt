@@ -3385,6 +3385,42 @@ background-position: left center;</string>
      </widget>
     </widget>
    </widget>
+   <widget class="QComboBox" name="combo_bench">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>5</y>
+      <width>181</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border:0;</string>
+    </property>
+    <item>
+     <property name="text">
+      <string>Все</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Отдельные инструменты</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Программные комплексы</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Графика</string>
+     </property>
+    </item>
+   </widget>
    <zorder>scroll_site</zorder>
    <zorder>webEngineView</zorder>
    <zorder>table_aur</zorder>
@@ -3396,6 +3432,7 @@ background-position: left center;</string>
    <zorder>list_grub</zorder>
    <zorder>list_sh</zorder>
    <zorder>tabWidget</zorder>
+   <zorder>combo_bench</zorder>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="enabled">

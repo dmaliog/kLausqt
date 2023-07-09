@@ -113,7 +113,9 @@ private:
                                       ":/bench/gnome-disks.sh",
                                       ":/bench/kdiskmark.sh",
                                       ":/bench/systemd-analyze.sh",
-                                      ":/bench/dd.sh"};
+                                      ":/bench/dd.sh",
+                                      ":/bench/7z.sh",
+                                      ":/bench/peakperf.sh"};
 
     QStringList endingsToRemove = QStringList() << "-bin" << "-git" << "-qt" << "-qt4" << "-qt5" << "-qt6"
                                                 << "qt-" << "qt4-" << "qt5-" << "qt6-" << "-gtk"

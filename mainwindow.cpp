@@ -15,7 +15,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "5.3";
+QString currentVersion = "5.4";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -212,64 +212,8 @@ void MainWindow::on_action_9_triggered()
     ui->action_27->setVisible(true);
     ui->action_bench->setVisible(true);
     ui->action_repair->setVisible(true);
+
     ui->list_grub->setVisible(true);
-
-    QString filename = "/etc/default/grub";
-    QFile file(filename);
-
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        ui->push_grub->setDisabled(true);
-        ui->line_grub->setDisabled(true);
-        ui->spin_grub->setDisabled(true);
-        ui->line_grub->setText(tr("GRUB не установлен"));
-        // Ошибка открытия файла
-    } else {
-
-        QTextStream in(&file);
-        QString grubContent;
-        QString timeoutStr;
-
-        // Обновленные регулярные выражения для поиска значений с обоими вариантами ковычек
-        static QRegularExpression timeoutRegex("^GRUB_TIMEOUT=['\"]?(\\d+)['\"]?$");
-        static QRegularExpression grubCmdlineRegex("^GRUB_CMDLINE_LINUX_DEFAULT=['\"]?(.*)['\"]?$");
-
-        while (!in.atEnd()) {
-            QString line = in.readLine();
-            if (line.startsWith("GRUB_TIMEOUT=")) {
-                QRegularExpressionMatch match = timeoutRegex.match(line);
-                if (match.hasMatch()) {
-                    timeoutStr = match.captured(1).trimmed();
-                    static const QRegularExpression quotationRegex("[\"']");
-                    timeoutStr.remove(quotationRegex);
-                }
-                continue;
-            }
-
-            if (line.startsWith("GRUB_CMDLINE_LINUX_DEFAULT=")) {
-                QRegularExpressionMatch match = grubCmdlineRegex.match(line);
-                if (match.hasMatch()) {
-                    grubContent = match.captured(1).trimmed();
-                    static const QRegularExpression quotationRegex("[\"']");
-                    grubContent.remove(quotationRegex);
-                }
-                else {
-                    // Если первая попытка не удалась, попробуйте другой вариант ковычек
-                    grubCmdlineRegex.setPattern("^GRUB_CMDLINE_LINUX_DEFAULT=['\"]?(.*)['\"]?$");
-                    match = grubCmdlineRegex.match(line);
-                    if (match.hasMatch()) {
-                        grubContent = match.captured(1).trimmed();
-                        static const QRegularExpression quotationRegex("[\"']");
-                        grubContent.remove(quotationRegex);
-                    }
-                }
-                break; // Закончит цикл поиска
-            }
-        }
-
-        int timeout = timeoutStr.toInt(); // получаем значение timeout из файла
-        ui->spin_grub->setValue(timeout); // устанавливаем значение в QSpinBox
-        ui->line_grub->setText(grubContent);
-    }
     showLoadingAnimation(false);
 }
 
@@ -471,6 +415,7 @@ void MainWindow::on_action_27_triggered()
     ui->label1->setText(tr("Системные журналы и конфигурации"));
     ui->list_bench->setVisible(false);
     ui->scroll_repair->setVisible(false);
+    ui->combo_bench->setVisible(false);
     ui->list_grub->setVisible(true);
 }
 
@@ -480,6 +425,7 @@ void MainWindow::on_action_bench_triggered()
     ui->list_grub->setVisible(false);
     ui->scroll_repair->setVisible(false);
     ui->list_bench->setVisible(true);
+    ui->combo_bench->setVisible(true);
 }
 
 void MainWindow::on_action_repair_triggered()
@@ -487,6 +433,7 @@ void MainWindow::on_action_repair_triggered()
     ui->label1->setText(tr("Оптимизиция"));
     ui->list_grub->setVisible(false);
     ui->list_bench->setVisible(false);
+    ui->combo_bench->setVisible(false);
     ui->scroll_repair->setVisible(true);
 }
 
@@ -556,18 +503,19 @@ void MainWindow::on_action_31_triggered()
 
 void MainWindow::on_action_34_triggered()
 {
-    if (ui->table_aur->currentItem() != nullptr) {
-        int currentRow = ui->table_aur->currentRow();
-        QTableWidgetItem *item = ui->table_aur->item(currentRow, 0);
-        QString url = item->data(Qt::UserRole).toString();
-        if (!url.isEmpty()) {
-            showLoadingAnimation(true);
-            ui->webEngineView->page()->load(QUrl(url));
-        } else {
-            sendNotification(tr("Внимание"), tr("URL отсутствует!"));
-        }
-    } else
+    if (ui->table_aur->currentItem() == nullptr) {
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для просмотра информации!"));
+        return;
+    }
+
+    int currentRow = ui->table_aur->currentRow();
+    QTableWidgetItem *item = ui->table_aur->item(currentRow, 0);
+    QString url = item->data(Qt::UserRole).toString();
+    if (!url.isEmpty()) {
+        showLoadingAnimation(true);
+        ui->webEngineView->page()->load(QUrl(url));
+    } else
+        sendNotification(tr("Внимание"), tr("URL отсутствует!"));
 }
 
 void MainWindow::on_action_35_triggered()
@@ -649,36 +597,36 @@ void MainWindow::on_action_5_triggered()
     }
     else
     {
-        if (ui->list_manager->currentItem() != nullptr) {
-            QString packageName = ui->list_manager->currentItem()->text();
-            packageName = packageName.left(packageName.indexOf(" "));
-
-            // Выполняем команду `pacman -Ql packageName` и захватываем вывод
-            QProcess process;
-            process.start("pacman", QStringList() << "-Ql" << packageName);
-            process.waitForFinished(-1);
-            QString output = process.readAllStandardOutput();
-
-            // Ищем строку, содержащую путь к файлу .desktop
-            QString desktopFilePath;
-            QStringList lines = output.split('\n');
-            for (const QString& line : lines) {
-                if (line.contains(packageName) && line.contains(".desktop")) {
-                    desktopFilePath = line.split(' ').last();
-                    break;
-                }
-            }
-
-            if (!desktopFilePath.isEmpty()) {
-                // Запускаем файл .desktop
-                QString desktopFileName = QFileInfo(desktopFilePath).fileName();
-                QProcess::startDetached("gtk-launch", QStringList() << desktopFileName);
-            } else {
-                // Файл .desktop не найден
-                sendNotification(tr("Ошибка"), tr("Файл .desktop не найден для пакета ") + packageName);
-            }
-        } else
+        if (ui->list_manager->currentItem() == nullptr) {
             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для запуска!"));
+            return;
+        }
+
+        QString packageName = ui->list_manager->currentItem()->text();
+        packageName = packageName.left(packageName.indexOf(" "));
+
+        // Выполняем команду `pacman -Ql packageName` и захватываем вывод
+        QProcess process;
+        process.start("pacman", QStringList() << "-Ql" << packageName);
+        process.waitForFinished(-1);
+        QString output = process.readAllStandardOutput();
+
+        // Ищем строку, содержащую путь к файлу .desktop
+        QString desktopFilePath;
+        QStringList lines = output.split('\n');
+        for (const QString& line : lines) {
+            if (line.contains(packageName) && line.contains(".desktop")) {
+                desktopFilePath = line.split(' ').last();
+                break;
+            }
+        }
+
+        if (!desktopFilePath.isEmpty()) {
+            // Запускаем файл .desktop
+            QString desktopFileName = QFileInfo(desktopFilePath).fileName();
+            QProcess::startDetached("gtk-launch", QStringList() << desktopFileName);
+        } else
+            sendNotification(tr("Ошибка"), tr("Файл .desktop не найден для пакета ") + packageName);
     }
 }
 
@@ -686,45 +634,49 @@ void MainWindow::on_action_6_triggered()
 {
     if (page == 2)
     {
-        if (ui->table_aur->currentItem() != nullptr) {
-            QString packageName = ui->table_aur->item(ui->table_aur->currentRow(), 0)->text();
-            QProcess* process = new QProcess(this);
-
-            // Обработчик вывода информации из процесса
-            connect(process, &QProcess::readyReadStandardOutput, this, [=]() {
-                QString output = process->readAllStandardOutput();
-                static QRegularExpression re("Название\\s+\\:\\s+(\\S+)");
-                QRegularExpressionMatch match = re.match(output);
-                if (match.hasMatch()) {
-
-                    Terminal terminal = getTerminal();
-                    QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -R " + packageName);
-                } else
-                    sendNotification(tr("Пакет не найден"), tr("Пакет ") + packageName + tr(" не найден в системе!"));
-
-                process->deleteLater();
-            });
-
-            // Обработчик вывода ошибок из процесса
-            connect(process, &QProcess::readyReadStandardError, this, [=]() {
-                QString error = process->readAllStandardError();
-                sendNotification(tr("Ошибка"), error);
-                process->deleteLater();
-            });
-
-            // Запускаем процесс
-            process->start("yay", QStringList() << "-Qi" << packageName);
-        } else
+        if (ui->table_aur->currentItem() == nullptr) {
             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для удаления!"));
+            return;
+        }
+
+        QString packageName = ui->table_aur->item(ui->table_aur->currentRow(), 0)->text();
+        QProcess* process = new QProcess(this);
+
+        // Обработчик вывода информации из процесса
+        connect(process, &QProcess::readyReadStandardOutput, this, [=]() {
+            QString output = process->readAllStandardOutput();
+            static QRegularExpression re("Название\\s+\\:\\s+(\\S+)");
+            QRegularExpressionMatch match = re.match(output);
+            if (match.hasMatch()) {
+
+                Terminal terminal = getTerminal();
+                QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -R " + packageName);
+            } else
+                sendNotification(tr("Пакет не найден"), tr("Пакет ") + packageName + tr(" не найден в системе!"));
+
+            process->deleteLater();
+        });
+
+        // Обработчик вывода ошибок из процесса
+        connect(process, &QProcess::readyReadStandardError, this, [=]() {
+            QString error = process->readAllStandardError();
+            sendNotification(tr("Ошибка"), error);
+            process->deleteLater();
+        });
+
+        // Запускаем процесс
+        process->start("yay", QStringList() << "-Qi" << packageName);
 
     } else {
-        if (ui->list_manager->currentItem() != nullptr) {
-            QString packageName = ui->list_manager->currentItem()->text();
-            packageName = packageName.left(packageName.indexOf(" "));
-            Terminal terminal = getTerminal();
-            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -R " + packageName);
-        } else
-             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для удаления!"));
+        if (ui->list_manager->currentItem() == nullptr) {
+            sendNotification(tr("Внимание"), tr("Выберите пакет из списка для удаления!"));
+            return;
+        }
+
+        QString packageName = ui->list_manager->currentItem()->text();
+        packageName = packageName.left(packageName.indexOf(" "));
+        Terminal terminal = getTerminal();
+        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -R " + packageName);
     }
 }
 
@@ -734,34 +686,41 @@ void MainWindow::on_action_4_triggered()
         sendNotification(tr("Внимание"), tr("Перед установкой пакетов требуется обновить систему до актуального состояния! Это поможет предотвратить конфликт зависимостей и избежать кучи других проблем!"));
         return;
     }
+
     if (page == 2)
     {
-        if (ui->table_aur->currentItem() != nullptr) {
-            QString packageName = ui->table_aur->item(ui->table_aur->currentRow(), 0)->text();
-            Terminal terminal = getTerminal();
-            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -S " + packageName);
-         } else
+        if (ui->table_aur->currentItem() == nullptr) {
             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
+            return;
+        }
+
+        QString packageName = ui->table_aur->item(ui->table_aur->currentRow(), 0)->text();
+        Terminal terminal = getTerminal();
+        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -S " + packageName);
 
     } else {
-        if (ui->list_manager->currentItem() != nullptr) {
-            QString packageName = ui->list_manager->currentItem()->text();
-            packageName = packageName.left(packageName.indexOf(" "));
-            Terminal terminal = getTerminal();
-            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -S " + packageName);
-        } else
-             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
+        if (ui->list_manager->currentItem() == nullptr) {
+            sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
+            return;
+        }
+
+        QString packageName = ui->list_manager->currentItem()->text();
+        packageName = packageName.left(packageName.indexOf(" "));
+        Terminal terminal = getTerminal();
+        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -S " + packageName);
     }
 }
 
 void MainWindow::on_action_30_triggered()
 {
-    if (ui->table_aur->currentItem() != nullptr) {
-        QString packageName = ui->table_aur->item(ui->table_aur->currentRow(), 0)->text();
-        Terminal terminal = getTerminal();
-        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << baseDir + "sh/PKGBUILD.sh" << lang << packageName);
-    } else
+    if (ui->table_aur->currentItem() == nullptr) {
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
+        return;
+    }
+
+    QString packageName = ui->table_aur->item(ui->table_aur->currentRow(), 0)->text();
+    Terminal terminal = getTerminal();
+    QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << baseDir + "sh/PKGBUILD.sh" << lang << packageName);
 }
 
 void MainWindow::on_push_grub_clicked()
@@ -945,52 +904,56 @@ void MainWindow::on_action_addsh_triggered()
 
 void MainWindow::on_action_rmsh_triggered()
 {
+    if (ui->list_sh->currentItem() == nullptr) {
+        sendNotification(tr("Внимание"), tr("Выберите скрипт из списка для удаления!"));
+        return;
+    }
+
     // Получаем указатель на текущий выбранный элемент списка
     QListWidgetItem* selectedItem = ui->list_sh->currentItem();
 
-    if (selectedItem)
+    // Получаем содержимое элемента списка (название скрипта на основе языка)
+    QString itemContent = selectedItem->text();
+
+    // Создаем QMap для хранения соответствия имени скрипта и его пути
+    QMap<QString, QString> scriptMap;
+
+    // Ищем файлы со скриптами и заполняем QMap
+    QDir dir(baseDir + "sh/");
+    QStringList filter;
+    filter << "*.sh";
+    QFileInfoList fileList = dir.entryInfoList(filter);
+    for (const QFileInfo& fileInfo : fileList)
     {
-        // Получаем содержимое элемента списка (название скрипта на основе языка)
-        QString itemContent = selectedItem->text();
+        QString filePath = fileInfo.filePath();
 
-        // Ищем файл с соответствующим названием скрипта
-        QDir dir(baseDir + "sh/");
-        QStringList filter;
-        filter << "*.sh";
-        QFileInfoList fileList = dir.entryInfoList(filter);
-        for (const QFileInfo& fileInfo : fileList)
+        // Читаем содержимое файла для сопоставления имени скрипта
+        QFile scriptFile(filePath);
+        if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text))
         {
-            QString filePath = fileInfo.filePath();
-
-            // Читаем содержимое файла для сопоставления имени скрипта
-            QFile scriptFile(filePath);
-            if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text))
+            QTextStream scriptStream(&scriptFile);
+            while (!scriptStream.atEnd())
             {
-                QTextStream scriptStream(&scriptFile);
-                while (!scriptStream.atEnd())
+                QString line = scriptStream.readLine();
+                if (line.startsWith("#name_" + lang))
                 {
-                    QString line = scriptStream.readLine();
-                    if (line.startsWith("#name_" + lang))
-                    {
-                        QString itemName = line.mid(12).trimmed();
-                        if (itemName == itemContent)
-                        {
-                            // Удаляем найденный файл
-                            scriptFile.close();
-                            if (QFile::remove(filePath))
-                            {
-                                // Удаляем выбранный элемент из списка
-                                delete ui->list_sh->takeItem(ui->list_sh->row(selectedItem));
-                                sendNotification(tr("Удаление"), tr("Скрипт успешно удален!"));
-                            }
-                            return;
-                        }
-                        break;
-                    }
+                    QString itemName = line.mid(12).trimmed();
+                    scriptMap[itemName] = filePath;
+                    break;
                 }
-                scriptFile.close();
             }
+            scriptFile.close();
         }
+    }
+
+    // Получаем путь к файлу, соответствующему выбранному элементу списка
+    QString filePath = scriptMap.value(itemContent);
+
+    // Удаляем файл и элемент списка, если путь найден
+    if (!filePath.isEmpty() && QFile::remove(filePath))
+    {
+        delete ui->list_sh->takeItem(ui->list_sh->row(selectedItem));
+        sendNotification(tr("Удаление"), tr("Скрипт успешно удален!"));
     }
 }
 
@@ -1009,104 +972,106 @@ QString MainWindow::getScriptContent(const QString& filePath)
 
 void MainWindow::on_action_editsh_triggered()
 {
+    if (ui->list_sh->currentItem() == nullptr) {
+        sendNotification(tr("Внимание"), tr("Выберите скрипт из списка для изменения!"));
+        return;
+    }
+
     // Получаем указатель на текущий выбранный элемент списка
     QListWidgetItem* selectedItem = ui->list_sh->currentItem();
 
-    if (selectedItem)
+    // Получаем содержимое элемента списка (название скрипта на основе языка)
+    QString itemContent = selectedItem->text();
+
+    // Ищем файл с соответствующим названием скрипта
+    QDir dir(baseDir + "sh/");
+    QStringList filter;
+    filter << "*.sh";
+    QFileInfoList fileList = dir.entryInfoList(filter);
+    for (const QFileInfo& fileInfo : fileList)
     {
-        // Получаем содержимое элемента списка (название скрипта на основе языка)
-        QString itemContent = selectedItem->text();
+        QString filePath = fileInfo.filePath();
+        QString fileName = fileInfo.fileName();
 
-        // Ищем файл с соответствующим названием скрипта
-        QDir dir(baseDir + "sh/");
-        QStringList filter;
-        filter << "*.sh";
-        QFileInfoList fileList = dir.entryInfoList(filter);
-        for (const QFileInfo& fileInfo : fileList)
+        // Читаем содержимое файла для сопоставления имени скрипта
+        QFile scriptFile(filePath);
+        if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text))
         {
-            QString filePath = fileInfo.filePath();
-            QString fileName = fileInfo.fileName();
-
-            // Читаем содержимое файла для сопоставления имени скрипта
-            QFile scriptFile(filePath);
-            if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text))
+            QTextStream scriptStream(&scriptFile);
+            while (!scriptStream.atEnd())
             {
-                QTextStream scriptStream(&scriptFile);
-                while (!scriptStream.atEnd())
+                QString line = scriptStream.readLine();
+                if (line.startsWith("#name_" + lang))
                 {
-                    QString line = scriptStream.readLine();
-                    if (line.startsWith("#name_" + lang))
+                    QString itemName = line.mid(12).trimmed();
+                    if (itemName == itemContent)
                     {
-                        QString itemName = line.mid(12).trimmed();
-                        if (itemName == itemContent)
-                        {
-                            // Закрываем файл, чтобы его можно было перезаписать
-                            scriptFile.close();
+                        // Закрываем файл, чтобы его можно было перезаписать
+                        scriptFile.close();
 
-                            // Создаем диалоговое окно для редактирования содержимого
-                            QDialog* editDialog = new QDialog(this);
-                            editDialog->setWindowTitle(tr("Редактировать скрипт"));
-                            editDialog->resize(500, 300);
+                        // Создаем диалоговое окно для редактирования содержимого
+                        QDialog* editDialog = new QDialog(this);
+                        editDialog->setWindowTitle(tr("Редактировать скрипт"));
+                        editDialog->resize(500, 300);
 
-                            // Создаем элементы интерфейса
-                            QLabel* nameLabel = new QLabel(tr("Имя файла:"));
-                            QLineEdit* nameEdit = new QLineEdit(fileName);
-                            QLabel* scriptLabel = new QLabel(tr("Тело скрипта:"));
-                            QTextEdit* scriptEdit = new QTextEdit();
-                            QPushButton* saveButton = new QPushButton(tr("Сохранить"));
+                        // Создаем элементы интерфейса
+                        QLabel* nameLabel = new QLabel(tr("Имя файла:"));
+                        QLineEdit* nameEdit = new QLineEdit(fileName);
+                        QLabel* scriptLabel = new QLabel(tr("Тело скрипта:"));
+                        QTextEdit* scriptEdit = new QTextEdit();
+                        QPushButton* saveButton = new QPushButton(tr("Сохранить"));
 
-                            // Устанавливаем содержимое скрипта в поле редактирования
-                            scriptEdit->setPlainText(getScriptContent(filePath));
+                        // Устанавливаем содержимое скрипта в поле редактирования
+                        scriptEdit->setPlainText(getScriptContent(filePath));
 
-                            QVBoxLayout* layout = new QVBoxLayout(editDialog);
-                            editDialog->setStyleSheet("QWidget{background-color:#2d2b79;} QLineEdit,QTextEdit{background-color:#21205b;padding:10px;border-radius:10px;} QLabel{color:#fff;font-size:10pt;}QPushButton{border-radius:10px;padding:5px 20px;background-color:#916ee4;color:#fff;}");
+                        QVBoxLayout* layout = new QVBoxLayout(editDialog);
+                        editDialog->setStyleSheet("QWidget{background-color:#2d2b79;} QLineEdit,QTextEdit{background-color:#21205b;padding:10px;border-radius:10px;} QLabel{color:#fff;font-size:10pt;}QPushButton{border-radius:10px;padding:5px 20px;background-color:#916ee4;color:#fff;}");
 
-                            // Добавляем элементы в компоновщик
-                            layout->addWidget(nameLabel);
-                            layout->addWidget(nameEdit);
-                            layout->addWidget(scriptLabel);
-                            layout->addWidget(scriptEdit);
-                            layout->addWidget(saveButton);
+                        // Добавляем элементы в компоновщик
+                        layout->addWidget(nameLabel);
+                        layout->addWidget(nameEdit);
+                        layout->addWidget(scriptLabel);
+                        layout->addWidget(scriptEdit);
+                        layout->addWidget(saveButton);
 
-                            // Устанавливаем компоновщик для диалогового окна
-                            editDialog->setLayout(layout);
+                        // Устанавливаем компоновщик для диалогового окна
+                        editDialog->setLayout(layout);
 
-                            // Подключаем сигнал нажатия кнопки "Сохранить" к соответствующему слоту
-                            connect(saveButton, &QPushButton::clicked, this, [=]() mutable {
-                                // Получаем новое имя файла и новое содержимое скрипта
-                                QString newFileName = nameEdit->text();
-                                QString newScriptContent = scriptEdit->toPlainText();
+                        // Подключаем сигнал нажатия кнопки "Сохранить" к соответствующему слоту
+                        connect(saveButton, &QPushButton::clicked, this, [=]() mutable {
+                            // Получаем новое имя файла и новое содержимое скрипта
+                            QString newFileName = nameEdit->text();
+                            QString newScriptContent = scriptEdit->toPlainText();
 
-                                // Перезаписываем файл с новыми данными
-                                QString newFilePath = baseDir + "sh/" + newFileName;
-                                QFile newScriptFile(newFilePath);
-                                if (newScriptFile.open(QIODevice::WriteOnly | QIODevice::Text))
-                                {
-                                    QTextStream newScriptStream(&newScriptFile);
-                                    newScriptStream << newScriptContent;
-                                    newScriptFile.close();
-                                }
+                            // Перезаписываем файл с новыми данными
+                            QString newFilePath = baseDir + "sh/" + newFileName;
+                            QFile newScriptFile(newFilePath);
+                            if (newScriptFile.open(QIODevice::WriteOnly | QIODevice::Text))
+                            {
+                                QTextStream newScriptStream(&newScriptFile);
+                                newScriptStream << newScriptContent;
+                                newScriptFile.close();
+                            }
 
-                                // Обновляем элемент списка с новым именем
-                                selectedItem->setText(newFileName);
+                            // Обновляем элемент списка с новым именем
+                            selectedItem->setText(newFileName);
 
-                                // Закрываем окно редактирования скрипта
-                                editDialog->close();
+                            // Закрываем окно редактирования скрипта
+                            editDialog->close();
 
-                                // Обновляем список скриптов
-                                loadScripts(baseDir + "sh/", ui->list_sh);
-                                sendNotification(tr("Сохранение"), tr("Скрипт успешно изменен!"));
-                            });
+                            // Обновляем список скриптов
+                            loadScripts(baseDir + "sh/", ui->list_sh);
+                            sendNotification(tr("Сохранение"), tr("Скрипт успешно изменен!"));
+                        });
 
-                            // Отображаем диалоговое окно
-                            editDialog->exec();
-                            return;
-                        }
-                        break;
+                        // Отображаем диалоговое окно
+                        editDialog->exec();
+                        return;
                     }
+                    break;
                 }
-                scriptFile.close();
             }
+            scriptFile.close();
         }
     }
 }
@@ -1127,7 +1092,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     loadFolders();          //загрузка конфигов
     loadingListWidget();
     loadSystemInfo();
-
 
     ui->check_trayon->setChecked(trayon == 1);
     ui->check_repair->setChecked(repair == 1);
@@ -1509,6 +1473,67 @@ void MainWindow::loadSettings()
         action->setChecked(true);
         previousAction = action;
     });
+
+    //-##################################################################################
+    //-##################################### GRUB #######################################
+    //-##################################################################################
+    QString filename = "/etc/default/grub";
+    QFile file(filename);
+
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        ui->push_grub->setDisabled(true);
+        ui->line_grub->setDisabled(true);
+        ui->spin_grub->setDisabled(true);
+        ui->line_grub->setText(tr("GRUB не установлен"));
+        // Ошибка открытия файла
+    } else {
+
+        QTextStream in(&file);
+        QString grubContent;
+        QString timeoutStr;
+
+        // Обновленные регулярные выражения для поиска значений с обоими вариантами ковычек
+        static QRegularExpression timeoutRegex("^GRUB_TIMEOUT=['\"]?(\\d+)['\"]?$");
+        static QRegularExpression grubCmdlineRegex("^GRUB_CMDLINE_LINUX_DEFAULT=['\"]?(.*)['\"]?$");
+
+        while (!in.atEnd()) {
+            QString line = in.readLine();
+            if (line.startsWith("GRUB_TIMEOUT=")) {
+                QRegularExpressionMatch match = timeoutRegex.match(line);
+                if (match.hasMatch()) {
+                    timeoutStr = match.captured(1).trimmed();
+                    static const QRegularExpression quotationRegex("[\"']");
+                    timeoutStr.remove(quotationRegex);
+                }
+                continue;
+            }
+
+            if (line.startsWith("GRUB_CMDLINE_LINUX_DEFAULT=")) {
+                QRegularExpressionMatch match = grubCmdlineRegex.match(line);
+                if (match.hasMatch()) {
+                    grubContent = match.captured(1).trimmed();
+                    static const QRegularExpression quotationRegex("[\"']");
+                    grubContent.remove(quotationRegex);
+                }
+                else {
+                    // Если первая попытка не удалась, попробуйте другой вариант ковычек
+                    grubCmdlineRegex.setPattern("^GRUB_CMDLINE_LINUX_DEFAULT=['\"]?(.*)['\"]?$");
+                    match = grubCmdlineRegex.match(line);
+                    if (match.hasMatch()) {
+                        grubContent = match.captured(1).trimmed();
+                        static const QRegularExpression quotationRegex("[\"']");
+                        grubContent.remove(quotationRegex);
+                    }
+                }
+                break; // Закончит цикл поиска
+            }
+        }
+
+        int timeout = timeoutStr.toInt(); // получаем значение timeout из файла
+        ui->spin_grub->setValue(timeout); // устанавливаем значение в QSpinBox
+        ui->line_grub->setText(grubContent);
+    }
+
 }
 
 void MainWindow::removeToolButtonTooltips(QToolBar* toolbar) {
@@ -1578,6 +1603,7 @@ void MainWindow::mrpropper(int value) //зачистка говна перед �
     ui->searchApp->setVisible(false);
     ui->webEngineView->setVisible(false);
     ui->scroll_site->setVisible(false);
+    ui->combo_bench->setVisible(false);
     ui->label1->setVisible(true);
 }
 
@@ -2042,7 +2068,7 @@ void MainWindow::loadContent() {
                         QString cellText = item->text();
                         QStringList words = cellText.split(' ', Qt::SkipEmptyParts);
                         if (!words.isEmpty() && words.first().startsWith(text, Qt::CaseInsensitive)) {
-                            // Выделяем строку
+
                             // Выделяем всю строку
                             table->setCurrentCell(item->row(), 0);
                             table->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -2077,8 +2103,8 @@ void MainWindow::loadingListWidget()
     saveScripts(benchResourcePaths, baseDir + "bench/");
 
     loadScripts(baseDir + "sh/", ui->list_sh);
-
     loadScripts(baseDir + "clear/", ui->list_clear);
+
     cacheButtonYay = new QListWidgetItem(tr("Кэш пакетов Yay"), ui->list_clear);
     cacheButtonPacman = new QListWidgetItem(tr("Кэш пакетов Pacman"), ui->list_clear);
     orphanButton = new QListWidgetItem(tr("Пакеты сироты"), ui->list_clear);
@@ -2338,7 +2364,7 @@ void MainWindow::on_combo_host_currentIndexChanged(int index)
                 Terminal terminal = getTerminal();
                 installProcess.start(terminal.binary, QStringList() << terminal.args << "yay -S apache");
 
-                                installProcess.closeWriteChannel();
+                installProcess.closeWriteChannel();
                 installProcess.waitForFinished();
                 if (installProcess.exitCode() == 0)
                     ui->combo_host->setCurrentIndex(1);
@@ -2367,7 +2393,6 @@ void MainWindow::on_combo_host_currentIndexChanged(int index)
 
                 Terminal terminal = getTerminal();
                 installProcess.start(terminal.binary, QStringList() << terminal.args << "yay -S xampp");
-
 
                 installProcess.closeWriteChannel();
                 installProcess.waitForFinished();
@@ -2697,8 +2722,7 @@ void MainWindow::openUrl(const QString& url)
             process.start("xdg-open", QStringList() << url);
             process.waitForFinished();
         }
-        else {
+        else
             sendNotification(tr("Ошибка"), tr("Установите Firefox или выберите рабочий браузер в качестве основного в настройках системы!"));
-        }
     }
 }
