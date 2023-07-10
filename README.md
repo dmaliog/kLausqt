@@ -14,5 +14,5 @@ Manager's features:
 ![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/f2e7c64c-efe9-4f0e-adb6-3fd18c1c71e2)
 ![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/1cac2885-130c-4ef0-bd49-5887423c71fc)
 ![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/b5a035d6-1546-474b-a53a-b08f957b305c)
-![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/e36ce6ec-dd04-49dc-873a-e237e89b0045)
+![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/4fc48c18-b4a4-4ba7-90f1-3fa9f776ef31)
 ![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/2aee17a7-40c6-4216-b3e4-c87f3c4b582d)
