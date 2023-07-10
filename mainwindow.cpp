@@ -15,7 +15,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "5.6";
+QString currentVersion = "5.7";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -1105,6 +1105,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     ui->check_trayon->setChecked(trayon == 1);
     ui->check_repair->setChecked(repair == 1);
+    ui->check_tooltip->setChecked(tooltip == 1);
     ui->check_animload->setChecked(animload == 1);
     ui->check_updateinstall->setChecked(updinst == 1);
     ui->check_description->setChecked(table1 == 1);
@@ -1245,6 +1246,7 @@ void MainWindow::loadSettings()
     //-##################################################################################
     previousAction = ui->action_1; //предыдущий action [заглушка]
     ui->webEngineView->raise(); //браузер выше всех
+
     removeToolButtonTooltips(ui->toolBar);
     removeToolButtonTooltips(ui->toolBar_2);
 
@@ -1256,6 +1258,7 @@ void MainWindow::loadSettings()
     yaycache = settings.value("YayCache", 0).toInt();
     trayon = settings.value("TrayOn", 0).toInt();
     repair = settings.value("RepairBackup", 1).toInt();
+    tooltip = settings.value("ToolTip", 0).toInt();
     animload = settings.value("AnimLoad", 1).toInt();
     updinst = settings.value("UpdateInstall", 1).toInt();
     volumenotify = settings.value("VolumeNotify", 30).toInt();
@@ -1543,7 +1546,6 @@ void MainWindow::loadSettings()
         ui->spin_grub->setValue(timeout); // устанавливаем значение в QSpinBox
         ui->line_grub->setText(grubContent);
     }
-
 }
 
 void MainWindow::removeToolButtonTooltips(QToolBar* toolbar) {
@@ -1996,6 +1998,12 @@ void MainWindow::handleServerResponse(QNetworkReply *reply)
                 item->setForeground(color);
                 item->setData(Qt::UserRole, packageURL); // Установка данных пользовательской роли
                 ui->table_aur->setItem(i, 0, item);
+
+                if (tooltip == 1)
+                {
+                    QString tooltip = QString(tr("Название: %1\n\nОписание: %2\n\nВерсия: %3\n\nГолоса: %4\n\nПопулярность: %5\n\nПоследнее обновление: %6")).arg(name, description, version, QString::number(votes), QString::number(popularity, 'f', 2), date);
+                    item->setToolTip(tooltip);
+                }
             }
         }
         // установка атрибутов сортировки и выбора для ячеек заголовка столбца
@@ -2575,6 +2583,13 @@ void MainWindow::on_check_repair_stateChanged()
 {
     repair = ui->check_repair->isChecked() ? 1 : 0;
     settings.setValue("RepairBackup", repair);
+}
+
+void MainWindow::on_check_tooltip_stateChanged()
+{
+    tooltip = ui->check_tooltip->isChecked() ? 1 : 0;
+    settings.setValue("ToolTip", tooltip);
+    loadContent();
 }
 
 void MainWindow::on_check_animload_stateChanged()

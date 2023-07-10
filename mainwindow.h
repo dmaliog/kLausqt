@@ -32,6 +32,7 @@ public:
     QColor generateRandomColor();
 
 private:
+
     QMap<QString, QString> iconMap; // Статический словарь для кэширования информации об иконках
 
     QListWidgetItem* orphanButton;
@@ -58,6 +59,7 @@ private:
     int fav; // последнее обновление
     int host;
     int benchlist; //бенчлист
+    int tooltip; //показывать всплывающие подсказки
 
     QString packageURL;
     QString lang;
@@ -217,6 +219,7 @@ private slots:
     void on_check_updateinstall_stateChanged();
     void on_check_trayon_stateChanged();
     void on_check_animload_stateChanged();
+    void on_check_tooltip_stateChanged();
 
     void on_dial_volmenu_valueChanged(int value);
     void on_dial_volnotify_valueChanged(int value);

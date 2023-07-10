@@ -2,9 +2,6 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
-  <property name="windowModality">
-   <enum>Qt::NonModal</enum>
-  </property>
   <property name="enabled">
    <bool>true</bool>
   </property>
@@ -59,6 +56,14 @@
    <string notr="true">* {
     color: #ffffff;
     border: 0;
+}
+
+QToolTip {
+    background-color: #333333;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    padding: 5px;
+	z-index:999;
 }
 
 #centralwidget {
@@ -243,6 +248,18 @@ QMenuBar::item:pressed {
     background-color: #916ee4;
 }</string>
   </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonIconOnly</enum>
+  </property>
+  <property name="animated">
+   <bool>true</bool>
+  </property>
+  <property name="documentMode">
+   <bool>false</bool>
+  </property>
+  <property name="dockNestingEnabled">
+   <bool>false</bool>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="label1">
     <property name="geometry">
@@ -290,6 +307,9 @@ QMenuBar::item:pressed {
     </property>
     <property name="focusPolicy">
      <enum>Qt::NoFocus</enum>
+    </property>
+    <property name="toolTipDuration">
+     <number>0</number>
     </property>
     <property name="styleSheet">
      <string notr="true">QTableWidget {
@@ -345,6 +365,9 @@ QTableWidget QHeaderView::section:first {
     border-top-left-radius: 5px;
 }</string>
     </property>
+    <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+     <bool>false</bool>
+    </attribute>
    </widget>
    <widget class="QLineEdit" name="searchApp">
     <property name="geometry">
@@ -395,6 +418,9 @@ QTableWidget QHeaderView::section:first {
     </property>
     <property name="styleSheet">
      <string notr="true"/>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
     </property>
     <property name="movement">
      <enum>QListView::Static</enum>
@@ -488,7 +514,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab_aursettings">
      <attribute name="title">
@@ -1201,11 +1227,153 @@ padding-right:55px;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>599</width>
-         <height>260</height>
+         <width>591</width>
+         <height>288</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_4">
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_mainpage">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Стартовая страница</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QComboBox" name="combo_lang">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <item>
+           <property name="text">
+            <string>Русский</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>English</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="4" column="0" colspan="2">
+         <widget class="QCheckBox" name="check_trayon">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>Закрывать без сворачивания в трей</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0" colspan="2">
+         <widget class="QCheckBox" name="check_repair">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="tabletTracking">
+           <bool>false</bool>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>Создать резервную копию при удалении конфигураций</string>
+          </property>
+          <property name="autoRepeat">
+           <bool>false</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+          <property name="tristate">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QComboBox" name="combo_animload">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>Химический процесс</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Косатки</string>
+           </property>
+          </item>
+         </widget>
+        </item>
         <item row="3" column="0">
          <widget class="QCheckBox" name="check_animload">
           <property name="minimumSize">
@@ -1263,91 +1431,6 @@ padding-right:55px;</string>
           </property>
           <property name="text">
            <string>Язык</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QComboBox" name="combo_lang">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <item>
-           <property name="text">
-            <string>Русский</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>English</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QComboBox" name="combo_animload">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <item>
-           <property name="text">
-            <string>Химический процесс</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Косатки</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_mainpage">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Стартовая страница</string>
           </property>
          </widget>
         </item>
@@ -1415,29 +1498,8 @@ padding-right:55px;</string>
           </item>
          </widget>
         </item>
-        <item row="4" column="0" colspan="2">
-         <widget class="QCheckBox" name="check_trayon">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="text">
-           <string>Закрывать без сворачивания в трей</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="0" colspan="2">
-         <widget class="QCheckBox" name="check_repair">
+        <item row="6" column="0">
+         <widget class="QCheckBox" name="check_tooltip">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -1459,7 +1521,7 @@ padding-right:55px;</string>
            <string notr="true"/>
           </property>
           <property name="text">
-           <string>Создать резервную копию при удалении конфигураций</string>
+           <string>Показывать всплывающие подсказки</string>
           </property>
           <property name="autoRepeat">
            <bool>false</bool>
@@ -1934,6 +1996,9 @@ background-position: left center;</string>
     <property name="focusPolicy">
      <enum>Qt::NoFocus</enum>
     </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
    </widget>
    <widget class="QListWidget" name="list_journal">
     <property name="geometry">
@@ -1952,6 +2017,9 @@ background-position: left center;</string>
     </property>
     <property name="focusPolicy">
      <enum>Qt::NoFocus</enum>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
     </property>
    </widget>
    <widget class="QScrollArea" name="scroll_site">
@@ -3227,6 +3295,9 @@ background-position: left center;</string>
     <property name="focusPolicy">
      <enum>Qt::NoFocus</enum>
     </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
    </widget>
    <widget class="QScrollArea" name="scroll_repair">
     <property name="geometry">
@@ -3406,9 +3477,7 @@ background-position: left center;</string>
     border-radius: 15px;
 	border:0;
     background-color: #242424;
-}
-
-</string>
+}</string>
     </property>
     <property name="iconSize">
      <size>
@@ -3984,7 +4053,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Запустить</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">Запустить</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -3999,7 +4068,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Удалить</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">Удалить</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4014,7 +4083,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Установить</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">Установить</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4029,7 +4098,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Наш выбор</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">Наш выбор</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4062,7 +4131,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Журналы</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">Журналы</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4077,7 +4146,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Приложение</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">Приложение</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4092,7 +4161,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>AUR</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">AUR</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4107,7 +4176,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>PKGBUILD</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">PKGBUILD</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4122,7 +4191,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Домашняя</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">Домашняя</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4137,7 +4206,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Обновить</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">Обновить</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4152,7 +4221,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Скопировать</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">Скопировать</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4167,7 +4236,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>О пакете</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">О пакете</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4182,7 +4251,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Назад</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">Назад</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4278,7 +4347,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Добавить</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">Добавить</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4293,7 +4362,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Удалить</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">Удалить</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4308,7 +4377,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Изменить</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">Изменить</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4323,7 +4392,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Таймеры</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">Таймеры</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4434,7 +4503,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Рестарт</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">Рестарт</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4449,7 +4518,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Остановить</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">Остановить</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4464,7 +4533,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Каталог</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">Каталог</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4479,7 +4548,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Обновить</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">Обновить</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4497,7 +4566,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Бенчмарки</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">Бенчмарки</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4512,7 +4581,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Система</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">Система</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4539,7 +4608,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Оптимизиция</string>
    </property>
    <property name="toolTip">
-    <string notr="true"> </string>
+    <string notr="true">Оптимизиция</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
