@@ -137,5 +137,6 @@
         <file>bench/phoronix-test-suite.sh</file>
         <file>bench/hardinfo.sh</file>
         <file>bench/iozone.sh</file>
+        <file>img/50.png</file>
     </qresource>
 </RCC>

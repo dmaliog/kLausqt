@@ -162,7 +162,7 @@ QPushButton {
     background-color: #252525;
     border-radius: 10px;
     border: 1px solid #3d3d3d;
-    color: #FFFFFF;
+    color: #fff;
 }
 
 QComboBox::drop-down {
@@ -3391,18 +3391,36 @@ background-position: left center;</string>
     </property>
     <property name="geometry">
      <rect>
-      <x>190</x>
+      <x>220</x>
       <y>5</y>
-      <width>191</width>
+      <width>161</width>
       <height>31</height>
      </rect>
     </property>
+    <property name="contextMenuPolicy">
+     <enum>Qt::PreventContextMenu</enum>
+    </property>
     <property name="styleSheet">
-     <string notr="true">QComboBox{
+     <string notr="true">QComboBox#combo_bench{
 	padding: 0 10px 0 15px;
     border-radius: 15px;
-	border: 0;
-}</string>
+	border:0;
+    background-color: #242424;
+}
+
+</string>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>20</width>
+      <height>20</height>
+     </size>
+    </property>
+    <property name="duplicatesEnabled">
+     <bool>false</bool>
+    </property>
+    <property name="frame">
+     <bool>true</bool>
     </property>
     <item>
      <property name="text">
@@ -3411,12 +3429,12 @@ background-position: left center;</string>
     </item>
     <item>
      <property name="text">
-      <string>Отдельные инструменты</string>
+      <string>Инструменты</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>Программные комплексы</string>
+      <string>Комплексы</string>
      </property>
     </item>
     <item>

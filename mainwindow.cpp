@@ -15,7 +15,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "5.5";
+QString currentVersion = "5.6";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -81,6 +81,8 @@ void MainWindow::on_action_17_triggered()
     ui->list_sh->setVisible(true);
     ui->action_addsh->setVisible(true);
     ui->action_editsh->setVisible(true);
+    ui->searchApp->setGeometry(390, 5, 221, 31);
+    ui->searchApp->setVisible(true);
     ui->action_rmsh->setVisible(true);
 
     showLoadingAnimation(false);
@@ -208,12 +210,11 @@ void MainWindow::on_action_9_triggered()
 {
     if (page == 5) return;
     mrpropper(5);
-    ui->label1->setText(tr("Системные журналы и конфигурации"));
     ui->action_27->setVisible(true);
     ui->action_bench->setVisible(true);
     ui->action_repair->setVisible(true);
 
-    ui->list_journal->setVisible(true);
+    on_action_27_triggered();
     showLoadingAnimation(false);
 }
 
@@ -2093,6 +2094,8 @@ void MainWindow::loadContent() {
                 searchAndScroll(ui->list_journal, text);
             else if (page == 12)
                 searchAndScroll(ui->list_bench, text);
+            else if (page == 3)
+                searchAndScroll(ui->list_sh, text);
             else
                 searchAndScroll(ui->list_manager, text);
         }
