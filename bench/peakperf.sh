@@ -12,7 +12,7 @@
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
-if ! yay -Qs peakperf-git &>/dev/null; then
+if ! yay -Q peakperf-git &>/dev/null; then
 
     # Предлагаем установить peakperf-git
     read -p "${pkg} peakperf-git ${no_found}. ${instq} peakperf-git? (y/n): " choice

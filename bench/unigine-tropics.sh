@@ -12,7 +12,7 @@
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
-if ! yay -Qs unigine-tropics &>/dev/null; then
+if ! yay -Q unigine-tropics &>/dev/null; then
 
     # Предлагаем установить unigine-tropics
     read -p "${pkg} unigine-tropics ${no_found}. ${instq} unigine-tropics? (y/n): " choice

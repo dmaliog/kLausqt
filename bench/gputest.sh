@@ -12,7 +12,7 @@
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
-if ! yay -Qs gputest &>/dev/null; then
+if ! yay -Q gputest &>/dev/null; then
 
     # Предлагаем установить gputest
     read -p "${pkg} gputest ${no_found}. ${instq} gputest? (y/n): " choice

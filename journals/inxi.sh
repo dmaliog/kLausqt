@@ -13,7 +13,7 @@ source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
 # Проверка наличия установленного inxi
-if ! yay -Qs inxi &>/dev/null; then
+if ! yay -Q inxi &>/dev/null; then
     read -p "${pkg} inxi ${no_found}. ${instq} inxi? (y/n): " answer
     if [[ "$answer" == [yY] ]]; then
         yay -S inxi

@@ -13,7 +13,7 @@ source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
 # Проверяем наличие установленного пакета unixbench
-if ! yay -Qs unixbench &>/dev/null; then
+if ! yay -Q unixbench &>/dev/null; then
 
     # Предлагаем установить unixbench
     read -p "${pkg} unixbench ${no_found}. ${instq} unixbench? (y/n): " choice

@@ -13,7 +13,7 @@ source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
 # Проверяем наличие установленного пакета iperf
-if ! yay -Qs iperf &>/dev/null; then
+if ! yay -Q iperf &>/dev/null; then
 
     # Предлагаем установить iperf
     read -p "${pkg} iperf ${no_found}. ${instq} iperf? (y/n): " choice

@@ -13,7 +13,7 @@ source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
 # Проверяем наличие установленного пакета hdparm
-if ! yay -Qs hdparm &>/dev/null; then
+if ! yay -Q hdparm &>/dev/null; then
 
 # Предлагаем установить hdparm
     read -p "${pkg} hdparm ${no_found}. ${instq} hdparm? (y/n): " choice

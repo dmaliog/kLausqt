@@ -12,7 +12,7 @@
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
-if ! yay -Qs basemark &>/dev/null; then
+if ! yay -Q basemark &>/dev/null; then
 
     # Предлагаем установить basemark
     read -p "${pkg} basemark ${no_found}. ${instq} basemark? (y/n): " choice

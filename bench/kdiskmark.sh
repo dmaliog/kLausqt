@@ -13,7 +13,7 @@ source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
 # Проверяем наличие установленного пакета kdiskmark
-if ! yay -Qs kdiskmark &>/dev/null; then
+if ! yay -Q kdiskmark &>/dev/null; then
 
     # Предлагаем установить kdiskmark
     read -p "${pkg} kdiskmark ${no_found}. ${instq} kdiskmark? (y/n): " choice

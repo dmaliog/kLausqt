@@ -12,7 +12,7 @@
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
-if ! yay -Qs blender-benchmark &>/dev/null; then
+if ! yay -Q blender-benchmark &>/dev/null; then
 
     # Предлагаем установить blender-benchmark
     read -p "${pkg} blender-benchmark ${no_found}. ${instq} blender-benchmark? (y/n): " choice

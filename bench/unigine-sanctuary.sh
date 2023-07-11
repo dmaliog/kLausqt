@@ -12,7 +12,7 @@
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
-if ! yay -Qs unigine-sanctuary &>/dev/null; then
+if ! yay -Q unigine-sanctuary &>/dev/null; then
 
     # Предлагаем установить unigine-sanctuary
     read -p "${pkg} unigine-sanctuary ${no_found}. ${instq} unigine-sanctuary? (y/n): " choice

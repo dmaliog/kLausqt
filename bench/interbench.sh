@@ -13,7 +13,7 @@ source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
 # Проверяем наличие установленного пакета interbench
-if ! yay -Qs interbench &>/dev/null; then
+if ! yay -Q interbench &>/dev/null; then
 
     # Предлагаем установить interbench
     read -p "${pkg} interbench ${no_found}. ${instq} interbench? (y/n): " choice

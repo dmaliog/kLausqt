@@ -13,7 +13,7 @@ source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
 # Проверяем наличие установленного пакета ttcp
-if ! yay -Qs ttcp &>/dev/null; then
+if ! yay -Q ttcp &>/dev/null; then
 
 # Предлагаем установить ttcp
     read -p "${pkg} ttcp ${no_found}. ${instq} ttcp? (y/n): " choice

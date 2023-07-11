@@ -12,7 +12,7 @@
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
-if ! yay -Qs phoronix-test-suite &>/dev/null; then
+if ! yay -Q phoronix-test-suite &>/dev/null; then
 
     # Предлагаем установить phoronix-test-suite
     read -p "${pkg} phoronix-test-suite ${no_found}. ${instq} phoronix-test-suite? (y/n): " choice

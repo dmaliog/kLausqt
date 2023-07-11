@@ -12,7 +12,7 @@
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
-if ! yay -Qs glmark2 &>/dev/null; then
+if ! yay -Q glmark2 &>/dev/null; then
 
     # Предлагаем установить glmark2
     read -p "${pkg} glmark2 ${no_found}. ${instq} glmark2? (y/n): " choice

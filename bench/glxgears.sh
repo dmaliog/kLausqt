@@ -12,7 +12,7 @@
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
-if ! yay -Qs mesa-utils &>/dev/null; then
+if ! yay -Q mesa-utils &>/dev/null; then
 
     # Предлагаем установить mesa-utils
     read -p "${pkg} mesa-utils ${no_found}. ${instq} mesa-utils? (y/n): " choice

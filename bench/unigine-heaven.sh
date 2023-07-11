@@ -12,7 +12,7 @@
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
-if ! yay -Qs unigine-heaven &>/dev/null; then
+if ! yay -Q unigine-heaven &>/dev/null; then
 
     # Предлагаем установить unigine-heaven
     read -p "${pkg} unigine-heaven ${no_found}. ${instq} unigine-heaven? (y/n): " choice

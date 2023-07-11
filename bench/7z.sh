@@ -12,7 +12,7 @@
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
-if ! yay -Qs p7zip &>/dev/null; then
+if ! yay -Q p7zip &>/dev/null; then
 
     # Предлагаем установить p7zip
     read -p "${pkg} p7zip ${no_found}. ${instq} p7zip? (y/n): " choice

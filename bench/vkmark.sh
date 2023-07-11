@@ -12,7 +12,7 @@
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
-if ! yay -Qs vkmark &>/dev/null; then
+if ! yay -Q vkmark &>/dev/null; then
 
     # Предлагаем установить vkmark
     read -p "${pkg} vkmark ${no_found}. ${instq} vkmark? (y/n): " choice

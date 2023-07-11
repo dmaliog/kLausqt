@@ -12,7 +12,7 @@
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
-if ! yay -Qs intel-gpu-tools &>/dev/null; then
+if ! yay -Q intel-gpu-tools &>/dev/null; then
 
     # Предлагаем установить intel-gpu-tools
     read -p "${pkg} intel-gpu-tools ${no_found}. ${instq} intel-gpu-tools? (y/n): " choice

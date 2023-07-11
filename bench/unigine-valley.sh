@@ -12,7 +12,7 @@
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
-if ! yay -Qs unigine-valley &>/dev/null; then
+if ! yay -Q unigine-valley &>/dev/null; then
 
     # Предлагаем установить unigine-valley
     read -p "${pkg} unigine-valley ${no_found}. ${instq} unigine-valley? (y/n): " choice

@@ -12,7 +12,7 @@
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
-if ! yay -Qs iozone &>/dev/null; then
+if ! yay -Q iozone &>/dev/null; then
 
     # Предлагаем установить iozone
     read -p "${pkg} iozone ${no_found}. ${instq} iozone? (y/n): " choice

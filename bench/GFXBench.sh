@@ -12,7 +12,7 @@
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
-if ! yay -Qs gfxbench &>/dev/null; then
+if ! yay -Q gfxbench &>/dev/null; then
 
     # Предлагаем установить gfxbench
     read -p "${pkg} gfxbench ${no_found}. ${instq} gfxbench? (y/n): " choice

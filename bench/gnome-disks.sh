@@ -13,7 +13,7 @@ source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
 # Проверяем наличие установленного пакета gnome-disk-utility
-if ! yay -Qs gnome-disk-utility &>/dev/null; then
+if ! yay -Q gnome-disk-utility &>/dev/null; then
 
     # Предлагаем установить gnome-disk-utility
     read -p "${pkg} gnome-disk-utility ${no_found}. ${instq} gnome-disk-utility? (y/n): " choice

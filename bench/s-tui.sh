@@ -12,7 +12,7 @@
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
-if ! yay -Qs s-tui &>/dev/null; then
+if ! yay -Q s-tui &>/dev/null; then
 
     # Предлагаем установить s-tui
     read -p "${pkg} s-tui ${no_found}. ${instq} s-tui? (y/n): " choice

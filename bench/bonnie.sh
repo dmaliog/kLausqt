@@ -12,7 +12,7 @@
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
-if ! yay -Qs bonnie++ &>/dev/null; then
+if ! yay -Q bonnie++ &>/dev/null; then
 
     # Предлагаем установить bonnie++
     read -p "${pkg} bonnie++ ${no_found}. ${instq} bonnie++? (y/n): " choice

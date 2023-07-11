@@ -12,7 +12,7 @@
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
-if ! yay -Qs unigine-superposition &>/dev/null; then
+if ! yay -Q unigine-superposition &>/dev/null; then
 
     # Предлагаем установить unigine-superposition
     read -p "${pkg} unigine-superposition ${no_found}. ${instq} unigine-superposition? (y/n): " choice
