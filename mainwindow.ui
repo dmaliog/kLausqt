@@ -63,7 +63,6 @@ QToolTip {
     color: #ffffff;
     border: 1px solid #ffffff;
     padding: 5px;
-	z-index:999;
 }
 
 #centralwidget {
@@ -296,7 +295,7 @@ QMenuBar::item:pressed {
      <rect>
       <x>10</x>
       <y>40</y>
-      <width>971</width>
+      <width>341</width>
       <height>481</height>
      </rect>
     </property>
@@ -364,6 +363,12 @@ QTableWidget QTableView::item:selected {
 QTableWidget QHeaderView::section:first {
     border-top-left-radius: 5px;
 }</string>
+    </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAsNeeded</enum>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
     </property>
     <attribute name="verticalHeaderShowSortIndicator" stdset="0">
      <bool>false</bool>
@@ -514,35 +519,17 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_aursettings">
      <attribute name="title">
       <string>Настройки AUR</string>
      </attribute>
-     <widget class="QLabel" name="label_show">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>20</y>
-        <width>911</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Видимость элементов</string>
-      </property>
-     </widget>
      <widget class="QLabel" name="label_other">
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>140</y>
+        <y>20</y>
         <width>371</width>
         <height>21</height>
        </rect>
@@ -560,9 +547,9 @@ QTabWidget#tabWidget QTabBar::tab:selected {
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>170</y>
+        <y>50</y>
         <width>611</width>
-        <height>271</height>
+        <height>391</height>
        </rect>
       </property>
       <property name="layoutDirection">
@@ -586,80 +573,10 @@ QTabWidget#tabWidget QTabBar::tab:selected {
          <x>0</x>
          <y>0</y>
          <width>599</width>
-         <height>259</height>
+         <height>379</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_cache">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Удаление кэша</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QTimeEdit" name="time_update">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="contextMenuPolicy">
-           <enum>Qt::NoContextMenu</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0" colspan="2">
-         <widget class="QCheckBox" name="check_updateinstall">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Проверять актуальность системы перед установкой новых пакетов</string>
-          </property>
-         </widget>
-        </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_rating">
           <property name="minimumSize">
@@ -684,37 +601,27 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
-         <widget class="QSpinBox" name="spin_rating">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_cache">
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>40</height>
+            <height>30</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>16777215</height>
+            <height>40</height>
            </size>
           </property>
-          <property name="contextMenuPolicy">
-           <enum>Qt::NoContextMenu</enum>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
           </property>
-          <property name="layoutDirection">
-           <enum>Qt::LeftToRight</enum>
-          </property>
-          <property name="frame">
-           <bool>true</bool>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
+          <property name="text">
+           <string>Удаление кэша</string>
           </property>
          </widget>
         </item>
@@ -764,6 +671,86 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           </item>
          </widget>
         </item>
+        <item row="2" column="1">
+         <widget class="QSpinBox" name="spin_rating">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="contextMenuPolicy">
+           <enum>Qt::NoContextMenu</enum>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="frame">
+           <bool>true</bool>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0" colspan="2">
+         <widget class="QCheckBox" name="check_updateinstall">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Проверять актуальность системы перед установкой новых пакетов</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QTimeEdit" name="time_update">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="contextMenuPolicy">
+           <enum>Qt::NoContextMenu</enum>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label_update">
           <property name="minimumSize">
@@ -785,94 +772,6 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           </property>
           <property name="text">
            <string>Частота обновления пакетов</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </widget>
-     <widget class="QScrollArea" name="scroll_elements">
-      <property name="geometry">
-       <rect>
-        <x>220</x>
-        <y>10</y>
-        <width>411</width>
-        <height>111</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background:#272727;</string>
-      </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
-      </property>
-      <widget class="QWidget" name="scrollArea_visible">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>399</width>
-         <height>99</height>
-        </rect>
-       </property>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="2">
-         <widget class="QCheckBox" name="check_voices">
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Голоса</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QCheckBox" name="check_version">
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Версия</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QCheckBox" name="check_lastupdate">
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Последнее обновление</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QCheckBox" name="check_popularity">
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Популярность</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QCheckBox" name="check_description">
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Описание</string>
           </property>
          </widget>
         </item>
@@ -1227,91 +1126,11 @@ padding-right:55px;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>591</width>
-         <height>288</height>
+         <width>599</width>
+         <height>260</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_4">
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_mainpage">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Стартовая страница</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QComboBox" name="combo_lang">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <item>
-           <property name="text">
-            <string>Русский</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>English</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="4" column="0" colspan="2">
-         <widget class="QCheckBox" name="check_trayon">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="text">
-           <string>Закрывать без сворачивания в трей</string>
-          </property>
-         </widget>
-        </item>
         <item row="5" column="0" colspan="2">
          <widget class="QCheckBox" name="check_repair">
           <property name="minimumSize">
@@ -1345,92 +1164,6 @@ padding-right:55px;</string>
           </property>
           <property name="tristate">
            <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QComboBox" name="combo_animload">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <item>
-           <property name="text">
-            <string>Химический процесс</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Косатки</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QCheckBox" name="check_animload">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="tabletTracking">
-           <bool>false</bool>
-          </property>
-          <property name="layoutDirection">
-           <enum>Qt::LeftToRight</enum>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="text">
-           <string>Показывать анимацию загрузки</string>
-          </property>
-          <property name="autoRepeat">
-           <bool>false</bool>
-          </property>
-          <property name="autoExclusive">
-           <bool>false</bool>
-          </property>
-          <property name="tristate">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_lang">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Язык</string>
           </property>
          </widget>
         </item>
@@ -1498,8 +1231,67 @@ padding-right:55px;</string>
           </item>
          </widget>
         </item>
-        <item row="6" column="0">
-         <widget class="QCheckBox" name="check_tooltip">
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_mainpage">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Стартовая страница</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QComboBox" name="combo_lang">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <item>
+           <property name="text">
+            <string>Русский</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>English</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QCheckBox" name="check_animload">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -1521,7 +1313,7 @@ padding-right:55px;</string>
            <string notr="true"/>
           </property>
           <property name="text">
-           <string>Показывать всплывающие подсказки</string>
+           <string>Показывать анимацию загрузки</string>
           </property>
           <property name="autoRepeat">
            <bool>false</bool>
@@ -1532,6 +1324,77 @@ padding-right:55px;</string>
           <property name="tristate">
            <bool>false</bool>
           </property>
+         </widget>
+        </item>
+        <item row="4" column="0" colspan="2">
+         <widget class="QCheckBox" name="check_trayon">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>Закрывать без сворачивания в трей</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_lang">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Язык</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QComboBox" name="combo_animload">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>Химический процесс</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Косатки</string>
+           </property>
+          </item>
          </widget>
         </item>
        </layout>
@@ -3512,9 +3375,37 @@ background-position: left center;</string>
      </property>
     </item>
    </widget>
+   <widget class="QTextEdit" name="text_details">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>40</y>
+      <width>311</width>
+      <height>481</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QTextEdit {
+	background-color: #242424;
+    border: 5px solid #28276b;
+    border-radius: 13px;
+    padding: 15px;
+}</string>
+    </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+   </widget>
    <zorder>scroll_site</zorder>
    <zorder>webEngineView</zorder>
-   <zorder>table_aur</zorder>
    <zorder>label1</zorder>
    <zorder>list_manager</zorder>
    <zorder>searchApp</zorder>
@@ -3522,8 +3413,10 @@ background-position: left center;</string>
    <zorder>scroll_repair</zorder>
    <zorder>list_journal</zorder>
    <zorder>list_sh</zorder>
-   <zorder>tabWidget</zorder>
    <zorder>combo_bench</zorder>
+   <zorder>table_aur</zorder>
+   <zorder>text_details</zorder>
+   <zorder>tabWidget</zorder>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="enabled">

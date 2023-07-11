@@ -15,7 +15,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "5.7";
+QString currentVersion = "5.8";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -62,13 +62,14 @@ void MainWindow::on_action_2_triggered()
     if (page == 2) return;
     mrpropper(2);
     ui->label1->setText(tr("Каталог пакетов из AUR"));
-    ui->searchApp->setGeometry(750, 5, 221, 31);
+    ui->searchApp->setGeometry(440, 5, 221, 31);
     ui->action_4->setVisible(true);
     ui->action_6->setVisible(true);
     ui->action_16->setVisible(true);
     ui->action_30->setVisible(true);
     ui->action_34->setVisible(true);
-    ui->table_aur->setVisible(true); //Показываем список устнановить
+    ui->text_details->setVisible(true);
+    ui->table_aur->setVisible(true);
     ui->searchApp->setVisible(true);
     showLoadingAnimation(false);
 }
@@ -779,49 +780,59 @@ void MainWindow::on_action_16_triggered()
 
     QString sourceFilePath;
     QString targetFilePath;
-    if(lang == "en_US")
+    if (lang == "en_US")
     {
         sourceFilePath = ":/other/list_en.txt";
         targetFilePath = baseDir + "other/list_en.txt";
-    } else {
+    }
+    else
+    {
         sourceFilePath = ":/other/list.txt";
         targetFilePath = baseDir + "other/list.txt";
     }
 
     QFileInfo fileInfo(targetFilePath);
-    if (!fileInfo.exists()) {
-        if (!QDir().mkpath(fileInfo.absoluteDir().path())) {
+    if (!fileInfo.exists())
+    {
+        if (!QDir().mkpath(fileInfo.absoluteDir().path()))
+        {
             sendNotification(tr("Ошибка"), tr("Не удалось создать каталог: ") + fileInfo.absoluteDir().path());
             return;
         }
-        if (!QFile::copy(sourceFilePath, targetFilePath)) {
+        if (!QFile::copy(sourceFilePath, targetFilePath))
+        {
             sendNotification(tr("Ошибка"), tr("Не удалось скопировать файл из ") + sourceFilePath + tr(" в ") + targetFilePath);
             return;
         }
     }
 
     QFile file(targetFilePath);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
         sendNotification(tr("Ошибка"), tr("Не удалось открыть файл ресурсов"));
         return;
     }
 
     QTextStream in(&file);
     QVector<QPair<QString, QString>> programs;
-    while (!in.atEnd()) {
+    while (!in.atEnd())
+    {
         QString line = in.readLine();
         line = line.trimmed();
-        if (!line.isEmpty()) {
+        if (!line.isEmpty())
+        {
             int index = line.indexOf(',');
-            if (index != -1) {
-                QString program = line.mid(2, index-3);
-                QString description = line.mid(index+3, line.length()-index-4);
+            if (index != -1)
+            {
+                QString program = line.mid(2, index - 3);
+                QString description = line.mid(index + 3).chopped(3);
                 programs.append(qMakePair(program, description));
             }
         }
     }
 
-    for (int i = 0; i < programs.size(); i++) {
+    for (int i = 0; i < programs.size(); i++)
+    {
         QTableWidgetItem *item1 = new QTableWidgetItem(programs[i].first);
         QTableWidgetItem *item2 = new QTableWidgetItem(programs[i].second);
 
@@ -1105,14 +1116,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     ui->check_trayon->setChecked(trayon == 1);
     ui->check_repair->setChecked(repair == 1);
-    ui->check_tooltip->setChecked(tooltip == 1);
     ui->check_animload->setChecked(animload == 1);
     ui->check_updateinstall->setChecked(updinst == 1);
-    ui->check_description->setChecked(table1 == 1);
-    ui->check_version->setChecked(table2 == 1);
-    ui->check_voices->setChecked(table3 == 1);
-    ui->check_popularity->setChecked(table4 == 1);
-    ui->check_lastupdate->setChecked(table5 == 1);
     ui->combo_mainpage->setCurrentIndex(mainpage);
     ui->combo_animload->setCurrentIndex(animloadpage);
     ui->spin_rating->setValue(fav);
@@ -1258,16 +1263,10 @@ void MainWindow::loadSettings()
     yaycache = settings.value("YayCache", 0).toInt();
     trayon = settings.value("TrayOn", 0).toInt();
     repair = settings.value("RepairBackup", 1).toInt();
-    tooltip = settings.value("ToolTip", 0).toInt();
     animload = settings.value("AnimLoad", 1).toInt();
     updinst = settings.value("UpdateInstall", 1).toInt();
     volumenotify = settings.value("VolumeNotify", 30).toInt();
     volumemenu = settings.value("VolumeMenu", 50).toInt();
-    table1 = settings.value("Table1", 1).toInt();
-    table2 = settings.value("Table2", 1).toInt();
-    table3 = settings.value("Table3", 0).toInt();
-    table4 = settings.value("Table4", 0).toInt();
-    table5 = settings.value("Table5", 0).toInt();
     fav = settings.value("Favorite", 50).toInt();
     lang = settings.value("Language").toString();
     host = settings.value("Host").toInt();
@@ -1545,6 +1544,9 @@ void MainWindow::loadSettings()
         int timeout = timeoutStr.toInt(); // получаем значение timeout из файла
         ui->spin_grub->setValue(timeout); // устанавливаем значение в QSpinBox
         ui->line_grub->setText(grubContent);
+
+        connect(ui->table_aur, &QTableWidget::cellClicked, this, &MainWindow::onTableAurCellClicked);
+
     }
 }
 
@@ -1616,6 +1618,7 @@ void MainWindow::mrpropper(int value) //зачистка говна перед �
     ui->webEngineView->setVisible(false);
     ui->scroll_site->setVisible(false);
     ui->combo_bench->setVisible(false);
+    ui->text_details->setVisible(false);
     ui->label1->setVisible(true);
 }
 
@@ -1927,7 +1930,7 @@ void MainWindow::handleServerResponse(QNetworkReply *reply)
             ui->table_aur->setColumnCount(6); // Устанавливаем количество столбцов в таблице
             ui->table_aur->setShowGrid(false); // Убираем отображение сетки
             ui->table_aur->verticalHeader()->setVisible(false); // Убираем отображение номеров строк
-            ui->table_aur->setColumnWidth(0, 250);
+            ui->table_aur->setColumnWidth(0, 320);
             ui->table_aur->setColumnWidth(1, 550);
             ui->table_aur->setColumnWidth(2, 110);
             ui->table_aur->setColumnWidth(3, 70);
@@ -1936,11 +1939,11 @@ void MainWindow::handleServerResponse(QNetworkReply *reply)
 
             ui->table_aur->setHorizontalHeaderLabels({tr("Название"), tr("Описание"), tr("Версия"), tr("Голоса"), tr("Популярность"), tr("Последнее обновление")});
 
-            ui->table_aur->setColumnHidden(1, table1 == 0);
-            ui->table_aur->setColumnHidden(2, table2 == 0);
-            ui->table_aur->setColumnHidden(3, table3 == 0);
-            ui->table_aur->setColumnHidden(4, table4 == 0);
-            ui->table_aur->setColumnHidden(5, table5 == 0);
+            ui->table_aur->setColumnHidden(1, 1);
+            ui->table_aur->setColumnHidden(2, 1);
+            ui->table_aur->setColumnHidden(3, 1);
+            ui->table_aur->setColumnHidden(4, 1);
+            ui->table_aur->setColumnHidden(5, 1);
 
             for (int i = 0; i < results.size(); i++) {
                 QString name = results[i].toObject()["Name"].toString();
@@ -1999,11 +2002,6 @@ void MainWindow::handleServerResponse(QNetworkReply *reply)
                 item->setData(Qt::UserRole, packageURL); // Установка данных пользовательской роли
                 ui->table_aur->setItem(i, 0, item);
 
-                if (tooltip == 1)
-                {
-                    QString tooltip = QString(tr("Название: %1\n\nОписание: %2\n\nВерсия: %3\n\nГолоса: %4\n\nПопулярность: %5\n\nПоследнее обновление: %6")).arg(name, description, version, QString::number(votes), QString::number(popularity, 'f', 2), date);
-                    item->setToolTip(tooltip);
-                }
             }
         }
         // установка атрибутов сортировки и выбора для ячеек заголовка столбца
@@ -2020,6 +2018,29 @@ void MainWindow::handleServerResponse(QNetworkReply *reply)
     }
     reply->deleteLater();
 }
+
+void MainWindow::onTableAurCellClicked(int row)
+{
+    QTableWidgetItem* nameItem = ui->table_aur->item(row, 0);
+    QTableWidgetItem* descriptionItem = ui->table_aur->item(row, 1);
+    QTableWidgetItem* versionItem = ui->table_aur->item(row, 2);
+    QTableWidgetItem* votesItem = ui->table_aur->item(row, 3);
+    QTableWidgetItem* popularityItem = ui->table_aur->item(row, 4);
+    QTableWidgetItem* dateItem = ui->table_aur->item(row, 5);
+
+    QString name = nameItem ? nameItem->text() : tr("нет информации");
+    QString description = descriptionItem ? descriptionItem->text() : tr("нет информации");
+    QString version = versionItem ? versionItem->text() : tr("нет информации");
+    int votes = votesItem ? votesItem->text().toInt() : 0;
+    double popularity = popularityItem ? popularityItem->text().toDouble() : 0.0;
+    QString date = dateItem ? dateItem->text() : tr("нет информации");
+
+    QString tooltip = QString(tr("Название: %1\n\nОписание: %2\n\nВерсия: %3\n\nГолоса: %4\n\nПопулярность: %5\n\nПоследнее обновление: %6"))
+                          .arg(name, description, version, QString::number(votes), QString::number(popularity, 'f', 2), date);
+
+    ui->text_details->setText(tooltip);
+}
+
 
 void MainWindow::loadContent() {
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
@@ -2585,13 +2606,6 @@ void MainWindow::on_check_repair_stateChanged()
     settings.setValue("RepairBackup", repair);
 }
 
-void MainWindow::on_check_tooltip_stateChanged()
-{
-    tooltip = ui->check_tooltip->isChecked() ? 1 : 0;
-    settings.setValue("ToolTip", tooltip);
-    loadContent();
-}
-
 void MainWindow::on_check_animload_stateChanged()
 {
     animload = ui->check_animload->isChecked() ? 1 : 0;
@@ -2621,45 +2635,6 @@ void MainWindow::on_dial_volnotify_valueChanged(int value)
     ui->label_volnotify->setText(labelvolnotify);
 }
 
-void MainWindow::on_check_description_stateChanged()
-{
-    //описание
-    table1 = ui->check_description->isChecked() ? 1 : 0;
-    settings.setValue("Table1", table1);
-    ui->table_aur->setColumnHidden(1, !ui->check_description->isChecked());
-}
-
-void MainWindow::on_check_version_stateChanged()
-{
-    //версия
-    table2 = ui->check_version->isChecked() ? 1 : 0;
-    settings.setValue("Table2", table2);
-    ui->table_aur->setColumnHidden(2, !ui->check_version->isChecked());
-}
-
-void MainWindow::on_check_voices_stateChanged()
-{
-    //голоса
-    table3 = ui->check_voices->isChecked() ? 1 : 0;
-    settings.setValue("Table3", table3);
-    ui->table_aur->setColumnHidden(3, !ui->check_voices->isChecked());
-}
-
-void MainWindow::on_check_popularity_stateChanged()
-{
-    //популярность
-    table4 = ui->check_popularity->isChecked() ? 1 : 0;
-    settings.setValue("Table4", table4);
-    ui->table_aur->setColumnHidden(4, !ui->check_popularity->isChecked());
-}
-
-void MainWindow::on_check_lastupdate_stateChanged()
-{
-    //последнее обновление
-    table5 = ui->check_lastupdate->isChecked() ? 1 : 0;
-    settings.setValue("Table5", table5);
-    ui->table_aur->setColumnHidden(5, !ui->check_lastupdate->isChecked());
-}
 
 void MainWindow::on_spin_rating_valueChanged(int arg1)
 {

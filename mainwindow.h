@@ -51,15 +51,9 @@ private:
     int volumemenu; // громкость меню
     int mainpage; // главная страница
     int yaycache; // кэш
-    int table1; // описание
-    int table2; // версия
-    int table3; // голоса
-    int table4; // популярность
-    int table5; // последнее обновление
     int fav; // последнее обновление
     int host;
     int benchlist; //бенчлист
-    int tooltip; //показывать всплывающие подсказки
 
     QString packageURL;
     QString lang;
@@ -210,16 +204,12 @@ private slots:
     void on_combo_host_currentIndexChanged(int index);
     void on_combo_lang_currentIndexChanged(int index);
 
-    void on_check_description_stateChanged();
-    void on_check_version_stateChanged();
-    void on_check_voices_stateChanged();
-    void on_check_popularity_stateChanged();
-    void on_check_lastupdate_stateChanged();
     void on_check_repair_stateChanged();
     void on_check_updateinstall_stateChanged();
     void on_check_trayon_stateChanged();
     void on_check_animload_stateChanged();
-    void on_check_tooltip_stateChanged();
+
+    void onTableAurCellClicked(int row);
 
     void on_dial_volmenu_valueChanged(int value);
     void on_dial_volnotify_valueChanged(int value);
