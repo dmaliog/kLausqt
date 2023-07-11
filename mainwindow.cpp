@@ -15,7 +15,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "5.9";
+QString currentVersion = "6.0";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -65,7 +65,6 @@ void MainWindow::on_action_2_triggered()
     ui->searchApp->setGeometry(440, 5, 221, 31);
     ui->action_4->setVisible(true);
     ui->action_6->setVisible(true);
-    ui->action_16->setVisible(true);
     ui->action_30->setVisible(true);
     ui->action_34->setVisible(true);
     ui->text_details->setVisible(true);
@@ -537,7 +536,6 @@ void MainWindow::on_action_35_triggered()
         return;
     }
 
-    ui->action_16->setVisible(true);
     ui->action_34->setVisible(true);
     ui->action_35->setVisible(false);
     ui->webEngineView->hide();
@@ -765,88 +763,6 @@ void MainWindow::on_push_grub_clicked()
         return;
     }
     sendNotification(tr("GRUB изменен"), tr("Изменения GRUB вступят в силу после перезагрузки."));
-}
-
-void MainWindow::on_action_16_triggered()
-{
-    // Удаление содержимого таблицы
-    ui->table_aur->clearContents();
-    ui->table_aur->setRowCount(0);
-    ui->table_aur->setColumnHidden(2, true);
-    ui->table_aur->setColumnHidden(3, true);
-    ui->table_aur->setColumnHidden(4, true);
-    ui->table_aur->setColumnHidden(5, true);
-    ui->table_aur->setColumnWidth(1, 680);
-
-    QString sourceFilePath;
-    QString targetFilePath;
-    if (lang == "en_US")
-    {
-        sourceFilePath = ":/other/list_en.txt";
-        targetFilePath = baseDir + "other/list_en.txt";
-    }
-    else
-    {
-        sourceFilePath = ":/other/list.txt";
-        targetFilePath = baseDir + "other/list.txt";
-    }
-
-    QFileInfo fileInfo(targetFilePath);
-    if (!fileInfo.exists())
-    {
-        if (!QDir().mkpath(fileInfo.absoluteDir().path()))
-        {
-            sendNotification(tr("Ошибка"), tr("Не удалось создать каталог: ") + fileInfo.absoluteDir().path());
-            return;
-        }
-        if (!QFile::copy(sourceFilePath, targetFilePath))
-        {
-            sendNotification(tr("Ошибка"), tr("Не удалось скопировать файл из ") + sourceFilePath + tr(" в ") + targetFilePath);
-            return;
-        }
-    }
-
-    QFile file(targetFilePath);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        sendNotification(tr("Ошибка"), tr("Не удалось открыть файл ресурсов"));
-        return;
-    }
-
-    QTextStream in(&file);
-    QVector<QPair<QString, QString>> programs;
-    while (!in.atEnd())
-    {
-        QString line = in.readLine();
-        line = line.trimmed();
-        if (!line.isEmpty())
-        {
-            int index = line.indexOf(',');
-            if (index != -1)
-            {
-                QString program = line.mid(2, index - 3);
-                QString description = line.mid(index + 3).chopped(3);
-                programs.append(qMakePair(program, description));
-            }
-        }
-    }
-
-    for (int i = 0; i < programs.size(); i++)
-    {
-        QTableWidgetItem *item1 = new QTableWidgetItem(programs[i].first);
-        QTableWidgetItem *item2 = new QTableWidgetItem(programs[i].second);
-
-        // Генерация случайного яркого цвета
-        QColor color = generateRandomColor();
-
-        // Установка цвета текста и фона ячеек таблицы
-        item1->setForeground(color);
-        item2->setForeground(color);
-
-        ui->table_aur->insertRow(i);
-        ui->table_aur->setItem(i, 0, item1);
-        ui->table_aur->setItem(i, 1, item2);
-    }
 }
 
 void MainWindow::on_action_addsh_triggered()
@@ -1403,7 +1319,6 @@ void MainWindow::loadSettings()
                 ui->webEngineView->show();
 
             else if (page == 2) {
-                ui->action_16->setVisible(false);
                 ui->action_34->setVisible(false);
                 ui->action_35->setVisible(true);
                 ui->webEngineView->show();
@@ -2042,52 +1957,109 @@ void MainWindow::onTableAurCellClicked(int row)
 }
 
 
-void MainWindow::loadContent() {
-    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-    // Создаем объект запроса с параметрами
-    QUrlQuery params;
-    params.addQueryItem("type", "search");
-    params.addQueryItem("arg", "-qt"); // замените на ваше приложение
-    QUrl url("https://aur.archlinux.org/rpc/?v=5&" + params.toString());
-    QNetworkRequest request(url);
-    QNetworkReply *reply = manager->get(request);
-    // Обрабатываем ответ от сервера
-    QObject::connect(reply, &QNetworkReply::finished, this, [=]() {
-        handleServerResponse(reply);
+void MainWindow::loadContent()
+{
+    ui->table_aur->setColumnCount(6); // Устанавливаем количество столбцов в таблице
+    ui->table_aur->setShowGrid(false); // Убираем отображение сетки
+    ui->table_aur->verticalHeader()->setVisible(false); // Убираем отображение номеров строк
+    ui->table_aur->setColumnWidth(0, 320);
+    ui->table_aur->setColumnWidth(1, 550);
+    ui->table_aur->setColumnWidth(2, 110);
+    ui->table_aur->setColumnWidth(3, 70);
+    ui->table_aur->setColumnWidth(4, 110);
+    ui->table_aur->setColumnWidth(5, 170);
 
-        // Выполняем поиск и выделение в таблице
-        const QString searchText = ui->searchApp->text();
-        if (page != 2 || searchText.isEmpty())
-            return;
+    ui->table_aur->setHorizontalHeaderLabels({tr("Названия пакетов"), tr("Описание"), tr("Версия"), tr("Голоса"), tr("Популярность"), tr("Последнее обновление")});
 
-        QTableWidget *table = ui->table_aur;
-        int rowCount = table->rowCount();
-        for (int i = 0; i < rowCount; ++i) {
-            QTableWidgetItem *item = table->item(i, 0);
-            if (item) {
-                QString cellText = item->text();
-                QStringList words = cellText.split(' ', Qt::SkipEmptyParts);
-                if (!words.isEmpty() && words.first().startsWith(searchText, Qt::CaseInsensitive)) {
-                    // Выделяем строку
-                    table->setCurrentItem(item);
-                    table->scrollToItem(item, QAbstractItemView::EnsureVisible);
-                    break;
-                }
-            }
-        }
-    });
+    ui->table_aur->setColumnHidden(1, true);
+    ui->table_aur->setColumnHidden(2, true);
+    ui->table_aur->setColumnHidden(3, true);
+    ui->table_aur->setColumnHidden(4, true);
+    ui->table_aur->setColumnHidden(5, true);
 
     // Очищаем таблицу
-    QTableWidget *table = ui->table_aur;
-    table->clearContents();
-    table->setRowCount(0);
+    ui->table_aur->clearContents();
+    ui->table_aur->setRowCount(0);
+
+    QString sourceFilePath;
+    QString targetFilePath;
+    if (lang == "en_US")
+    {
+        sourceFilePath = ":/other/list_en.txt";
+        targetFilePath = baseDir + "other/list_en.txt";
+    }
+    else
+    {
+        sourceFilePath = ":/other/list.txt";
+        targetFilePath = baseDir + "other/list.txt";
+    }
+
+    QFileInfo fileInfo(targetFilePath);
+    if (!fileInfo.exists())
+    {
+        if (!QDir().mkpath(fileInfo.absoluteDir().path()))
+        {
+            sendNotification(tr("Ошибка"), tr("Не удалось создать каталог: ") + fileInfo.absoluteDir().path());
+            return;
+        }
+        if (!QFile::copy(sourceFilePath, targetFilePath))
+        {
+            sendNotification(tr("Ошибка"), tr("Не удалось скопировать файл из ") + sourceFilePath + tr(" в ") + targetFilePath);
+            return;
+        }
+    }
+
+    QFile file(targetFilePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        sendNotification(tr("Ошибка"), tr("Не удалось открыть файл ресурсов"));
+        return;
+    }
+
+    QTextStream in(&file);
+    QVector<QPair<QString, QString>> programs;
+    while (!in.atEnd())
+    {
+        QString line = in.readLine().trimmed();
+        if (!line.isEmpty())
+        {
+            int index = line.indexOf(',');
+            if (index != -1)
+            {
+                QString program = line.mid(2, index - 3);
+                QString description = line.mid(index + 3).chopped(3);
+                programs.append(qMakePair(program, description));
+            }
+        }
+    }
+
+    file.close(); // Закрываем файл после использования
+
+    for (int i = 0; i < programs.size(); i++)
+    {
+        QTableWidgetItem *item1 = new QTableWidgetItem(programs[i].first);
+        QTableWidgetItem *item2 = new QTableWidgetItem(programs[i].second);
+
+        // Генерация случайного яркого цвета
+        QColor color = generateRandomColor();
+
+        // Установка цвета текста и фона ячеек таблицы
+        item1->setForeground(color);
+        item2->setForeground(color);
+
+        ui->table_aur->insertRow(i);
+        ui->table_aur->setItem(i, 0, item1);
+        ui->table_aur->setItem(i, 1, item2);
+    }
 
     connect(ui->searchApp, &QLineEdit::textChanged, this, [=](const QString &text) {
         if (page == 2)
         {
+            QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+            // Создаем объект запроса с параметрами
+            QUrlQuery newParams;
+            newParams.addQueryItem("type", "search");
             // Обновление параметра "arg"
-            QUrlQuery newParams = params;
-            newParams.removeQueryItem("arg");
             newParams.addQueryItem("arg", text);
 
             // Отправка запроса на сервер
@@ -2100,18 +2072,18 @@ void MainWindow::loadContent() {
                 handleServerResponse(reply);
 
                 // Выполняем поиск и выделение в таблице
-                int rowCount = table->rowCount();
+                int rowCount = ui->table_aur->rowCount();
                 for (int i = 0; i < rowCount; ++i) {
-                    QTableWidgetItem *item = table->item(i, 0);
+                    QTableWidgetItem *item = ui->table_aur->item(i, 0);
                     if (item) {
                         QString cellText = item->text();
                         QStringList words = cellText.split(' ', Qt::SkipEmptyParts);
                         if (!words.isEmpty() && words.first().startsWith(text, Qt::CaseInsensitive)) {
 
                             // Выделяем всю строку
-                            table->setCurrentCell(item->row(), 0);
-                            table->setSelectionBehavior(QAbstractItemView::SelectRows);
-                            table->scrollToItem(item, QAbstractItemView::EnsureVisible);
+                            ui->table_aur->setCurrentCell(item->row(), 0);
+                            ui->table_aur->setSelectionBehavior(QAbstractItemView::SelectRows);
+                            ui->table_aur->scrollToItem(item, QAbstractItemView::EnsureVisible);
                             break;
                         }
                     }

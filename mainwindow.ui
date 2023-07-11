@@ -3589,7 +3589,6 @@ QToolBar#toolBar_2 QToolButton:hover {
    <addaction name="action_4"/>
    <addaction name="action_5"/>
    <addaction name="action_6"/>
-   <addaction name="action_16"/>
    <addaction name="action_29"/>
    <addaction name="action_28"/>
    <addaction name="action_27"/>
@@ -3977,21 +3976,6 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="toolTip">
     <string notr="true">Установить</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_16">
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/17.png</normaloff>:/img/17.png</iconset>
-   </property>
-   <property name="text">
-    <string>Наш выбор</string>
-   </property>
-   <property name="toolTip">
-    <string notr="true">Наш выбор</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>

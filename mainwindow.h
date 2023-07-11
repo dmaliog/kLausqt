@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "qurlquery.h"
 #include "qwebengineview.h"
 #include <QSystemTrayIcon>
 #include <QMainWindow>
@@ -32,7 +33,7 @@ public:
     QColor generateRandomColor();
 
 private:
-
+    QUrlQuery newParams;
     QMap<QString, QString> iconMap; // Статический словарь для кэширования информации об иконках
 
     QListWidgetItem* orphanButton;
@@ -151,7 +152,6 @@ public slots:
     void on_action_10_triggered();
     void on_action_11_triggered();
     void on_action_12_triggered();
-    void on_action_16_triggered();
     void on_action_17_triggered();
     void on_action_27_triggered();
     void on_action_28_triggered();
@@ -161,6 +161,7 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
+
     QIcon getPackageIcon(const QString& packageName);
     QString getScriptContent(const QString& filePath);
 
