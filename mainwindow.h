@@ -33,6 +33,7 @@ public:
     QColor generateRandomColor();
 
 private:
+
     QUrlQuery newParams;
     QMap<QString, QString> iconMap; // Статический словарь для кэширования информации об иконках
 
@@ -52,7 +53,6 @@ private:
     int volumemenu; // громкость меню
     int mainpage; // главная страница
     int yaycache; // кэш
-    int fav; // последнее обновление
     int host;
     int benchlist; //бенчлист
 
@@ -61,6 +61,7 @@ private:
     QString currentDesktop;
     QString teatext;
     QString worktext;
+    QString repo;
 
     QTime timeupdate;
     QTime timetea;
@@ -193,11 +194,9 @@ private slots:
 
     void TeaTimer();
     void WorkTimer();
-    void handleServerResponse(QNetworkReply* reply);
+    void handleServerResponse(const QString &reply);
     void handleListItemDoubleClick(QListWidgetItem *item, const QString& scriptDir);
     void searchAndScroll(QListWidget* listWidget, const QString& text);
-
-    void on_spin_rating_valueChanged(int arg1);
 
     void on_combo_mainpage_currentIndexChanged();
     void on_combo_animload_currentIndexChanged();

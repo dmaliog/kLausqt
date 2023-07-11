@@ -90,7 +90,6 @@
         <file>media/message.wav</file>
         <file>media/sound.wav</file>
         <file>other/list.txt</file>
-        <file>other/list_en.txt</file>
         <file>other/main.sh</file>
         <file>other/notify.png</file>
         <file>other/translations_en_US.txt</file>
@@ -138,5 +137,17 @@
         <file>bench/hardinfo.sh</file>
         <file>bench/iozone.sh</file>
         <file>img/50.png</file>
+        <file>img/aur.png</file>
+        <file>img/multilib.png</file>
+        <file>img/core.png</file>
+        <file>img/extra.png</file>
+        <file>img/enter.png</file>
+        <file>img/endeavouros.png</file>
+        <file>img/aur_mini.png</file>
+        <file>img/multilib_mini.png</file>
+        <file>img/extra_mini.png</file>
+        <file>img/core_mini.png</file>
+        <file>img/community.png</file>
+        <file>img/community_mini.png</file>
     </qresource>
 </RCC>

@@ -15,7 +15,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "6.0";
+QString currentVersion = "6.1";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -61,8 +61,10 @@ void MainWindow::on_action_2_triggered()
 {
     if (page == 2) return;
     mrpropper(2);
-    ui->label1->setText(tr("Каталог пакетов из AUR"));
-    ui->searchApp->setGeometry(440, 5, 221, 31);
+    ui->label1->setText(tr("Каталог пакетов"));
+    ui->searchApp->setGeometry(510, 5, 221, 31);
+    ui->push_search->setVisible(true);
+    ui->push_search->setGeometry(693, 5, 31, 31);
     ui->action_4->setVisible(true);
     ui->action_6->setVisible(true);
     ui->action_30->setVisible(true);
@@ -78,12 +80,12 @@ void MainWindow::on_action_17_triggered()
     if (page == 3) return;
     mrpropper(3);
     ui->label1->setText(tr("Полезные скрипты"));
-    ui->list_sh->setVisible(true);
     ui->action_addsh->setVisible(true);
     ui->action_editsh->setVisible(true);
     ui->searchApp->setGeometry(390, 5, 221, 31);
     ui->searchApp->setVisible(true);
     ui->action_rmsh->setVisible(true);
+    ui->list_sh->setVisible(true);
 
     showLoadingAnimation(false);
 }
@@ -520,12 +522,32 @@ void MainWindow::on_action_34_triggered()
 
     int currentRow = ui->table_aur->currentRow();
     QTableWidgetItem *item = ui->table_aur->item(currentRow, 0);
-    QString url = item->data(Qt::UserRole).toString();
+    QString packageName = item->text();
+
+    QProcess process;
+    process.start("yay", QStringList() << "-Si" << packageName);
+    process.waitForFinished();
+
+    QByteArray output = process.readAllStandardOutput();
+    QString packageInfo = QString::fromUtf8(output);
+
+    // Ищем ссылку в тексте packageInfo
+    QString url;
+    int urlIndex = packageInfo.indexOf("URL");
+    if (urlIndex != -1) {
+        int start = packageInfo.indexOf(":", urlIndex);
+        int end = packageInfo.indexOf("\n", start);
+        if (start != -1 && end != -1) {
+            url = packageInfo.mid(start + 1, end - start - 1).trimmed();
+        }
+    }
+
     if (!url.isEmpty()) {
         showLoadingAnimation(true);
         ui->webEngineView->page()->load(QUrl(url));
-    } else
+    } else {
         sendNotification(tr("Внимание"), tr("URL отсутствует!"));
+    }
 }
 
 void MainWindow::on_action_35_triggered()
@@ -1036,7 +1058,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->check_updateinstall->setChecked(updinst == 1);
     ui->combo_mainpage->setCurrentIndex(mainpage);
     ui->combo_animload->setCurrentIndex(animloadpage);
-    ui->spin_rating->setValue(fav);
 
     ui->time_update->setTime(timeupdate);
     ui->time_tea->setTime(timetea);
@@ -1183,11 +1204,11 @@ void MainWindow::loadSettings()
     updinst = settings.value("UpdateInstall", 1).toInt();
     volumenotify = settings.value("VolumeNotify", 30).toInt();
     volumemenu = settings.value("VolumeMenu", 50).toInt();
-    fav = settings.value("Favorite", 50).toInt();
     lang = settings.value("Language").toString();
     host = settings.value("Host").toInt();
     teatext = settings.value("TeaText").toString();
     worktext = settings.value("WorkText").toString();
+    repo = settings.value("Repository").toString();
 
     timeupdate = QTime::fromString(settings.value("TimeUpdate").toString(), "HH:mm");
     timetea = QTime::fromString(settings.value("TimeTea").toString(), "HH:mm");
@@ -1246,8 +1267,7 @@ void MainWindow::loadSettings()
     //-##################################################################################
     connect(ui->spin_grub, SIGNAL(valueChanged(int)), this, SLOT(on_spinBox_grub_valueChanged(int)));
     connect(ui->time_update, &QTimeEdit::timeChanged, this, &MainWindow::onTimeChanged);
-    connect(ui->spin_rating, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::on_spin_rating_valueChanged);
-
+    connect(ui->table_aur, &QTableWidget::cellClicked, this, &MainWindow::onTableAurCellClicked);
     //-##################################################################################
     //-############################### ЗАНЯТОЕ МЕСТО ####################################
     //-##################################################################################
@@ -1404,10 +1424,9 @@ void MainWindow::loadSettings()
     //-##################################################################################
     //-##################################### GRUB #######################################
     //-##################################################################################
-    QString filename = "/etc/default/grub";
-    QFile file(filename);
+    QFile grub("/etc/default/grub");
 
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if (!grub.open(QIODevice::ReadOnly | QIODevice::Text)) {
         ui->push_grub->setDisabled(true);
         ui->line_grub->setDisabled(true);
         ui->spin_grub->setDisabled(true);
@@ -1415,7 +1434,7 @@ void MainWindow::loadSettings()
         // Ошибка открытия файла
     } else {
 
-        QTextStream in(&file);
+        QTextStream in(&grub);
         QString grubContent;
         QString timeoutStr;
 
@@ -1455,12 +1474,36 @@ void MainWindow::loadSettings()
                 break; // Закончит цикл поиска
             }
         }
+        grub.close();
 
         int timeout = timeoutStr.toInt(); // получаем значение timeout из файла
         ui->spin_grub->setValue(timeout); // устанавливаем значение в QSpinBox
         ui->line_grub->setText(grubContent);
 
-        connect(ui->table_aur, &QTableWidget::cellClicked, this, &MainWindow::onTableAurCellClicked);
+
+        //-##################################################################################
+        //-########################## СПИСОК РЕПОЗИТОРИЕВ ###################################
+        //-##################################################################################
+        QFile pacman("/etc/pacman.conf");
+        if (pacman.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QTextStream in(&pacman);
+            QStringList sections;
+
+            while (!in.atEnd()) {
+                QString line = in.readLine().trimmed();
+                if (line.startsWith('[') && line.endsWith(']')) {
+                    QString section = line.mid(1, line.length() - 2);
+                    if (section != "options") { // Исключение секции [options]
+                        sections.append(section);
+                    }
+                }
+            }
+
+            pacman.close();
+
+            QString regexPattern = "^(" + sections.join("/\\S+|") + "/\\S+|aur/\\S+)"; // Формирование регулярного выражения
+            settings.setValue("Repository", regexPattern); // Сохранение значения regexPattern, а не repo
+        }
 
     }
 }
@@ -1534,6 +1577,7 @@ void MainWindow::mrpropper(int value) //зачистка говна перед �
     ui->scroll_site->setVisible(false);
     ui->combo_bench->setVisible(false);
     ui->text_details->setVisible(false);
+    ui->push_search->setVisible(false);
     ui->label1->setVisible(true);
 }
 
@@ -1832,150 +1876,48 @@ void MainWindow::showLoadingAnimation(bool show)
     removeToolButtonTooltips(ui->toolBar_2);
 }
 
-void MainWindow::handleServerResponse(QNetworkReply *reply)
-{
-    if (reply->error() == QNetworkReply::NoError) {
-        QByteArray response = reply->readAll();
-        QJsonDocument jsonDoc = QJsonDocument::fromJson(response);
-        QJsonObject jsonObj = jsonDoc.object();
-
-        if (jsonObj["type"].toString() == "search") {
-            QJsonArray results = jsonObj["results"].toArray();
-            ui->table_aur->setRowCount(results.size()); // Устанавливаем количество строк в таблице
-            ui->table_aur->setColumnCount(6); // Устанавливаем количество столбцов в таблице
-            ui->table_aur->setShowGrid(false); // Убираем отображение сетки
-            ui->table_aur->verticalHeader()->setVisible(false); // Убираем отображение номеров строк
-            ui->table_aur->setColumnWidth(0, 320);
-            ui->table_aur->setColumnWidth(1, 550);
-            ui->table_aur->setColumnWidth(2, 110);
-            ui->table_aur->setColumnWidth(3, 70);
-            ui->table_aur->setColumnWidth(4, 110);
-            ui->table_aur->setColumnWidth(5, 170);
-
-            ui->table_aur->setHorizontalHeaderLabels({tr("Названия пакетов"), tr("Описание"), tr("Версия"), tr("Голоса"), tr("Популярность"), tr("Последнее обновление")});
-
-            ui->table_aur->setColumnHidden(1, 1);
-            ui->table_aur->setColumnHidden(2, 1);
-            ui->table_aur->setColumnHidden(3, 1);
-            ui->table_aur->setColumnHidden(4, 1);
-            ui->table_aur->setColumnHidden(5, 1);
-
-            for (int i = 0; i < results.size(); i++) {
-                QString name = results[i].toObject()["Name"].toString();
-                QString version = results[i].toObject()["Version"].toString();
-                QString description = results[i].toObject()["Description"].toString();
-                int votes = results[i].toObject()["NumVotes"].toInt();
-                double popularity = results[i].toObject()["Popularity"].toDouble();
-                qint64 timestamp = results[i].toObject()["LastModified"].toInt();
-                int outofdate = results[i].toObject()["OutOfDate"].toInt();
-                QString packageURL = results[i].toObject()["URL"].toString();
-
-                QColor color = generateRandomColor();
-
-                QTableWidgetItem *item = new QTableWidgetItem(name);
-                item->setForeground(color);
-                ui->table_aur->setItem(i, 0, item);
-
-                if (votes >= fav) {
-                    QIcon icon(":/img/p_1.png");
-                    item->setIcon(icon);
-                }
-
-                QTableWidgetItem *item1 = new QTableWidgetItem(description);
-                item1->setForeground(color);
-                ui->table_aur->setItem(i, 1, item1);
-
-                QTableWidgetItem *item2 = new QTableWidgetItem(version);
-                item2->setForeground(color);
-                if (outofdate) {
-                    item2->setFlags(item2->flags() | Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable);
-                    QFont font = item2->font();
-                    font.setStrikeOut(true);
-                    item2->setFont(font);
-                } else
-                    item2->setFlags(item2->flags() ^ Qt::ItemIsEditable);
-
-                ui->table_aur->setItem(i, 2, item2);
-
-                QTableWidgetItem *item3 = new QTableWidgetItem();
-                item3->setForeground(color);
-                item3->setData(Qt::DisplayRole, votes);
-                ui->table_aur->setItem(i, 3, item3);
-
-                QTableWidgetItem *item4 = new QTableWidgetItem(QString::number(popularity, 'f', 2));
-                item4->setForeground(color);
-                ui->table_aur->setItem(i, 4, item4);
-
-                QDateTime dateTime;
-                dateTime.setMSecsSinceEpoch(timestamp * 1000);
-                QString date = dateTime.toString("yyyy-MM-dd");
-                QTableWidgetItem *item5 = new QTableWidgetItem(date);
-                item5->setForeground(color);
-                ui->table_aur->setItem(i, 5, item5);
-
-                item->setForeground(color);
-                item->setData(Qt::UserRole, packageURL); // Установка данных пользовательской роли
-                ui->table_aur->setItem(i, 0, item);
-
-            }
-        }
-        // установка атрибутов сортировки и выбора для ячеек заголовка столбца
-        for(int i = 0; i < ui->table_aur->columnCount(); i++) {
-            QTableWidgetItem *headerItem = ui->table_aur->horizontalHeaderItem(i);
-            headerItem->setFlags(headerItem->flags() | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-        }
-
-        // подключение сигнала клика по заголовку столбца к слоту сортировки таблицы
-        QObject::connect(ui->table_aur->horizontalHeader(), &QHeaderView::sectionClicked, ui->table_aur, [this](int index){
-            Qt::SortOrder order = ui->table_aur->horizontalHeader()->sortIndicatorOrder();
-            ui->table_aur->sortByColumn(index, order);
-        });
-    }
-    reply->deleteLater();
-}
-
 void MainWindow::onTableAurCellClicked(int row)
 {
     QTableWidgetItem* nameItem = ui->table_aur->item(row, 0);
-    QTableWidgetItem* descriptionItem = ui->table_aur->item(row, 1);
-    QTableWidgetItem* versionItem = ui->table_aur->item(row, 2);
-    QTableWidgetItem* votesItem = ui->table_aur->item(row, 3);
-    QTableWidgetItem* popularityItem = ui->table_aur->item(row, 4);
-    QTableWidgetItem* dateItem = ui->table_aur->item(row, 5);
+    QString packageName = nameItem->text();
 
-    QString name = nameItem ? nameItem->text() : tr("нет информации");
-    QString description = descriptionItem ? descriptionItem->text() : tr("нет информации");
-    QString version = versionItem ? versionItem->text() : tr("нет информации");
-    int votes = votesItem ? votesItem->text().toInt() : 0;
-    double popularity = popularityItem ? popularityItem->text().toDouble() : 0.0;
-    QString date = dateItem ? dateItem->text() : tr("нет информации");
+    QProcess process;
+    process.start("yay", QStringList() << "-Si" << packageName);
+    process.waitForFinished();
 
-    QString tooltip = QString(tr("<b>Название:</b> %1<br><br><b>Описание:</b> %2<br><br><b>Версия:</b> %3<br><br><b>Голоса:</b> %4<br><br><b>Популярность:</b> %5<br><br><b>Последнее обновление:</b> %6"))
-                          .arg(name, description, version, QString::number(votes), QString::number(popularity, 'f', 2), date);
+    QByteArray output = process.readAllStandardOutput();
+    QString packageInfo = QString::fromUtf8(output);
 
-    ui->text_details->setText(tooltip);
+    // Process the packageInfo string
+    QStringList lines = packageInfo.split("\n");
+    QString processedInfo;
+
+    for (const QString& line : lines) {
+        if (!line.isEmpty()) {
+            int colonIndex = line.indexOf(':');
+            if (colonIndex != -1) {
+                QString header = line.left(colonIndex).trimmed();
+                QString content = line.mid(colonIndex + 1).trimmed();
+
+                header = "<b>" + header + ":</b> ";
+
+                processedInfo += header + content + "<br><br>";
+            }
+        }
+    }
+
+    ui->text_details->setText(processedInfo);
 }
 
 
 void MainWindow::loadContent()
 {
-    ui->table_aur->setColumnCount(6); // Устанавливаем количество столбцов в таблице
+    ui->table_aur->setColumnCount(2); // Устанавливаем количество столбцов в таблице
     ui->table_aur->setShowGrid(false); // Убираем отображение сетки
     ui->table_aur->verticalHeader()->setVisible(false); // Убираем отображение номеров строк
     ui->table_aur->setColumnWidth(0, 320);
-    ui->table_aur->setColumnWidth(1, 550);
-    ui->table_aur->setColumnWidth(2, 110);
-    ui->table_aur->setColumnWidth(3, 70);
-    ui->table_aur->setColumnWidth(4, 110);
-    ui->table_aur->setColumnWidth(5, 170);
 
-    ui->table_aur->setHorizontalHeaderLabels({tr("Названия пакетов"), tr("Описание"), tr("Версия"), tr("Голоса"), tr("Популярность"), tr("Последнее обновление")});
-
-    ui->table_aur->setColumnHidden(1, true);
-    ui->table_aur->setColumnHidden(2, true);
-    ui->table_aur->setColumnHidden(3, true);
-    ui->table_aur->setColumnHidden(4, true);
-    ui->table_aur->setColumnHidden(5, true);
+    ui->table_aur->setHorizontalHeaderLabels({tr("Названия пакетов")});
 
     // Очищаем таблицу
     ui->table_aur->clearContents();
@@ -1983,16 +1925,8 @@ void MainWindow::loadContent()
 
     QString sourceFilePath;
     QString targetFilePath;
-    if (lang == "en_US")
-    {
-        sourceFilePath = ":/other/list_en.txt";
-        targetFilePath = baseDir + "other/list_en.txt";
-    }
-    else
-    {
-        sourceFilePath = ":/other/list.txt";
-        targetFilePath = baseDir + "other/list.txt";
-    }
+    sourceFilePath = ":/other/list.txt";
+    targetFilePath = baseDir + "other/list.txt";
 
     QFileInfo fileInfo(targetFilePath);
     if (!fileInfo.exists())
@@ -2017,78 +1951,97 @@ void MainWindow::loadContent()
     }
 
     QTextStream in(&file);
-    QVector<QPair<QString, QString>> programs;
+    QVector<QString> programs;
+
     while (!in.atEnd())
     {
         QString line = in.readLine().trimmed();
+
         if (!line.isEmpty())
         {
             int index = line.indexOf(',');
+
             if (index != -1)
             {
-                QString program = line.mid(2, index - 3);
-                QString description = line.mid(index + 3).chopped(3);
-                programs.append(qMakePair(program, description));
+                QString program = line.mid(2, index - 4);
+                programs.append(program);
             }
         }
     }
 
     file.close(); // Закрываем файл после использования
 
-    for (int i = 0; i < programs.size(); i++)
-    {
-        QTableWidgetItem *item1 = new QTableWidgetItem(programs[i].first);
-        QTableWidgetItem *item2 = new QTableWidgetItem(programs[i].second);
 
-        // Генерация случайного яркого цвета
+    for (int i = 0; i < programs.size(); i++) {
+        QString packageName = programs[i];
         QColor color = generateRandomColor();
+        QTableWidgetItem *item = new QTableWidgetItem();
 
-        // Установка цвета текста и фона ячеек таблицы
-        item1->setForeground(color);
-        item2->setForeground(color);
+        QString iconPath = "";
+        QString prefixToRemove = "";
+
+        QRegularExpression regex("(\\w+)/\\S+");
+        QRegularExpressionMatch match = regex.match(packageName);
+
+        if (match.hasMatch()) {
+            QString repoName = match.captured(1);
+            iconPath = ":/img/" + repoName + ".png";
+            prefixToRemove = repoName + "/";
+        }
+
+        item->setIcon(QIcon(iconPath));
+
+        // Удаление префикса, если применимо
+        if (!prefixToRemove.isEmpty()) {
+            packageName.remove(0, prefixToRemove.length());
+        }
+
+        item->setText(packageName);
+        item->setForeground(color);
 
         ui->table_aur->insertRow(i);
-        ui->table_aur->setItem(i, 0, item1);
-        ui->table_aur->setItem(i, 1, item2);
+        ui->table_aur->setItem(i, 0, item);
     }
 
-    connect(ui->searchApp, &QLineEdit::textChanged, this, [=](const QString &text) {
+    //событие на кнопку Enter
+    connect(ui->searchApp, &QLineEdit::returnPressed, this, [=]() {
         if (page == 2)
         {
-            QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-            // Создаем объект запроса с параметрами
-            QUrlQuery newParams;
-            newParams.addQueryItem("type", "search");
-            // Обновление параметра "arg"
-            newParams.addQueryItem("arg", text);
+            QString text = ui->searchApp->text();
+            handleServerResponse(text);
 
-            // Отправка запроса на сервер
-            QUrl url("https://aur.archlinux.org/rpc/?v=5&" + newParams.toString());
-            QNetworkRequest request(url);
-            QNetworkReply *reply = manager->get(request);
+        }
+    });
 
-            // Обработка ответа от сервера
-            QObject::connect(reply, &QNetworkReply::finished, this, [=]() {
-                handleServerResponse(reply);
+    //событие на нажатую кнопку
+    connect(ui->push_search, &QPushButton::clicked, this, [=]() {
+        if (page == 2)
+        {
+            QString text = ui->searchApp->text();
+            handleServerResponse(text);
+        }
+    });
 
-                // Выполняем поиск и выделение в таблице
-                int rowCount = ui->table_aur->rowCount();
-                for (int i = 0; i < rowCount; ++i) {
-                    QTableWidgetItem *item = ui->table_aur->item(i, 0);
-                    if (item) {
-                        QString cellText = item->text();
-                        QStringList words = cellText.split(' ', Qt::SkipEmptyParts);
-                        if (!words.isEmpty() && words.first().startsWith(text, Qt::CaseInsensitive)) {
+    connect(ui->searchApp, &QLineEdit::textChanged, this, [=](const QString& text) {
+        if (page == 2)
+        {
+            // Выполняем поиск и выделение в таблице
+            int rowCount = ui->table_aur->rowCount();
+            for (int i = 0; i < rowCount; ++i) {
+                QTableWidgetItem *item = ui->table_aur->item(i, 0);
+                if (item) {
+                    QString cellText = item->text();
+                    QStringList words = cellText.split(' ', Qt::SkipEmptyParts);
+                    if (!words.isEmpty() && words.first().startsWith(text, Qt::CaseInsensitive)) {
 
-                            // Выделяем всю строку
-                            ui->table_aur->setCurrentCell(item->row(), 0);
-                            ui->table_aur->setSelectionBehavior(QAbstractItemView::SelectRows);
-                            ui->table_aur->scrollToItem(item, QAbstractItemView::EnsureVisible);
-                            break;
-                        }
+                        // Выделяем всю строку
+                        ui->table_aur->setCurrentCell(item->row(), 0);
+                        ui->table_aur->setSelectionBehavior(QAbstractItemView::SelectRows);
+                        ui->table_aur->scrollToItem(item, QAbstractItemView::EnsureVisible);
+                        break;
                     }
                 }
-            });
+            }
         }
         else {
             if (page == 11)
@@ -2101,6 +2054,65 @@ void MainWindow::loadContent()
                 searchAndScroll(ui->list_manager, text);
         }
     });
+}
+
+void MainWindow::handleServerResponse(const QString& reply)
+{
+    QProcess process;
+    process.start("yay", QStringList() << "-Ss" << reply);
+
+        if (process.waitForFinished()) {
+        QStringList packageNames;
+
+        while (process.canReadLine()) {
+            QByteArray line = process.readLine();
+            QString lineString = QString::fromUtf8(line).trimmed();
+
+            QRegularExpression regex(repo); // Добавлено условие для extra
+            QRegularExpressionMatch match = regex.match(lineString);
+            if (match.hasMatch()) {
+                QString packageName = match.captured(1);
+                packageNames.append(packageName);
+            }
+        }
+
+        ui->table_aur->clearContents(); // Очистка содержимого таблицы
+
+        // Установка общего количества строк в таблице
+        ui->table_aur->setRowCount(packageNames.size());
+        ui->table_aur->setColumnCount(1);
+
+        for (int i = 0; i < packageNames.size(); i++) {
+            QString packageName = packageNames[i];
+            QColor color = generateRandomColor();
+            QTableWidgetItem *item = new QTableWidgetItem();
+
+            QString iconPath = "";
+            QString prefixToRemove = "";
+
+            QRegularExpression regex("(\\w+)/\\S+");
+            QRegularExpressionMatch match = regex.match(packageName);
+
+            if (match.hasMatch()) {
+                QString repoName = match.captured(1);
+                iconPath = ":/img/" + repoName + ".png";
+                prefixToRemove = repoName + "/";
+            }
+
+            item->setIcon(QIcon(iconPath));
+
+            // Удаление префикса, если применимо
+            if (!prefixToRemove.isEmpty()) {
+                packageName.remove(0, prefixToRemove.length());
+            }
+
+            item->setText(packageName);
+            item->setForeground(color);
+
+            ui->table_aur->setItem(i, 0, item);
+        }
+
+    }
 }
 
 void MainWindow::searchAndScroll(QListWidget* listWidget, const QString& text)
@@ -2484,7 +2496,20 @@ void MainWindow::on_combo_lang_currentIndexChanged(int index)
     // Проверка, совпадает ли выбранный язык с текущим языком
     if (currentLang != lang) {
         settings.setValue("Language", lang);
+
+        QTranslator translator;
+        if (lang == "ru_RU") {
+            if (translator.load(":/lang/kLaus_ru.qm")) {
+                qApp->installTranslator(&translator);
+            }
+        } else if (lang == "en_US") {
+            if (translator.load(":/lang/kLaus_en.qm")) {
+                qApp->installTranslator(&translator);
+            }
+        }
+
         sendNotification(tr("Смена языка"), tr("Приложение будет перезагружено для смены языка"));
+
         qApp->quit();
         QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
     }
@@ -2607,13 +2632,6 @@ void MainWindow::on_dial_volnotify_valueChanged(int value)
     ui->label_volnotify->setText(labelvolnotify);
 }
 
-
-void MainWindow::on_spin_rating_valueChanged(int arg1)
-{
-    fav = arg1;
-    settings.setValue("Favorite", fav);
-    loadContent();
-}
 
 void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString& scriptDir) {
     Terminal terminal = getTerminal();

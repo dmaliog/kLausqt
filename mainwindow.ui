@@ -365,10 +365,16 @@ QTableWidget QHeaderView::section:first {
 }</string>
     </property>
     <property name="verticalScrollBarPolicy">
-     <enum>Qt::ScrollBarAsNeeded</enum>
+     <enum>Qt::ScrollBarAlwaysOn</enum>
     </property>
     <property name="horizontalScrollBarPolicy">
      <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>20</width>
+      <height>20</height>
+     </size>
     </property>
     <attribute name="verticalHeaderShowSortIndicator" stdset="0">
      <bool>false</bool>
@@ -519,7 +525,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>4</number>
     </property>
     <widget class="QWidget" name="tab_aursettings">
      <attribute name="title">
@@ -529,7 +535,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>20</y>
+        <y>190</y>
         <width>371</width>
         <height>21</height>
        </rect>
@@ -547,9 +553,9 @@ QTabWidget#tabWidget QTabBar::tab:selected {
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>50</y>
+        <y>220</y>
         <width>611</width>
-        <height>391</height>
+        <height>221</height>
        </rect>
       </property>
       <property name="layoutDirection">
@@ -573,16 +579,16 @@ QTabWidget#tabWidget QTabBar::tab:selected {
          <x>0</x>
          <y>0</y>
          <width>599</width>
-         <height>379</height>
+         <height>209</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_rating">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_update">
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>30</height>
+            <height>40</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -597,31 +603,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
            </font>
           </property>
           <property name="text">
-           <string>Рейтинг для показа звезды</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_cache">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Удаление кэша</string>
+           <string>Частота обновления пакетов</string>
           </property>
          </widget>
         </item>
@@ -671,58 +653,6 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           </item>
          </widget>
         </item>
-        <item row="2" column="1">
-         <widget class="QSpinBox" name="spin_rating">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="contextMenuPolicy">
-           <enum>Qt::NoContextMenu</enum>
-          </property>
-          <property name="layoutDirection">
-           <enum>Qt::LeftToRight</enum>
-          </property>
-          <property name="frame">
-           <bool>true</bool>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0" colspan="2">
-         <widget class="QCheckBox" name="check_updateinstall">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Проверять актуальность системы перед установкой новых пакетов</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="1">
          <widget class="QTimeEdit" name="time_update">
           <property name="sizePolicy">
@@ -751,12 +681,12 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_update">
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_cache">
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>40</height>
+            <height>30</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -771,12 +701,78 @@ QTabWidget#tabWidget QTabBar::tab:selected {
            </font>
           </property>
           <property name="text">
-           <string>Частота обновления пакетов</string>
+           <string>Удаление кэша</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="2">
+         <widget class="QCheckBox" name="check_updateinstall">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Проверять актуальность системы перед установкой новых пакетов</string>
           </property>
          </widget>
         </item>
        </layout>
       </widget>
+     </widget>
+     <widget class="QScrollArea" name="scroll_repository">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>10</y>
+        <width>391</width>
+        <height>111</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background:#272727;</string>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollArea_repository">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>379</width>
+         <height>99</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_6"/>
+      </widget>
+     </widget>
+     <widget class="QLabel" name="label_repository">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>20</y>
+        <width>211</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>Репозитории</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_addaur">
@@ -1191,7 +1187,7 @@ padding-right:55px;</string>
           </item>
           <item>
            <property name="text">
-            <string>Каталог пакетов AUR</string>
+            <string>Каталог пакетов</string>
            </property>
           </item>
           <item>
@@ -1549,7 +1545,7 @@ border:0;</string>
         <x>380</x>
         <y>110</y>
         <width>251</width>
-        <height>171</height>
+        <height>201</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -1559,7 +1555,7 @@ border:0;</string>
     padding: 15px; /* Внутренний отступ */</string>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Exomoon Design Studio&lt;/p&gt;&lt;p&gt;Hasymi и Luvdat&lt;/p&gt;&lt;p&gt;Разработчикам KDE &lt;/p&gt;&lt;p&gt;Линусу Торвальдсу&lt;/p&gt;&lt;p&gt;dalto&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Разработчикам KDE &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Линусу Торвальдсу&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;dalto&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;&lt;br/&gt;Особая благодарность:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.flaticon.com/ru/authors/exomoon-design-studio&quot;&gt;&lt;span style=&quot; font-size:8pt; font-style:italic; text-decoration: underline; color:#3d3d3d;&quot;&gt;exomoon design studio&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt; font-style:italic; color:#3d3d3d;&quot;&gt;, &lt;/span&gt;&lt;a href=&quot;https://www.flaticon.com/authors/shohanurrahman13&quot;&gt;&lt;span style=&quot; font-size:8pt; font-style:italic; text-decoration: underline; color:#3d3d3d;&quot;&gt;shohanur.rahman13&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt; font-style:italic; color:#3d3d3d;&quot;&gt;,&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.flaticon.com/ru/authors/hasymi&quot;&gt;&lt;span style=&quot; font-size:8pt; font-style:italic; text-decoration: underline; color:#3d3d3d;&quot;&gt;Hasymi&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt; font-style:italic; color:#3d3d3d;&quot;&gt;, &lt;/span&gt;&lt;a href=&quot;https://www.flaticon.com/ru/authors/luvdat&quot;&gt;&lt;span style=&quot; font-size:8pt; font-style:italic; text-decoration: underline; color:#3d3d3d;&quot;&gt;Luvdat&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt; font-style:italic; color:#3d3d3d;&quot;&gt;, &lt;/span&gt;&lt;a href=&quot;https://www.flaticon.com/authors/freepik&quot;&gt;&lt;span style=&quot; font-size:8pt; font-style:italic; text-decoration: underline; color:#3d3d3d;&quot;&gt;Freeplk&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt; font-style:italic; color:#3d3d3d;&quot;&gt;, &lt;/span&gt;&lt;a href=&quot;https://www.flaticon.com/authors/bzzrincantation&quot;&gt;&lt;span style=&quot; font-size:8pt; font-style:italic; text-decoration: underline; color:#3d3d3d;&quot;&gt;BZZRINCANTATION&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt; font-style:italic; color:#3d3d3d;&quot;&gt;,&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -3377,13 +3373,13 @@ background-position: left center;</string>
    </widget>
    <widget class="QTextEdit" name="text_details">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
       <x>360</x>
       <y>40</y>
-      <width>311</width>
+      <width>381</width>
       <height>481</height>
      </rect>
     </property>
@@ -3397,11 +3393,75 @@ background-position: left center;</string>
 	background-color: #242424;
     border: 5px solid #28276b;
     border-radius: 13px;
-    padding: 15px;
+	padding-left: 10px;
 }</string>
     </property>
     <property name="verticalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOff</enum>
+     <enum>Qt::ScrollBarAsNeeded</enum>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="html">
+     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/core_mini.png&quot; /&gt;  &lt;span style=&quot; font-size:28pt; font-style:italic;&quot;&gt;core&lt;/span&gt; имеет достаточно строгие требования к качеству. Разработчики/пользователи должны подтвердить (в ответ на &lt;span style=&quot; font-style:italic;&quot;&gt;signoff&lt;/span&gt;-запрос в почтовой рассылке) работоспособность обновлений, прежде чем они будут приняты. &lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/extra_mini.png&quot; /&gt; &lt;span style=&quot; font-size:28pt; font-style:italic;&quot;&gt;extra&lt;/span&gt; содержит все пакеты, которые не подходят для &lt;span style=&quot; font-style:italic;&quot;&gt;core&lt;/span&gt;. Этот репозиторий совместно сопровождается &lt;a href=&quot;https://wiki.archlinux.org/title/Trusted_Users&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;доверенными пользователями&lt;/span&gt;&lt;/a&gt; и разработчиками Arch. Примеры: Xorg, оконные менеджеры, веб-браузеры, медиаплееры, инструменты для работы с языками, такими как Python и Ruby, и многое другое. &lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/multilib_mini.png&quot; /&gt; &lt;span style=&quot; font-size:28pt; font-style:italic;&quot;&gt;multilib&lt;/span&gt; содержит 32-битное программное обеспечение и библиотеки, которые можно использовать для запуска и сборки 32-битных приложений на 64-битных системах (например, &lt;a href=&quot;https://archlinux.org/packages/?name=wine&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;wine&lt;/span&gt;&lt;/a&gt;, &lt;a href=&quot;https://archlinux.org/packages/?name=steam&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;steam&lt;/span&gt;&lt;/a&gt; и т.д.). &lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/community_mini.png&quot; /&gt; &lt;span style=&quot; font-family:'monospace'; font-size:28pt; font-style:italic;&quot;&gt;community&lt;/span&gt; содержит пакеты, поддерживаемые и обновляемые сообществом Arch Linux. В репозитории вы найдете дополнительные пакеты, которые не включены в базовую установку Arch Linux, но предоставляются и поддерживаются сообществом.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/aur_mini.png&quot; /&gt;  &lt;span style=&quot; font-size:28pt; font-style:italic;&quot;&gt;aur&lt;/span&gt; содержат наиболее важное и популярное программное обеспечение, которое можно легко получить и установить при помощи &lt;a href=&quot;https://wiki.archlinux.org/title/Pacman_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;pacman&lt;/span&gt;&lt;/a&gt;. Эти репозитории поддерживают &lt;a href=&quot;https://wiki.archlinux.org/title/Arch_terminology#Package_maintainer&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;мейнтейнеры пакетов&lt;/span&gt;&lt;/a&gt;. &lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Как пользоваться поиском:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- ничего не нажимаете (внутренний поиск)&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- нажимаете Enter (новый поиск)&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="push_search">
+    <property name="geometry">
+     <rect>
+      <x>933</x>
+      <y>5</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border:0;
+border-radius:0;
+background:0;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="klausres.qrc">
+      <normaloff>:/img/enter.png</normaloff>:/img/enter.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>20</width>
+      <height>20</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
     </property>
    </widget>
    <zorder>scroll_site</zorder>
@@ -3416,6 +3476,7 @@ background-position: left center;</string>
    <zorder>combo_bench</zorder>
    <zorder>table_aur</zorder>
    <zorder>text_details</zorder>
+   <zorder>push_search</zorder>
    <zorder>tabWidget</zorder>
   </widget>
   <widget class="QToolBar" name="toolBar">
@@ -3813,7 +3874,7 @@ QToolBar#toolBar_2 QToolButton:hover {
      <normaloff>:/img/2.png</normaloff>:/img/2.png</iconset>
    </property>
    <property name="text">
-    <string>Каталог пакетов AUR</string>
+    <string>Каталог пакетов</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
