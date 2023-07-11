@@ -10,7 +10,7 @@ Manager's features:
 - System update/ removal of orphans and package cache
 - Recommended apps
 
-![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/47ef45c2-3738-4f60-994f-19e621635c24)
+![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/3783680a-1aed-4efb-b1ac-34fc1da5da1c)
 ![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/f2e7c64c-efe9-4f0e-adb6-3fd18c1c71e2)
 ![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/1cac2885-130c-4ef0-bd49-5887423c71fc)
 ![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/b5a035d6-1546-474b-a53a-b08f957b305c)
