@@ -13,7 +13,7 @@ source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
 
 # Проверка наличия установленных Zen пакетов
-if [ -n "$(yay -Qs linux-zen)" ] || [ -n "$(yay -Qs linux-zen-headers)" ]; then
+if [ -n "$(yay -Q linux-zen)" ] || [ -n "$(yay -Q linux-zen-headers)" ]; then
     echo "${pkg} linux-zen ${found}. ${delq} linux-zen & linux-zen-headers? (y/n): "
     read answer
     if [ "$answer" == "y" ]; then

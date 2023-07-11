@@ -15,7 +15,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "5.8";
+QString currentVersion = "5.9";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -239,7 +239,7 @@ void MainWindow::on_action_8_triggered()
 {
     if (page == 7) return;
     QProcess process;
-    process.start("yay", QStringList() << "-Qs" << "ocs-url");
+    process.start("yay", QStringList() << "-Q" << "ocs-url");
     if (process.waitForFinished()) {
         QString output = QString::fromUtf8(process.readAllStandardOutput());
         if (!output.contains("ocs-url")) {
@@ -656,7 +656,7 @@ void MainWindow::on_action_6_triggered()
         // Обработчик вывода информации из процесса
         connect(process, &QProcess::readyReadStandardOutput, this, [=]() {
             QString output = process->readAllStandardOutput();
-            static QRegularExpression re("Название\\s+\\:\\s+(\\S+)");
+            static QRegularExpression re(packageName);
             QRegularExpressionMatch match = re.match(output);
             if (match.hasMatch()) {
 
@@ -676,7 +676,7 @@ void MainWindow::on_action_6_triggered()
         });
 
         // Запускаем процесс
-        process->start("yay", QStringList() << "-Qi" << packageName);
+        process->start("yay", QStringList() << "-Q" << packageName);
 
     } else {
         if (ui->list_manager->currentItem() == nullptr) {
@@ -1937,7 +1937,7 @@ void MainWindow::handleServerResponse(QNetworkReply *reply)
             ui->table_aur->setColumnWidth(4, 110);
             ui->table_aur->setColumnWidth(5, 170);
 
-            ui->table_aur->setHorizontalHeaderLabels({tr("Название"), tr("Описание"), tr("Версия"), tr("Голоса"), tr("Популярность"), tr("Последнее обновление")});
+            ui->table_aur->setHorizontalHeaderLabels({tr("Названия пакетов"), tr("Описание"), tr("Версия"), tr("Голоса"), tr("Популярность"), tr("Последнее обновление")});
 
             ui->table_aur->setColumnHidden(1, 1);
             ui->table_aur->setColumnHidden(2, 1);
@@ -2035,7 +2035,7 @@ void MainWindow::onTableAurCellClicked(int row)
     double popularity = popularityItem ? popularityItem->text().toDouble() : 0.0;
     QString date = dateItem ? dateItem->text() : tr("нет информации");
 
-    QString tooltip = QString(tr("Название: %1\n\nОписание: %2\n\nВерсия: %3\n\nГолоса: %4\n\nПопулярность: %5\n\nПоследнее обновление: %6"))
+    QString tooltip = QString(tr("<b>Название:</b> %1<br><br><b>Описание:</b> %2<br><br><b>Версия:</b> %3<br><br><b>Голоса:</b> %4<br><br><b>Популярность:</b> %5<br><br><b>Последнее обновление:</b> %6"))
                           .arg(name, description, version, QString::number(votes), QString::number(popularity, 'f', 2), date);
 
     ui->text_details->setText(tooltip);

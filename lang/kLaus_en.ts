@@ -962,12 +962,22 @@
         <translation>Internal IP: %1</translation>
     </message>
     <message>
+        <location filename="../mainwindow.cpp" line="1940"/>
+        <source>Названия пакетов</source>
+        <translation>Package names</translation>
+    </message>
+    <message>
         <location filename="../mainwindow.cpp" line="2031"/>
         <location filename="../mainwindow.cpp" line="2032"/>
         <location filename="../mainwindow.cpp" line="2033"/>
         <location filename="../mainwindow.cpp" line="2036"/>
         <source>нет информации</source>
         <translation>no information</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2038"/>
+        <source>&lt;b&gt;Название:&lt;/b&gt; %1&lt;br&gt;&lt;br&gt;&lt;b&gt;Описание:&lt;/b&gt; %2&lt;br&gt;&lt;br&gt;&lt;b&gt;Версия:&lt;/b&gt; %3&lt;br&gt;&lt;br&gt;&lt;b&gt;Голоса:&lt;/b&gt; %4&lt;br&gt;&lt;br&gt;&lt;b&gt;Популярность:&lt;/b&gt; %5&lt;br&gt;&lt;br&gt;&lt;b&gt;Последнее обновление:&lt;/b&gt; %6</source>
+        <translation>&lt;b&gt;Name:&lt;/b&gt; %1&lt;br&gt;&lt;br&gt;&lt;b&gt;Description:&lt;/b&gt; %2&lt;br&gt;&lt;br&gt;&lt;b&gt;Version:&lt;/b&gt; %3&lt;br&gt;&lt;br&gt;&lt;b&gt;Voices:&lt;/b&gt; %4&lt;br&gt;&lt;br&gt;&lt;b&gt;Popularity:&lt;/b&gt; %5&lt;br&gt;&lt;br&gt;&lt;b&gt;Last update:&lt;/b&gt; %6</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2158"/>
@@ -1051,31 +1061,6 @@
         <location filename="../mainwindow.cpp" line="1636"/>
         <source>Пора сделать зарядку!</source>
         <translation>It&apos;s time to do some exercises!</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cpp" line="2038"/>
-        <source>Название: %1
-
-Описание: %2
-
-Версия: %3
-
-Голоса: %4
-
-Популярность: %5
-
-Последнее обновление: %6</source>
-        <translation>Name: %1
-
-Description: %2
-
-Version: %3
-
-Votes: %4
-
-Popularity: %5
-
-Last updated: %6</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2282"/>
@@ -1274,11 +1259,6 @@ Important: Archives starting with a dot are configurations from the home directo
         <location filename="../mainwindow.cpp" line="1768"/>
         <source>Память: %1 / %2</source>
         <translation>Memory: %1 /%2</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cpp" line="1940"/>
-        <source>Название</source>
-        <translation>Title</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2515"/>

@@ -17,7 +17,7 @@ packages=("enchant1.6" "webkitgtk2-bin" "pkgextract" "imagemagick")
 missing_packages=()
 
 for package in "${packages[@]}"; do
-    if ! pacman -Qs "$package" > /dev/null; then
+    if ! pacman -Q "$package" > /dev/null; then
         missing_packages+=("$package")
     fi
 done
