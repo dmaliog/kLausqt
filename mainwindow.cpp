@@ -15,7 +15,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "6.4";
+QString currentVersion = "6.5";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -2106,6 +2106,11 @@ void MainWindow::handleServerResponse(const QString& reply)
             }
         }
 
+        if (!currentProcess->atEnd()) {
+            // Весь вывод еще не получен, ждем следующего сигнала readyReadStandardOutput
+            return;
+        }
+
         // Установка общего количества строк в таблице
         ui->table_aur->setRowCount(packageNames.size());
         ui->table_aur->setColumnCount(1);
@@ -2139,7 +2144,9 @@ void MainWindow::handleServerResponse(const QString& reply)
 
             ui->table_aur->setItem(i, 0, item);
         }
+
         miniAnimation(0, 0, false);
+        currentProcess->deleteLater(); // Удаляем объект QProcess после использования
     });
 
     currentProcess->start("yay", QStringList() << "-Ss" << reply);
