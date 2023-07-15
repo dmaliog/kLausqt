@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
     trayMenu->addAction(action_11);
 
     // Создание действия
-    QAction *action_2 = new QAction(QObject::tr("Каталог пакетов AUR"), trayMenu);
+    QAction *action_2 = new QAction(QObject::tr("Каталог пакетов"), trayMenu);
     action_2->setIcon(QIcon(":/img/2.png"));
     trayMenu->addAction(action_2);
 

@@ -1313,7 +1313,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </message>
     <message>
         <location filename="../main.cpp" line="147"/>
-        <source>Каталог пакетов AUR</source>
+        <source>Каталог пакетов</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

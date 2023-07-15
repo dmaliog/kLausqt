@@ -1336,8 +1336,8 @@ Important: Archives starting with a dot are configurations from the home directo
     </message>
     <message>
         <location filename="../main.cpp" line="147"/>
-        <source>Каталог пакетов AUR</source>
-        <translation>AUR package catalog</translation>
+        <source>Каталог пакетов</source>
+        <translation>Package catalog</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="151"/>
