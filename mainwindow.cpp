@@ -15,7 +15,7 @@
 QString baseDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = baseDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "6.3";
+QString currentVersion = "6.4";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -157,7 +157,7 @@ void MainWindow::on_action_7_triggered()
 {
     if (page == 4) return;
     mrpropper(4);
-    ui->searchApp->setGeometry(440, 5, 221, 31);
+    ui->searchApp->setGeometry(390, 5, 221, 31);
     // Выполняем команду yay -Qe | wc -l и получаем вывод
     QProcess process;
     process.start("sh", QStringList() << "-c" << "yay -Qe | wc -l");
@@ -1504,7 +1504,6 @@ void MainWindow::loadSettings()
             QString regexPattern = "^(" + sections.join("/\\S+|") + "/\\S+|aur/\\S+)"; // Формирование регулярного выражения
             settings.setValue("Repository", regexPattern); // Сохранение значения regexPattern, а не repo
         }
-
     }
 }
 
@@ -1881,38 +1880,68 @@ void MainWindow::onTableAurCellClicked(int row)
     QTableWidgetItem* nameItem = ui->table_aur->item(row, 0);
     QString packageName = nameItem->text();
 
-    QProcess process;
-    process.start("yay", QStringList() << "-Si" << packageName);
-    process.waitForFinished();
+    currentProcess = new QProcess(this);
 
-    QByteArray output = process.readAllStandardOutput();
-    QString packageInfo = QString::fromUtf8(output);
+    // Сохраняем текущую позицию прокрутки
+    int scrollBarValue = ui->text_details->verticalScrollBar()->value();
 
-    // Process the packageInfo string
-    QStringList lines = packageInfo.split("\n");
-    QString processedInfo;
+    connect(currentProcess, &QProcess::readyReadStandardOutput, this, [=]() {
+        QByteArray output = currentProcess->readAllStandardOutput();
+        QString packageInfo = QString::fromUtf8(output);
 
-    for (const QString& line : lines) {
-        if (!line.isEmpty()) {
-            int colonIndex = line.indexOf(':');
-            if (colonIndex != -1) {
-                QString header = line.left(colonIndex).trimmed();
-                QString content = line.mid(colonIndex + 1).trimmed();
+        // Process the packageInfo string
+        QStringList lines = packageInfo.split("\n");
+        QString processedInfo;
 
-                header = "<b>" + header + ":</b> ";
+        for (const QString& line : lines) {
+            if (!line.isEmpty()) {
+                int colonIndex = line.indexOf(':');
+                if (colonIndex != -1) {
+                    QString header = line.left(colonIndex).trimmed();
+                    QString content = line.mid(colonIndex + 1).trimmed();
 
-                processedInfo += header + content + "<br><br>";
+                    header = "<b>" + header + ":</b> ";
+
+                    processedInfo += "<p><span>" + header + "</span>" + content + "</p>";
+                }
             }
         }
-    }
 
-    ui->text_details->setText(processedInfo);
+        // Устанавливаем информацию после обработки всей строки
+        ui->text_details->append(processedInfo);
+
+        // Восстанавливаем позицию прокрутки
+        ui->text_details->verticalScrollBar()->setValue(scrollBarValue);
+
+        miniAnimation(0,0,false);
+    });
+
+    // Очищаем ui->text_details перед началом нового запроса
+    ui->text_details->clear();
+
+    miniAnimation(440,260,true);
+
+    currentProcess->start("yay", QStringList() << "-Si" << packageName);
+}
+
+void MainWindow::miniAnimation(int x, int y, bool visible)
+{
+    ui->label_miniload->setGeometry(x, y, 221, 31);
+
+    if (visible) {
+        ui->label_miniload->setVisible(true);
+        QMovie* movie = new QMovie(":/img/load.gif");
+        ui->label_miniload->setMovie(movie);
+        movie->start();
+    } else {
+        ui->label_miniload->setVisible(false);
+    }
 }
 
 
 void MainWindow::loadContent()
 {
-    ui->table_aur->setColumnCount(2); // Устанавливаем количество столбцов в таблице
+    ui->table_aur->setColumnCount(1); // Устанавливаем количество столбцов в таблице
     ui->table_aur->setShowGrid(false); // Убираем отображение сетки
     ui->table_aur->verticalHeader()->setVisible(false); // Убираем отображение номеров строк
     ui->table_aur->setColumnWidth(0, 320);
@@ -1980,7 +2009,7 @@ void MainWindow::loadContent()
         QString iconPath = "";
         QString prefixToRemove = "";
 
-        QRegularExpression regex("(\\w+)/\\S+");
+        static const QRegularExpression regex("(\\w+)/\\S+");
         QRegularExpressionMatch match = regex.match(packageName);
 
         if (match.hasMatch()) {
@@ -2058,14 +2087,15 @@ void MainWindow::loadContent()
 
 void MainWindow::handleServerResponse(const QString& reply)
 {
-    QProcess process;
-    process.start("yay", QStringList() << "-Ss" << reply);
+    ui->table_aur->clearContents();
+    miniAnimation(65, 260, true);
 
-        if (process.waitForFinished()) {
+    currentProcess = new QProcess(this);
+
+    connect(currentProcess, &QProcess::readyReadStandardOutput, this, [=]() {
         QStringList packageNames;
-
-        while (process.canReadLine()) {
-            QByteArray line = process.readLine();
+        while (currentProcess->canReadLine()) {
+            QByteArray line = currentProcess->readLine();
             QString lineString = QString::fromUtf8(line).trimmed();
 
             QRegularExpression regex(repo); // Добавлено условие для extra
@@ -2075,8 +2105,6 @@ void MainWindow::handleServerResponse(const QString& reply)
                 packageNames.append(packageName);
             }
         }
-
-        ui->table_aur->clearContents(); // Очистка содержимого таблицы
 
         // Установка общего количества строк в таблице
         ui->table_aur->setRowCount(packageNames.size());
@@ -2090,7 +2118,7 @@ void MainWindow::handleServerResponse(const QString& reply)
             QString iconPath = "";
             QString prefixToRemove = "";
 
-            QRegularExpression regex("(\\w+)/\\S+");
+            static const QRegularExpression regex("(\\w+)/\\S+");
             QRegularExpressionMatch match = regex.match(packageName);
 
             if (match.hasMatch()) {
@@ -2111,8 +2139,10 @@ void MainWindow::handleServerResponse(const QString& reply)
 
             ui->table_aur->setItem(i, 0, item);
         }
+        miniAnimation(0, 0, false);
+    });
 
-    }
+    currentProcess->start("yay", QStringList() << "-Ss" << reply);
 }
 
 void MainWindow::searchAndScroll(QListWidget* listWidget, const QString& text)

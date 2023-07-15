@@ -149,5 +149,6 @@
         <file>img/core_mini.png</file>
         <file>img/community.png</file>
         <file>img/community_mini.png</file>
+        <file>img/load.gif</file>
     </qresource>
 </RCC>

@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "qlabel.h"
+#include "qprocess.h"
 #include "qurlquery.h"
 #include "qwebengineview.h"
 #include <QSystemTrayIcon>
@@ -33,7 +35,8 @@ public:
     QColor generateRandomColor();
 
 private:
-
+    QString processedInfo;
+    QProcess* currentProcess = nullptr;
     QUrlQuery newParams;
     QMap<QString, QString> iconMap; // Статический словарь для кэширования информации об иконках
 
@@ -162,6 +165,7 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
+    void miniAnimation(int x, int y, bool visible);
 
     QIcon getPackageIcon(const QString& packageName);
     QString getScriptContent(const QString& filePath);

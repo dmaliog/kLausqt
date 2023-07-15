@@ -415,7 +415,7 @@ QTableWidget QHeaderView::section:first {
      <rect>
       <x>10</x>
       <y>40</y>
-      <width>661</width>
+      <width>611</width>
       <height>481</height>
      </rect>
     </property>
@@ -3371,7 +3371,7 @@ background-position: left center;</string>
      </property>
     </item>
    </widget>
-   <widget class="QTextEdit" name="text_details">
+   <widget class="QTextBrowser" name="text_details">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -3464,20 +3464,34 @@ background:0;</string>
      <bool>false</bool>
     </property>
    </widget>
+   <widget class="QLabel" name="label_miniload">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>50</y>
+      <width>111</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
    <zorder>scroll_site</zorder>
    <zorder>webEngineView</zorder>
    <zorder>label1</zorder>
-   <zorder>list_manager</zorder>
    <zorder>searchApp</zorder>
    <zorder>list_bench</zorder>
    <zorder>scroll_repair</zorder>
    <zorder>list_journal</zorder>
-   <zorder>list_sh</zorder>
    <zorder>combo_bench</zorder>
    <zorder>table_aur</zorder>
    <zorder>text_details</zorder>
    <zorder>push_search</zorder>
    <zorder>tabWidget</zorder>
+   <zorder>list_sh</zorder>
+   <zorder>list_manager</zorder>
+   <zorder>label_miniload</zorder>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="enabled">
