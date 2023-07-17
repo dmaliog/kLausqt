@@ -10,9 +10,10 @@ Manager's features:
 - System update/ removal of orphans and package cache
 - Recommended apps
 
-![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/3783680a-1aed-4efb-b1ac-34fc1da5da1c)
-![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/f2e7c64c-efe9-4f0e-adb6-3fd18c1c71e2)
-![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/1cac2885-130c-4ef0-bd49-5887423c71fc)
-![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/b5a035d6-1546-474b-a53a-b08f957b305c)
-![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/4fc48c18-b4a4-4ba7-90f1-3fa9f776ef31)
-![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/2aee17a7-40c6-4216-b3e4-c87f3c4b582d)
+![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/072ecfb2-bf5e-43a1-ad51-dca2f768dd3a)
+![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/3d38a84e-bf22-48d4-bb47-a8f3018f85e3)
+![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/eb78edf4-c0ff-48f3-93a4-beb409c943fe)
+![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/d3201a4c-ae03-4888-9b21-ea9f1b6f0773)
+![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/ed8f9f7d-4252-45bf-b401-160c415f95ab)
+![изображение](https://github.com/dmaliog/kLausqt/assets/115931219/c099dd4d-9235-48fe-816e-fdde3ef97de3)
+
