@@ -15,7 +15,7 @@
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "6.6";
+QString currentVersion = "6.7";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -991,6 +991,7 @@ void MainWindow::createSearchBar()
     QToolBar* toolbar = addToolBar("topmenu");
     toolbar->setMovable(false); // Запрещаем перемещение панели инструментов
     toolbar->setContentsMargins(0, 0, 0, 0); // Устанавливаем отступы на нулевые
+    toolbar->setContextMenuPolicy(Qt::PreventContextMenu); // Запрещаем контекстное меню панели инструментов
     toolbar->setStyleSheet("QToolBar { background: #1f1f1f; color: #ffffff; padding: 3px;}"
                            "QToolButton { spacing: 3px; padding: 5px; margin-right:5px; border: 0; }"
                            "QToolButton:selected, QToolButton:pressed,QToolButton:hover { border-radius: 5px; background-color: #916ee4; }"
