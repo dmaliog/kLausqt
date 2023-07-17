@@ -35,8 +35,11 @@ public:
     QColor generateRandomColor();
 
 private:
-    QString processedInfo;
     QProcess* currentProcess = nullptr;
+
+    QLineEdit* searchLineEdit;
+
+    QString processedInfo;
     QUrlQuery newParams;
     QMap<QString, QString> iconMap; // Статический словарь для кэширования информации об иконках
 
@@ -165,6 +168,13 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
+    void createSearchBar();
+    void searchTextChanged(const QString& searchText);
+    void search();
+
+    void setupTableContextMenu();
+    void showTableContextMenu(const QPoint& pos);
+
     void miniAnimation(int x, int y, bool visible);
 
     QIcon getPackageIcon(const QString& packageName);
@@ -180,7 +190,7 @@ private slots:
     void loadSystemInfo();
     void loadingListWidget();
     void loadFolders();
-    void loadScripts(const QString& baseDir, QListWidget* listWidget);
+    void loadScripts(const QString& basedDir, QListWidget* listWidget);
     void openDirectory(const QString &dirPath);
     void openUrl(const QString& url);
 
