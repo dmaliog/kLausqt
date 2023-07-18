@@ -35,6 +35,11 @@ public:
     QColor generateRandomColor();
 
 private:
+    QSet<QString> snapPackagesSet;
+    QStringList snapPackageNames;
+
+    int numPackages;
+
     QProcess* currentProcess = nullptr;
 
     QLineEdit* searchLineEdit;
@@ -49,6 +54,7 @@ private:
 
     QAction* previousAction; // Предыдущий QAction
 
+    int snap;
     int page; // какая страница используется
     int animloadpage;
     int trayon; // закрывать без трея
@@ -89,7 +95,8 @@ private:
                                    ":/sh/PKGBUILD.sh",
                                    ":/sh/save.sh",
                                    ":/sh/load.sh",
-                                   ":/sh/zen.sh"};
+                                   ":/sh/zen.sh",
+                                   ":/sh/snap.sh"};
 
     QStringList clearResourcePaths = {":/clear/clear_trash.sh"};
 
@@ -186,6 +193,7 @@ private slots:
 
     void loadSound(int soundIndex);
     void loadSettings();
+    void loadContentInstall();
     void loadContent();
     void loadSystemInfo();
     void loadingListWidget();
@@ -222,6 +230,7 @@ private slots:
     void on_check_updateinstall_stateChanged();
     void on_check_trayon_stateChanged();
     void on_check_animload_stateChanged();
+    void on_check_snap_stateChanged();
 
     void onTableAurCellClicked(int row);
 

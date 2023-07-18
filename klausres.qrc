@@ -150,5 +150,9 @@
         <file>img/community.png</file>
         <file>img/community_mini.png</file>
         <file>img/load.gif</file>
+        <file>img/snap.png</file>
+        <file>sh/snap.sh</file>
+        <file>img/snap_mini.png</file>
+        <file>img/reload.png</file>
     </qresource>
 </RCC>

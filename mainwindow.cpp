@@ -15,7 +15,7 @@
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "6.7";
+QString currentVersion = "6.8";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -66,6 +66,7 @@ void MainWindow::on_action_2_triggered()
 
     ui->text_details->setVisible(true);
     ui->table_aur->setVisible(true);
+    ui->push_reload->setVisible(true);
 
     ui->action_4->setVisible(true);
     ui->action_6->setVisible(true);
@@ -78,20 +79,13 @@ void MainWindow::on_action_7_triggered()
 {
     if (page == 4) return;
     mrpropper(4);
-
-    QProcess process;
-    process.start("sh", QStringList() << "-c" << "yay -Qe | wc -l");
-    process.waitForFinished(-1);
-    QString output = process.readAllStandardOutput();
-
-    int numPackages = output.toInt();
-
     ui->label1->setText(tr("Каталог установленных пакетов: %1").arg(numPackages));
     searchLineEdit->setPlaceholderText(tr("Поиск установленных пакетов..."));
     searchLineEdit->setFixedWidth(261);
 
     ui->text_details->setVisible(true);
     ui->table_app->setVisible(true);
+    ui->push_reload->setVisible(true);
 
     ui->action_11->setVisible(true);
     ui->action_5->setVisible(true);
@@ -444,11 +438,15 @@ void MainWindow::on_action_34_triggered()
     }
 
     int currentRow = tableWidget->currentRow();
-    QTableWidgetItem *item = tableWidget->item(currentRow, 0);
+    QTableWidgetItem* item = tableWidget->item(currentRow, 0);
     QString packageName = item->text();
 
     QProcess process;
-    process.start("yay", QStringList() << "-Si" << packageName);
+    if ((snap == 1 && snapPackagesSet.contains(packageName)) || (snap == 1 && snapPackageNames.contains(packageName))) {
+        process.start("snap", QStringList() << "info" << packageName);
+    } else {
+        process.start("yay", QStringList() << "-Si" << packageName);
+    }
     process.waitForFinished();
 
     QByteArray output = process.readAllStandardOutput();
@@ -456,12 +454,23 @@ void MainWindow::on_action_34_triggered()
 
     // Ищем ссылку в тексте packageInfo
     QString url;
-    int urlIndex = packageInfo.indexOf("URL");
-    if (urlIndex != -1) {
-        int start = packageInfo.indexOf(":", urlIndex);
-        int end = packageInfo.indexOf("\n", start);
-        if (start != -1 && end != -1) {
-            url = packageInfo.mid(start + 1, end - start - 1).trimmed();
+    if ((snap == 1 && snapPackagesSet.contains(packageName)) || (snap == 1 && snapPackageNames.contains(packageName))) {
+        int urlIndex = packageInfo.indexOf("store-url:");
+        if (urlIndex != -1) {
+            int start = packageInfo.indexOf("https://", urlIndex);
+            int end = packageInfo.indexOf("\n", start);
+            if (start != -1 && end != -1) {
+                url = packageInfo.mid(start, end - start).trimmed();
+            }
+        }
+    } else {
+        int urlIndex = packageInfo.indexOf("URL");
+        if (urlIndex != -1) {
+            int start = packageInfo.indexOf(":", urlIndex);
+            int end = packageInfo.indexOf("\n", start);
+            if (start != -1 && end != -1) {
+                url = packageInfo.mid(start + 1, end - start - 1).trimmed();
+            }
         }
     }
 
@@ -563,28 +572,48 @@ void MainWindow::on_action_5_triggered()
         QString packageName = ui->table_app->currentItem()->text();
         packageName = packageName.left(packageName.indexOf(" "));
 
-        // Выполняем команду `pacman -Ql packageName` и захватываем вывод
-        QProcess process;
-        process.start("pacman", QStringList() << "-Ql" << packageName);
-        process.waitForFinished(-1);
-        QString output = process.readAllStandardOutput();
+        if (snap == 1 && snapPackagesSet.contains(packageName)) {
+            // Путь к каталогу snap, содержащему файлы .desktop
+            QString snapDesktopDir = "/var/lib/snapd/desktop/applications/";
 
-        // Ищем строку, содержащую путь к файлу .desktop
-        QString desktopFilePath;
-        QStringList lines = output.split('\n');
-        for (const QString& line : lines) {
-            if (line.contains(packageName) && line.contains(".desktop")) {
-                desktopFilePath = line.split(' ').last();
-                break;
+            QDir dir(snapDesktopDir);
+            QStringList snapDesktopFiles = dir.entryList(QStringList() << packageName + "_*.desktop", QDir::Files);
+
+            if (!snapDesktopFiles.isEmpty()) {
+                // Возьмем первый найденный файл .desktop, но также можно добавить логику для выбора конкретного, если их несколько
+                QString desktopFilePath = snapDesktopDir + snapDesktopFiles.first();
+
+                // Запускаем файл .desktop
+                QString desktopFileName = QFileInfo(desktopFilePath).fileName();
+                QProcess::startDetached("gtk-launch", QStringList() << desktopFileName);
+            } else {
+                sendNotification(tr("Ошибка"), tr("Файл .desktop не найден для пакета ") + packageName);
             }
-        }
+        } else {
 
-        if (!desktopFilePath.isEmpty()) {
-            // Запускаем файл .desktop
-            QString desktopFileName = QFileInfo(desktopFilePath).fileName();
-            QProcess::startDetached("gtk-launch", QStringList() << desktopFileName);
-        } else
-            sendNotification(tr("Ошибка"), tr("Файл .desktop не найден для пакета ") + packageName);
+            // Выполняем команду `yay -Ql packageName` и захватываем вывод
+            QProcess process;
+            process.start("yay", QStringList() << "-Ql" << packageName);
+            process.waitForFinished(-1);
+            QString output = process.readAllStandardOutput();
+
+            // Ищем строку, содержащую путь к файлу .desktop
+            QString desktopFilePath;
+            QStringList lines = output.split('\n');
+            for (const QString& line : lines) {
+                if (line.contains(packageName) && line.contains(".desktop")) {
+                    desktopFilePath = line.split(' ').last();
+                    break;
+                }
+            }
+
+            if (!desktopFilePath.isEmpty()) {
+                // Запускаем файл .desktop
+                QString desktopFileName = QFileInfo(desktopFilePath).fileName();
+                QProcess::startDetached("gtk-launch", QStringList() << desktopFileName);
+            } else
+                sendNotification(tr("Ошибка"), tr("Файл .desktop не найден для пакета ") + packageName);
+        }
     }
 }
 
@@ -604,23 +633,59 @@ void MainWindow::on_action_6_triggered()
     }
 
     QString packageName = tableWidget->item(tableWidget->currentRow(), 0)->text();
+    Terminal terminal = getTerminal();
 
-    QProcess* process = new QProcess(this);
+    if ((snap == 1 && snapPackagesSet.contains(packageName)) || (snap == 1 && snapPackageNames.contains(packageName))) {
+        QProcess* process = new QProcess(this);
+        process->start("bash", QStringList() << "-c" << "snap list | grep " + packageName);
 
-    // Обработчик вывода информации из процесса
-    connect(process, &QProcess::readyReadStandardOutput, this, [=]() {
-        Terminal terminal = getTerminal();
-        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -R " + packageName);
-    });
+        connect(process, &QProcess::readyReadStandardOutput, this, [=]() {
+            QProcess process;
+            process.setProgram(terminal.binary);
+            process.setArguments(QStringList() << terminal.args << "sudo snap remove " + packageName);
+            process.setProcessChannelMode(QProcess::MergedChannels);
+            process.start();
+            process.waitForFinished(-1);
 
-    // Обработчик вывода ошибок из процесса
-    connect(process, &QProcess::readyReadStandardError, this, [=]() {
-        QString error = process->readAllStandardError();
-        sendNotification(tr("Ошибка"), error);
-    });
+            if (process.exitCode() == QProcess::NormalExit) {
 
-    // Запускаем процесс
-    process->start("yay", QStringList() << "-Q" << packageName);
+                if(snap == 1 && snapPackagesSet.contains(packageName))
+                    snapPackagesSet.remove(packageName);
+                else
+                    snapPackageNames.contains(packageName);
+
+                loadContentInstall();
+            }
+        });
+
+        connect(process, &QProcess::readyReadStandardError, this, [=]() {
+            QString error = process->readAllStandardError();
+            sendNotification(tr("Ошибка"), error);
+        });
+
+    } else {
+        QProcess* process = new QProcess(this);
+        process->start("yay", QStringList() << "-Q" << packageName);
+
+        // Удаляем пакет с помощью yay
+        connect(process, &QProcess::readyReadStandardOutput, this, [=]() {
+            QProcess process;
+            process.setProgram(terminal.binary);
+            process.setArguments(QStringList() << terminal.args << "yay -R " + packageName);
+            process.setProcessChannelMode(QProcess::MergedChannels);
+            process.start();
+            process.waitForFinished(-1);
+
+            if (process.exitCode() == QProcess::NormalExit) {
+                loadContentInstall();
+            }
+        });
+
+        connect(process, &QProcess::readyReadStandardError, this, [=]() {
+            QString error = process->readAllStandardError();
+            sendNotification(tr("Ошибка"), error);
+        });
+    }
 }
 
 void MainWindow::on_action_4_triggered()
@@ -630,15 +695,59 @@ void MainWindow::on_action_4_triggered()
         return;
     }
 
-    if (ui->table_aur->currentItem() == nullptr) {
+    QTableWidget* tableWidget = nullptr;
+
+    if (page == 2) {
+        tableWidget = ui->table_aur;
+    } else {
+        tableWidget = ui->table_app;
+    }
+
+    if (tableWidget->currentItem() == nullptr) {
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для удаления!"));
         return;
     }
 
-    QString packageName = ui->table_aur->item(ui->table_aur->currentRow(), 0)->text();
-
+    QString packageName = tableWidget->item(tableWidget->currentRow(), 0)->text();
     Terminal terminal = getTerminal();
-    QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "yay -S " + packageName);
+
+    if ((snap == 1 && snapPackagesSet.contains(packageName)) || (snap == 1 && snapPackageNames.contains(packageName)))
+    {
+        QProcess process;
+        process.setProgram(terminal.binary);
+
+        if (page == 4)
+            process.setArguments(QStringList() << terminal.args << "sudo snap refresh " + packageName);
+        else
+            process.setArguments(QStringList() << terminal.args << "sudo snap install " + packageName);
+
+        process.setProcessChannelMode(QProcess::MergedChannels);
+        process.start();
+        process.waitForFinished(-1);
+
+        if (process.exitCode() == QProcess::NormalExit) {
+
+            if (snap == 1 && snapPackagesSet.contains(packageName))
+                snapPackagesSet.insert(packageName);
+            else
+                snapPackageNames.contains(packageName);
+
+            loadContentInstall();
+            show();
+        }
+    }
+    else
+    {
+        QProcess process;
+        process.setProgram(terminal.binary);
+        process.setArguments(QStringList() << terminal.args << "yay -S " + packageName);
+        process.setProcessChannelMode(QProcess::MergedChannels);
+        process.start();
+        process.waitForFinished(-1);
+
+        if (process.exitCode() == QProcess::NormalExit)
+            loadContentInstall();
+    }
 }
 
 void MainWindow::on_action_30_triggered()
@@ -650,7 +759,14 @@ void MainWindow::on_action_30_triggered()
 
     QString packageName = ui->table_aur->item(ui->table_aur->currentRow(), 0)->text();
     Terminal terminal = getTerminal();
-    QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << mainDir + "sh/PKGBUILD.sh" << lang << packageName);
+
+    if ((snap == 1 && snapPackagesSet.contains(packageName)) || (snap == 1 && snapPackageNames.contains(packageName)))
+    {
+        sendNotification(tr("Внимание"), tr("Snap не использует PKGBUILD"));
+        return;
+    }
+    else
+        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << mainDir + "sh/PKGBUILD.sh" << lang << packageName);
 }
 
 void MainWindow::on_push_grub_clicked()
@@ -964,6 +1080,7 @@ void MainWindow::showTableContextMenu(const QPoint& pos)
     QAction action3(QIcon(":/img/14.png"), tr("Удалить"), this);
     QAction action4(QIcon(":/img/34.png"), tr("Информация о пакете"), this);
     QAction action5(QIcon(":/img/13.png"), tr("Запустить"), this);
+    QAction action6(QIcon(":/img/15.png"), tr("Обновить версию"), this);
 
     connect(&action1, &QAction::triggered, this, &MainWindow::on_action_4_triggered);
     connect(&action2, &QAction::triggered, this, &MainWindow::on_action_30_triggered);
@@ -971,11 +1088,14 @@ void MainWindow::showTableContextMenu(const QPoint& pos)
     connect(&action4, &QAction::triggered, this, &MainWindow::on_action_34_triggered);
     connect(&action5, &QAction::triggered, this, &MainWindow::on_action_5_triggered);
 
+    connect(&action6, &QAction::triggered, this, &MainWindow::on_action_4_triggered);
+
     if (page == 2) {
         contextMenu.addAction(&action1);
         contextMenu.addAction(&action2);
     } else if (page == 4) {
         contextMenu.addAction(&action5);
+        contextMenu.addAction(&action6);
     }
     contextMenu.addAction(&action3);
     contextMenu.addAction(&action4);
@@ -1084,15 +1204,19 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     checkVersionAndClear();
     UpdateIcon();           //получаем иконку трея
+
     loadContent();          //загрузка списков приложений игр и тп
+    loadContentInstall();
+
     loadFolders();          //загрузка конфигов
     loadingListWidget();
     loadSystemInfo();
 
-    ui->check_trayon->setChecked(trayon == 1);
-    ui->check_repair->setChecked(repair == 1);
-    ui->check_animload->setChecked(animload == 1);
-    ui->check_updateinstall->setChecked(updinst == 1);
+    ui->check_trayon->setChecked(trayon);
+    ui->check_repair->setChecked(repair);
+    ui->check_animload->setChecked(animload);
+    ui->check_updateinstall->setChecked(updinst);
+    ui->check_snap->setChecked(snap);
     ui->combo_mainpage->setCurrentIndex(mainpage);
     ui->combo_animload->setCurrentIndex(animloadpage);
 
@@ -1239,6 +1363,7 @@ void MainWindow::loadSettings()
     repair = settings.value("RepairBackup", 1).toInt();
     animload = settings.value("AnimLoad", 1).toInt();
     updinst = settings.value("UpdateInstall", 1).toInt();
+    snap = settings.value("Snap", 0).toInt();
     volumenotify = settings.value("VolumeNotify", 30).toInt();
     volumemenu = settings.value("VolumeMenu", 50).toInt();
     lang = settings.value("Language").toString();
@@ -1306,6 +1431,10 @@ void MainWindow::loadSettings()
     connect(ui->time_update, &QTimeEdit::timeChanged, this, &MainWindow::onTimeChanged);
     connect(ui->table_aur, &QTableWidget::cellClicked, this, &MainWindow::onTableAurCellClicked);
     connect(ui->table_app, &QTableWidget::cellClicked, this, &MainWindow::onTableAurCellClicked);
+    connect(ui->push_reload, &QPushButton::clicked, this, [=]() {
+        loadContentInstall();
+        loadContent();
+    });
     //-##################################################################################
     //-############################### ЗАНЯТОЕ МЕСТО ####################################
     //-##################################################################################
@@ -1608,6 +1737,7 @@ void MainWindow::mrpropper(int value) //зачистка говна перед �
 
     searchLineEdit->setFixedWidth(0);
 
+    ui->push_reload->setVisible(false);
     ui->scroll_repair->setVisible(false);
 
     ui->table_aur->setVisible(false);
@@ -1971,9 +2101,19 @@ void MainWindow::onTableAurCellClicked(int row)
     miniAnimation(460, 260, true);
 
     if (page == 2) {
-        currentProcess->start("yay", QStringList() << "-Si" << packageName);
+
+        if (snap == 1 && snapPackageNames.contains(packageName))
+            currentProcess->start("snap", QStringList() << "info" << packageName);
+        else
+            currentProcess->start("yay", QStringList() << "-Si" << packageName);
+
     } else if (page == 4) {
-        currentProcess->start("yay", QStringList() << "-Qi" << packageName);
+
+        if (snap == 1 && snapPackagesSet.contains(packageName))
+            currentProcess->start("snap", QStringList() << "info" << packageName);
+        else
+            currentProcess->start("yay", QStringList() << "-Qi" << packageName);
+
     }
 }
 
@@ -2174,43 +2314,71 @@ void MainWindow::loadContent()
         ui->table_aur->insertRow(i);
         ui->table_aur->setItem(i, 0, item);
     }
+}
 
-    // КАТАЛОГ УСТАНОВЛЕННЫХ ПРИЛОЖЕНИЙ
-    QProcess process;
+void MainWindow::loadContentInstall()
+{
+    QProcess processYay;
     // Выполняем команду yay -Qe и получаем вывод
-    process.start("yay", QStringList() << "-Qe");
-    process.waitForFinished(-1);
-    QString output = process.readAllStandardOutput();
+    processYay.start("yay", QStringList() << "-Qe");
+    processYay.waitForFinished(-1);
+    QString outputYay = processYay.readAllStandardOutput();
 
-    // Разбиваем вывод на строки и добавляем каждую строку в table_app
-    QStringList packages = output.split("\n");
-    int numPackages = packages.size();
+    // Разбиваем вывод от yay -Qe на строки и добавляем каждую строку в allPackages
+    QStringList allPackages = outputYay.split("\n", Qt::SkipEmptyParts);
+    QStringList packagesSnap;
+
+    if (snap == 1) {
+        QProcess processSnap;
+        // Выполняем команду snap list и получаем вывод
+        processSnap.start("snap", QStringList() << "list");
+        processSnap.waitForFinished(-1);
+        QString outputSnap = processSnap.readAllStandardOutput();
+
+        // Разбиваем вывод на строки и добавляем каждую строку в packagesSnap
+        packagesSnap = outputSnap.split("\n", Qt::SkipEmptyParts);
+
+        // Пропускаем первую строку (заголовок "Name")
+        packagesSnap.removeFirst();
+    }
+
+    // Создаем set из имен пакетов в packagesSnap для быстрой проверки наличия пакета
+    for (const QString& snapPackage : packagesSnap) {
+        QStringList snapPackageParts = snapPackage.split(' ');
+        QString snapPackageName = snapPackageParts.at(0);
+        snapPackagesSet.insert(snapPackageName);
+    }
+
+    // Объединяем списки имен пакетов из yay -Qe и snap list
+    QStringList allPackagesCombined = allPackages + packagesSnap;
+
+    numPackages = allPackagesCombined.size();
     ui->table_app->setHorizontalHeaderLabels({tr("Названия пакетов")});
-
     ui->table_app->clearContents();
     ui->table_app->setRowCount(numPackages);
 
     for (int i = 0; i < numPackages; ++i) {
-        const QString& package = packages.at(i);
-        if (!package.isEmpty()) {
-            // Разделение названия пакета и версии
-            QStringList packageParts = package.split(' ');
-            QString packageName = packageParts.at(0); // Берем только первую часть
+        const QString& package = allPackagesCombined.at(i);
+        QStringList packageParts = package.split(' ');
+        QString packageName = packageParts.at(0); // Берем только первую часть
 
-            // Получаем иконку пакета
-            QIcon packageIcon = getPackageIcon(packageName);
+        // Получаем иконку пакета
+        QIcon packageIcon;
+        if (snap == 1 && snapPackagesSet.contains(packageName))
+            packageIcon = QIcon(":/img/snap.png");
+        else
+            packageIcon = getPackageIcon(packageName);
 
-            // Создаем ячейку таблицы с иконкой и текстом
-            QTableWidgetItem* item = new QTableWidgetItem(packageName);
-            item->setIcon(packageIcon);
+        // Создаем ячейку таблицы с иконкой и текстом
+        QTableWidgetItem* item = new QTableWidgetItem(packageName);
+        item->setIcon(packageIcon);
 
-            // Раскрашиваем
-            QColor color = generateRandomColor();
-            item->setForeground(color);
+        // Раскрашиваем
+        QColor color = generateRandomColor();
+        item->setForeground(color);
 
-            // Добавляем ячейку в таблицу
-            ui->table_app->setItem(i, 0, item);
-        }
+        // Добавляем ячейку в таблицу
+        ui->table_app->setItem(i, 0, item);
     }
 }
 
@@ -2240,6 +2408,35 @@ void MainWindow::handleServerResponse(const QString& reply)
             return;
         }
 
+        // Проверяем, нужно ли искать snap-пакеты
+        if (snap == 1) {
+            // Очищаем список со снап-пакетами
+            snapPackageNames.clear();
+
+            QProcess snapProcess;
+            snapProcess.start("snap", QStringList() << "find" << reply);
+            snapProcess.waitForFinished(-1);
+            QByteArray snapOutput = snapProcess.readAllStandardOutput();
+            QString snapOutputString = QString::fromUtf8(snapOutput).trimmed();
+
+            // Обработка вывода команды snap find
+            QStringList snapLines = snapOutputString.split('\n');
+
+            // Пропускаем первую строку (заголовок "Name")
+            snapLines.removeFirst();
+
+            for (const QString& snapLine : snapLines) {
+                if (!snapLine.isEmpty()) {
+                    QString snapPackageName = snapLine.section(' ', 0, 0);
+                    snapPackageNames.append(snapPackageName);
+                }
+            }
+
+            // Добавляем snap-пакеты в список
+            packageNames.append(snapPackageNames);
+
+        }
+
         // Установка общего количества строк в таблице
         ui->table_aur->setRowCount(packageNames.size());
         ui->table_aur->setColumnCount(1);
@@ -2259,6 +2456,11 @@ void MainWindow::handleServerResponse(const QString& reply)
                 QString repoName = match.captured(1);
                 iconPath = ":/img/" + repoName + ".png";
                 prefixToRemove = repoName + "/";
+            }
+
+            // Добавляем иконку snap-пакета, если это snap
+            if (snap == 1 && snapPackageNames.contains(packageName)) {
+                iconPath = ":/img/snap.png";
             }
 
             item->setIcon(QIcon(iconPath));
@@ -2809,6 +3011,32 @@ void MainWindow::on_check_updateinstall_stateChanged()
 {
     updinst = ui->check_updateinstall->isChecked() ? 1 : 0;
     settings.setValue("UpdateInstall", updinst);
+}
+
+void MainWindow::on_check_snap_stateChanged()
+{
+    Terminal terminal = getTerminal();
+    // Проверяем установлен ли snapd
+    QProcess process;
+    process.start("snap", QStringList() << "version");
+    process.waitForFinished(-1);
+
+    if (process.exitCode() == 0)
+    {
+        // Если snapd установлен, обновляем значение переменной snap
+        snap = ui->check_snap->isChecked() ? 1 : 0;
+        settings.setValue("Snap", snap);
+
+        // Загружаем контент с учетом нового значения snap
+        loadContentInstall();
+    }
+    else
+    {
+        // Если snapd не установлен, выводим уведомление
+        sendNotification(tr("Внимание"), tr("У вас не установлен Snap, установите его!"));
+        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << mainDir + "sh/snap.sh" << lang);
+        ui->check_snap->setChecked(false);
+    }
 }
 
 void MainWindow::on_dial_volmenu_valueChanged(int value)

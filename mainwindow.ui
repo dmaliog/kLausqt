@@ -685,7 +685,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
         <x>240</x>
         <y>10</y>
         <width>391</width>
-        <height>111</height>
+        <height>161</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -700,10 +700,18 @@ QTabWidget#tabWidget QTabBar::tab:selected {
          <x>0</x>
          <y>0</y>
          <width>379</width>
-         <height>99</height>
+         <height>149</height>
         </rect>
        </property>
-       <layout class="QGridLayout" name="gridLayout_6"/>
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="check_snap">
+          <property name="text">
+           <string>Snap</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </widget>
      <widget class="QLabel" name="label_repository">
@@ -3371,7 +3379,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/community_mini.png&quot; /&gt; &lt;span style=&quot; font-family:'monospace'; font-size:28pt; font-style:italic;&quot;&gt;community&lt;/span&gt; содержит пакеты, поддерживаемые и обновляемые сообществом Arch Linux. В репозитории вы найдете дополнительные пакеты, которые не включены в базовую установку Arch Linux, но предоставляются и поддерживаются сообществом.&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/aur_mini.png&quot; /&gt;  &lt;span style=&quot; font-size:28pt; font-style:italic;&quot;&gt;aur&lt;/span&gt; содержат наиболее важное и популярное программное обеспечение, которое можно легко получить и установить при помощи &lt;a href=&quot;https://wiki.archlinux.org/title/Pacman_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;pacman&lt;/span&gt;&lt;/a&gt;. Эти репозитории поддерживают &lt;a href=&quot;https://wiki.archlinux.org/title/Arch_terminology#Package_maintainer&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;мейнтейнеры пакетов&lt;/span&gt;&lt;/a&gt;. &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/aur_mini.png&quot; /&gt;  &lt;span style=&quot; font-size:28pt; font-style:italic;&quot;&gt;aur&lt;/span&gt; содержит наиболее важное и популярное программное обеспечение, которое можно легко получить и установить при помощи &lt;a href=&quot;https://wiki.archlinux.org/title/Pacman_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;pacman&lt;/span&gt;&lt;/a&gt;. Эти репозитории поддерживают &lt;a href=&quot;https://wiki.archlinux.org/title/Arch_terminology#Package_maintainer&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;мейнтейнеры пакетов&lt;/span&gt;&lt;/a&gt;. &lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/snap_mini.png&quot; /&gt; &lt;span style=&quot; font-size:28pt; font-style:italic;&quot;&gt;snap&lt;/span&gt; содержит пакеты разработанные компанией Canonical, которая является создателем и основным разработчиком дистрибутива Ubuntu.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Как пользоваться поиском:&lt;/span&gt;&lt;/p&gt;
@@ -3511,19 +3522,43 @@ QTableWidget QHeaderView::section:first {
     </attribute>
     <column/>
    </widget>
+   <widget class="QPushButton" name="push_reload">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>470</y>
+      <width>30</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="klausres.qrc">
+      <normaloff>:/img/reload.png</normaloff>:/img/reload.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>20</width>
+      <height>20</height>
+     </size>
+    </property>
+   </widget>
    <zorder>scroll_site</zorder>
    <zorder>webEngineView</zorder>
    <zorder>list_journal</zorder>
    <zorder>table_aur</zorder>
    <zorder>list_sh</zorder>
-   <zorder>table_app</zorder>
    <zorder>text_details</zorder>
    <zorder>label1</zorder>
    <zorder>label_miniload</zorder>
    <zorder>combo_bench</zorder>
    <zorder>list_bench</zorder>
-   <zorder>tabWidget</zorder>
    <zorder>scroll_repair</zorder>
+   <zorder>tabWidget</zorder>
+   <zorder>table_app</zorder>
+   <zorder>push_reload</zorder>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="enabled">

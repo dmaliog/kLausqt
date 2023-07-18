@@ -57,6 +57,7 @@ link="Link:"
 
 error="Error"
 pkg="Package"
+pkgs="Packages"
 no_found="not found"
 found="found"
 
