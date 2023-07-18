@@ -141,7 +141,6 @@
         <file>img/multilib.png</file>
         <file>img/core.png</file>
         <file>img/extra.png</file>
-        <file>img/enter.png</file>
         <file>img/endeavouros.png</file>
         <file>img/aur_mini.png</file>
         <file>img/multilib_mini.png</file>
@@ -154,5 +153,7 @@
         <file>sh/snap.sh</file>
         <file>img/snap_mini.png</file>
         <file>img/reload.png</file>
+        <file>other/snap.txt</file>
+        <file>img/pacman.png</file>
     </qresource>
 </RCC>

@@ -484,31 +484,13 @@ QTabWidget#tabWidget QTabBar::tab:selected {
      <attribute name="title">
       <string>Настройки AUR</string>
      </attribute>
-     <widget class="QLabel" name="label_other">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>180</y>
-        <width>371</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Другие настройки</string>
-      </property>
-     </widget>
      <widget class="QScrollArea" name="scroll_other">
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>210</y>
+        <y>10</y>
         <width>611</width>
-        <height>221</height>
+        <height>201</height>
        </rect>
       </property>
       <property name="layoutDirection">
@@ -532,133 +514,11 @@ QTabWidget#tabWidget QTabBar::tab:selected {
          <x>0</x>
          <y>0</y>
          <width>599</width>
-         <height>209</height>
+         <height>189</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_update">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Частота обновления пакетов</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QComboBox" name="combo_cache">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>180</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="currentIndex">
-           <number>0</number>
-          </property>
-          <property name="maxVisibleItems">
-           <number>8</number>
-          </property>
-          <item>
-           <property name="text">
-            <string>Неустановленных пакетов</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Всех пакетов</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Всех кроме 3 последних версий каждого пакета</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QTimeEdit" name="time_update">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="contextMenuPolicy">
-           <enum>Qt::NoContextMenu</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_cache">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Удаление кэша</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0" colspan="2">
+        <item row="1" column="0" colspan="2">
          <widget class="QCheckBox" name="check_updateinstall">
           <property name="minimumSize">
            <size>
@@ -676,64 +536,152 @@ QTabWidget#tabWidget QTabBar::tab:selected {
           </property>
          </widget>
         </item>
-       </layout>
-      </widget>
-     </widget>
-     <widget class="QScrollArea" name="scroll_repository">
-      <property name="geometry">
-       <rect>
-        <x>240</x>
-        <y>10</y>
-        <width>391</width>
-        <height>161</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background:#272727;</string>
-      </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
-      </property>
-      <widget class="QWidget" name="scrollArea_repository">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>379</width>
-         <height>149</height>
-        </rect>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_6">
         <item row="0" column="0">
-         <widget class="QCheckBox" name="check_snap">
-          <property name="text">
-           <string>Snap</string>
+         <widget class="QScrollArea" name="scroll_pkgclear">
+          <property name="styleSheet">
+           <string notr="true">background:#272727;</string>
           </property>
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="scrollArea_pkgclear">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>563</width>
+             <height>113</height>
+            </rect>
+           </property>
+           <layout class="QGridLayout" name="gridLayout">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_update">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Частота обновления пакетов</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QTimeEdit" name="time_update">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::NoContextMenu</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_cache">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Удаление кэша</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QComboBox" name="combo_cache">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>180</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="currentIndex">
+               <number>0</number>
+              </property>
+              <property name="maxVisibleItems">
+               <number>8</number>
+              </property>
+              <item>
+               <property name="text">
+                <string>Неустановленных пакетов</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Всех пакетов</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Всех кроме 3 последних версий каждого пакета</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </item>
        </layout>
       </widget>
-     </widget>
-     <widget class="QLabel" name="label_repository">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>20</y>
-        <width>211</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="text">
-       <string>Репозитории</string>
-      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_addaur">
@@ -3545,20 +3493,67 @@ QTableWidget QHeaderView::section:first {
      </size>
     </property>
    </widget>
+   <widget class="QComboBox" name="combo_repo">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>4</y>
+      <width>211</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="contextMenuPolicy">
+     <enum>Qt::PreventContextMenu</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QComboBox#combo_repo{
+	padding: 0 10px 0 15px;
+    border-radius: 15px;
+	border:0;
+    background-color: #242424;
+}</string>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>20</width>
+      <height>20</height>
+     </size>
+    </property>
+    <property name="duplicatesEnabled">
+     <bool>false</bool>
+    </property>
+    <property name="frame">
+     <bool>true</bool>
+    </property>
+    <item>
+     <property name="text">
+      <string>Репозитории Pacman</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Репозитории Snap</string>
+     </property>
+    </item>
+   </widget>
    <zorder>scroll_site</zorder>
    <zorder>webEngineView</zorder>
    <zorder>list_journal</zorder>
    <zorder>table_aur</zorder>
    <zorder>list_sh</zorder>
-   <zorder>text_details</zorder>
    <zorder>label1</zorder>
-   <zorder>label_miniload</zorder>
    <zorder>combo_bench</zorder>
    <zorder>list_bench</zorder>
    <zorder>scroll_repair</zorder>
-   <zorder>tabWidget</zorder>
    <zorder>table_app</zorder>
    <zorder>push_reload</zorder>
+   <zorder>text_details</zorder>
+   <zorder>combo_repo</zorder>
+   <zorder>tabWidget</zorder>
+   <zorder>label_miniload</zorder>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="enabled">
@@ -3725,6 +3720,7 @@ QToolBar#toolBar_2 QToolButton:hover {
    </attribute>
    <addaction name="action_35"/>
    <addaction name="action_11"/>
+   <addaction name="action_snap"/>
    <addaction name="action_addsh"/>
    <addaction name="action_rmsh"/>
    <addaction name="action_editsh"/>
@@ -4628,6 +4624,21 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="toolTip">
     <string notr="true">О пакете</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_snap">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/snap.png</normaloff>:/img/snap.png</iconset>
+   </property>
+   <property name="text">
+    <string>Обновить</string>
+   </property>
+   <property name="toolTip">
+    <string>Обновить</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
