@@ -35,8 +35,12 @@ public:
     QColor generateRandomColor();
 
 private:
-    QSet<QString> snapPackagesSet;
+    QLabel* loadingAnimationLabel = nullptr;
+    QLabel* loadingLabel;
+    QAction* actionLoad;
+
     QStringList snapPackageNames;
+
 
     int numPackages;
 
@@ -62,7 +66,6 @@ private:
     int animload; // анимация загрузки
     int updinst; //проверять систему перед установкой пакетов или нет
     int volumenotify; // громкость уведомлений
-    int volumemenu; // громкость меню
     int mainpage; // главная страница
     int yaycache; // кэш
     int host;
@@ -84,7 +87,9 @@ private:
     QTimer* workTimer;
 
     bool errorShown = false;
+
     bool hasUpdates;
+    bool hasUpdatesSnap;
 
     QWebEngineView* webView;
 
@@ -169,12 +174,14 @@ public slots:
     void on_action_17_triggered();
     void on_action_27_triggered();
     void on_action_28_triggered();
-    void on_action_29_triggered();
     void on_action_30_triggered();
 
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
+
+    bool isSnapInstalled();
+
     void createSearchBar();
     void searchTextChanged(const QString& searchText);
     void search();
@@ -189,6 +196,7 @@ private slots:
 
     void mrpropper(int value);
     void showLoadingAnimation(bool show);
+    void showLoadingAnimationMini(bool show);
     void checkVersionAndClear();
 
     void loadSound(int soundIndex);
@@ -203,6 +211,7 @@ private slots:
     void openUrl(const QString& url);
 
     void setHasUpdates(bool updates);
+
     void createArchive(const QString& folderPath, const QString& folderName);
     void saveScripts(const QStringList& resourcePaths, const QString& baseDir);
 
@@ -212,7 +221,9 @@ private slots:
 
     void restoreArchive(const QString& archivePath);
     void onTimeChanged(const QTime& time);
+
     void UpdateIcon();
+    void UpdateSnap();
 
     void TeaTimer();
     void WorkTimer();
@@ -225,16 +236,15 @@ private slots:
     void on_combo_cache_currentIndexChanged();
     void on_combo_host_currentIndexChanged(int index);
     void on_combo_lang_currentIndexChanged(int index);
+    void on_combo_repo_currentIndexChanged(int index);
 
     void on_check_repair_stateChanged();
     void on_check_updateinstall_stateChanged();
     void on_check_trayon_stateChanged();
     void on_check_animload_stateChanged();
-    void on_check_snap_stateChanged();
 
     void onTableAurCellClicked(int row);
 
-    void on_dial_volmenu_valueChanged(int value);
     void on_dial_volnotify_valueChanged(int value);
 
     void on_list_repair_itemDoubleClicked(QListWidgetItem *item);
@@ -276,6 +286,7 @@ private slots:
     void on_push_site_clicked();
     void on_push_repair_clicked();
     void on_combo_bench_currentIndexChanged(int index);
+    void on_action_snap_triggered();
 };
 
 #endif // MAINWINDOW_H
