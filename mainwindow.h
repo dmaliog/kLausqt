@@ -287,6 +287,8 @@ private slots:
     void on_push_repair_clicked();
     void on_combo_bench_currentIndexChanged(int index);
     void on_action_snap_triggered();
+
+
 };
 
 #endif // MAINWINDOW_H

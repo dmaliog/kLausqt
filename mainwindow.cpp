@@ -15,7 +15,7 @@
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "7.0";
+QString currentVersion = "7.1";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -1151,7 +1151,6 @@ void MainWindow::createSearchBar()
     for (QAction* action : myMenuBar->actions()) {
         if (action->menu()) {
             QToolButton* menuButton = new QToolButton(this);
-            menuButton->setCursor(Qt::PointingHandCursor);
             menuButton->setPopupMode(QToolButton::InstantPopup);
             menuButton->setText(action->text());
             menuButton->setIcon(action->icon()); // Устанавливаем иконку из пункта меню, если есть
@@ -1451,7 +1450,6 @@ void MainWindow::loadSettings()
     //-##################################################################################
     //-############################## СИГНАЛЫ И СЛОТЫ ###################################
     //-##################################################################################
-    connect(ui->spin_grub, SIGNAL(valueChanged(int)), this, SLOT(on_spinBox_grub_valueChanged(int)));
     connect(ui->time_update, &QTimeEdit::timeChanged, this, &MainWindow::onTimeChanged);
     connect(ui->table_aur, &QTableWidget::cellClicked, this, &MainWindow::onTableAurCellClicked);
     connect(ui->table_app, &QTableWidget::cellClicked, this, &MainWindow::onTableAurCellClicked);
@@ -1719,7 +1717,7 @@ void MainWindow::loadSettings()
         loadingAnimation->start();
 
         // Добавляем фоновый цвет под иконкой анимации
-        loadingLabel->setStyleSheet("margin-left:5px;padding-left:2px;border:0;");
+        loadingLabel->setStyleSheet("margin-left:4px;padding-left:2px;border:0;");
     }
 }
 
