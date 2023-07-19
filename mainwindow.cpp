@@ -15,7 +15,7 @@
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "7.2";
+QString currentVersion = "7.3";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -174,11 +174,17 @@ void MainWindow::on_action_8_triggered()
     if (process.waitForFinished()) {
         QString output = QString::fromUtf8(process.readAllStandardOutput());
         if (!output.contains("ocs-url")) {
+
+            on_action_2_triggered();
+            searchLineEdit->setText("ocs-url");
+
+            QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
+            QCoreApplication::postEvent(searchLineEdit, event);
+
             sendNotification(tr("Ошибка"), tr("Установите пакет ocs-url для установки тем!"));
             return;
         }
     }
-    showLoadingAnimationMini(false);
     showLoadingAnimation(true);
     mrpropper(7);
     ui->label1->hide();
@@ -205,6 +211,7 @@ void MainWindow::on_action_8_triggered()
         sendNotification(tr("Ошибка"), tr("Для вашего окружения тем не найдено!"));
         return;
     }
+    showLoadingAnimationMini(false);
 }
 
 void MainWindow::on_action_10_triggered()
@@ -1222,7 +1229,6 @@ void MainWindow::search()
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    showLoadingAnimation(true);
 
     setupTableContextMenu();
     createSearchBar();
@@ -2083,12 +2089,16 @@ void MainWindow::showLoadingAnimation(bool show)
 
     static QWidget* overlayWidget = nullptr;
     static QLabel* loadingLabel = nullptr;
-    static QPushButton* closeButton = nullptr;
 
     if (show) {
+        // Устанавливаем отступы сверху, снизу и слева в пикселях
+        int leftMargin = 73;
+        int topMargin = 38;
+        int bottomMargin = 41;
+
+        // Создаем виджет overlayWidget, если он еще не создан
         if (!overlayWidget) {
             overlayWidget = new QWidget(this);
-            overlayWidget->setGeometry(rect());
             overlayWidget->setObjectName("OverlayWidget");
             if (animloadpage == 0)
                 overlayWidget->setStyleSheet("QWidget#OverlayWidget { background-color: #472e91; }");
@@ -2096,13 +2106,17 @@ void MainWindow::showLoadingAnimation(bool show)
                 overlayWidget->setStyleSheet("QWidget#OverlayWidget { background-color: #2d2b79; }");
             overlayWidget->raise();
         }
+
+        // Устанавливаем размеры и положение overlayWidget
+        overlayWidget->setGeometry(leftMargin, topMargin, width() - leftMargin, height() - topMargin - bottomMargin);
+
         overlayWidget->show();
 
         if (!loadingLabel) {
             loadingLabel = new QLabel(overlayWidget);
             loadingLabel->setObjectName("LoadingLabel");
-            loadingLabel->setAlignment(Qt::AlignCenter);
-            loadingLabel->setFixedSize(800, 600);
+            loadingLabel->setAlignment(Qt::AlignCenter); // Выравнивание по центру
+            loadingLabel->setFixedSize(500, 500); // Задайте размеры в соответствии с вашим изображением
         }
 
         QMovie* loadingMovie = (animloadpage == 0) ? new QMovie(":/img/loading.gif") : new QMovie(":/img/loading2.gif");
@@ -2110,40 +2124,26 @@ void MainWindow::showLoadingAnimation(bool show)
         loadingLabel->setMovie(loadingMovie);
         loadingMovie->start();
 
-        loadingLabel->move((width() - loadingLabel->width()) / 2, (height() - loadingLabel->height()) / 2);
+        // Центрирование по X и Y относительно overlayWidget
+        loadingLabel->move((overlayWidget->width() - loadingLabel->width()) / 2, (overlayWidget->height() - loadingLabel->height()) / 2);
+
         loadingLabel->show();
 
-        if (!closeButton) {
-            closeButton = new QPushButton(overlayWidget);
-            closeButton->setObjectName("CloseButton");
-            closeButton->setIcon(QIcon(":/img/18.png"));
-            closeButton->setFixedSize(30, 30);
-            closeButton->move(width() - closeButton->width() - 10, 10);
-            connect(closeButton, &QPushButton::clicked, this, [this]() {
-                showLoadingAnimation(false);
-            });
-        }
-        closeButton->show();
-
     } else {
-        if (overlayWidget) {
-            overlayWidget->hide();
-            overlayWidget->deleteLater();
-            overlayWidget = nullptr;
-        }
+        QTimer::singleShot(500, this, [=]() {
+            if (overlayWidget) {
+                overlayWidget->hide();
+                overlayWidget->deleteLater();
+                overlayWidget = nullptr;
+            }
 
-        if (loadingLabel) {
-            loadingLabel->hide();
-            loadingLabel->clear();
-            loadingLabel->deleteLater();
-            loadingLabel = nullptr;
-        }
-
-        if (closeButton) {
-            closeButton->hide();
-            closeButton->deleteLater();
-            closeButton = nullptr;
-        }
+            if (loadingLabel) {
+                loadingLabel->hide();
+                loadingLabel->clear();
+                loadingLabel->deleteLater();
+                loadingLabel = nullptr;
+            }
+        });
     }
 
     //удаление подсказок
@@ -2984,6 +2984,8 @@ void MainWindow::on_combo_repo_currentIndexChanged(int index)
         if (!snapInstalled) {
             ui->combo_repo->setCurrentIndex(0);
             sendNotification(tr("Ошибка"), tr("Установите и настройте Snap прежде чем его выбирать!"));
+            Terminal terminal = getTerminal();
+            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << mainDir + "sh/snap.sh" << lang);
             return;
         }
     }
