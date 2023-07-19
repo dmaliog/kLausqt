@@ -468,7 +468,6 @@ QTabWidget#tabWidget QTabBar::tab {
     border: none;
     background: transparent;
     outline: none;
-    cursor: default;
 }
 
 QTabWidget#tabWidget QTabBar::tab:hover,
