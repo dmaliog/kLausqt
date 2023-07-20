@@ -40,8 +40,6 @@ private:
     QAction* actionLoad;
 
     QStringList snapPackageNames;
-
-
     int numPackages;
 
     QProcess* currentProcess = nullptr;
@@ -58,6 +56,7 @@ private:
 
     QAction* previousAction; // Предыдущий QAction
 
+    int pkg; //пакетный менеджер
     int snap;
     int page; // какая страница используется
     int animloadpage;
@@ -179,7 +178,6 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
-
     bool isSnapInstalled();
 
     void createSearchBar();
@@ -231,12 +229,14 @@ private slots:
     void handleListItemDoubleClick(QListWidgetItem *item, const QString& scriptDir);
     void searchAndScroll(QListWidget* listWidget, const QString& text);
 
-    void on_combo_mainpage_currentIndexChanged();
-    void on_combo_animload_currentIndexChanged();
-    void on_combo_cache_currentIndexChanged();
+    void on_combo_mainpage_currentIndexChanged(int index);
+    void on_combo_animload_currentIndexChanged(int index);
+    void on_combo_cache_currentIndexChanged(int index);
     void on_combo_host_currentIndexChanged(int index);
     void on_combo_lang_currentIndexChanged(int index);
     void on_combo_repo_currentIndexChanged(int index);
+    void on_combo_pacman_currentIndexChanged(int index);
+    void on_combo_bench_currentIndexChanged(int index);
 
     void on_check_repair_stateChanged();
     void on_check_updateinstall_stateChanged();
@@ -285,7 +285,6 @@ private slots:
     void on_push_grub_clicked();
     void on_push_site_clicked();
     void on_push_repair_clicked();
-    void on_combo_bench_currentIndexChanged(int index);
     void on_action_snap_triggered();
 
 

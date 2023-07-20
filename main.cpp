@@ -106,16 +106,9 @@ int main(int argc, char *argv[])
     }
 
     bool pacmanInstalled = isPackageInstalled("pacman");
-    bool yayInstalled = isPackageInstalled("yay");
-
 
     if (!pacmanInstalled) {
         w.sendNotification(QObject::tr("Ошибка"), QObject::tr("Требуется Pacman!"));
-        return 1;
-    }
-
-    if (!yayInstalled) {
-        w.sendNotification(QObject::tr("Ошибка"), QObject::tr("Требуется помощник yay!"));
         return 1;
     }
 

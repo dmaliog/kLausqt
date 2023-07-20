@@ -15,11 +15,38 @@
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "7.3";
+QString currentVersion = "7.4";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
 //-#####################################################################################################################################################
+
+QMap<int, QMap<QString, QStringList>> packageCommands = {
+    {0, {{"install", {"yay", "-S"}},
+         {"remove", {"yay", "-R"}},
+         {"info", {"yay", "-Qi"}},
+         {"update", {"yay", "-Syu"}},
+         {"list_files", {"yay", "-Ql"}},
+         {"query", {"yay", "-Q"}},
+         {"show_info", {"yay", "-Si"}},
+         {"query_explicit", {"yay", "-Qe"}},
+         {"search", {"yay", "-Ss"}},
+         {"query_q", {"yay", "-Qq"}},
+         {"remove_explicit", {"yay", "-Rs"}},
+         {"query_depends", {"yay", "-Qdtq"}}}},
+    {1, {{"install", {"paru", "-S", "--skipreview"}},
+         {"remove", {"paru", "-R"}},
+         {"info", {"paru", "-Qi"}},
+         {"update", {"paru", "-Syu"}},
+         {"list_files", {"paru", "-Ql"}},
+         {"query", {"paru", "-Q"}},
+         {"show_info", {"paru", "-Si"}},
+         {"query_explicit", {"paru", "-Qe"}},
+         {"search", {"paru", "-Ss"}},
+         {"query_q", {"paru", "-Qq"}},
+         {"remove_explicit", {"paru", "-Rs"}},
+         {"query_depends", {"paru", "-Qdtq"}}}}
+};
 
 Terminal getTerminal()
 {
@@ -170,7 +197,8 @@ void MainWindow::on_action_8_triggered()
 {
     if (page == 7) return;
     QProcess process;
-    process.start("yay", QStringList() << "-Q" << "ocs-url");
+    process.start(packageCommands.value(pkg).value("query").at(0), QStringList() << packageCommands.value(pkg).value("query").at(1) << "ocs-url");
+
     if (process.waitForFinished()) {
         QString output = QString::fromUtf8(process.readAllStandardOutput());
         if (!output.contains("ocs-url")) {
@@ -468,9 +496,9 @@ void MainWindow::on_action_34_triggered()
     QProcess process;
     if (snap == 1) {
         process.start("snap", QStringList() << "info" << packageName);
-    } else {
-        process.start("yay", QStringList() << "-Si" << packageName);
-    }
+    } else
+        process.start(packageCommands.value(pkg).value("show_info").at(0), QStringList() << packageCommands.value(pkg).value("show_info").at(1) << packageName);
+
     process.waitForFinished();
 
     QByteArray output = process.readAllStandardOutput();
@@ -546,7 +574,7 @@ void MainWindow::on_action_11_triggered()
         Terminal terminal = getTerminal();
         QProcess process;
         process.setProgram(terminal.binary);
-        process.setArguments(QStringList() << terminal.args << "yay" << "-Syu");
+        process.setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("update"));
         process.setProcessChannelMode(QProcess::MergedChannels);
         process.start();
         process.waitForFinished(-1);
@@ -635,9 +663,9 @@ void MainWindow::on_action_5_triggered()
             }
         } else {
 
-            // Выполняем команду `yay -Ql packageName` и захватываем вывод
-            QProcess process;
-            process.start("yay", QStringList() << "-Ql" << packageName);
+            // Выполняем команду `-Ql packageName` и захватываем вывод
+            QProcess process;           
+            process.start(packageCommands.value(pkg).value("list_files").at(0), QStringList() << packageCommands.value(pkg).value("list_files").at(1) << packageName);
             process.waitForFinished(-1);
             QString output = process.readAllStandardOutput();
 
@@ -703,13 +731,14 @@ void MainWindow::on_action_6_triggered()
 
     } else {
         QProcess* process = new QProcess(this);
-        process->start("yay", QStringList() << "-Q" << packageName);
+        process->start(packageCommands.value(pkg).value("query").at(0), QStringList() << packageCommands.value(pkg).value("query").at(1) << packageName);
 
-        // Удаляем пакет с помощью yay
+        // Удаляем пакет
         connect(process, &QProcess::readyReadStandardOutput, this, [=]() {
+
             QProcess process;
             process.setProgram(terminal.binary);
-            process.setArguments(QStringList() << terminal.args << "yay -R " + packageName);
+            process.setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("remove") << packageName);
             process.setProcessChannelMode(QProcess::MergedChannels);
             process.start();
             process.waitForFinished(-1);
@@ -765,14 +794,13 @@ void MainWindow::on_action_4_triggered()
 
         if (process.exitCode() == QProcess::NormalExit) {
             loadContentInstall();
-            show();
         }
     }
     else
     {
         QProcess process;
         process.setProgram(terminal.binary);
-        process.setArguments(QStringList() << terminal.args << "yay -S " + packageName);
+        process.setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("install") << packageName);
         process.setProcessChannelMode(QProcess::MergedChannels);
         process.start();
         process.waitForFinished(-1);
@@ -781,6 +809,7 @@ void MainWindow::on_action_4_triggered()
             loadContentInstall();
     }
 }
+
 
 void MainWindow::on_action_30_triggered()
 {
@@ -1386,6 +1415,7 @@ void MainWindow::loadSettings()
     //-##################################################################################
     //-############################## ОСНОВНАЯ ЧАСТЬ ####################################
     //-##################################################################################
+    pkg = settings.value("PackageManager", 0).toInt();
     mainpage = settings.value("MainPage", 0).toInt();
     animloadpage = settings.value("AnimLoadPage", 0).toInt();
     yaycache = settings.value("YayCache", 0).toInt();
@@ -1899,7 +1929,8 @@ void MainWindow::loadSystemInfo()
 
     // Получаем количество пакетов pacman
     QProcess pacmanProcess;
-    pacmanProcess.start("sh", QStringList() << "-c" << "yay -Qq | wc -l");
+    pacmanProcess.start("sh", QStringList() << "-c" << packageCommands.value(pkg).value("query_q").join(" ") + " | wc -l");
+
     pacmanProcess.waitForFinished(-1);
     QString pacmanPackagesCount = QString::fromUtf8(pacmanProcess.readAllStandardOutput()).trimmed();
 
@@ -2208,11 +2239,14 @@ void MainWindow::onTableAurCellClicked(int row)
     if (snap == 1)
         currentProcess->start("snap", QStringList() << "info" << packageName);
 
-    else if (page == 2 && snap == 0)
-        currentProcess->start("yay", QStringList() << "-Si" << packageName);
+    QStringList command;
 
+    if (page == 2 && snap == 0)
+        command = packageCommands.value(pkg).value("show_info");
     else if (page == 4 && snap == 0)
-        currentProcess->start("yay", QStringList() << "-Qi" << packageName);
+        command = packageCommands.value(pkg).value("info");
+
+    currentProcess->start(command[0], QStringList() << command[1] << packageName);
 }
 
 void MainWindow::miniAnimation(int x, int y, bool visible)
@@ -2431,12 +2465,13 @@ void MainWindow::loadContentInstall()
     QStringList allPackages;
 
     QProcess processYay;
-    // Выполняем команду yay -Qe и получаем вывод
-    processYay.start("yay", QStringList() << "-Qe");
+    // Выполняем команду и получаем вывод
+
+    processYay.start(packageCommands.value(pkg).value("query_explicit").at(0), QStringList() << packageCommands.value(pkg).value("query_explicit").at(1));
     processYay.waitForFinished(-1);
     QString outputYay = processYay.readAllStandardOutput();
 
-    // Разбиваем вывод от yay -Qe на строки и добавляем каждую строку в allPackages
+    // Разбиваем вывод на строки и добавляем каждую строку в allPackages
     allPackages = outputYay.split("\n", Qt::SkipEmptyParts);
 
     QStringList packagesSnap;
@@ -2601,7 +2636,7 @@ void MainWindow::handleServerResponse(const QString& reply)
         currentProcess->deleteLater(); // Удаляем объект QProcess после использования
     });
 
-    currentProcess->start("yay", QStringList() << "-Ss" << reply);
+    currentProcess->start(packageCommands.value(pkg).value("search").at(0), QStringList() << packageCommands.value(pkg).value("search").at(1) << reply);
 }
 
 void MainWindow::searchAndScroll(QListWidget* listWidget, const QString& text)
@@ -2854,15 +2889,21 @@ void MainWindow::restoreArchive(const QString& archivePath)
 //--################################################################## СОБЫТИЯ ФУНКЦИЙ ##################################################################
 //-#####################################################################################################################################################
 
-void MainWindow::on_combo_mainpage_currentIndexChanged()
+void MainWindow::on_combo_mainpage_currentIndexChanged(int index)
 {
-    mainpage = ui->combo_mainpage->currentIndex();
+    mainpage = index;
     settings.setValue("MainPage", mainpage);
 }
 
-void MainWindow::on_combo_animload_currentIndexChanged()
+void MainWindow::on_combo_pacman_currentIndexChanged(int index)
 {
-    animloadpage = ui->combo_animload->currentIndex();
+    pkg = index;
+    settings.setValue("PackageManager", pkg);
+}
+
+void MainWindow::on_combo_animload_currentIndexChanged(int index)
+{
+    animloadpage = index;
     settings.setValue("AnimLoadPage", animloadpage);
 }
 
@@ -2889,7 +2930,7 @@ void MainWindow::on_combo_host_currentIndexChanged(int index)
                 installProcess.setProcessChannelMode(QProcess::MergedChannels);
 
                 Terminal terminal = getTerminal();
-                installProcess.start(terminal.binary, QStringList() << terminal.args << "yay -S apache");
+                installProcess.start(terminal.binary, QStringList() << terminal.args << packageCommands.value(pkg).value("install") << "apache");
 
                 installProcess.closeWriteChannel();
                 installProcess.waitForFinished();
@@ -2919,7 +2960,7 @@ void MainWindow::on_combo_host_currentIndexChanged(int index)
                 installProcess.setProcessChannelMode(QProcess::MergedChannels);
 
                 Terminal terminal = getTerminal();
-                installProcess.start(terminal.binary, QStringList() << terminal.args << "yay -S xampp");
+                installProcess.start(terminal.binary, QStringList() << terminal.args << packageCommands.value(pkg).value("install") << "xampp");
 
                 installProcess.closeWriteChannel();
                 installProcess.waitForFinished();
@@ -3073,9 +3114,9 @@ void MainWindow::on_combo_bench_currentIndexChanged(int index)
     }
 }
 
-void MainWindow::on_combo_cache_currentIndexChanged()
+void MainWindow::on_combo_cache_currentIndexChanged(int index)
 {
-    yaycache = ui->combo_cache->currentIndex();
+    yaycache = index;
     settings.setValue("YayCache", yaycache);
 }
 
