@@ -15,7 +15,7 @@
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "7.4";
+QString currentVersion = "7.5";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -2238,8 +2238,10 @@ void MainWindow::onTableAurCellClicked(int row)
 
     miniAnimation(460, 260, true);
 
-    if (snap == 1)
+    if (snap == 1) {
         currentProcess->start("snap", QStringList() << "info" << packageName);
+        return;
+    }
 
     QStringList command;
 
