@@ -133,57 +133,5 @@ int main(int argc, char *argv[])
     }
     w.show();
 
-     // Создание контекстного меню для иконки трея
-    QMenu *trayMenu = new QMenu();
-
-    QAction *action_11 = new QAction(QObject::tr("Обновить систему"), trayMenu);
-    action_11->setIcon(QIcon(":/img/16.png"));
-    trayMenu->addAction(action_11);
-
-    // Создание действия
-    QAction *action_2 = new QAction(QObject::tr("Каталог пакетов"), trayMenu);
-    action_2->setIcon(QIcon(":/img/2.png"));
-    trayMenu->addAction(action_2);
-
-    QAction *action_7 = new QAction(QObject::tr("Установленные пакеты"), trayMenu);
-    action_7->setIcon(QIcon(":/img/5.png"));
-    trayMenu->addAction(action_7);
-
-
-    QAction *action_9 = new QAction(QObject::tr("Информация о системе"), trayMenu);
-    action_9->setIcon(QIcon(":/img/7.png"));
-    trayMenu->addAction(action_9);
-
-    QAction *action_12 = new QAction(QObject::tr("Настройки"), trayMenu);
-    action_12->setIcon(QIcon(":/img/9.png"));
-    trayMenu->addAction(action_12);
-
-    QAction *exitAction = new QAction(QObject::tr("Выход"), trayMenu);
-    exitAction->setIcon(QIcon(":/img/18.png"));
-    trayMenu->addAction(exitAction);
-
-    // Установка контекстного меню для иконки трея
-    w.trayIcon.setContextMenu(trayMenu);
-
-    // Связывание событий нажатия на пункты меню с обработчиками
-    QObject::connect(action_2, &QAction::triggered, &w, [&](){ w.show(); w.on_action_2_triggered(); });
-    QObject::connect(action_7, &QAction::triggered, &w, [&](){ w.show(); w.on_action_7_triggered(); });
-    QObject::connect(action_11, &QAction::triggered, &w, [&](){ w.show(); w.on_action_11_triggered(); });
-    QObject::connect(action_9, &QAction::triggered, &w, [&](){ w.show(); w.on_action_9_triggered(); });
-    QObject::connect(action_12, &QAction::triggered, &w, [&](){ w.show(); w.on_action_12_triggered(); });
-    QObject::connect(exitAction, &QAction::triggered, &a, &QApplication::quit);
-
-    // Связываем событие клика на иконке с обработчиком
-    QObject::connect(&w.trayIcon, &QSystemTrayIcon::activated, &w, [&](QSystemTrayIcon::ActivationReason reason) {
-        // Проверяем, что клик был левым кликом
-        if (reason == QSystemTrayIcon::Trigger) {
-            // Проверяем, было ли главное окно свернуто
-            if (w.isHidden())
-                w.show(); // Если главное окно свернуто, показываем его и делаем активным
-            else
-                w.hide(); // Если главное окно открыто, сворачиваем его
-        }
-    });
-
     return a.exec();
 }

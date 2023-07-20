@@ -183,6 +183,8 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
+    void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
+
     bool isSnapInstalled();
 
     void createSearchBar();

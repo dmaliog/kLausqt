@@ -15,7 +15,7 @@
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "7.5";
+QString currentVersion = "7.6";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -1635,6 +1635,48 @@ void MainWindow::loadSettings()
     trayIcon.setToolTip("kLaus ;)");
     trayIcon.show();
 
+     // Создание контекстного меню для иконки трея
+    QMenu *trayMenu = new QMenu();
+
+    QAction *action_11 = new QAction(QObject::tr("Обновить систему"), trayMenu);
+    action_11->setIcon(QIcon(":/img/16.png"));
+    trayMenu->addAction(action_11);
+
+    // Создание действия
+    QAction *action_2 = new QAction(QObject::tr("Каталог пакетов"), trayMenu);
+    action_2->setIcon(QIcon(":/img/2.png"));
+    trayMenu->addAction(action_2);
+
+    QAction *action_7 = new QAction(QObject::tr("Установленные пакеты"), trayMenu);
+    action_7->setIcon(QIcon(":/img/5.png"));
+    trayMenu->addAction(action_7);
+
+
+    QAction *action_9 = new QAction(QObject::tr("Информация о системе"), trayMenu);
+    action_9->setIcon(QIcon(":/img/7.png"));
+    trayMenu->addAction(action_9);
+
+    QAction *action_12 = new QAction(QObject::tr("Настройки"), trayMenu);
+    action_12->setIcon(QIcon(":/img/9.png"));
+    trayMenu->addAction(action_12);
+
+    QAction *exitAction = new QAction(QObject::tr("Выход"), trayMenu);
+    exitAction->setIcon(QIcon(":/img/18.png"));
+    trayMenu->addAction(exitAction);
+
+    // Установка контекстного меню для иконки трея
+    trayIcon.setContextMenu(trayMenu);
+
+    // Связывание событий нажатия на пункты меню с обработчиками
+    connect(action_2, &QAction::triggered, this, &MainWindow::on_action_2_triggered);
+    connect(action_7, &QAction::triggered, this, &MainWindow::on_action_7_triggered);
+    connect(action_11, &QAction::triggered, this, &MainWindow::on_action_11_triggered);
+    connect(action_9, &QAction::triggered, this, &MainWindow::on_action_9_triggered);
+    connect(action_12, &QAction::triggered, this, &MainWindow::on_action_12_triggered);
+    connect(exitAction, &QAction::triggered, qApp, &QApplication::quit);
+
+    // Связываем событие клика на иконке с обработчиком
+    connect(&trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::onTrayIconActivated);
     //-##################################################################################
     //-############################## ПЕРЕКЛЮЧЕНИЕ МЕНЮ #################################
     //-##################################################################################
@@ -1758,6 +1800,18 @@ void MainWindow::loadSettings()
     }
 }
 
+void MainWindow::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
+{
+    // Ваш код обработки клика на иконке трея
+    if (reason == QSystemTrayIcon::Trigger) {
+        // Проверяем, было ли главное окно свернуто
+        if (isHidden())
+            show(); // Если главное окно свернуто, показываем его и делаем активным
+        else
+            hide(); // Если главное окно открыто, сворачиваем его
+    }
+}
+
 void MainWindow::removeToolButtonTooltips(QToolBar* toolbar) {
     // Получение стиля текущей темы
     QList<QAction*> actions = toolbar->actions();
@@ -1784,6 +1838,7 @@ bool isDescendantOfTabWidget(QWidget* widget) {
 
 void MainWindow::mrpropper(int value) //зачистка говна перед началом каждой вкладки
 {
+    miniAnimation(0, 0, false);
     showLoadingAnimationMini(true);
 
     page = value;
