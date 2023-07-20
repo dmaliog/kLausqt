@@ -3,11 +3,12 @@
 
 bool isPackageInstalled(const QString& packageName)
 {
-    QProcess process;
-    process.start("pacman", QStringList() << "-Q" << packageName);
-    process.waitForFinished();
+    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
 
-    QString output = process.readAllStandardOutput();
+    process->start("pacman", QStringList() << "-Q" << packageName);
+    process->waitForFinished();
+
+    QString output = process->readAllStandardOutput();
     return !output.isEmpty();
 }
 
@@ -66,6 +67,7 @@ int main(int argc, char *argv[])
 
         // Записываем выбранный язык в файл INI
         settings.setValue("Language", locale);
+        settings.sync(); // Сохраняем изменения в файл INI
 
         // Загружаем и устанавливаем файл перевода
         QTranslator translator;
@@ -76,6 +78,7 @@ int main(int argc, char *argv[])
             return 1;
         }
     }
+
     // Загружаем и устанавливаем файл перевода
     QTranslator translator;
     if (translator.load("kLaus_" + locale, ":/lang"))
@@ -112,11 +115,12 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    QProcess process;
-    process.start("which", QStringList() << "notify-send");
-    process.waitForFinished();
+    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
 
-    if (process.exitCode() != 0) {
+    process->start("which", QStringList() << "notify-send");
+    process->waitForFinished();
+
+    if (process->exitCode() != 0) {
         w.sendNotification(QObject::tr("Ошибка"), QObject::tr("Требуется notify-send!"));
         return 1;
     }

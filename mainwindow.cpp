@@ -70,25 +70,6 @@ Terminal getTerminal()
 }
 
 
-// Функция для анимации исчезания виджета
-void fadeOut(QWidget *widget) {
-    // Создание анимации исчезания для указанного виджета
-    QPropertyAnimation *animation = new QPropertyAnimation(widget, "windowOpacity");
-
-    // Задайте продолжительность анимации (в миллисекундах)
-    animation->setDuration(500);
-
-    // Задайте начальное и конечное значение прозрачности виджета
-    animation->setStartValue(1.0); // Полностью непрозрачный
-    animation->setEndValue(0.0);   // Полностью прозрачный
-
-    // Подключите сигнал о завершении анимации к слоту, который скроет виджет после анимации
-    QAbstractAnimation::connect(animation, &QPropertyAnimation::finished, widget, &QWidget::hide);
-
-    // Запустите анимацию
-    animation->start();
-}
-
 //---#####################################################################################################################################################
 //--################################################################# ОСНОВНЫЕ ФУНКЦИИ ##################################################################
 //-#####################################################################################################################################################
@@ -187,7 +168,7 @@ void MainWindow::on_action_3_triggered()
     ui->action_33->setVisible(true);
     ui->action_35->setVisible(true);
 
-    if (lang == "en_US")
+    if (*lang == "en_US")
         ui->webEngineView->page()->load(QUrl("https://wiki.archlinux.org/title/General_recommendations"));
     else
         ui->webEngineView->page()->load(QUrl("https://wiki.archlinux.org/title/General_recommendations_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)"));
@@ -196,19 +177,19 @@ void MainWindow::on_action_3_triggered()
 void MainWindow::on_action_8_triggered()
 {
     if (page == 7) return;
-    QProcess process;
-    process.start(packageCommands.value(pkg).value("query").at(0), QStringList() << packageCommands.value(pkg).value("query").at(1) << "ocs-url");
+    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
 
-    if (process.waitForFinished()) {
-        QString output = QString::fromUtf8(process.readAllStandardOutput());
+    process->start(packageCommands.value(pkg).value("query").at(0), QStringList() << packageCommands.value(pkg).value("query").at(1) << "ocs-url");
+
+    if (process->waitForFinished()) {
+        QString output = QString::fromUtf8(process->readAllStandardOutput());
         if (!output.contains("ocs-url")) {
 
             on_action_2_triggered();
             searchLineEdit->setText("ocs-url");
 
             QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
-            QCoreApplication::postEvent(searchLineEdit, event);
-
+            QCoreApplication::postEvent(searchLineEdit.data(), event);
             sendNotification(tr("Ошибка"), tr("Установите пакет ocs-url для установки тем!"));
             return;
         }
@@ -221,19 +202,19 @@ void MainWindow::on_action_8_triggered()
     ui->action_33->setVisible(true);
     ui->action_35->setVisible(true);
 
-    if (currentDesktop == "KDE")
+    if (*currentDesktop == "KDE")
         ui->webEngineView->page()->load(QUrl("https://store.kde.org/browse/"));
-    else if (currentDesktop == "GNOME")
+    else if (*currentDesktop == "GNOME")
         ui->webEngineView->page()->load(QUrl("https://www.pling.com/s/Gnome/browse/"));
-    else if (currentDesktop == "XFCE")
+    else if (*currentDesktop == "XFCE")
         ui->webEngineView->page()->load(QUrl("https://www.pling.com/s/XFCE/browse/"));
-    else if (currentDesktop == "LXQt")
+    else if (*currentDesktop == "LXQt")
         ui->webEngineView->page()->load(QUrl("https://store.kde.org/browse?cat=446"));
-    else if (currentDesktop == "Cinnamon")
+    else if (*currentDesktop == "Cinnamon")
         ui->webEngineView->page()->load(QUrl("https://www.pling.com/s/Cinnamon/browse/"));
-    else if (currentDesktop == "MATE")
+    else if (*currentDesktop == "MATE")
         ui->webEngineView->page()->load(QUrl("https://www.pling.com/s/Mate/browse/"));
-    else if (currentDesktop == "Enlightenment")
+    else if (*currentDesktop == "Enlightenment")
         ui->webEngineView->page()->load(QUrl("https://www.pling.com/s/Enlightenment/browse/"));
     else {
         sendNotification(tr("Ошибка"), tr("Для вашего окружения тем не найдено!"));
@@ -285,10 +266,10 @@ void MainWindow::on_push_server_clicked()
 {
     if(host == 1)
     {
-        QProcess httpd;
-        httpd.start("sh", QStringList() << "-c" << "httpd -v");
-        httpd.waitForFinished(-1);
-        QString output = QString::fromUtf8(httpd.readAllStandardOutput()).trimmed();
+        QSharedPointer<QProcess> httpd = QSharedPointer<QProcess>::create();
+        httpd->start("sh", QStringList() << "-c" << "httpd -v");
+        httpd->waitForFinished(-1);
+        QString output = QString::fromUtf8(httpd->readAllStandardOutput()).trimmed();
         sendNotification(tr("Информация"), output);
     } else
         sendNotification(tr("Ошибка"), tr("Сервер не выбран!"));
@@ -296,10 +277,10 @@ void MainWindow::on_push_server_clicked()
 
 void MainWindow::on_push_php_clicked()
 {
-    QProcess php;
-    php.start("sh", QStringList() << "-c" << "php -v");
-    php.waitForFinished(-1);
-    QString output = QString::fromUtf8(php.readAllStandardOutput()).trimmed();
+    QSharedPointer<QProcess> php = QSharedPointer<QProcess>::create();
+    php->start("sh", QStringList() << "-c" << "php -v");
+    php->waitForFinished(-1);
+    QString output = QString::fromUtf8(php->readAllStandardOutput()).trimmed();
     sendNotification(tr("Информация"), output);
 }
 
@@ -307,17 +288,17 @@ void MainWindow::on_action_restart_triggered()
 {
     if(host == 1)
     {
-        QProcess httpProcess;
-        httpProcess.start("pkexec", QStringList() << "sudo" << "systemctl" << "restart" << "httpd");
-        httpProcess.closeWriteChannel();
-        httpProcess.waitForFinished();
+        QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create();
+        httpProcess->start("pkexec", QStringList() << "sudo" << "systemctl" << "restart" << "httpd");
+        httpProcess->closeWriteChannel();
+        httpProcess->waitForFinished();
     }
     else if(host == 2)
     {
-        QProcess httpProcess;
-        httpProcess.start("pkexec", QStringList() << "sudo" << "systemctl" << "restart" << "xampp.service");
-        httpProcess.closeWriteChannel();
-        httpProcess.waitForFinished();
+        QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create();
+        httpProcess->start("pkexec", QStringList() << "sudo" << "systemctl" << "restart" << "xampp.service");
+        httpProcess->closeWriteChannel();
+        httpProcess->waitForFinished();
     }
     else
         sendNotification(tr("Ошибка"), tr("Сервер не выбран!"));
@@ -327,17 +308,17 @@ void MainWindow::on_action_stop_triggered()
 {
     if (host == 1)
     {
-        QProcess httpProcess;
-        httpProcess.start("pkexec", QStringList() << "sudo" << "systemctl" << "stop" << "httpd");
-        httpProcess.closeWriteChannel();
-        httpProcess.waitForFinished();
+        QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create();
+        httpProcess->start("pkexec", QStringList() << "sudo" << "systemctl" << "stop" << "httpd");
+        httpProcess->closeWriteChannel();
+        httpProcess->waitForFinished();
     }
     else if(host == 2)
     {
-        QProcess httpProcess;
-        httpProcess.start("pkexec", QStringList() << "sudo" << "systemctl" << "stop" << "xampp.service");
-        httpProcess.closeWriteChannel();
-        httpProcess.waitForFinished();
+        QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create();
+        httpProcess->start("pkexec", QStringList() << "sudo" << "systemctl" << "stop" << "xampp.service");
+        httpProcess->closeWriteChannel();
+        httpProcess->waitForFinished();
     }
     else
         sendNotification(tr("Ошибка"), tr("Сервер не выбран!"));
@@ -362,12 +343,13 @@ void MainWindow::on_push_conf_clicked()
 void MainWindow::on_push_repair_clicked()
 {
     // Открываем диалог выбора архива с помощью Zenity
-    QProcess process;
-    process.start("zenity", QStringList() << "--file-selection" << tr("--title=Выберите архив") << "--file-filter=*.zip");
+    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
 
-    if (process.waitForFinished() && process.exitCode() == 0) {
+    process->start("zenity", QStringList() << "--file-selection" << tr("--title=Выберите архив") << "--file-filter=*.zip");
+
+    if (process->waitForFinished() && process->exitCode() == 0) {
         // Получаем путь выбранного архива
-        QString archivePath = process.readAllStandardOutput().trimmed();
+        QString archivePath = process->readAllStandardOutput().trimmed();
 
         // Восстанавливаем архив
         restoreArchive(archivePath);
@@ -446,26 +428,26 @@ void MainWindow::on_action_31_triggered()
 {
     if (page == 6)
     {
-        if (lang == "en_US")
+        if (*lang == "en_US")
             ui->webEngineView->load(QUrl("https://wiki.archlinux.org/title/General_recommendations"));
         else
             ui->webEngineView->load(QUrl("https://wiki.archlinux.org/title/General_recommendations_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)"));
     }
     else if (page == 7)
     {
-        if(currentDesktop == "KDE")
+        if(*currentDesktop == "KDE")
             ui->webEngineView->load(QUrl("https://store.kde.org/browse/"));
-        else if(currentDesktop == "GNOME")
+        else if(*currentDesktop == "GNOME")
             ui->webEngineView->load(QUrl("https://www.pling.com/s/Gnome/browse/"));
-        else if(currentDesktop == "XFCE")
+        else if(*currentDesktop == "XFCE")
             ui->webEngineView->load(QUrl("https://www.pling.com/s/XFCE/browse/"));
-        else if(currentDesktop == "LXQt")
+        else if(*currentDesktop == "LXQt")
             ui->webEngineView->load(QUrl("https://store.kde.org/browse?cat=446"));
-        else if(currentDesktop == "Cinnamon")
+        else if(*currentDesktop == "Cinnamon")
             ui->webEngineView->load(QUrl("https://www.pling.com/s/Cinnamon/browse/"));
-        else if(currentDesktop == "MATE")
+        else if(*currentDesktop == "MATE")
             ui->webEngineView->load(QUrl("https://www.pling.com/s/Mate/browse/"));
-        else if (currentDesktop == "Enlightenment")
+        else if (*currentDesktop == "Enlightenment")
             ui->webEngineView->load(QUrl("https://www.pling.com/s/Enlightenment/browse/"));
         else {
             sendNotification(tr("Ошибка"), tr("Для вашего окружения тем не найдено!"));
@@ -493,15 +475,16 @@ void MainWindow::on_action_34_triggered()
     QTableWidgetItem* item = tableWidget->item(currentRow, 0);
     QString packageName = item->text();
 
-    QProcess process;
+    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+
     if (snap == 1) {
-        process.start("snap", QStringList() << "info" << packageName);
+        process->start("snap", QStringList() << "info" << packageName);
     } else
-        process.start(packageCommands.value(pkg).value("show_info").at(0), QStringList() << packageCommands.value(pkg).value("show_info").at(1) << packageName);
+        process->start(packageCommands.value(pkg).value("show_info").at(0), QStringList() << packageCommands.value(pkg).value("show_info").at(1) << packageName);
 
-    process.waitForFinished();
+    process->waitForFinished();
 
-    QByteArray output = process.readAllStandardOutput();
+    QByteArray output = process->readAllStandardOutput();
     QString packageInfo = QString::fromUtf8(output);
 
     // Ищем ссылку в тексте packageInfo
@@ -572,14 +555,15 @@ void MainWindow::on_action_11_triggered()
     if (hasUpdates) {
         hide();
         Terminal terminal = getTerminal();
-        QProcess process;
-        process.setProgram(terminal.binary);
-        process.setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("update"));
-        process.setProcessChannelMode(QProcess::MergedChannels);
-        process.start();
-        process.waitForFinished(-1);
+        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
 
-        if (process.exitCode() == QProcess::NormalExit) {
+        process->setProgram(terminal.binary);
+        process->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("update"));
+        process->setProcessChannelMode(QProcess::MergedChannels);
+        process->start();
+        process->waitForFinished(-1);
+
+        if (process->exitCode() == QProcess::NormalExit) {
             UpdateIcon();
             show();
         }
@@ -593,14 +577,14 @@ void MainWindow::on_action_snap_triggered()
     if (hasUpdatesSnap) {
         hide();
         Terminal terminal = getTerminal();
-        QProcess process;
-        process.setProgram(terminal.binary);
-        process.setArguments(QStringList() << terminal.args << "snap" << "refresh");
-        process.setProcessChannelMode(QProcess::MergedChannels);
-        process.start();
-        process.waitForFinished(-1);
+        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+        process->setProgram(terminal.binary);
+        process->setArguments(QStringList() << terminal.args << "snap" << "refresh");
+        process->setProcessChannelMode(QProcess::MergedChannels);
+        process->start();
+        process->waitForFinished(-1);
 
-        if (process.exitCode() == QProcess::NormalExit) {
+        if (process->exitCode() == QProcess::NormalExit) {
             show();
         }
     } else
@@ -619,17 +603,17 @@ void MainWindow::on_action_5_triggered()
     {
         if(host == 1)
         {
-            QProcess httpProcess;
-            httpProcess.start("pkexec", QStringList() << "sudo" << "systemctl" << "start" << "httpd");
-            httpProcess.closeWriteChannel();
-            httpProcess.waitForFinished();
+            QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create();
+            httpProcess->start("pkexec", QStringList() << "sudo" << "systemctl" << "start" << "httpd");
+            httpProcess->closeWriteChannel();
+            httpProcess->waitForFinished();
         }
         else if(host == 2)
         {
-            QProcess httpProcess;
-            httpProcess.start("pkexec", QStringList() << "sudo" << "systemctl" << "start" << "xampp.service");
-            httpProcess.closeWriteChannel();
-            httpProcess.waitForFinished();
+            QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create();
+            httpProcess->start("pkexec", QStringList() << "sudo" << "systemctl" << "start" << "xampp.service");
+            httpProcess->closeWriteChannel();
+            httpProcess->waitForFinished();
         }
         else
             sendNotification(tr("Ошибка"), tr("Сервер не выбран!"));
@@ -657,17 +641,17 @@ void MainWindow::on_action_5_triggered()
 
                 // Запускаем файл .desktop
                 QString desktopFileName = QFileInfo(desktopFilePath).fileName();
-                QProcess::startDetached("gtk-launch", QStringList() << desktopFileName);
+                QSharedPointer<QProcess>(new QProcess)->startDetached("gtk-launch", QStringList() << desktopFileName);
             } else {
                 sendNotification(tr("Ошибка"), tr("Файл .desktop не найден для пакета ") + packageName);
             }
         } else {
 
             // Выполняем команду `-Ql packageName` и захватываем вывод
-            QProcess process;           
-            process.start(packageCommands.value(pkg).value("list_files").at(0), QStringList() << packageCommands.value(pkg).value("list_files").at(1) << packageName);
-            process.waitForFinished(-1);
-            QString output = process.readAllStandardOutput();
+            QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+            process->start(packageCommands.value(pkg).value("list_files").at(0), QStringList() << packageCommands.value(pkg).value("list_files").at(1) << packageName);
+            process->waitForFinished(-1);
+            QString output = process->readAllStandardOutput();
 
             // Ищем строку, содержащую путь к файлу .desktop
             QString desktopFilePath;
@@ -682,7 +666,7 @@ void MainWindow::on_action_5_triggered()
             if (!desktopFilePath.isEmpty()) {
                 // Запускаем файл .desktop
                 QString desktopFileName = QFileInfo(desktopFilePath).fileName();
-                QProcess::startDetached("gtk-launch", QStringList() << desktopFileName);
+                QSharedPointer<QProcess>(new QProcess)->startDetached("gtk-launch", QStringList() << desktopFileName);
             } else
                 sendNotification(tr("Ошибка"), tr("Файл .desktop не найден для пакета ") + packageName);
         }
@@ -708,47 +692,47 @@ void MainWindow::on_action_6_triggered()
     Terminal terminal = getTerminal();
 
     if (snap == 1) {
-        QProcess* process = new QProcess(this);
+        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
         process->start("bash", QStringList() << "-c" << "snap list | grep " + packageName);
 
-        connect(process, &QProcess::readyReadStandardOutput, this, [=]() {
-            QProcess process;
-            process.setProgram(terminal.binary);
-            process.setArguments(QStringList() << terminal.args << "sudo snap remove " + packageName);
-            process.setProcessChannelMode(QProcess::MergedChannels);
-            process.start();
-            process.waitForFinished(-1);
+        connect(process.data(), &QProcess::readyReadStandardOutput, this, [=]() {
+            QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+            process->setProgram(terminal.binary);
+            process->setArguments(QStringList() << terminal.args << "sudo snap remove " + packageName);
+            process->setProcessChannelMode(QProcess::MergedChannels);
+            process->start();
+            process->waitForFinished(-1);
 
-            if (process.exitCode() == QProcess::NormalExit) {
+            if (process->exitCode() == QProcess::NormalExit) {
                 loadContentInstall();
             }
         });
 
-        connect(process, &QProcess::readyReadStandardError, this, [=]() {
+        connect(process.data(), &QProcess::readyReadStandardError, this, [=]() {
             QString error = process->readAllStandardError();
             sendNotification(tr("Ошибка"), error);
         });
 
     } else {
-        QProcess* process = new QProcess(this);
+        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
         process->start(packageCommands.value(pkg).value("query").at(0), QStringList() << packageCommands.value(pkg).value("query").at(1) << packageName);
 
         // Удаляем пакет
-        connect(process, &QProcess::readyReadStandardOutput, this, [=]() {
+        connect(process.data(), &QProcess::readyReadStandardOutput, this, [=]() {
 
-            QProcess process;
-            process.setProgram(terminal.binary);
-            process.setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("remove") << packageName);
-            process.setProcessChannelMode(QProcess::MergedChannels);
-            process.start();
-            process.waitForFinished(-1);
+            QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+            process->setProgram(terminal.binary);
+            process->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("remove") << packageName);
+            process->setProcessChannelMode(QProcess::MergedChannels);
+            process->start();
+            process->waitForFinished(-1);
 
-            if (process.exitCode() == QProcess::NormalExit) {
+            if (process->exitCode() == QProcess::NormalExit) {
                 loadContentInstall();
             }
         });
 
-        connect(process, &QProcess::readyReadStandardError, this, [=]() {
+        connect(process.data(), &QProcess::readyReadStandardError, this, [=]() {
             QString error = process->readAllStandardError();
             sendNotification(tr("Ошибка"), error);
         });
@@ -780,32 +764,32 @@ void MainWindow::on_action_4_triggered()
 
     if (snap == 1)
     {
-        QProcess process;
-        process.setProgram(terminal.binary);
+        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+        process->setProgram(terminal.binary);
 
         if (page == 4)
-            process.setArguments(QStringList() << terminal.args << "sudo snap refresh " + packageName);
+            process->setArguments(QStringList() << terminal.args << "sudo snap refresh " + packageName);
         else
-            process.setArguments(QStringList() << terminal.args << "sudo snap install " + packageName);
+            process->setArguments(QStringList() << terminal.args << "sudo snap install " + packageName);
 
-        process.setProcessChannelMode(QProcess::MergedChannels);
-        process.start();
-        process.waitForFinished(-1);
+        process->setProcessChannelMode(QProcess::MergedChannels);
+        process->start();
+        process->waitForFinished(-1);
 
-        if (process.exitCode() == QProcess::NormalExit) {
+        if (process->exitCode() == QProcess::NormalExit) {
             loadContentInstall();
         }
     }
     else
     {
-        QProcess process;
-        process.setProgram(terminal.binary);
-        process.setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("install") << packageName);
-        process.setProcessChannelMode(QProcess::MergedChannels);
-        process.start();
-        process.waitForFinished(-1);
+        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+        process->setProgram(terminal.binary);
+        process->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("install") << packageName);
+        process->setProcessChannelMode(QProcess::MergedChannels);
+        process->start();
+        process->waitForFinished(-1);
 
-        if (process.exitCode() == QProcess::NormalExit)
+        if (process->exitCode() == QProcess::NormalExit)
             loadContentInstall();
     }
 }
@@ -827,7 +811,7 @@ void MainWindow::on_action_30_triggered()
         return;
     }
     else
-        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << mainDir + "sh/PKGBUILD.sh" << lang << packageName);
+        QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "bash" << mainDir + "sh/PKGBUILD.sh" << *lang << packageName);
 }
 
 void MainWindow::on_push_grub_clicked()
@@ -837,27 +821,27 @@ void MainWindow::on_push_grub_clicked()
     QString timeout = ui->spin_grub->value() > 0 ? QString::number(ui->spin_grub->value()) : "5";
 
     // Создаем процесс для выполнения команды с pkexec
-    QProcess process;
-    process.setProgram("pkexec");
+    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+    process->setProgram("pkexec");
     QStringList arguments;
     arguments << "bash" << "-c" << "sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"" + grubContent + "\"/; s/^GRUB_TIMEOUT=.*/GRUB_TIMEOUT=\"" + timeout + "\"/' " + filename + " && sudo grub-mkconfig -o /boot/grub/grub.cfg";
-    process.setArguments(arguments);
+    process->setArguments(arguments);
 
     // Запускаем процесс с pkexec
-    process.start();
-    if (!process.waitForStarted()) {
+    process->start();
+    if (!process->waitForStarted()) {
         sendNotification(tr("Ошибка выполнения"), tr("Не удалось запустить pkexec"));
         return;
     }
 
     // Ждем, пока процесс завершится
-    if (!process.waitForFinished(-1)) {
+    if (!process->waitForFinished(-1)) {
         sendNotification(tr("Ошибка выполнения"), tr("Не удалось выполнить команду pkexec"));
         return;
     }
 
     // Проверяем код выхода
-    if (process.exitCode() != QProcess::NormalExit || process.exitStatus() != QProcess::ExitStatus::NormalExit) {
+    if (process->exitCode() != QProcess::NormalExit || process->exitStatus() != QProcess::ExitStatus::NormalExit) {
         return;
     }
     sendNotification(tr("GRUB изменен"), tr("Изменения GRUB вступят в силу после перезагрузки."));
@@ -910,7 +894,7 @@ void MainWindow::on_action_addsh_triggered()
         if (file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
             QTextStream stream(&file);
-            if(lang == "en_US")
+            if(*lang == "en_US")
             {
                 stream << "#name_en_US " << nameRuLineEdit->text() << "\n";
                 stream << "#msg_en_US " << msgRuLineEdit->text() << "\n";
@@ -970,7 +954,7 @@ void MainWindow::on_action_rmsh_triggered()
             while (!scriptStream.atEnd())
             {
                 QString line = scriptStream.readLine();
-                if (line.startsWith("#name_" + lang))
+                if (line.startsWith("#name_" + *lang))
                 {
                     QString itemName = line.mid(12).trimmed();
                     scriptMap[itemName] = filePath;
@@ -1036,7 +1020,7 @@ void MainWindow::on_action_editsh_triggered()
             while (!scriptStream.atEnd())
             {
                 QString line = scriptStream.readLine();
-                if (line.startsWith("#name_" + lang))
+                if (line.startsWith("#name_" + *lang))
                 {
                     QString itemName = line.mid(12).trimmed();
                     if (itemName == itemContent)
@@ -1197,14 +1181,14 @@ void MainWindow::createSearchBar()
     }
 
     // Создаем строку поиска
-    searchLineEdit = new QLineEdit(this);
+    searchLineEdit = QSharedPointer<QLineEdit>(new QLineEdit(this));
     searchLineEdit->setStyleSheet("QLineEdit {margin-left:10px;padding-left:30px;border-radius: 5px;background-image: url(:/img/m4.png);border:0;background-repeat: no-repeat;background-position: left center;background-color: #242424;}");
     searchLineEdit->setFixedWidth(211); // Устанавливаем фиксированную ширину строки поиска
-    toolbar->addWidget(searchLineEdit);
+    toolbar->addWidget(searchLineEdit.data());
 
     // Подключаем сигналы и слоты для обработки поиска и активации пунктов меню
-    connect(searchLineEdit, &QLineEdit::textChanged, this, &MainWindow::searchTextChanged);
-    connect(searchLineEdit, &QLineEdit::returnPressed, this, &MainWindow::search);
+    connect(searchLineEdit.data(), &QLineEdit::textChanged, this, &MainWindow::searchTextChanged);
+    connect(searchLineEdit.data(), &QLineEdit::returnPressed, this, &MainWindow::search);
 }
 
 void MainWindow::searchTextChanged(const QString& searchText)
@@ -1285,14 +1269,14 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->time_update->setTime(timeupdate);
     ui->time_tea->setTime(timetea);
     ui->time_work->setTime(timework);
-    ui->line_tea->setText(teatext);
-    ui->line_work->setText(worktext);
+    ui->line_tea->setText(*teatext);
+    ui->line_work->setText(*worktext);
 
     ui->dial_volnotify->setValue(volumenotify);
 
-    if(lang == "ru_RU")
+    if(*lang == "ru_RU")
         ui->combo_lang->setCurrentIndex(0);
-    else if(lang == "en_US")
+    else if(*lang == "en_US")
         ui->combo_lang->setCurrentIndex(1);
 
     ui->combo_host->setCurrentIndex(host);
@@ -1369,8 +1353,25 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if(trayon == 1)
+    if(trayon == 1){
+        iconMap.clear();
+        delete actionLoad;
+        delete previousAction;
+
+        delete orphanButton;
+        delete cacheButtonYay;
+        delete cacheButtonPacman;
+
+        // Очистить список
+        snapPackageNames.clear();
+        shResourcePaths.clear();
+        clearResourcePaths.clear();
+        journalsResourcePaths.clear();
+        benchResourcePaths.clear();
+        endingsToRemove.clear();
+
         QApplication::quit();
+    }
     else
     {
         hide();             // Скрываем главное окно
@@ -1425,18 +1426,18 @@ void MainWindow::loadSettings()
     updinst = settings.value("UpdateInstall", 1).toInt();
     snap = settings.value("Snap", 0).toInt();
     volumenotify = settings.value("VolumeNotify", 30).toInt();
-    lang = settings.value("Language").toString();
+    lang = QSharedPointer<QString>::create(settings.value("Language").toString());
     host = settings.value("Host").toInt();
-    teatext = settings.value("TeaText").toString();
-    worktext = settings.value("WorkText").toString();
-    repo = settings.value("Repository").toString();
+    teatext = QSharedPointer<QString>::create(settings.value("TeaText").toString());
+    worktext = QSharedPointer<QString>::create(settings.value("WorkText").toString());
+    repo = QSharedPointer<QString>::create(settings.value("Repository").toString());
 
     timeupdate = QTime::fromString(settings.value("TimeUpdate").toString(), "HH:mm");
     timetea = QTime::fromString(settings.value("TimeTea").toString(), "HH:mm");
     timework = QTime::fromString(settings.value("TimeWork").toString(), "HH:mm");
 
     QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
-    currentDesktop = environment.value("XDG_CURRENT_DESKTOP");
+    currentDesktop = QSharedPointer<QString>::create(environment.value("XDG_CURRENT_DESKTOP"));
 
     ui->webEngineView->setZoomFactor(0.9);
     ui->toolBar_2->setFixedWidth(100);
@@ -1612,20 +1613,20 @@ void MainWindow::loadSettings()
     //-##################################################################################
     //-############################# ТАЙМЕР ИКОНКИ ТРЕЯ #################################
     //-##################################################################################
-    updateIconTimer = new QTimer(this);
+    updateIconTimer = QSharedPointer<QTimer>::create(this);
     updateIconTimer->setInterval(3600000); // 1 час
     updateIconTimer->setSingleShot(false);
-    connect(updateIconTimer, &QTimer::timeout, this, &MainWindow::UpdateIcon);
+    connect(updateIconTimer.data(), &QTimer::timeout, this, &MainWindow::UpdateIcon);
     updateIconTimer->start();
 
     //-##################################################################################
     //-############################## ТАЙМЕР COFFETIME ##################################
     //-##################################################################################
-    teaTimer = new QTimer(this);
-    connect(teaTimer, &QTimer::timeout, this, &MainWindow::TeaTimer);
+    teaTimer = QSharedPointer<QTimer>::create(this);
+    connect(teaTimer.data(), &QTimer::timeout, this, &MainWindow::TeaTimer);
 
-    workTimer = new QTimer(this);
-    connect(workTimer, &QTimer::timeout, this, &MainWindow::WorkTimer);
+    workTimer = QSharedPointer<QTimer>::create(this);
+    connect(workTimer.data(), &QTimer::timeout, this, &MainWindow::WorkTimer);
 
     //-##################################################################################
     //-################################# ИКОНКИ ТРЕЯ ####################################
@@ -1731,7 +1732,7 @@ void MainWindow::loadSettings()
         //-##################################################################################
         //-########################### MINI LODING ANIMATION ################################
         //-##################################################################################
-        loadingLabel = new QLabel(this);
+        loadingLabel.reset(new QLabel(this));
         loadingLabel->setVisible(false);
         // Создаем виджет QLabel для анимации загрузки
         loadingLabel->setFixedSize(58, 53); // Устанавливаем размеры виджета
@@ -1835,18 +1836,18 @@ void MainWindow::mrpropper(int value) //зачистка говна перед �
 
 void MainWindow::TeaTimer()
 {
-    if (teatext.isEmpty())
+    if (teatext->isEmpty())
         sendNotification(tr("Отдохни!"), tr("Пора пить чай!"));
     else
-        sendNotification(tr("Отдохни!"), teatext);
+        sendNotification(tr("Отдохни!"), *teatext);
 }
 
 void MainWindow::WorkTimer()
 {
-    if (worktext.isEmpty())
+    if (teatext->isEmpty())
         sendNotification(tr("Отдохни!"), tr("Пора сделать зарядку!"));
     else
-        sendNotification(tr("Отдохни!"), worktext);
+        sendNotification(tr("Отдохни!"), *worktext);
 }
 
 void MainWindow::setHasUpdates(bool updates)
@@ -1857,13 +1858,13 @@ void MainWindow::setHasUpdates(bool updates)
 
 void MainWindow::UpdateIcon()
 {
-    QProcess process;
-    process.setReadChannel(QProcess::StandardOutput);
-    process.start("sh", QStringList() << "-c" << "checkupdates | wc -l");
-    process.waitForFinished();
+    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+    process->setReadChannel(QProcess::StandardOutput);
+    process->start("sh", QStringList() << "-c" << "checkupdates | wc -l");
+    process->waitForFinished();
 
-    if (process.exitCode() == QProcess::NormalExit) {
-        QByteArray output = process.readAll();
+    if (process->exitCode() == QProcess::NormalExit) {
+        QByteArray output = process->readAll();
         int numUpdates = output.trimmed().toInt();
 
         if (numUpdates == 0) {
@@ -1879,13 +1880,13 @@ void MainWindow::UpdateIcon()
 
 void MainWindow::UpdateSnap()
 {
-    QProcess process;
-    process.setReadChannel(QProcess::StandardOutput);
-    process.start("sh", QStringList() << "-c" << "snap refresh --list | wc -l");
-    process.waitForFinished();
+    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+    process->setReadChannel(QProcess::StandardOutput);
+    process->start("sh", QStringList() << "-c" << "snap refresh --list | wc -l");
+    process->waitForFinished();
 
-    if (process.exitCode() == QProcess::NormalExit) {
-        QByteArray output = process.readAll();
+    if (process->exitCode() == QProcess::NormalExit) {
+        QByteArray output = process->readAll();
         int numUpdates = output.trimmed().toInt();
 
         if (numUpdates == 0)
@@ -1914,10 +1915,10 @@ void MainWindow::loadSystemInfo()
         QString release = QString::fromUtf8(systemInfo.release);
         QString machine = QString::fromUtf8(systemInfo.machine);
 
-        QProcess distributionProcess;
-        distributionProcess.start("lsb_release", QStringList() << "-s" << "-d");
-        distributionProcess.waitForFinished();
-        QString distribution = QString::fromUtf8(distributionProcess.readAllStandardOutput()).trimmed();
+        QSharedPointer<QProcess> distributionProcess = QSharedPointer<QProcess>::create();
+        distributionProcess->start("lsb_release", QStringList() << "-s" << "-d");
+        distributionProcess->waitForFinished();
+        QString distribution = QString::fromUtf8(distributionProcess->readAllStandardOutput()).trimmed();
 
         // Отобразить информацию о системе в меню
         QString osText = QString("%1 (%2)").arg(distribution, machine);
@@ -1928,17 +1929,17 @@ void MainWindow::loadSystemInfo()
     }
 
     // Получаем количество пакетов pacman
-    QProcess pacmanProcess;
-    pacmanProcess.start("sh", QStringList() << "-c" << packageCommands.value(pkg).value("query_q").join(" ") + " | wc -l");
+    QSharedPointer<QProcess> pacmanProcess = QSharedPointer<QProcess>::create();
+    pacmanProcess->start("sh", QStringList() << "-c" << packageCommands.value(pkg).value("query_q").join(" ") + " | wc -l");
 
-    pacmanProcess.waitForFinished(-1);
-    QString pacmanPackagesCount = QString::fromUtf8(pacmanProcess.readAllStandardOutput()).trimmed();
+    pacmanProcess->waitForFinished(-1);
+    QString pacmanPackagesCount = QString::fromUtf8(pacmanProcess->readAllStandardOutput()).trimmed();
 
     // Получаем количество пакетов flatpak
-    QProcess flatpakProcess;
-    flatpakProcess.start("sh", QStringList() << "-c" << "flatpak list --app | wc -l");
-    flatpakProcess.waitForFinished(-1);
-    QString flatpakPackagesCount = QString::fromUtf8(flatpakProcess.readAllStandardOutput()).trimmed();
+    QSharedPointer<QProcess> flatpakProcess = QSharedPointer<QProcess>::create();
+    flatpakProcess->start("sh", QStringList() << "-c" << "flatpak list --app | wc -l");
+    flatpakProcess->waitForFinished(-1);
+    QString flatpakPackagesCount = QString::fromUtf8(flatpakProcess->readAllStandardOutput()).trimmed();
 
     QString packagesText = QString("Pacman: %1, Flatpak: %2").arg(pacmanPackagesCount, flatpakPackagesCount);
     ui->action_packages->setText(packagesText);
@@ -1953,10 +1954,10 @@ void MainWindow::loadSystemInfo()
     ui->action_screen->setText(resolutionText);
 
     // Получаем CPU
-    QProcess cpuProcess;
-    cpuProcess.start("sh", QStringList() << "-c" << "LC_ALL=C lscpu");
-    cpuProcess.waitForFinished(-1);
-    QString cpuOutput = QString::fromUtf8(cpuProcess.readAllStandardOutput());
+    QSharedPointer<QProcess> cpuProcess = QSharedPointer<QProcess>::create();
+    cpuProcess->start("sh", QStringList() << "-c" << "LC_ALL=C lscpu");
+    cpuProcess->waitForFinished(-1);
+    QString cpuOutput = QString::fromUtf8(cpuProcess->readAllStandardOutput());
 
     QStringList cpuLines = cpuOutput.split('\n');
     QString cpuInfo;
@@ -1969,10 +1970,10 @@ void MainWindow::loadSystemInfo()
     ui->action_cpu->setText(cpuInfo);
 
     // Получаем GPU
-    QProcess gpuProcess;
-    gpuProcess.start("sh", QStringList() << "-c" << "lspci | grep -i 'VGA'");
-    if (gpuProcess.waitForFinished()) {
-        QString output = QString::fromUtf8(gpuProcess.readAllStandardOutput()).trimmed();
+    QSharedPointer<QProcess> gpuProcess = QSharedPointer<QProcess>::create();
+    gpuProcess->start("sh", QStringList() << "-c" << "lspci | grep -i 'VGA'");
+    if (gpuProcess->waitForFinished()) {
+        QString output = QString::fromUtf8(gpuProcess->readAllStandardOutput()).trimmed();
 
         QStringList parts = output.split(':');
         if (parts.size() > 2) {
@@ -1982,10 +1983,10 @@ void MainWindow::loadSystemInfo()
     }
 
     // Получаем Memory
-    QProcess memoryProcess;
-    memoryProcess.start("sh", QStringList() << "-c" << "free -m");
-    memoryProcess.waitForFinished();
-    QString memoryOutput = QString::fromUtf8(memoryProcess.readAllStandardOutput());
+    QSharedPointer<QProcess> memoryProcess = QSharedPointer<QProcess>::create();
+    memoryProcess->start("sh", QStringList() << "-c" << "free -m");
+    memoryProcess->waitForFinished();
+    QString memoryOutput = QString::fromUtf8(memoryProcess->readAllStandardOutput());
 
     QStringList memoryLines = memoryOutput.split('\n');
     QString memoryInfo;
@@ -2004,11 +2005,11 @@ void MainWindow::loadSystemInfo()
     ui->action_memory->setText(memoryInfo);
 
     QString externalIp;
-    QProcess process;
-    process.start("curl", QStringList() << "ifconfig.me");
-    process.waitForFinished();
-    if (process.exitCode() == QProcess::NormalExit) {
-        QByteArray response = process.readAllStandardOutput();
+    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+    process->start("curl", QStringList() << "ifconfig.me");
+    process->waitForFinished();
+    if (process->exitCode() == QProcess::NormalExit) {
+        QByteArray response = process->readAllStandardOutput();
         externalIp = QString::fromUtf8(response).trimmed();
     }
 
@@ -2088,7 +2089,7 @@ void MainWindow::showLoadingAnimationMini(bool show)
                 loadingLabel->setVisible(true);
 
                 // Заменяем иконку действия на QLabel с анимацией
-                ui->toolBar->insertWidget(action, loadingLabel);
+                ui->toolBar->insertWidget(action, loadingLabel.data());
                 action->setVisible(false);
 
                 actionLoad = action;
@@ -2104,13 +2105,14 @@ void MainWindow::showLoadingAnimationMini(bool show)
             loadingLabel->setVisible(false);
             QLayout *toolBarLayout = ui->toolBar->layout();
             if (toolBarLayout) {
-                toolBarLayout->removeWidget(loadingLabel);
+                toolBarLayout->removeWidget(loadingLabel.data());
             }
             actionLoad->setVisible(true);
             ui->toolBar->setEnabled(true);
             removeToolButtonTooltips(ui->toolBar);
             removeToolButtonTooltips(ui->toolBar_2);
         });
+
     }
 }
 
@@ -2195,12 +2197,12 @@ void MainWindow::onTableAurCellClicked(int row)
     QTableWidgetItem* nameItem = tableWidget->item(row, 0);
     QString packageName = nameItem->text();
 
-    currentProcess = new QProcess(this);
+    QSharedPointer<QProcess> currentProcess = QSharedPointer<QProcess>::create();
 
     // Сохраняем текущую позицию прокрутки
     int scrollBarValue = ui->text_details->verticalScrollBar()->value();
 
-    connect(currentProcess, &QProcess::readyReadStandardOutput, this, [=]() {
+    connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, [=]() {
         QByteArray output = currentProcess->readAllStandardOutput();
         QString packageInfo = QString::fromUtf8(output);
 
@@ -2464,23 +2466,23 @@ void MainWindow::loadContentInstall()
 {
     QStringList allPackages;
 
-    QProcess processYay;
+    QSharedPointer<QProcess> processYay = QSharedPointer<QProcess>::create();
     // Выполняем команду и получаем вывод
 
-    processYay.start(packageCommands.value(pkg).value("query_explicit").at(0), QStringList() << packageCommands.value(pkg).value("query_explicit").at(1));
-    processYay.waitForFinished(-1);
-    QString outputYay = processYay.readAllStandardOutput();
+    processYay->start(packageCommands.value(pkg).value("query_explicit").at(0), QStringList() << packageCommands.value(pkg).value("query_explicit").at(1));
+    processYay->waitForFinished(-1);
+    QString outputYay = processYay->readAllStandardOutput();
 
     // Разбиваем вывод на строки и добавляем каждую строку в allPackages
     allPackages = outputYay.split("\n", Qt::SkipEmptyParts);
 
     QStringList packagesSnap;
     if (snap == 1) {
-        QProcess processSnap;
+        QSharedPointer<QProcess> processSnap = QSharedPointer<QProcess>::create();
         // Выполняем команду snap list и получаем вывод
-        processSnap.start("snap", QStringList() << "list");
-        processSnap.waitForFinished(-1);
-        QString outputSnap = processSnap.readAllStandardOutput();
+        processSnap->start("snap", QStringList() << "list");
+        processSnap->waitForFinished(-1);
+        QString outputSnap = processSnap->readAllStandardOutput();
 
         // Разбиваем вывод на строки и добавляем каждую строку в packagesSnap
         packagesSnap = outputSnap.split("\n", Qt::SkipEmptyParts);
@@ -2532,9 +2534,9 @@ void MainWindow::handleServerResponse(const QString& reply)
     ui->table_aur->clearContents();
     miniAnimation(75, 260, true);
 
-    currentProcess = new QProcess(this);
+    QSharedPointer<QProcess> currentProcess = QSharedPointer<QProcess>::create();
 
-    connect(currentProcess, &QProcess::readyReadStandardOutput, this, [=]() {
+    connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, [=]() {
         QStringList packageNames;
         QStringList snapPackageNames; // Список для snap-пакетов
 
@@ -2542,7 +2544,7 @@ void MainWindow::handleServerResponse(const QString& reply)
             QByteArray line = currentProcess->readLine();
             QString lineString = QString::fromUtf8(line).trimmed();
 
-            QRegularExpression regex(repo); // Добавлено условие для extra
+            QRegularExpression regex(*repo); // Добавлено условие для extra
             QRegularExpressionMatch match = regex.match(lineString);
             if (match.hasMatch()) {
                 QString packageName = match.captured(1);
@@ -2560,10 +2562,10 @@ void MainWindow::handleServerResponse(const QString& reply)
             // Очищаем список со снап-пакетами
             snapPackageNames.clear();
 
-            QProcess snapProcess;
-            snapProcess.start("snap", QStringList() << "find" << reply);
-            snapProcess.waitForFinished(-1);
-            QByteArray snapOutput = snapProcess.readAllStandardOutput();
+            QSharedPointer<QProcess> snapProcess = QSharedPointer<QProcess>::create();
+            snapProcess->start("snap", QStringList() << "find" << reply);
+            snapProcess->waitForFinished(-1);
+            QByteArray snapOutput = snapProcess->readAllStandardOutput();
             QString snapOutputString = QString::fromUtf8(snapOutput).trimmed();
 
             // Обработка вывода команды snap find
@@ -2633,7 +2635,6 @@ void MainWindow::handleServerResponse(const QString& reply)
         }
 
         miniAnimation(0, 0, false);
-        currentProcess->deleteLater(); // Удаляем объект QProcess после использования
     });
 
     currentProcess->start(packageCommands.value(pkg).value("search").at(0), QStringList() << packageCommands.value(pkg).value("search").at(1) << reply);
@@ -2709,7 +2710,7 @@ void MainWindow::loadScripts(const QString& baseDir, QListWidget* listWidget)
             while (!scriptStream.atEnd())
             {
                 QString line = scriptStream.readLine();
-                if (line.startsWith("#name_" + lang))
+                if (line.startsWith("#name_" + *lang))
                 {
                     itemName = line.mid(12).trimmed();
                 }
@@ -2744,7 +2745,7 @@ void MainWindow::sendNotification(const QString& title, const QString& message)
 {
     QStringList arguments;
     arguments << title << message << "-i" << mainDir + "other/notify.png" << "-a" << "kLaus" << "-t" << "10000";
-    QProcess::startDetached("notify-send", arguments);
+    QSharedPointer<QProcess>(new QProcess)->startDetached("notify-send", arguments);
     loadSound(1);
 }
 
@@ -2772,12 +2773,12 @@ void MainWindow::createArchive(const QString& folderPath, const QString& folderN
     QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), tr("Вы уверены, что хотите удалить каталог \"%1\" и создать резервную копию?\n\nВажно: Архивы начинающиеся с точки - это конфигурации из домашней директории (они скрыты по умолчанию/включите видимость скрытых файлов)").arg(folderPath + folderName), QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::No) return;
 
-    QProcess process;
-    process.start("zenity", QStringList() << "--file-selection" << "--directory" << tr("--title=Выберите путь сохранения архива"));
-    process.waitForFinished();
+    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+    process->start("zenity", QStringList() << "--file-selection" << "--directory" << tr("--title=Выберите путь сохранения архива"));
+    process->waitForFinished();
 
-    if (process.exitCode() != 0) return;
-        QString selectedPath = process.readAllStandardOutput().trimmed();
+    if (process->exitCode() != 0) return;
+    QString selectedPath = process->readAllStandardOutput().trimmed();
 
     if (selectedPath.isEmpty()) return;
     QDir folderDir(folderPath);
@@ -2796,12 +2797,12 @@ void MainWindow::createArchive(const QString& folderPath, const QString& folderN
         return;
     }
 
-    QProcess zipProcess;
-    zipProcess.setWorkingDirectory(folderDir.absolutePath());
-    zipProcess.start("zip", QStringList() << "-r" << archivePath << folderName);
-    zipProcess.waitForFinished();
+    QSharedPointer<QProcess> zipProcess = QSharedPointer<QProcess>::create();
+    zipProcess->setWorkingDirectory(folderDir.absolutePath());
+    zipProcess->start("zip", QStringList() << "-r" << archivePath << folderName);
+    zipProcess->waitForFinished();
 
-    if (zipProcess.exitCode() != 0) {
+    if (zipProcess->exitCode() != 0) {
         sendNotification(tr("Ошибка"), tr("Резервная копия %1 не создана!").arg(archivePath));
         return;
     }
@@ -2871,12 +2872,12 @@ void MainWindow::restoreArchive(const QString& archivePath)
         targetDir = QDir::homePath() + "/.config"; // Иначе размещаем в папке ".config"
 
     // Запускаем процесс распаковки архива в целевую директорию
-    QProcess process;
-    process.setWorkingDirectory(targetDir);
-    process.start("unzip", QStringList() << "-q" << archivePath);
-    process.waitForFinished();
+    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+    process->setWorkingDirectory(targetDir);
+    process->start("unzip", QStringList() << "-q" << archivePath);
+    process->waitForFinished();
 
-    if (process.exitCode() == 0) {
+    if (process->exitCode() == 0) {
         // Успешно распаковано
         sendNotification(tr("Резервная копия"), tr("Резервная копия успешно восстановлена в папку: ") + targetDir);
         loadFolders();
@@ -2914,11 +2915,11 @@ void MainWindow::on_combo_host_currentIndexChanged(int index)
 
     if (host == 1)
     {
-        QProcess process;
-        process.start("httpd", QStringList() << "-v");
-        process.waitForFinished();
+        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+        process->start("httpd", QStringList() << "-v");
+        process->waitForFinished();
 
-        if (process.exitCode() == 0) {
+        if (process->exitCode() == 0) {
             // Apache установлен
             ui->combo_host->setCurrentIndex(1);
         }
@@ -2926,15 +2927,15 @@ void MainWindow::on_combo_host_currentIndexChanged(int index)
             // Apache не установлен, предложить установку
             int reply = QMessageBox::question(this, "Установка Apache", "Apache не установлен. Хотите установить Apache?", QMessageBox::Yes | QMessageBox::No);
             if (reply == QMessageBox::Yes) {
-                QProcess installProcess;
-                installProcess.setProcessChannelMode(QProcess::MergedChannels);
+                QSharedPointer<QProcess> installProcess = QSharedPointer<QProcess>::create();
+                installProcess->setProcessChannelMode(QProcess::MergedChannels);
 
                 Terminal terminal = getTerminal();
-                installProcess.start(terminal.binary, QStringList() << terminal.args << packageCommands.value(pkg).value("install") << "apache");
+                installProcess->start(terminal.binary, QStringList() << terminal.args << packageCommands.value(pkg).value("install") << "apache");
 
-                installProcess.closeWriteChannel();
-                installProcess.waitForFinished();
-                if (installProcess.exitCode() == 0)
+                installProcess->closeWriteChannel();
+                installProcess->waitForFinished();
+                if (installProcess->exitCode() == 0)
                     ui->combo_host->setCurrentIndex(1);
                 else {
                     QMessageBox::critical(this, "Ошибка установки", "Произошла ошибка при установке Apache");
@@ -2946,25 +2947,25 @@ void MainWindow::on_combo_host_currentIndexChanged(int index)
     }
     else if (host == 2)
     {
-        QProcess process;
-        process.start("/opt/lampp/lampp", QStringList() << "status");
-        process.waitForFinished();
+        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+        process->start("/opt/lampp/lampp", QStringList() << "status");
+        process->waitForFinished();
 
-        if (process.exitCode() == 0) {
+        if (process->exitCode() == 0) {
             ui->combo_host->setCurrentIndex(2);
         }
         else {
             int reply = QMessageBox::question(this, "Установка XAMPP", "XAMPP не установлен. Хотите установить XAMPP?", QMessageBox::Yes | QMessageBox::No);
             if (reply == QMessageBox::Yes) {
-                QProcess installProcess;
-                installProcess.setProcessChannelMode(QProcess::MergedChannels);
+                QSharedPointer<QProcess> installProcess = QSharedPointer<QProcess>::create();
+                installProcess->setProcessChannelMode(QProcess::MergedChannels);
 
                 Terminal terminal = getTerminal();
-                installProcess.start(terminal.binary, QStringList() << terminal.args << packageCommands.value(pkg).value("install") << "xampp");
+                installProcess->start(terminal.binary, QStringList() << terminal.args << packageCommands.value(pkg).value("install") << "xampp");
 
-                installProcess.closeWriteChannel();
-                installProcess.waitForFinished();
-                if (installProcess.exitCode() == 0)
+                installProcess->closeWriteChannel();
+                installProcess->waitForFinished();
+                if (installProcess->exitCode() == 0)
                     ui->combo_host->setCurrentIndex(2);
                 else {
                     QMessageBox::critical(this, "Ошибка установки", "Произошла ошибка при установке XAMPP");
@@ -3005,17 +3006,17 @@ void MainWindow::on_combo_lang_currentIndexChanged(int index)
         sendNotification(tr("Смена языка"), tr("Приложение будет перезагружено для смены языка"));
 
         qApp->quit();
-        QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+        QSharedPointer<QProcess>(new QProcess)->startDetached(qApp->arguments()[0], qApp->arguments());
     }
 }
 
 bool MainWindow::isSnapInstalled()
 {
-    QProcess processSnap;
-    processSnap.start("snap", QStringList() << "--version");
-    processSnap.waitForFinished(-1);
+    QSharedPointer<QProcess> processSnap = QSharedPointer<QProcess>::create();
+    processSnap->start("snap", QStringList() << "--version");
+    processSnap->waitForFinished(-1);
 
-    return processSnap.exitCode() == 0;
+    return processSnap->exitCode() == 0;
 }
 
 void MainWindow::on_combo_repo_currentIndexChanged(int index)
@@ -3026,7 +3027,7 @@ void MainWindow::on_combo_repo_currentIndexChanged(int index)
             ui->combo_repo->setCurrentIndex(0);
             sendNotification(tr("Ошибка"), tr("Установите и настройте Snap прежде чем его выбирать!"));
             Terminal terminal = getTerminal();
-            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << mainDir + "sh/snap.sh" << lang);
+            QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "bash" << mainDir + "sh/snap.sh" << *lang);
             return;
         }
     }
@@ -3079,7 +3080,7 @@ void MainWindow::on_combo_bench_currentIndexChanged(int index)
             while (!scriptStream.atEnd())
             {
                 QString line = scriptStream.readLine();
-                if (line.startsWith("#name_" + lang))
+                if (line.startsWith("#name_" + *lang))
                 {
                     itemName = line.mid(12).trimmed();
                 }
@@ -3174,13 +3175,13 @@ void MainWindow::on_time_work_timeChanged(const QTime &time)
 
 void MainWindow::on_line_tea_textChanged(const QString &arg1)
 {
-    teatext = arg1;
+    teatext.reset(new QString(arg1));
     settings.setValue("TeaText", arg1);
 }
 
 void MainWindow::on_line_work_textChanged(const QString &arg1)
 {
-    worktext = arg1;
+    worktext.reset(new QString(arg1));
     settings.setValue("WorkText", arg1);
 }
 
@@ -3224,7 +3225,7 @@ void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString&
         QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), tr("Обычно, когда пакет становится сиротой, это означает, что он был установлен в качестве зависимости другого пакета, но этот пакет был удален, и больше нет других пакетов, которые бы зависели от данного. Удаление сирот из системы помогает поддерживать систему более чистой и оптимизированной. Вы действительно хотите удалить пакеты сироты?"), QMessageBox::Yes | QMessageBox::No);
         if (reply == QMessageBox::Yes) {
             QString command = QString("bash -c 'yay -Rs $(yay -Qdtq)'");
-            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << command);
+            QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << command);
         }
         return;
     }
@@ -3255,7 +3256,7 @@ void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString&
         }
 
         if (replymod == QMessageBox::Yes)
-            QProcess::startDetached(terminal.binary, QStringList() << terminal.args << command);
+            QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << command);
 
         return;
     }
@@ -3273,12 +3274,12 @@ void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString&
             QTextStream scriptStream(&scriptFile);
             while (!scriptStream.atEnd()) {
                 QString line = scriptStream.readLine();
-                if (line.startsWith("#name_" + lang)) {
+                if (line.startsWith("#name_" + *lang)) {
                     QString name = line.mid(12).trimmed();
                     if (name == itemName)
                         scriptPath = fileInfo.absoluteFilePath();
                 }
-                else if (line.startsWith("#msg_" + lang))
+                else if (line.startsWith("#msg_" + *lang))
                     msg = line.mid(11).trimmed();
             }
             scriptFile.close();
@@ -3292,7 +3293,7 @@ void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString&
 
     QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), msg, QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes)
-        QProcess::startDetached(terminal.binary, QStringList() << terminal.args << "bash" << scriptPath << lang);
+        QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "bash" << scriptPath << *lang);
 }
 
 void MainWindow::on_list_sh_itemDoubleClicked(QListWidgetItem *item) {
@@ -3336,22 +3337,25 @@ void MainWindow::on_push_site_clicked()
 
 void MainWindow::openUrl(const QString& url)
 {
-    QProcess process;
-    process.start("xdg-open", QStringList() << url);
-    process.waitForFinished();
+    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+
+    process->start("xdg-open", QStringList() << url);
+    process->waitForFinished();
 
     // Проверяем код возврата
-    if (process.exitCode() != 0) {
+    if (process->exitCode() != 0) {
         // Проверяем наличие Firefox
         QString firefoxPath = QStandardPaths::findExecutable("firefox");
         if (!firefoxPath.isEmpty()) {
-            QProcess processSettings;
-            processSettings.start("xdg-settings", QStringList() << "set default-web-browser firefox.desktop");
-            processSettings.waitForFinished();
+            QSharedPointer<QProcess> processSettings = QSharedPointer<QProcess>::create();
 
-            QProcess process;
-            process.start("xdg-open", QStringList() << url);
-            process.waitForFinished();
+            processSettings->start("xdg-settings", QStringList() << "set default-web-browser firefox.desktop");
+            processSettings->waitForFinished();
+
+            QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+
+            process->start("xdg-open", QStringList() << url);
+            process->waitForFinished();
         }
         else
             sendNotification(tr("Ошибка"), tr("Установите Firefox или выберите рабочий браузер в качестве основного в настройках системы!"));

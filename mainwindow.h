@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include "qlabel.h"
-#include "qprocess.h"
 #include "qurlquery.h"
 #include "qwebengineview.h"
 #include <QSystemTrayIcon>
@@ -35,62 +34,69 @@ public:
     QColor generateRandomColor();
 
 private:
-    QLabel* loadingAnimationLabel = nullptr;
-    QLabel* loadingLabel;
-    QAction* actionLoad;
-
-    QStringList snapPackageNames;
-    int numPackages;
-
-    QProcess* currentProcess = nullptr;
-
-    QLineEdit* searchLineEdit;
-
-    QString processedInfo;
-    QUrlQuery newParams;
-    QMap<QString, QString> iconMap; // Статический словарь для кэширования информации об иконках
-
-    QListWidgetItem* orphanButton;
-    QListWidgetItem* cacheButtonYay;
-    QListWidgetItem* cacheButtonPacman;
-
-    QAction* previousAction; // Предыдущий QAction
-
-    int pkg; //пакетный менеджер
-    int snap;
-    int page; // какая страница используется
-    int animloadpage;
-    int trayon; // закрывать без трея
-    int repair; // создавать бэкап при удалении или нет
-    int animload; // анимация загрузки
-    int updinst; //проверять систему перед установкой пакетов или нет
-    int volumenotify; // громкость уведомлений
-    int mainpage; // главная страница
-    int yaycache; // кэш
-    int host;
-    int benchlist; //бенчлист
-
-    QString packageURL;
-    QString lang;
-    QString currentDesktop;
-    QString teatext;
-    QString worktext;
-    QString repo;
+    //автоматически управляют памятью или не требуют
+    int pkg = 0; //пакетный менеджер
+    int snap = 0;
+    int page = 0; // какая страница используется
+    int animloadpage = 0;
+    int trayon = 0; // закрывать без трея
+    int repair = 0; // создавать бэкап при удалении или нет
+    int animload = 0; // анимация загрузки
+    int updinst = 0; //проверять систему перед установкой пакетов или нет
+    int volumenotify = 0; // громкость уведомлений
+    int mainpage = 0; // главная страница
+    int yaycache = 0; // кэш
+    int host = 0;
+    int benchlist = 0; //бенчлист
+    int numPackages = 0;
 
     QTime timeupdate;
     QTime timetea;
     QTime timework;
 
-    QTimer *updateIconTimer;
-    QTimer* teaTimer;
-    QTimer* workTimer;
-
     bool errorShown = false;
+    bool hasUpdates = false;
+    bool hasUpdatesSnap = false;
 
-    bool hasUpdates;
-    bool hasUpdatesSnap;
+    //тупые QAction
+    QAction* actionLoad = nullptr;
+    QAction* previousAction = nullptr; // Предыдущий QAction
 
-    QWebEngineView* webView;
+    //тупые QMAP
+    QMap<QString, QString> iconMap; // Статический словарь для кэширования информации об иконках
+
+    //умные Qlabel
+    QSharedPointer<QLabel> loadingAnimationLabel;
+    QScopedPointer<QLabel> loadingLabel;
+
+    //умные QLineEdit
+    QSharedPointer<QLineEdit> searchLineEdit;
+
+    //умные QWebEngineView
+    QSharedPointer<QWebEngineView> webView;
+
+    //умные QUrlQuery
+    QSharedPointer<QUrlQuery> newParams;
+
+    //умные QString
+    QSharedPointer<QString> packageURL;
+    QSharedPointer<QString> teatext;
+    QSharedPointer<QString> worktext;
+    QSharedPointer<QString> currentDesktop;
+    QSharedPointer<QString> repo;
+    QSharedPointer<QString> lang;
+
+    //умные QTimer
+    QSharedPointer<QTimer> updateIconTimer;
+    QSharedPointer<QTimer> teaTimer;
+    QSharedPointer<QTimer> workTimer;
+
+    //не требуют управления памятью
+    QListWidgetItem* orphanButton;
+    QListWidgetItem* cacheButtonYay;
+    QListWidgetItem* cacheButtonPacman;
+
+    QStringList snapPackageNames;
 
     QStringList shResourcePaths = {":/sh/1c.sh",
                                    ":/sh/wayland.sh",
@@ -174,7 +180,6 @@ public slots:
     void on_action_27_triggered();
     void on_action_28_triggered();
     void on_action_30_triggered();
-
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
@@ -286,8 +291,6 @@ private slots:
     void on_push_site_clicked();
     void on_push_repair_clicked();
     void on_action_snap_triggered();
-
-
 };
 
 #endif // MAINWINDOW_H
