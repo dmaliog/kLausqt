@@ -11,13 +11,18 @@
 # Импорт файла main.sh
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
+helper="$2"
 
-if ! yay -Q iozone &>/dev/null; then
+if ! $helper -Q iozone &>/dev/null; then
 
     # Предлагаем установить iozone
-    read -p "${pkg} iozone ${no_found}. ${instq} iozone? (y/n): " choice
-    if [[ $choice == "y" || $choice == "Y" ]]; then
-        yay -S iozone
+    read -p "${pkg} iozone ${no_found}. ${instq} iozone? (y/n): " answer
+    if [[ "$answer" == [yY] ]]; then
+        if [ "$helper" = "yay" ]; then
+            $helper -S iozone
+        else
+            $helper -S iozone --skipreview
+        fi
     else
         notify-send "${error}" "${noinstall}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
         exit 1

@@ -11,13 +11,18 @@
 # Импорт файла main.sh
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
+helper="$2"
 
-if ! yay -Q unigine-valley &>/dev/null; then
+if ! $helper -Q unigine-valley &>/dev/null; then
 
     # Предлагаем установить unigine-valley
-    read -p "${pkg} unigine-valley ${no_found}. ${instq} unigine-valley? (y/n): " choice
-    if [[ $choice == "y" || $choice == "Y" ]]; then
-        yay -S unigine-valley
+    read -p "${pkg} unigine-valley ${no_found}. ${instq} unigine-valley? (y/n): " answer
+    if [[ "$answer" == [yY] ]]; then
+        if [ "$helper" = "yay" ]; then
+            $helper -S unigine-valley
+        else
+            $helper -S unigine-valley --skipreview
+        fi
     else
         notify-send "${error}" "${noinstall}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
         exit 1

@@ -11,13 +11,13 @@
 # Импорт файла main.sh
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
+helper="$2"
 
 # Проверка наличия установленных Zen пакетов
-if [ -n "$(yay -Q linux-zen)" ] || [ -n "$(yay -Q linux-zen-headers)" ]; then
-    echo "${pkg} linux-zen ${found}. ${delq} linux-zen & linux-zen-headers? (y/n): "
-    read answer
-    if [ "$answer" == "y" ]; then
-        yay -R --noconfirm linux-zen linux-zen-headers
+if [ -n "$($helper -Q linux-zen)" ] || [ -n "$($helper -Q linux-zen-headers)" ]; then
+    read -p "${pkg} linux-zen ${found}. ${delq} linux-zen & linux-zen-headers? (y/n): " answer
+    if [[ "$answer" == [yY] ]]; then
+        $helper -R --noconfirm linux-zen linux-zen-headers
 
         # Проверка наличия Grub
         if [ ! -f "/boot/grub/grub.cfg" ]; then
@@ -29,8 +29,11 @@ if [ -n "$(yay -Q linux-zen)" ] || [ -n "$(yay -Q linux-zen-headers)" ]; then
         fi
     fi
 else
-    # Установка ядра Linux Zen и заголовков
-    yay -S --noconfirm linux-zen linux-zen-headers
+    if [ "$helper" = "yay" ]; then
+        $helper -S --noconfirm linux-zen linux-zen-headers
+    else
+        $helper -S --noconfirm linux-zen linux-zen-headers --skipreview
+    fi
 
     # Проверка наличия Grub
     if [ ! -f "/boot/grub/grub.cfg" ]; then

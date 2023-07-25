@@ -11,6 +11,7 @@
 # Импорт файла main.sh
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
+helper="$2"
 
 # Проверка наличия пакетов
 packages=("enchant1.6" "webkitgtk2-bin" "pkgextract" "imagemagick")
@@ -22,16 +23,20 @@ for package in "${packages[@]}"; do
     fi
 done
 
-# Установка недостающих пакетов через yay
+# Установка недостающих пакетов через $helper
 if [ ${#missing_packages[@]} -gt 0 ]; then
-    yay -S "${missing_packages[@]}"
+    if [ "$helper" = "yay" ]; then
+        $helper -S "${missing_packages[@]}"
+    else
+        $helper -S "${missing_packages[@]}" --skipreview
+    fi
 fi
 
 # Проверка наличия папки /opt/1cv8t/
 if [ -d "/opt/1cv8t/" ]; then
     # Папка существует, спросить пользователя о удалении 1С Предприятие
     read -p "${pkg} 1C ${found}. ${delq} 1C? (y/n): " answer
-    if [ "$answer" = "y" ]; then
+    if [[ "$answer" == [yY] ]]; then
         # Удаление предыдущей версии 1С Предприятие
         version=$(ls /opt/1cv8t/x86_64/)
         sudo /opt/1cv8t/x86_64/$version/uninstaller-training

@@ -11,12 +11,17 @@
 # Импорт файла main.sh
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
+helper="$2"
 
 if [[ $(sudo cat /sys/module/nvidia_drm/parameters/modeset) == "N" ]]; then
-    if yay -Q xorg-xwayland >/dev/null && yay -Q libxcb >/dev/null && yay -Q egl-wayland >/dev/null && yay -Q qt5-wayland >/dev/null && yay -Q qt6-wayland >/dev/null; then
+    if $helper -Q xorg-xwayland >/dev/null && $helper -Q libxcb >/dev/null && $helper -Q egl-wayland >/dev/null && $helper -Q qt5-wayland >/dev/null && $helper -Q qt6-wayland >/dev/null; then
         notify-send "${wayland_nvidia}" "${pkginstall_ok}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
     else
-        yay -S --noconfirm xorg-xwayland libxcb egl-wayland qt5-wayland qt6-wayland
+        if [ "$helper" = "yay" ]; then
+            $helper -S --noconfirm xorg-xwayland libxcb egl-wayland qt5-wayland qt6-wayland
+        else
+            $helper -S --noconfirm xorg-xwayland libxcb egl-wayland qt5-wayland qt6-wayland --skipreview
+        fi
     fi
     # Проверка и изменение файла kdeglobals
     kdeglobals_file="$HOME/.config/kdeglobals"

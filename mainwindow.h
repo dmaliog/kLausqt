@@ -1,13 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "qlabel.h"
-#include "qurlquery.h"
-#include "qwebengineview.h"
+#include <QLabel>
+#include <QWebEngineView>
 #include <QSystemTrayIcon>
 #include <QMainWindow>
 #include <QListWidgetItem>
-#include <QNetworkAccessManager>
+#include <QProcess>
 
 struct Terminal {
     QString binary;
@@ -34,21 +33,8 @@ public:
     QColor generateRandomColor();
 
 private:
-    //автоматически управляют памятью или не требуют
-    int pkg = 0; //пакетный менеджер
-    int snap = 0;
-    int page = 0; // какая страница используется
-    int animloadpage = 0;
-    int trayon = 0; // закрывать без трея
-    int repair = 0; // создавать бэкап при удалении или нет
-    int animload = 0; // анимация загрузки
-    int updinst = 0; //проверять систему перед установкой пакетов или нет
-    int volumenotify = 0; // громкость уведомлений
-    int mainpage = 0; // главная страница
-    int yaycache = 0; // кэш
-    int host = 0;
-    int benchlist = 0; //бенчлист
-    int numPackages = 0;
+    QSharedPointer<QProcess> snapProcess;
+    QSharedPointer<QProcess> currentProcess;
 
     QTime timeupdate;
     QTime timetea;
@@ -85,6 +71,7 @@ private:
     QSharedPointer<QString> currentDesktop;
     QSharedPointer<QString> repo;
     QSharedPointer<QString> lang;
+    QString helper;
 
     //умные QTimer
     QSharedPointer<QTimer> updateIconTimer;
@@ -93,10 +80,11 @@ private:
 
     //не требуют управления памятью
     QListWidgetItem* orphanButton;
-    QListWidgetItem* cacheButtonYay;
+    QListWidgetItem* cacheButtonHelper;
     QListWidgetItem* cacheButtonPacman;
 
     QStringList snapPackageNames;
+    QStringList helperPackageNames;
 
     QStringList shResourcePaths = {":/sh/1c.sh",
                                    ":/sh/wayland.sh",
@@ -183,6 +171,9 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
+    void onSnapProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void onCurrentProcessReadyRead();
+
     void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
 
     bool isSnapInstalled();
@@ -242,7 +233,7 @@ private slots:
     void on_combo_host_currentIndexChanged(int index);
     void on_combo_lang_currentIndexChanged(int index);
     void on_combo_repo_currentIndexChanged(int index);
-    void on_combo_pacman_currentIndexChanged(int index);
+    void on_combo_helper_currentIndexChanged(int index);
     void on_combo_bench_currentIndexChanged(int index);
 
     void on_check_repair_stateChanged();
@@ -293,6 +284,7 @@ private slots:
     void on_push_site_clicked();
     void on_push_repair_clicked();
     void on_action_snap_triggered();
+    void on_push_pacman_clicked();
 };
 
 #endif // MAINWINDOW_H

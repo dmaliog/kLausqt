@@ -7,7 +7,6 @@
 #include <QSoundEffect>
 #include <unistd.h>
 #include <sys/utsname.h>
-#include <QHostInfo>
 
 //---#####################################################################################################################################################
 //--############################################################## ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ################################################################
@@ -15,37 +14,77 @@
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "7.6";
+QString currentVersion = "7.7";
+
+//автоматически управляют памятью или не требуют
+int pkg = 0; //пакетный менеджер 0-yay / 1-paru
+int container = 0; //хелперы 1-нет / 2-snap / 3-paru
+int page = 0; // какая страница используется
+int animloadpage = 0;
+int trayon = 0; // закрывать без трея
+int repair = 0; // создавать бэкап при удалении или нет
+int animload = 0; // анимация загрузки
+int updinst = 0; //проверять систему перед установкой пакетов или нет
+int volumenotify = 0; // громкость уведомлений
+int mainpage = 0; // главная страница
+int helpercache = 0; // кэш
+int host = 0;
+int benchlist = 0; //бенчлист
+int numPackages = 0;
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
 //-#####################################################################################################################################################
 
 QMap<int, QMap<QString, QStringList>> packageCommands = {
-    {0, {{"install", {"yay", "-S"}},
-         {"remove", {"yay", "-R"}},
-         {"info", {"yay", "-Qi"}},
-         {"update", {"yay", "-Syu"}},
-         {"list_files", {"yay", "-Ql"}},
-         {"query", {"yay", "-Q"}},
-         {"show_info", {"yay", "-Si"}},
-         {"query_explicit", {"yay", "-Qe"}},
-         {"search", {"yay", "-Ss"}},
-         {"query_q", {"yay", "-Qq"}},
-         {"remove_explicit", {"yay", "-Rs"}},
-         {"query_depends", {"yay", "-Qdtq"}}}},
-    {1, {{"install", {"paru", "-S", "--skipreview"}},
-         {"remove", {"paru", "-R"}},
-         {"info", {"paru", "-Qi"}},
-         {"update", {"paru", "-Syu"}},
-         {"list_files", {"paru", "-Ql"}},
-         {"query", {"paru", "-Q"}},
-         {"show_info", {"paru", "-Si"}},
-         {"query_explicit", {"paru", "-Qe"}},
-         {"search", {"paru", "-Ss"}},
-         {"query_q", {"paru", "-Qq"}},
-         {"remove_explicit", {"paru", "-Rs"}},
-         {"query_depends", {"paru", "-Qdtq"}}}}
+    {0,
+        {
+            {"install", {"yay", "-S"}},
+            {"remove", {"yay", "-R"}},
+            {"info", {"yay", "-Qi"}},
+            {"update", {"yay", "-Syu"}},
+            {"list_files", {"yay", "-Ql"}},
+            {"query", {"yay", "-Q"}},
+            {"show_info", {"yay", "-Si"}},
+            {"query_explicit", {"yay", "-Qe"}},
+            {"search", {"yay", "-Ss"}},
+            {"query_q", {"yay", "-Qq"}},
+            {"remove_explicit", {"yay", "-Rs"}},
+            {"query_depends", {"yay", "-Qdtq"}},
+            {"clean_cache", {"yay", "-Sc"}},
+            {"clean_all_cache", {"yay", "-Scc"}}
+        }
+    },
+    {1,
+        {
+            {"install", {"paru", "-S", "--skipreview"}},
+            {"remove", {"paru", "-R"}},
+            {"info", {"paru", "-Qi"}},
+            {"update", {"paru", "-Syu", "--skipreview"}},
+            {"list_files", {"paru", "-Ql"}},
+            {"query", {"paru", "-Q"}},
+            {"show_info", {"paru", "-Si"}},
+            {"query_explicit", {"paru", "-Qe"}},
+            {"search", {"paru", "-Ss"}},
+            {"query_q", {"paru", "-Qq"}},
+            {"remove_explicit", {"paru", "-Rs"}},
+            {"query_depends", {"paru", "-Qdtq"}},
+            {"clean_cache", {"paru", "-Sc"}},
+            {"clean_all_cache", {"paru", "-Scc"}}
+        }
+    },
+    {2,
+        {
+            {"snap_list", {"snap", "list"}},
+            {"snap_remove", {"sudo", "snap", "remove"}},
+            {"snap_refresh", {"sudo", "snap", "refresh"}},
+            {"snap_install", {"sudo", "snap", "install"}},
+            {"snap_refresh_list", {"snap", "refresh", "--list"}},
+            {"snap_info", {"snap", "info"}},
+            {"snap_version", {"snap", "--version"}},
+            {"snap_find", {"snap", "find"}}
+        }
+    }
 };
 
 Terminal getTerminal()
@@ -96,10 +135,11 @@ void MainWindow::on_action_2_triggered()
     ui->combo_repo->setVisible(true);
 
     ui->action_4->setVisible(true);
-    ui->action_6->setVisible(true);
 
-    if (snap == 0)
+    if (container < 2) {
+        ui->push_pacman->setVisible(true);
         ui->action_30->setVisible(true);
+    }
     else
         ui->action_30->setVisible(false);
 
@@ -123,7 +163,10 @@ void MainWindow::on_action_7_triggered()
     ui->action_5->setVisible(true);
     ui->action_6->setVisible(true);
     ui->action_34->setVisible(true);
-    if(snap == 1)
+
+    if(container < 2)
+        ui->push_pacman->setVisible(true);
+    else
         ui->action_snap->setVisible(true);
 
     showLoadingAnimationMini(false);
@@ -477,8 +520,8 @@ void MainWindow::on_action_34_triggered()
 
     QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
 
-    if (snap == 1) {
-        process->start("snap", QStringList() << "info" << packageName);
+    if (container == 2) {
+        process->start(packageCommands.value(container).value("snap_info").at(0), QStringList() << packageCommands.value(container).value("snap_info").at(1) << packageName);
     } else
         process->start(packageCommands.value(pkg).value("show_info").at(0), QStringList() << packageCommands.value(pkg).value("show_info").at(1) << packageName);
 
@@ -489,7 +532,7 @@ void MainWindow::on_action_34_triggered()
 
     // Ищем ссылку в тексте packageInfo
     QString url;
-    if (snap == 1) {
+    if (container == 2) {
         int urlIndex = packageInfo.indexOf("store-url:");
         if (urlIndex != -1) {
             int start = packageInfo.indexOf("https://", urlIndex);
@@ -579,7 +622,7 @@ void MainWindow::on_action_snap_triggered()
         Terminal terminal = getTerminal();
         QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
         process->setProgram(terminal.binary);
-        process->setArguments(QStringList() << terminal.args << "snap" << "refresh");
+        process->setArguments(QStringList() << terminal.args << packageCommands.value(container).value("snap_find"));
         process->setProcessChannelMode(QProcess::MergedChannels);
         process->start();
         process->waitForFinished(-1);
@@ -628,7 +671,7 @@ void MainWindow::on_action_5_triggered()
         QString packageName = ui->table_app->currentItem()->text();
         packageName = packageName.left(packageName.indexOf(" "));
 
-        if (snap == 1) {
+        if (container == 2) {
             // Путь к каталогу snap, содержащему файлы .desktop
             QString snapDesktopDir = "/var/lib/snapd/desktop/applications/";
 
@@ -691,58 +734,36 @@ void MainWindow::on_action_6_triggered()
     QString packageName = tableWidget->item(tableWidget->currentRow(), 0)->text();
     Terminal terminal = getTerminal();
 
-    if (snap == 1) {
+    if (container == 2) {
         QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-        process->start("bash", QStringList() << "-c" << "snap list | grep " + packageName);
+        process->setProgram(terminal.binary);
+        process->setArguments(QStringList() << terminal.args << packageCommands.value(container).value("snap_remove") << packageName);
+        process->setProcessChannelMode(QProcess::MergedChannels);
+        process->start();
+        process->waitForFinished(-1);
 
-        connect(process.data(), &QProcess::readyReadStandardOutput, this, [=]() {
-            QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-            process->setProgram(terminal.binary);
-            process->setArguments(QStringList() << terminal.args << "sudo snap remove " + packageName);
-            process->setProcessChannelMode(QProcess::MergedChannels);
-            process->start();
-            process->waitForFinished(-1);
-
-            if (process->exitCode() == QProcess::NormalExit) {
-                loadContentInstall();
-            }
-        });
-
-        connect(process.data(), &QProcess::readyReadStandardError, this, [=]() {
-            QString error = process->readAllStandardError();
-            sendNotification(tr("Ошибка"), error);
-        });
+        if (process->exitCode() == QProcess::NormalExit) {
+            loadContentInstall();
+        }
 
     } else {
         QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-        process->start(packageCommands.value(pkg).value("query").at(0), QStringList() << packageCommands.value(pkg).value("query").at(1) << packageName);
+        process->setProgram(terminal.binary);
+        process->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("remove") << packageName);
+        process->setProcessChannelMode(QProcess::MergedChannels);
+        process->start();
+        process->waitForFinished(-1);
 
-        // Удаляем пакет
-        connect(process.data(), &QProcess::readyReadStandardOutput, this, [=]() {
-
-            QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-            process->setProgram(terminal.binary);
-            process->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("remove") << packageName);
-            process->setProcessChannelMode(QProcess::MergedChannels);
-            process->start();
-            process->waitForFinished(-1);
-
-            if (process->exitCode() == QProcess::NormalExit) {
-                loadContentInstall();
-            }
-        });
-
-        connect(process.data(), &QProcess::readyReadStandardError, this, [=]() {
-            QString error = process->readAllStandardError();
-            sendNotification(tr("Ошибка"), error);
-        });
+        if (process->exitCode() == QProcess::NormalExit) {
+            loadContentInstall();
+        }
     }
 }
 
 void MainWindow::on_action_4_triggered()
 {
     if (hasUpdates && updinst == 1) {
-        sendNotification(tr("Внимание"), tr("Перед установкой пакетов требуется обновить систему до актуального состояния! Это поможет предотвратить конфликт зависимостей и избежать кучи других проблем!"));
+        sendNotification(tr("Внимание"), tr("Вначале требуется обновить систему до актуального состояния! Это поможет предотвратить конфликт зависимостей и избежать кучи других проблем!"));
         return;
     }
 
@@ -762,15 +783,15 @@ void MainWindow::on_action_4_triggered()
     QString packageName = tableWidget->item(tableWidget->currentRow(), 0)->text();
     Terminal terminal = getTerminal();
 
-    if (snap == 1)
+    if (container == 2)
     {
         QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
         process->setProgram(terminal.binary);
 
         if (page == 4)
-            process->setArguments(QStringList() << terminal.args << "sudo snap refresh " + packageName);
+            process->setArguments(QStringList() << terminal.args << packageCommands.value(container).value("snap_refresh") << packageName);
         else
-            process->setArguments(QStringList() << terminal.args << "sudo snap install " + packageName);
+            process->setArguments(QStringList() << terminal.args << packageCommands.value(container).value("snap_install") << packageName);
 
         process->setProcessChannelMode(QProcess::MergedChannels);
         process->start();
@@ -797,6 +818,11 @@ void MainWindow::on_action_4_triggered()
 
 void MainWindow::on_action_30_triggered()
 {
+    if (hasUpdates && updinst == 1) {
+        sendNotification(tr("Внимание"), tr("Вначале требуется обновить систему до актуального состояния! Это поможет предотвратить конфликт зависимостей и избежать кучи других проблем!"));
+        return;
+    }
+
     if (ui->table_aur->currentItem() == nullptr) {
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
         return;
@@ -805,13 +831,13 @@ void MainWindow::on_action_30_triggered()
     QString packageName = ui->table_aur->item(ui->table_aur->currentRow(), 0)->text();
     Terminal terminal = getTerminal();
 
-    if (snap == 1)
+    if (container == 2)
     {
         sendNotification(tr("Внимание"), tr("Snap не использует PKGBUILD"));
         return;
     }
     else
-        QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "bash" << mainDir + "sh/PKGBUILD.sh" << *lang << packageName);
+        QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "bash" << mainDir + "sh/PKGBUILD.sh" << *lang << helper << packageName);
 }
 
 void MainWindow::on_push_grub_clicked()
@@ -1138,7 +1164,7 @@ void MainWindow::showTableContextMenu(const QPoint& pos)
     if (page == 2) {
         contextMenu.addAction(&action1);
 
-        if (snap == 0)
+        if (container < 2)
             contextMenu.addAction(&action2);
 
     } else if (page == 4) {
@@ -1237,11 +1263,13 @@ void MainWindow::search()
         handleServerResponse(searchText);
     }
 }
-
-
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    //-##################################################################################
+    //-######################### ПОДКЛЮЧЕНИЕ КОНФИГУРАЦИЙ ###############################
+    //-##################################################################################
 
     setupTableContextMenu();
     createSearchBar();
@@ -1262,8 +1290,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->check_repair->setChecked(repair);
     ui->check_animload->setChecked(animload);
     ui->check_updateinstall->setChecked(updinst);
-    ui->combo_repo->setCurrentIndex(snap);
     ui->combo_mainpage->setCurrentIndex(mainpage);
+    ui->combo_helper->setCurrentIndex(pkg);
     ui->combo_animload->setCurrentIndex(animloadpage);
 
     ui->time_update->setTime(timeupdate);
@@ -1278,6 +1306,11 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
         ui->combo_lang->setCurrentIndex(0);
     else if(*lang == "en_US")
         ui->combo_lang->setCurrentIndex(1);
+
+    if(pkg == 0)
+        helper = "yay";
+    else
+        helper = "paru";
 
     ui->combo_host->setCurrentIndex(host);
 
@@ -1359,7 +1392,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         delete previousAction;
 
         delete orphanButton;
-        delete cacheButtonYay;
+        delete cacheButtonHelper;
         delete cacheButtonPacman;
 
         // Очистить список
@@ -1419,18 +1452,17 @@ void MainWindow::loadSettings()
     pkg = settings.value("PackageManager", 0).toInt();
     mainpage = settings.value("MainPage", 0).toInt();
     animloadpage = settings.value("AnimLoadPage", 0).toInt();
-    yaycache = settings.value("YayCache", 0).toInt();
+    helpercache = settings.value("HelperCache", 0).toInt();
     trayon = settings.value("TrayOn", 0).toInt();
     repair = settings.value("RepairBackup", 1).toInt();
     animload = settings.value("AnimLoad", 1).toInt();
     updinst = settings.value("UpdateInstall", 1).toInt();
-    snap = settings.value("Snap", 0).toInt();
+    container = settings.value("Snap", 0).toInt();
     volumenotify = settings.value("VolumeNotify", 30).toInt();
-    lang = QSharedPointer<QString>::create(settings.value("Language").toString());
     host = settings.value("Host").toInt();
+    lang = QSharedPointer<QString>::create(settings.value("Language").toString());
     teatext = QSharedPointer<QString>::create(settings.value("TeaText").toString());
     worktext = QSharedPointer<QString>::create(settings.value("WorkText").toString());
-    repo = QSharedPointer<QString>::create(settings.value("Repository").toString());
 
     timeupdate = QTime::fromString(settings.value("TimeUpdate").toString(), "HH:mm");
     timetea = QTime::fromString(settings.value("TimeTea").toString(), "HH:mm");
@@ -1491,8 +1523,10 @@ void MainWindow::loadSettings()
     connect(ui->table_aur, &QTableWidget::cellClicked, this, &MainWindow::onTableAurCellClicked);
     connect(ui->table_app, &QTableWidget::cellClicked, this, &MainWindow::onTableAurCellClicked);
     connect(ui->push_reload, &QPushButton::clicked, this, [=]() {
+        miniAnimation(75, 260, true);
         loadContentInstall();
         loadContent();
+        miniAnimation(0, 0, false);
     });
     //-##################################################################################
     //-############################### ЗАНЯТОЕ МЕСТО ####################################
@@ -1545,8 +1579,9 @@ void MainWindow::loadSettings()
     //-##################################################################################
     QWebEngineProfile* profile = QWebEngineProfile::defaultProfile();
     profile->setHttpCacheType(QWebEngineProfile::MemoryHttpCache);
+    profile->defaultProfile()->setHttpUserAgent("Mozilla/5.0 (iPad; CPU OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1");
 
-    QObject::connect(ui->webEngineView->page(), &QWebEnginePage::loadStarted, this, [=]() {
+    connect(ui->webEngineView->page(), &QWebEnginePage::loadStarted, this, [=]() {
 
         if (page == 2 || page == 4 || page == 6 || page == 7) {
 
@@ -1559,7 +1594,7 @@ void MainWindow::loadSettings()
         }
     });
 
-    QObject::connect(ui->webEngineView->page(), &QWebEnginePage::loadFinished, this, [=](bool success) mutable{
+    connect(ui->webEngineView->page(), &QWebEnginePage::loadFinished, this, [=](bool success) mutable{
         if (success) {
             if (page == 6 || page == 7)
                 ui->webEngineView->show();
@@ -1587,7 +1622,7 @@ void MainWindow::loadSettings()
                << ui->action_packages << ui->action_release << ui->action_screen << ui->action_iphost << ui->action_iplocal;
     for (QAction* action : actionList) {
 
-        QObject::connect(action, &QAction::triggered, this, [action, this]() {
+        connect(action, &QAction::triggered, this, [action, this]() {
 
             // Копирование текста в буфер обмена
             QString text = action->text();
@@ -1638,29 +1673,29 @@ void MainWindow::loadSettings()
      // Создание контекстного меню для иконки трея
     QMenu *trayMenu = new QMenu();
 
-    QAction *action_11 = new QAction(QObject::tr("Обновить систему"), trayMenu);
+    QAction *action_11 = new QAction(tr("Обновить систему"), trayMenu);
     action_11->setIcon(QIcon(":/img/16.png"));
     trayMenu->addAction(action_11);
 
     // Создание действия
-    QAction *action_2 = new QAction(QObject::tr("Каталог пакетов"), trayMenu);
+    QAction *action_2 = new QAction(tr("Каталог пакетов"), trayMenu);
     action_2->setIcon(QIcon(":/img/2.png"));
     trayMenu->addAction(action_2);
 
-    QAction *action_7 = new QAction(QObject::tr("Установленные пакеты"), trayMenu);
+    QAction *action_7 = new QAction(tr("Установленные пакеты"), trayMenu);
     action_7->setIcon(QIcon(":/img/5.png"));
     trayMenu->addAction(action_7);
 
 
-    QAction *action_9 = new QAction(QObject::tr("Информация о системе"), trayMenu);
+    QAction *action_9 = new QAction(tr("Информация о системе"), trayMenu);
     action_9->setIcon(QIcon(":/img/7.png"));
     trayMenu->addAction(action_9);
 
-    QAction *action_12 = new QAction(QObject::tr("Настройки"), trayMenu);
+    QAction *action_12 = new QAction(tr("Настройки"), trayMenu);
     action_12->setIcon(QIcon(":/img/9.png"));
     trayMenu->addAction(action_12);
 
-    QAction *exitAction = new QAction(QObject::tr("Выход"), trayMenu);
+    QAction *exitAction = new QAction(tr("Выход"), trayMenu);
     exitAction->setIcon(QIcon(":/img/18.png"));
     trayMenu->addAction(exitAction);
 
@@ -1768,7 +1803,12 @@ void MainWindow::loadSettings()
             pacman.close();
 
             QString regexPattern = "^(" + sections.join("/\\S+|") + "/\\S+|aur/\\S+)"; // Формирование регулярного выражения
-            settings.setValue("Repository", regexPattern); // Сохранение значения regexPattern, а не repo
+
+            // Сохранение значения regexPattern в настройках
+            settings.setValue("Repository", regexPattern);
+
+            // Присваивание значения переменной repo
+            repo = QSharedPointer<QString>::create(regexPattern);
         }
 
         //-##################################################################################
@@ -1873,7 +1913,7 @@ void MainWindow::mrpropper(int value) //зачистка говна перед �
     }
 
     searchLineEdit->setFixedWidth(0);
-
+    ui->push_pacman->setVisible(false);
     ui->push_reload->setVisible(false);
     ui->scroll_repair->setVisible(false);
 
@@ -1948,6 +1988,7 @@ void MainWindow::UpdateSnap()
             hasUpdatesSnap = false;
         else
             hasUpdatesSnap = true;
+
     } else
         hasUpdatesSnap = false; // Обработка ошибки при выполнении команды
 }
@@ -2293,16 +2334,16 @@ void MainWindow::onTableAurCellClicked(int row)
 
     miniAnimation(460, 260, true);
 
-    if (snap == 1) {
-        currentProcess->start("snap", QStringList() << "info" << packageName);
+    if (container == 2) {
+        currentProcess->start(packageCommands.value(container).value("snap_info").at(0), QStringList() << packageCommands.value(container).value("snap_info").at(1) << packageName);
         return;
     }
 
     QStringList command;
 
-    if (page == 2 && snap == 0)
+    if (page == 2 && container < 2)
         command = packageCommands.value(pkg).value("show_info");
-    else if (page == 4 && snap == 0)
+    else if (page == 4 && container < 2)
         command = packageCommands.value(pkg).value("info");
 
     currentProcess->start(command[0], QStringList() << command[1] << packageName);
@@ -2428,7 +2469,7 @@ void MainWindow::loadContent()
 
     QString sourceFilePath;
     QString targetFilePath;
-    if (snap == 1) {
+    if (container == 2) {
         sourceFilePath = ":/other/snap.txt";
         targetFilePath = mainDir + "other/snap.txt";
     } else {
@@ -2486,7 +2527,7 @@ void MainWindow::loadContent()
 
         QString iconPath;
 
-        if (snap == 1)
+        if (container == 2)
             iconPath = ":/img/snap.png";
         else
             iconPath = ":/img/pacman.png";
@@ -2499,7 +2540,7 @@ void MainWindow::loadContent()
         if (match.hasMatch()) {
             QString repoName = match.captured(1);
 
-            if (snap == 0)
+            if (container < 2)
                 iconPath = ":/img/" + repoName + ".png"; // Иконка для обычных пакетов
 
             prefixToRemove = repoName + "/";
@@ -2523,21 +2564,21 @@ void MainWindow::loadContentInstall()
 {
     QStringList allPackages;
 
-    QSharedPointer<QProcess> processYay = QSharedPointer<QProcess>::create();
+    QSharedPointer<QProcess> processHelper = QSharedPointer<QProcess>::create();
     // Выполняем команду и получаем вывод
 
-    processYay->start(packageCommands.value(pkg).value("query_explicit").at(0), QStringList() << packageCommands.value(pkg).value("query_explicit").at(1));
-    processYay->waitForFinished(-1);
-    QString outputYay = processYay->readAllStandardOutput();
+    processHelper->start(packageCommands.value(pkg).value("query_explicit").at(0), QStringList() << packageCommands.value(pkg).value("query_explicit").at(1));
+    processHelper->waitForFinished(-1);
+    QString outputHelper = processHelper->readAllStandardOutput();
 
     // Разбиваем вывод на строки и добавляем каждую строку в allPackages
-    allPackages = outputYay.split("\n", Qt::SkipEmptyParts);
+    allPackages = outputHelper.split("\n", Qt::SkipEmptyParts);
 
     QStringList packagesSnap;
-    if (snap == 1) {
+    if (container == 2) {
         QSharedPointer<QProcess> processSnap = QSharedPointer<QProcess>::create();
         // Выполняем команду snap list и получаем вывод
-        processSnap->start("snap", QStringList() << "list");
+        processSnap->start(packageCommands.value(container).value("snap_list").at(0), QStringList() << packageCommands.value(container).value("snap_list").at(1));
         processSnap->waitForFinished(-1);
         QString outputSnap = processSnap->readAllStandardOutput();
 
@@ -2549,7 +2590,7 @@ void MainWindow::loadContentInstall()
     }
 
     QStringList allPackagesCombined;
-    if (snap == 1) {
+    if (container == 2) {
         allPackagesCombined = packagesSnap;
     } else {
         allPackagesCombined = allPackages;
@@ -2567,7 +2608,7 @@ void MainWindow::loadContentInstall()
 
         // Получаем иконку пакета
         QIcon packageIcon;
-        if (snap == 1) {
+        if (container == 2) {
             packageIcon = QIcon(":/img/snap.png");
         } else {
             packageIcon = getPackageIcon(packageName);
@@ -2589,113 +2630,131 @@ void MainWindow::loadContentInstall()
 void MainWindow::handleServerResponse(const QString& reply)
 {
     ui->table_aur->clearContents();
+    ui->table_aur->setRowCount(0);
+    ui->table_aur->setColumnCount(1);
+
     miniAnimation(75, 260, true);
 
-    QSharedPointer<QProcess> currentProcess = QSharedPointer<QProcess>::create();
+    if (container == 2)
+    {
+        snapPackageNames.clear();
 
-    connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, [=]() {
-        QStringList packageNames;
-        QStringList snapPackageNames; // Список для snap-пакетов
+        QString snapFindCommand = packageCommands.value(container).value("snap_find").at(0);
+        QString snapFindArg = packageCommands.value(container).value("snap_find").at(1);
 
-        while (currentProcess->canReadLine()) {
-            QByteArray line = currentProcess->readLine();
-            QString lineString = QString::fromUtf8(line).trimmed();
+        snapProcess = QSharedPointer<QProcess>::create(this);
+        connect(snapProcess.data(), &QProcess::finished, this, &MainWindow::onSnapProcessFinished);
 
-            QRegularExpression regex(*repo); // Добавлено условие для extra
-            QRegularExpressionMatch match = regex.match(lineString);
-            if (match.hasMatch()) {
-                QString packageName = match.captured(1);
-                packageNames.append(packageName);
-            }
-        }
+        snapProcess->start(snapFindCommand, QStringList() << snapFindArg << reply);
+    }
+    else
+    {
+        helperPackageNames.clear();
 
-        if (!currentProcess->atEnd()) {
-            // Весь вывод еще не получен, ждем следующего сигнала readyReadStandardOutput
-            return;
-        }
+        QString searchCommand = packageCommands.value(pkg).value("search").at(0);
+        QString searchArg = packageCommands.value(pkg).value("search").at(1);
 
-        // Проверяем, нужно ли искать snap-пакеты
-        if (snap == 1) {
-            // Очищаем список со снап-пакетами
-            snapPackageNames.clear();
+        currentProcess = QSharedPointer<QProcess>::create(this);
+        connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
 
-            QSharedPointer<QProcess> snapProcess = QSharedPointer<QProcess>::create();
-            snapProcess->start("snap", QStringList() << "find" << reply);
-            snapProcess->waitForFinished(-1);
-            QByteArray snapOutput = snapProcess->readAllStandardOutput();
-            QString snapOutputString = QString::fromUtf8(snapOutput).trimmed();
-
-            // Обработка вывода команды snap find
-            QStringList snapLines = snapOutputString.split('\n');
-
-            // Пропускаем первую строку (заголовок "Name")
-            snapLines.removeFirst();
-
-            for (const QString& snapLine : snapLines) {
-                if (!snapLine.isEmpty()) {
-                    QString snapPackageName = snapLine.section(' ', 0, 0);
-                    snapPackageNames.append(snapPackageName);
-                }
-            }
-        }
-
-        // Выбираем список пакетов в зависимости от значения snap
-        if (snap == 1) {
-            packageNames = snapPackageNames; // Показываем только snap-пакеты
-        }
-
-        // Установка общего количества строк в таблице
-        ui->table_aur->setRowCount(packageNames.size());
-        ui->table_aur->setColumnCount(1);
-
-        for (int i = 0; i < packageNames.size(); i++) {
-            QString packageName = packageNames[i];
-            QColor color = generateRandomColor();
-            QTableWidgetItem *item = new QTableWidgetItem();
-
-            QString iconPath = "";
-            QString prefixToRemove = "";
-
-            static const QRegularExpression regex("(\\w+)/\\S+");
-            QRegularExpressionMatch match = regex.match(packageName);
-
-            if (match.hasMatch()) {
-                QString repoName = match.captured(1);
-
-                // Проверяем наличие изображения repoName.png в ресурсах
-                if (QFile::exists(":/img/" + repoName + ".png")) {
-                    iconPath = ":/img/" + repoName + ".png";
-                } else {
-                    // Если изображение repoName.png не найдено, используем pacman.png
-                    iconPath = ":/img/pacman.png";
-                }
-
-                prefixToRemove = repoName + "/";
-            }
-
-            // Добавляем иконку snap-пакета, если это snap
-            if (snap == 1) {
-                iconPath = ":/img/snap.png";
-            }
-
-            item->setIcon(QIcon(iconPath));
-
-            // Удаление префикса, если применимо
-            if (!prefixToRemove.isEmpty()) {
-                packageName.remove(0, prefixToRemove.length());
-            }
-
-            item->setText(packageName);
-            item->setForeground(color);
-
-            ui->table_aur->setItem(i, 0, item);
-        }
-
-        miniAnimation(0, 0, false);
-    });
-
-    currentProcess->start(packageCommands.value(pkg).value("search").at(0), QStringList() << packageCommands.value(pkg).value("search").at(1) << reply);
+        currentProcess->start(searchCommand, QStringList() << searchArg << reply);
+    }
 }
+
+void MainWindow::onSnapProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    QByteArray snapOutput = snapProcess->readAllStandardOutput();
+    QString snapOutputString = QString::fromUtf8(snapOutput).trimmed();
+
+    // Обработка вывода команды snap find
+    QStringList snapLines = snapOutputString.split('\n');
+
+    // Пропускаем первую строку (заголовок "Name")
+    snapLines.removeFirst();
+
+    for (const QString& snapLine : snapLines) {
+        if (!snapLine.isEmpty()) {
+            QString snapPackageName = snapLine.section(' ', 0, 0);
+            snapPackageNames.append(snapPackageName);
+        }
+    }
+
+    ui->table_aur->setRowCount(snapPackageNames.size());
+
+    for (int i = 0; i < snapPackageNames.size(); i++) {
+        QString packageName = snapPackageNames[i];
+        QColor color = generateRandomColor();
+        QTableWidgetItem *item = new QTableWidgetItem();
+
+        item->setIcon(QIcon(":/img/snap.png"));
+        item->setText(packageName);
+        item->setForeground(color);
+
+        ui->table_aur->setItem(i, 0, item);
+    }
+
+    miniAnimation(0, 0, false);
+}
+
+void MainWindow::onCurrentProcessReadyRead()
+{
+    while (currentProcess->canReadLine()) {
+        QByteArray line = currentProcess->readLine();
+
+        QString lineString = QString::fromUtf8(line).trimmed();
+
+        QRegularExpression regex(*repo); // Добавлено условие для extra
+        QRegularExpressionMatch match = regex.match(lineString);
+        if (match.hasMatch()) {
+            QString packageName = match.captured(1);
+            helperPackageNames.append(packageName);
+        }
+    }
+
+    // Установка общего количества строк в таблице
+    ui->table_aur->setRowCount(helperPackageNames.size());
+
+    for (int i = 0; i < helperPackageNames.size(); i++) {
+        QString packageName = helperPackageNames[i];
+        QColor color = generateRandomColor();
+        QTableWidgetItem *item = new QTableWidgetItem();
+
+        QString iconPath = "";
+        QString prefixToRemove = "";
+
+        static const QRegularExpression regex("(\\w+)/\\S+");
+        QRegularExpressionMatch match = regex.match(packageName);
+
+        if (match.hasMatch()) {
+            QString repoName = match.captured(1);
+
+            // Проверяем наличие изображения repoName.png в ресурсах
+            if (QFile::exists(":/img/" + repoName + ".png")) {
+                iconPath = ":/img/" + repoName + ".png";
+            } else {
+                // Если изображение repoName.png не найдено, используем pacman.png
+                iconPath = ":/img/pacman.png";
+            }
+
+            prefixToRemove = repoName + "/";
+        }
+
+        item->setIcon(QIcon(iconPath));
+
+        // Удаление префикса, если применимо
+        if (!prefixToRemove.isEmpty()) {
+            packageName.remove(0, prefixToRemove.length());
+        }
+
+        item->setText(packageName);
+        item->setForeground(color);
+
+        ui->table_aur->setItem(i, 0, item);
+    }
+
+    miniAnimation(0, 0, false);
+}
+
 
 void MainWindow::searchAndScroll(QListWidget* listWidget, const QString& text)
 {
@@ -2718,15 +2777,15 @@ void MainWindow::loadingListWidget()
     loadScripts(mainDir + "journals/", ui->list_journal);
     loadScripts(mainDir + "bench/", ui->list_bench);
 
-    cacheButtonYay = new QListWidgetItem(tr("Кэш пакетов Yay"), ui->list_clear);
+    cacheButtonHelper = new QListWidgetItem((pkg == 0) ? tr("Кэш пакетов Yay") : tr("Кэш пакетов Paru"), ui->list_clear);
     cacheButtonPacman = new QListWidgetItem(tr("Кэш пакетов Pacman"), ui->list_clear);
     orphanButton = new QListWidgetItem(tr("Пакеты сироты"), ui->list_clear);
 
-    cacheButtonYay->setIcon(QIcon(":/img/14.png"));
+    cacheButtonHelper->setIcon(QIcon(":/img/14.png"));
     cacheButtonPacman->setIcon(QIcon(":/img/14.png"));
     orphanButton->setIcon(QIcon(":/img/14.png"));
 
-    cacheButtonYay->setForeground(generateRandomColor());
+    cacheButtonHelper->setForeground(generateRandomColor());
     cacheButtonPacman->setForeground(generateRandomColor());
     orphanButton->setForeground(generateRandomColor());
 
@@ -2953,10 +3012,12 @@ void MainWindow::on_combo_mainpage_currentIndexChanged(int index)
     settings.setValue("MainPage", mainpage);
 }
 
-void MainWindow::on_combo_pacman_currentIndexChanged(int index)
+void MainWindow::on_combo_helper_currentIndexChanged(int index)
 {
     pkg = index;
     settings.setValue("PackageManager", pkg);
+
+    cacheButtonHelper->setText((pkg == 0) ? tr("Кэш пакетов Yay") : tr("Кэш пакетов Paru"));
 }
 
 void MainWindow::on_combo_animload_currentIndexChanged(int index)
@@ -3070,7 +3131,7 @@ void MainWindow::on_combo_lang_currentIndexChanged(int index)
 bool MainWindow::isSnapInstalled()
 {
     QSharedPointer<QProcess> processSnap = QSharedPointer<QProcess>::create();
-    processSnap->start("snap", QStringList() << "--version");
+    processSnap->start(packageCommands.value(2).value("snap_version").at(0), QStringList() << packageCommands.value(2).value("snap_version").at(1));
     processSnap->waitForFinished(-1);
 
     return processSnap->exitCode() == 0;
@@ -3078,18 +3139,25 @@ bool MainWindow::isSnapInstalled()
 
 void MainWindow::on_combo_repo_currentIndexChanged(int index)
 {
+    if (index == 0)
+    {
+        if (page == 2 || page == 4) {
+            ui->push_pacman->setVisible(true);
+        }
+
+        container = 0;
+    }
     if (index == 1) {
         bool snapInstalled = isSnapInstalled();
         if (!snapInstalled) {
             ui->combo_repo->setCurrentIndex(0);
             sendNotification(tr("Ошибка"), tr("Установите и настройте Snap прежде чем его выбирать!"));
             Terminal terminal = getTerminal();
-            QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "bash" << mainDir + "sh/snap.sh" << *lang);
+            QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "bash" << mainDir + "sh/snap.sh" << *lang << helper);
             return;
         }
+        container = 2;
     }
-
-    snap = index;
 
     if (page == 2)
         on_action_2_triggered();
@@ -3174,8 +3242,8 @@ void MainWindow::on_combo_bench_currentIndexChanged(int index)
 
 void MainWindow::on_combo_cache_currentIndexChanged(int index)
 {
-    yaycache = index;
-    settings.setValue("YayCache", yaycache);
+    helpercache = index;
+    settings.setValue("HelperCache", helpercache);
 }
 
 void MainWindow::on_time_update_timeChanged(const QTime &time)
@@ -3281,28 +3349,35 @@ void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString&
     if (item == orphanButton) {
         QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), tr("Обычно, когда пакет становится сиротой, это означает, что он был установлен в качестве зависимости другого пакета, но этот пакет был удален, и больше нет других пакетов, которые бы зависели от данного. Удаление сирот из системы помогает поддерживать систему более чистой и оптимизированной. Вы действительно хотите удалить пакеты сироты?"), QMessageBox::Yes | QMessageBox::No);
         if (reply == QMessageBox::Yes) {
-            QString command = QString("bash -c 'yay -Rs $(yay -Qdtq)'");
-            QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << command);
+
+            // Формируем команду для удаления сиротских пакетов
+            QString remove = packageCommands.value(pkg).value("remove_explicit").join(" ");
+            QString removelist = packageCommands.value(pkg).value("query_depends").join(" ");
+            QString command = remove + " $(" + removelist + ")";
+
+            // Запускаем процесс с помощью sh -c и полной командой
+            QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "sh" << "-c" << command);
         }
         return;
     }
-    if (item == cacheButtonYay || item == cacheButtonPacman) {
+
+    if (item == cacheButtonHelper || item == cacheButtonPacman) {
         QString command;
         QMessageBox::StandardButton replymod = QMessageBox::No; // Инициализация значением по умолчанию
-        switch (yaycache) {
+        switch (helpercache) {
             case 0: {
                 replymod = QMessageBox::question(this, tr("Вопрос"), tr("При обновлении пакетов старые версии пакетов сохраняются в кэше, чтобы вы могли откатиться к предыдущим версиям, если это необходимо. Однако, если вы не планируете откатываться к предыдущим версиям пакетов, удаление кэша может помочь вам освободить дополнительное место на диске. Вы действительно хотите удалить кэш только неустановленных пакетов (можно изменить в настройках)?"), QMessageBox::Yes | QMessageBox::No);
-                command = (item == cacheButtonYay) ? "yay -Sc" : "sudo pacman -Sc";
+                command = (item == cacheButtonHelper) ? packageCommands.value(pkg).value("clean_cache").join(" ") : "sudo pacman -Sc";
                 break;
             }
             case 1: {
                 replymod = QMessageBox::question(this, tr("Вопрос"), tr("При обновлении пакетов старые версии пакетов сохраняются в кэше, чтобы вы могли откатиться к предыдущим версиям, если это необходимо. Однако, если вы не планируете откатываться к предыдущим версиям пакетов, удаление кэша может помочь вам освободить дополнительное место на диске. Вы действительно хотите удалить кэш пакетов всех пакетов (можно изменить в настройках)?"), QMessageBox::Yes | QMessageBox::No);
-                command = (item == cacheButtonYay) ? "yay -Scc" : "sudo pacman -Scc";
+                command = (item == cacheButtonHelper) ? packageCommands.value(pkg).value("clean_all_cache").join(" ") : "sudo pacman -Scc";
                 break;
             }
             case 2: {
-                if(item == cacheButtonYay)
-                    sendNotification(tr("Ошибка"), tr("Yay так не умеет, измените настройки удаления кэша"));
+                if(item == cacheButtonHelper)
+                    sendNotification(tr("Ошибка"), tr("Yay и Paru так не умеют, измените настройки удаления кэша"));
                 else
                 {
                     replymod = QMessageBox::question(this, tr("Вопрос"), tr("При обновлении пакетов старые версии пакетов сохраняются в кэше, чтобы вы могли откатиться к предыдущим версиям, если это необходимо. Однако, если вы не планируете откатываться к предыдущим версиям пакетов, удаление кэша может помочь вам освободить дополнительное место на диске. Вы действительно хотите удалить кэш всех пакетов кроме последних трех версий (можно изменить в настройках)?"), QMessageBox::Yes | QMessageBox::No);
@@ -3349,8 +3424,13 @@ void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString&
         scriptPath = scriptDir + itemName;
 
     QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), msg, QMessageBox::Yes | QMessageBox::No);
-    if (reply == QMessageBox::Yes)
-        QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "bash" << scriptPath << *lang);
+    if (reply == QMessageBox::Yes) {
+        if (hasUpdates && updinst == 1) {
+            sendNotification(tr("Внимание"), tr("Вначале требуется обновить систему до актуального состояния! Это поможет предотвратить конфликт зависимостей и избежать кучи других проблем!"));
+            return;
+        }
+        QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "bash" << scriptPath << *lang << helper);
+    }
 }
 
 void MainWindow::on_list_sh_itemDoubleClicked(QListWidgetItem *item) {
@@ -3416,5 +3496,72 @@ void MainWindow::openUrl(const QString& url)
         }
         else
             sendNotification(tr("Ошибка"), tr("Установите Firefox или выберите рабочий браузер в качестве основного в настройках системы!"));
+    }
+}
+
+// Функция для запроса аутентификации с помощью pkexec
+bool runPkexecCommand(const QString& command)
+{
+    QProcess process;
+    process.start("pkexec", QStringList() << "--disable-internal-agent" << "sh" << "-c" << command);
+    process.waitForFinished();
+
+    if (process.exitCode() == 0)
+        return true; // Успешно выполнена аутентификация
+
+    else
+    {
+        qWarning() << "Failed to run pkexec command:" << process.readAllStandardError();
+        return false; // Ошибка аутентификации
+    }
+}
+
+void MainWindow::on_push_pacman_clicked()
+{
+    QDialog* dialog = new QDialog(this);
+    dialog->setWindowTitle(tr("Pacman Repository Editor"));
+    dialog->setFixedSize(500, 600);
+
+    QVBoxLayout* layout = new QVBoxLayout(dialog);
+
+    QPlainTextEdit* editor = new QPlainTextEdit(dialog);
+
+    // Открываем и читаем содержимое файла /etc/pacman.conf
+    QFile pacmanConfFile("/etc/pacman.conf");
+    if (pacmanConfFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QTextStream in(&pacmanConfFile);
+        QString pacmanConfText = in.readAll();
+        editor->setPlainText(pacmanConfText);
+        pacmanConfFile.close();
+    }
+    else
+    {
+        sendNotification(tr("Ошибка"), tr("Не удалось открыть pacman.conf"));
+        return;
+    }
+
+    layout->addWidget(editor);
+
+    dialog->setLayout(layout);
+    dialog->setStyleSheet("QWidget{background-color:#2d2b79;} QLineEdit,QTextEdit{background-color:#21205b;padding:10px;border-radius:10px;} QLabel{color:#fff;font-size:10pt;}QPushButton{border-radius:10px;padding:5px 20px;background-color:#916ee4;color:#fff;}");
+
+    QPushButton* saveButton = new QPushButton(tr("Сохранить"), dialog);
+    layout->addWidget(saveButton);
+
+    connect(saveButton, &QPushButton::clicked, this, [=]() {
+        // Выполняем запрос аутентификации через pkexec перед сохранением
+        QString command = "sh -c 'cat > /etc/pacman.conf << EOF\n" + editor->toPlainText() + "\nEOF\n'";
+
+        if (runPkexecCommand(command))
+            dialog->accept();
+        else
+            sendNotification(tr("Ошибка"), tr("Не удалось выполнить аутентификацию"));
+
+    });
+
+    if (dialog->exec() == QDialog::Accepted)
+    {
+        // Здесь можно выполнить дополнительные действия после сохранения
     }
 }

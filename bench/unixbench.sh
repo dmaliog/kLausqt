@@ -11,14 +11,19 @@
 # Импорт файла main.sh
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
+helper="$2"
 
 # Проверяем наличие установленного пакета unixbench
-if ! yay -Q unixbench &>/dev/null; then
+if ! $helper -Q unixbench &>/dev/null; then
 
     # Предлагаем установить unixbench
-    read -p "${pkg} unixbench ${no_found}. ${instq} unixbench? (y/n): " choice
-    if [[ $choice == "y" || $choice == "Y" ]]; then
-        yay -S unixbench
+    read -p "${pkg} unixbench ${no_found}. ${instq} unixbench? (y/n): " answer
+    if [[ "$answer" == [yY] ]]; then
+        if [ "$helper" = "yay" ]; then
+            $helper -S unixbench
+        else
+            $helper -S unixbench --skipreview
+        fi
     else
         notify-send "${error}" "${noinstall}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
         exit 1

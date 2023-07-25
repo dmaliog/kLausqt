@@ -11,14 +11,19 @@
 # Импорт файла main.sh
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
+helper="$2"
 
 # Проверяем наличие установленного пакета hdparm
-if ! yay -Q hdparm &>/dev/null; then
+if ! $helper -Q hdparm &>/dev/null; then
 
 # Предлагаем установить hdparm
-    read -p "${pkg} hdparm ${no_found}. ${instq} hdparm? (y/n): " choice
-    if [[ $choice == "y" || $choice == "Y" ]]; then
-        yay -S hdparm
+    read -p "${pkg} hdparm ${no_found}. ${instq} hdparm? (y/n): " answer
+    if [[ "$answer" == [yY] ]]; then
+        if [ "$helper" = "yay" ]; then
+            $helper -S hdparm
+        else
+            $helper -S hdparm --skipreview
+        fi
     else
         notify-send "${error}" "${noinstall}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
         exit 1

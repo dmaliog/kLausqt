@@ -11,13 +11,18 @@
 # Импорт файла main.sh
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
+helper="$2"
 
-if ! yay -Q p7zip &>/dev/null; then
+if ! $helper -Q p7zip &>/dev/null; then
 
     # Предлагаем установить p7zip
-    read -p "${pkg} p7zip ${no_found}. ${instq} p7zip? (y/n): " choice
-    if [[ $choice == "y" || $choice == "Y" ]]; then
-        yay -S p7zip
+    read -p "${pkg} p7zip ${no_found}. ${instq} p7zip? (y/n): " answer
+    if [[ "$answer" == [yY] ]]; then
+        if [ "$helper" = "yay" ]; then
+            $helper -S p7zip
+        else
+            $helper -S p7zip --skipreview
+        fi
     else
         notify-send "${error}" "${noinstall}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
         exit 1

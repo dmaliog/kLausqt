@@ -20,7 +20,7 @@ username=$(whoami)
 if sudo [ -f /etc/sudoers.d/$username ]; then
   # если файл уже существует, то выводим сообщение с опцией "вернуть все"
   read -p "${sudo_ok}" answer
-  if [ "$answer" == "y" ]; then
+  if [[ "$answer" == [yY] ]]; then
     sudo rm /etc/sudoers.d/$username
     notify-send "${sudo}" "${removefile_ok}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
   else

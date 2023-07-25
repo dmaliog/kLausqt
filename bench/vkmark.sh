@@ -11,13 +11,18 @@
 # Импорт файла main.sh
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
+helper="$2"
 
-if ! yay -Q vkmark &>/dev/null; then
+if ! $helper -Q vkmark &>/dev/null; then
 
     # Предлагаем установить vkmark
-    read -p "${pkg} vkmark ${no_found}. ${instq} vkmark? (y/n): " choice
-    if [[ $choice == "y" || $choice == "Y" ]]; then
-        yay -S vkmark
+    read -p "${pkg} vkmark ${no_found}. ${instq} vkmark? (y/n): " answer
+    if [[ "$answer" == [yY] ]]; then
+        if [ "$helper" = "yay" ]; then
+            $helper -S vkmark
+        else
+            $helper -S vkmark --skipreview
+        fi
     else
         notify-send "${error}" "${noinstall}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
         exit 1

@@ -11,14 +11,19 @@
 # Импорт файла main.sh
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
+helper="$2"
 
 # Проверяем наличие установленного пакета gnome-disk-utility
-if ! yay -Q gnome-disk-utility &>/dev/null; then
+if ! $helper -Q gnome-disk-utility &>/dev/null; then
 
     # Предлагаем установить gnome-disk-utility
-    read -p "${pkg} gnome-disk-utility ${no_found}. ${instq} gnome-disk-utility? (y/n): " choice
-    if [[ $choice == "y" || $choice == "Y" ]]; then
-        yay -S gnome-disk-utility
+    read -p "${pkg} gnome-disk-utility ${no_found}. ${instq} gnome-disk-utility? (y/n): " answer
+    if [[ "$answer" == [yY] ]]; then
+        if [ "$helper" = "yay" ]; then
+            $helper -S gnome-disk-utility
+        else
+            $helper -S gnome-disk-utility --skipreview
+        fi
     else
         notify-send "${error}" "${noinstall}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
         exit 1

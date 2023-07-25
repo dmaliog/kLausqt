@@ -11,13 +11,18 @@
 # Импорт файла main.sh
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
+helper="$2"
 
-if ! yay -Q gputest &>/dev/null; then
+if ! $helper -Q gputest &>/dev/null; then
 
     # Предлагаем установить gputest
-    read -p "${pkg} gputest ${no_found}. ${instq} gputest? (y/n): " choice
-    if [[ $choice == "y" || $choice == "Y" ]]; then
-        yay -S gputest
+    read -p "${pkg} gputest ${no_found}. ${instq} gputest? (y/n): " answer
+    if [[ "$answer" == [yY] ]]; then
+        if [ "$helper" = "yay" ]; then
+            $helper -S gputest
+        else
+            $helper -S gputest --skipreview
+        fi
     else
         notify-send "${error}" "${noinstall}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
         exit 1

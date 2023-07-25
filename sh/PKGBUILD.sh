@@ -11,9 +11,10 @@
 # Импорт файла main.sh
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
+helper="$2"
 
-if [ -n "$2" ]; then
-    program_name="$2"
+if [ -n "$3" ]; then
+    program_name="$3"
 else
     read -p "${name_pkg}" program_name
 fi
@@ -23,7 +24,7 @@ if [ ! -d "$HOME/.config/kLaus/pkg/" ]; then
 fi
 cd "$HOME/.config/kLaus/pkg/"
 
-yay --getpkgbuild "$program_name"
+$helper --getpkgbuild "$program_name"
 
 # Путь к PKGBUILD файлу
 pkgbuild_path="$HOME/.config/kLaus/pkg/$program_name/PKGBUILD"
@@ -42,7 +43,7 @@ if [ -f "$pkgbuild_path" ]; then
 
     # Установка нового пакета
     read -p "${pkgbuild_newpkg}"
-    yay -U "$HOME/.config/kLaus/pkg/$program_name"/*.pkg.tar.zst
+    $helper -U "$HOME/.config/kLaus/pkg/$program_name"/*.pkg.tar.zst
 
 else
     notify-send "${pkgbuild}" "${pkgbuild_no}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000

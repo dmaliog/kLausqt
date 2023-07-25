@@ -11,13 +11,18 @@
 # Импорт файла main.sh
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
+helper="$2"
 
-if ! yay -Q basemark &>/dev/null; then
+if ! $helper -Q basemark &>/dev/null; then
 
     # Предлагаем установить basemark
-    read -p "${pkg} basemark ${no_found}. ${instq} basemark? (y/n): " choice
-    if [[ $choice == "y" || $choice == "Y" ]]; then
-        yay -S basemark
+    read -p "${pkg} basemark ${no_found}. ${instq} basemark? (y/n): " answer
+    if [[ "$answer" == [yY] ]]; then
+        if [ "$helper" = "yay" ]; then
+            $helper -S basemark
+        else
+            $helper -S basemark --skipreview
+        fi
     else
         notify-send "${error}" "${noinstall}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
         exit 1

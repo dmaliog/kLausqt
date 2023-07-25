@@ -11,13 +11,18 @@
 # Импорт файла main.sh
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
+helper="$2"
 
-if ! yay -Q gfxbench &>/dev/null; then
+if ! $helper -Q gfxbench &>/dev/null; then
 
     # Предлагаем установить gfxbench
-    read -p "${pkg} gfxbench ${no_found}. ${instq} gfxbench? (y/n): " choice
-    if [[ $choice == "y" || $choice == "Y" ]]; then
-        yay -S gfxbench
+    read -p "${pkg} gfxbench ${no_found}. ${instq} gfxbench? (y/n): " answer
+    if [[ "$answer" == [yY] ]]; then
+        if [ "$helper" = "yay" ]; then
+            $helper -S gfxbench
+        else
+            $helper -S gfxbench --skipreview
+        fi
     else
         notify-send "${error}" "${noinstall}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
         exit 1

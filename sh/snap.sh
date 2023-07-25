@@ -11,21 +11,26 @@
 # Импорт файла main.sh
 source "$HOME/.config/kLaus/other/main.sh"
 lang "$1"
+helper="$2"
 
 #!/bin/bash
 
 # Проверка наличия установленного пакета Snap
-if yay -Q snapd &>/dev/null; then
-    read -p "${pkg} Snapd ${found}. ${delq} Snapd & ${pkgs}? (y/n): " remove_snap
+if $helper -Q snapd &>/dev/null; then
+    read -p "${pkg} Snapd ${found}. ${delq} Snapd & ${pkgs}? (y/n): " answer
 
-    if [[ $remove_snap == "y" ]]; then
+    if [[ "$answer" == [yY] ]]; then
         # Удаление пакета Snap
-        yay -Rs snapd
+        $helper -Rs snapd
     fi
 
 else
     # Установка пакета Snap
-    yay -S snapd
+    if [ "$helper" = "yay" ]; then
+        $helper -S snapd
+    else
+        $helper -S snapd --skipreview
+    fi
 
     # Включение службы Snapd
     sudo systemctl enable snapd --now
