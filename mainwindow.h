@@ -8,6 +8,13 @@
 #include <QListWidgetItem>
 #include <QProcess>
 
+#include <QLineEdit>
+#include <QCheckBox>
+#include <QSpinBox>
+#include <QTextBrowser>
+#include <QPushButton>
+#include <QVBoxLayout>
+
 struct Terminal {
     QString binary;
     QString args;
@@ -171,7 +178,7 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
-    void onSnapProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void onSnapProcessFinished();
     void onCurrentProcessReadyRead();
 
     void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);

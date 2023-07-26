@@ -431,6 +431,9 @@ QTableWidget QHeaderView::section:first {
       <string>about:blank</string>
      </url>
     </property>
+    <property name="zoomFactor">
+     <double>1.000000000000000</double>
+    </property>
    </widget>
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
@@ -1159,9 +1162,9 @@ padding-right:55px;</string>
          </widget>
         </item>
         <item row="1" column="1" colspan="2">
-         <widget class="QComboBox" name="combo_pacman">
+         <widget class="QComboBox" name="combo_helper">
           <property name="enabled">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -1556,9 +1559,12 @@ border:0;</string>
        <rect>
         <x>20</x>
         <y>50</y>
-        <width>601</width>
-        <height>231</height>
+        <width>611</width>
+        <height>241</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
       </property>
       <property name="widgetResizable">
        <bool>true</bool>
@@ -1568,178 +1574,229 @@ border:0;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>589</width>
-         <height>219</height>
+         <width>599</width>
+         <height>229</height>
         </rect>
        </property>
-       <widget class="QWidget" name="layoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>50</x>
-          <y>130</y>
-          <width>481</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QLabel" name="label_grub">
-           <property name="font">
-            <font>
-             <pointsize>11</pointsize>
-            </font>
-           </property>
-           <property name="locale">
-            <locale language="Russian" country="Russia"/>
-           </property>
-           <property name="text">
-            <string>Ожидание загрузочного меню (секунды)</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::AutoText</enum>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-           </property>
-           <property name="margin">
-            <number>0</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="spin_grub">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>90</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="sizeIncrement">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="baseSize">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="contextMenuPolicy">
-            <enum>Qt::NoContextMenu</enum>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">padding: 0 10px 0 30px;
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="6" column="0" colspan="2">
+         <layout class="QHBoxLayout" name="horizontal_grubbutton">
+          <item>
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="push_grub">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>35</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border-radius:10px;padding:5px 20px;background-color:#916ee4;color:#fff;</string>
+            </property>
+            <property name="text">
+             <string>Применить</string>
+            </property>
+            <property name="icon">
+             <iconset resource="klausres.qrc">
+              <normaloff>:/img/27.png</normaloff>:/img/27.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="autoRepeat">
+             <bool>false</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="5" column="0" colspan="2">
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_grub">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+           </font>
+          </property>
+          <property name="locale">
+           <locale language="Russian" country="Russia"/>
+          </property>
+          <property name="text">
+           <string>Ожидание загрузочного меню (секунды)</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::AutoText</enum>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
+          <property name="margin">
+           <number>10</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_grub_3">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+           </font>
+          </property>
+          <property name="locale">
+           <locale language="Russian" country="Russia"/>
+          </property>
+          <property name="text">
+           <string>Модули ядра при старте системы</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::AutoText</enum>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
+          <property name="margin">
+           <number>4</number>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QSpinBox" name="spin_grub">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>80</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="sizeIncrement">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="baseSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="contextMenuPolicy">
+           <enum>Qt::NoContextMenu</enum>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">padding: 0 10px 0 30px;
 background-image: url(:/img/m6.png);
 background-repeat: no-repeat;
 background-position: left center;</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-           </property>
-           <property name="correctionMode">
-            <enum>QAbstractSpinBox::CorrectToPreviousValue</enum>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QLineEdit" name="line_grub">
-        <property name="geometry">
-         <rect>
-          <x>30</x>
-          <y>60</y>
-          <width>521</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="contextMenuPolicy">
-         <enum>Qt::NoContextMenu</enum>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">border-radius:13px;
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="correctionMode">
+           <enum>QAbstractSpinBox::CorrectToPreviousValue</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="2">
+         <widget class="QLineEdit" name="line_grub">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="contextMenuPolicy">
+           <enum>Qt::NoContextMenu</enum>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border-radius:13px;
 padding: 0 10px 0 35px;
 background-image: url(:/img/m5.png);
 background-repeat: no-repeat;
 background-position: left center;</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_grub_3">
-        <property name="geometry">
-         <rect>
-          <x>40</x>
-          <y>20</y>
-          <width>251</width>
-          <height>39</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>11</pointsize>
-         </font>
-        </property>
-        <property name="locale">
-         <locale language="Russian" country="Russia"/>
-        </property>
-        <property name="text">
-         <string>Модули ядра при старте системы</string>
-        </property>
-        <property name="textFormat">
-         <enum>Qt::AutoText</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-        <property name="margin">
-         <number>0</number>
-        </property>
-       </widget>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0" colspan="2">
+         <spacer name="verticalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </widget>
-     </widget>
-     <widget class="QPushButton" name="push_grub">
-      <property name="geometry">
-       <rect>
-        <x>480</x>
-        <y>260</y>
-        <width>121</width>
-        <height>35</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background:#24242c;</string>
-      </property>
-      <property name="text">
-       <string>Применить</string>
-      </property>
-      <property name="icon">
-       <iconset resource="klausres.qrc">
-        <normaloff>:/img/27.png</normaloff>:/img/27.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>20</width>
-        <height>20</height>
-       </size>
-      </property>
-      <property name="autoRepeat">
-       <bool>false</bool>
-      </property>
-      <property name="autoExclusive">
-       <bool>false</bool>
-      </property>
      </widget>
     </widget>
    </widget>
@@ -3097,7 +3154,7 @@ background-position: left center;</string>
         <x>20</x>
         <y>40</y>
         <width>301</width>
-        <height>381</height>
+        <height>391</height>
        </rect>
       </property>
       <property name="font">
@@ -3122,7 +3179,7 @@ background-position: left center;</string>
         <x>351</x>
         <y>40</y>
         <width>301</width>
-        <height>381</height>
+        <height>391</height>
        </rect>
       </property>
       <property name="font">
@@ -3172,7 +3229,7 @@ background-position: left center;</string>
       <property name="geometry">
        <rect>
         <x>607</x>
-        <y>400</y>
+        <y>394</y>
         <width>30</width>
         <height>30</height>
        </rect>
@@ -3333,6 +3390,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- ничего не нажимаете (внутренний поиск)&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- нажимаете Enter (новый поиск)&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="openLinks">
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QLabel" name="label_miniload">
@@ -3535,6 +3595,30 @@ QTableWidget QHeaderView::section:first {
      </property>
     </item>
    </widget>
+   <widget class="QPushButton" name="push_pacman">
+    <property name="geometry">
+     <rect>
+      <x>598</x>
+      <y>4</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">    border-radius: 15px;
+	border:0;
+    background-color: #242424;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="klausres.qrc">
+      <normaloff>:/img/27.png</normaloff>:/img/27.png</iconset>
+    </property>
+   </widget>
+   <zorder>text_details</zorder>
+   <zorder>table_app</zorder>
    <zorder>scroll_site</zorder>
    <zorder>webEngineView</zorder>
    <zorder>list_journal</zorder>
@@ -3543,13 +3627,12 @@ QTableWidget QHeaderView::section:first {
    <zorder>label1</zorder>
    <zorder>combo_bench</zorder>
    <zorder>list_bench</zorder>
-   <zorder>scroll_repair</zorder>
-   <zorder>table_app</zorder>
    <zorder>push_reload</zorder>
-   <zorder>text_details</zorder>
    <zorder>combo_repo</zorder>
-   <zorder>tabWidget</zorder>
    <zorder>label_miniload</zorder>
+   <zorder>scroll_repair</zorder>
+   <zorder>tabWidget</zorder>
+   <zorder>push_pacman</zorder>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="enabled">

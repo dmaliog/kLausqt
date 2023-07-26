@@ -14,7 +14,7 @@
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "7.7";
+QString currentVersion = "7.8";
 
 //автоматически управляют памятью или не требуют
 int pkg = 0; //пакетный менеджер 0-yay / 1-paru
@@ -1170,8 +1170,8 @@ void MainWindow::showTableContextMenu(const QPoint& pos)
     } else if (page == 4) {
         contextMenu.addAction(&action5);
         contextMenu.addAction(&action6);
+        contextMenu.addAction(&action3);
     }
-    contextMenu.addAction(&action3);
     contextMenu.addAction(&action4);
 
     contextMenu.exec(tableWidget->viewport()->mapToGlobal(pos));
@@ -2661,7 +2661,7 @@ void MainWindow::handleServerResponse(const QString& reply)
     }
 }
 
-void MainWindow::onSnapProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
+void MainWindow::onSnapProcessFinished()
 {
     QByteArray snapOutput = snapProcess->readAllStandardOutput();
     QString snapOutputString = QString::fromUtf8(snapOutput).trimmed();
