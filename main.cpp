@@ -103,21 +103,6 @@ int main(int argc, char *argv[])
 
     a.setWindowIcon(QIcon(":/img/2.png"));
 
-    const char* semaphoreName = "kLausSemaphore";
-
-    QSharedMemory semaphore(semaphoreName);
-
-    // Попытка удаления объекта QSharedMemory с заданным именем
-    if (semaphore.attach()) {
-        semaphore.detach();
-    }
-
-    // Создаем семафор, если он не существует
-    if (!semaphore.create(1)) {
-        w.sendNotification(QObject::tr("Внимание"), QObject::tr("Приложение уже запущено!"));
-        return 1;
-    }
-
     bool pacmanInstalled = isPackageInstalled("pacman");
 
     if (!pacmanInstalled) {

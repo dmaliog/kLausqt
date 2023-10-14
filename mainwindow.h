@@ -8,13 +8,6 @@
 #include <QListWidgetItem>
 #include <QProcess>
 
-#include <QLineEdit>
-#include <QCheckBox>
-#include <QSpinBox>
-#include <QTextBrowser>
-#include <QPushButton>
-#include <QVBoxLayout>
-
 struct Terminal {
     QString binary;
     QString args;

@@ -14,7 +14,7 @@
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
-QString currentVersion = "7.8";
+QString currentVersion = "7.9";
 
 //автоматически управляют памятью или не требуют
 int pkg = 0; //пакетный менеджер 0-yay / 1-paru
