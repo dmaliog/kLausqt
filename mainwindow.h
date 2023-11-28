@@ -1,12 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "qtextbrowser.h"
 #include <QLabel>
 #include <QWebEngineView>
 #include <QSystemTrayIcon>
 #include <QMainWindow>
 #include <QListWidgetItem>
 #include <QProcess>
+#include <QTableWidget>
 
 struct Terminal {
     QString binary;
@@ -33,6 +35,9 @@ public:
     QColor generateRandomColor();
 
 private:
+    QWebEngineView *webEngineView2;
+
+
     QSharedPointer<QProcess> snapProcess;
     QSharedPointer<QProcess> currentProcess;
 
@@ -109,10 +114,11 @@ private:
                                          ":/journals/native-pkg.sh",
                                          ":/journals/foreign-pkg.sh",
                                          ":/journals/xorg-log.sh",
-                                         ":/journals/grub-cfg.sh",
-                                         ":/journals/fstab.sh",
-                                         ":/journals/pacman.sh",
                                          ":/journals/top-pkg.sh"};
+
+    QStringList cfgResourcePaths = {":/cfg/grub-cfg.sh",
+                                         ":/cfg/fstab.sh",
+                                         ":/cfg/pacman.sh"};
 
     QStringList benchResourcePaths = {":/bench/unixbench.sh",
                                       ":/bench/interbench.sh",
@@ -152,6 +158,8 @@ protected: // события сворачивания окна
     void closeEvent(QCloseEvent *event) override; // объявление метода closeEvent()
 
 public slots:
+
+
     void on_action_1_triggered();
     void on_action_2_triggered();
     void on_action_3_triggered();
@@ -161,7 +169,6 @@ public slots:
     void on_action_7_triggered();
     void on_action_8_triggered();
     void on_action_9_triggered();
-    void on_action_10_triggered();
     void on_action_11_triggered();
     void on_action_12_triggered();
     void on_action_17_triggered();
@@ -171,6 +178,11 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
+
+    void handleListItemClicked(QListWidgetItem *item, const QString& scriptDir);
+
+    void processTableItem(int row, QTableWidget* tableWidget, QTextBrowser* detailsWidget);
+
     void onSnapProcessFinished();
     void onCurrentProcessReadyRead();
 
@@ -185,7 +197,7 @@ private slots:
     void setupTableContextMenu();
     void showTableContextMenu(const QPoint& pos);
 
-    void miniAnimation(int x, int y, bool visible);
+    void miniAnimation(bool visible, int index);
 
     QIcon getPackageIcon(const QString& packageName);
     QString getScriptContent(const QString& filePath);
@@ -249,6 +261,7 @@ private slots:
     void on_list_bench_itemDoubleClicked(QListWidgetItem *item);
     void on_list_sh_itemDoubleClicked(QListWidgetItem *item);
     void on_list_journal_itemDoubleClicked(QListWidgetItem *item);
+    void on_list_cfg_itemDoubleClicked(QListWidgetItem *item);
     void on_list_clear_itemDoubleClicked(QListWidgetItem *item);
 
     void on_line_tea_textChanged(const QString &arg1);
@@ -285,6 +298,11 @@ private slots:
     void on_push_repair_clicked();
     void on_action_snap_triggered();
     void on_push_pacman_clicked();
+    void on_list_journal_itemClicked(QListWidgetItem *item);
+    void on_list_cfg_itemClicked(QListWidgetItem *item);
+    void on_list_sh_itemClicked(QListWidgetItem *item);
+    void on_list_bench_itemClicked(QListWidgetItem *item);
+    void on_push_vk_clicked();
 };
 
 #endif // MAINWINDOW_H
