@@ -1,0 +1,6 @@
+{"utilities-terminal_su/Терминалы"}
+{"system-file-manager/Файлы"}
+{"applications-development/Разработка"}
+{"autokey/Ввод текста"}
+{"gnome-disks/Диски"}
+{"gnome-system/Система"}

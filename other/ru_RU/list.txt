@@ -1,0 +1,8 @@
+{"populaty/Популярные пакеты"}
+{"applications-webbrowsers/Интернет"}
+{"applications-multimedia/Мультимедиа"}
+{"applications-utilities/Утилиты"}
+{"applications-office/Документы и текст"}
+{"security-high/Безопасность"}
+{"applications-games/Игры"}
+{"distributor-logo-android/Прошивка телефона"}

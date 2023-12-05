@@ -1,0 +1,13 @@
+{"accessories-text-editor/Текстовые редакторы"}
+{"applications-office/Офис"}
+{"typora/Языки разметки"}
+{"converseen/Конвертеры документов"}
+{"referencer/Менеджеры библиографических ссылок"}
+{"accessories-ebook-reader/Читатели и просмотрщики"}
+{"accessories-dictionary/Менеджеры документов"}
+{"yast-scanner/Сканирование"}
+{"accessories-character-map/Распознавание текста"}
+{"accessories-notes/Заметки"}
+{"trelby/Специальные среды записи"}
+{"cs-language/Язык"}
+{"com.github.mubitosh.qrshare/Генераторы и считыватели штрих-кодов"}

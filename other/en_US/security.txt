@@ -1,0 +1,10 @@
+{"nmap/Network security"}
+{"cs-firewall/Firewall management"}
+{"zaproxy/Threat and vulnerability detection"}
+{"com.yuenhoe.filedrawer/File protection"}
+{"clamav/Malware protection"}
+{"xscreensaver/Lock screen"}
+{"org.gnome.Passbook/Password audit"}
+{"keepass/Password managers"}
+{"gnupg/Cryptography"}
+{"yast-sudo/Privilege escalation"}

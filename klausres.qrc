@@ -84,11 +84,8 @@
         <file>lang/kLaus_ru.qm</file>
         <file>loading.browser.js</file>
         <file>media/message.wav</file>
-        <file>other/list.txt</file>
         <file>other/main.sh</file>
         <file>other/notify.png</file>
-        <file>other/translations_en_US.txt</file>
-        <file>other/translations_ru_RU.txt</file>
         <file>sh/1c.sh</file>
         <file>sh/PKGBUILD.sh</file>
         <file>sh/imgneofetch.sh</file>
@@ -148,12 +145,82 @@
         <file>sh/snap.sh</file>
         <file>img/snap_mini.png</file>
         <file>img/reload.png</file>
-        <file>other/snap.txt</file>
         <file>img/pacman.png</file>
         <file>img/miniload.gif</file>
         <file>cfg/pacman.sh</file>
         <file>cfg/grub-cfg.sh</file>
         <file>cfg/fstab.sh</file>
         <file>img/qr_linux2.png</file>
+        <file>img/54.png</file>
+        <file>img/55.png</file>
+        <file>img/nvidia.png</file>
+        <file>img/amd.png</file>
+        <file>img/intel.png</file>
+        <file>img/xiaomi.png</file>
+        <file>img/populaty.png</file>
+        <file>img/server.gif</file>
+        <file>other/ru_RU/utility.txt</file>
+        <file>other/ru_RU/translations.txt</file>
+        <file>other/ru_RU/security.txt</file>
+        <file>other/ru_RU/office.txt</file>
+        <file>other/ru_RU/net.txt</file>
+        <file>other/ru_RU/multimedia.txt</file>
+        <file>other/ru_RU/list.txt</file>
+        <file>other/en_US/translations.txt</file>
+        <file>other/populaty.txt</file>
+        <file>other/phone.txt</file>
+        <file>other/game.txt</file>
+        <file>other/en_US/utility.txt</file>
+        <file>other/en_US/security.txt</file>
+        <file>other/en_US/office.txt</file>
+        <file>other/en_US/net.txt</file>
+        <file>other/en_US/multimedia.txt</file>
+        <file>other/en_US/list.txt</file>
+        <file>other/network.txt</file>
+        <file>other/browsers.txt</file>
+        <file>other/servers.txt</file>
+        <file>other/communication.txt</file>
+        <file>other/codecs.txt</file>
+        <file>other/images.txt</file>
+        <file>other/video.txt</file>
+        <file>other/audio.txt</file>
+        <file>other/metadata.txt</file>
+        <file>other/terminals.txt</file>
+        <file>other/files.txt</file>
+        <file>other/development.txt</file>
+        <file>other/disks.txt</file>
+        <file>other/system.txt</file>
+        <file>other/texteditors.txt</file>
+        <file>other/office.txt</file>
+        <file>other/notes.txt</file>
+        <file>other/language.txt</file>
+        <file>other/barcode-generators-and-readers.txt</file>
+        <file>other/remote-desktop.txt</file>
+        <file>other/reader-sand-viewers.txt</file>
+        <file>other/personal-video-recorders.txt</file>
+        <file>other/osr-software.txt</file>
+        <file>other/optical-disc-burning.txt</file>
+        <file>other/news-and-rss.txt</file>
+        <file>other/mobile-device-managers.txt</file>
+        <file>other/media-servers.txt</file>
+        <file>other/markup-languages.txt</file>
+        <file>other/file-sharing.txt</file>
+        <file>other/document-managers.txt</file>
+        <file>other/document-converters.txt</file>
+        <file>other/coll-managers.txt</file>
+        <file>other/bibliographic-reference-manager.txt</file>
+        <file>other/text-input.txt</file>
+        <file>other/special-writing-environments.txt</file>
+        <file>other/scanning-software.txt</file>
+        <file>other/network-security.txt</file>
+        <file>other/screen-lockers.txt</file>
+        <file>other/privilege-elevation.txt</file>
+        <file>other/password-managers.txt</file>
+        <file>other/password-auditing.txt</file>
+        <file>other/firewall-management.txt</file>
+        <file>other/file-security.txt</file>
+        <file>other/cryptography.txt</file>
+        <file>other/anti-malware.txt</file>
+        <file>other/threat-and-vulnerability-detection.txt</file>
     </qresource>
 </RCC>

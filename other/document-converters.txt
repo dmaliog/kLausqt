@@ -1,0 +1,8 @@
+{"antiword"}
+{"catdoc"}
+{"docx2txt"}
+{"htmldoc"}
+{"mupdf-tools"}
+{"pandoc-cli"}
+{"unoconv"}
+{"unrtf"}

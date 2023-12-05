@@ -1,0 +1,7 @@
+{"xiaomi/xiaomitool-v2"}
+{"xiaomi/spflashtool-bin"}
+{"xiaomi/spflashtool-standalone"}
+{"xiaomi/spflashtool-bin"}
+{"xiaomi/xiaomi-adb-fastboot-tools"}
+{"xiaomi/xiaomi-adb-fastboot-tools-bin"}
+{"xiaomi/android-tools"}

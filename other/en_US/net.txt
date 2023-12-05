@@ -1,0 +1,7 @@
+{"cs-network/Network connection"}
+{"internet-web-browser/Web browsers"}
+{"yast-tftp-server/Web servers"}
+{"gnome-user-share/File sharing"}
+{"wechat/Communication"}
+{"rss/News, RSS and blogs"}
+{"preferences-desktop-remote-desktop/Remote desktop"}

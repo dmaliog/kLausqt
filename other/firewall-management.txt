@@ -1,0 +1,16 @@
+{"firewalld"}
+{"nft-blackhole"}
+{"ufw"}
+{"arno-iptables-firewall"}
+{"ferm"}
+{"firehol"}
+{"firetable"}
+{"firewalld"}
+{"shorewall"}
+{"pgl"}
+{"vuurmuur"}
+{"fwbuilder"}
+{"firewalld"}
+{"gufw"}
+{"pgl"}
+{"portmaster-stub-bin"}

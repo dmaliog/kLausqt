@@ -1,0 +1,10 @@
+{"a2ln"}
+{"android-file-transfer"}
+{"gmtp"}
+{"gnokii"}
+{"gnome-phone-manager"}
+{"gtkpod"}
+{"kdeconnect"}
+{"modem-manager-gui"}
+{"ttwatch-git"}
+{"wammu"}

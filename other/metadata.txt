@@ -1,0 +1,15 @@
+{"coreinfo"}
+{"dvanalyzer"}
+{"dvanalyzer-gui"}
+{"perl-image-exiftool"}
+{"exifcleaner-bin"}
+{"exiv2"}
+{"ffmpeg"}
+{"jexiftoolgui"}
+{"jhead"}
+{"mat2"}
+{"mediaconch"}
+{"mediaconch-gui"}
+{"mediainfo"}
+{"mediainfo-gui"}
+{"libsndfile"}

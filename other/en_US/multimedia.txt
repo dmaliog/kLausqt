@@ -1,0 +1,10 @@
+{"mx-codecs/Codecs"}
+{"multimedia-photo-viewer/Image"}
+{"audio-player/Audio"}
+{"video-player/Video"}
+{"tellico/Collection managers"}
+{"org.kde.plasma.mediacontroller/Media servers"}
+{"mediainfo/Metadata"}
+{"android-sdk/Mobile device managers"}
+{"disk-burner/Burning optical discs"}
+{"org.gnome.gitlab.YaLTeR.VideoTrimmer/Personal video recorders"}

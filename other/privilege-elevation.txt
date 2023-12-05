@@ -1,0 +1,5 @@
+{"opendoas"}
+{"polkit"}
+{"polkit-fakesudo"}
+{"util-linux"}
+{"sudo"}

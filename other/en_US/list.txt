@@ -1,0 +1,8 @@
+{"populaty/Popular packages"}
+{"applications-webbrowsers/Internet"}
+{"applications-multimedia/Multimedia"}
+{"applications-utilities/Utilities"}
+{"applications-office/Documents and text"}
+{"security-high/Security"}
+{"applications-games/Games"}
+{"distributor-logo-android/Phone firmware"}

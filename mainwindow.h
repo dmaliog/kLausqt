@@ -35,6 +35,8 @@ public:
     QColor generateRandomColor();
 
 private:
+    QMap<QString, QString> appIcons;
+
     QWebEngineView *webEngineView2;
 
 
@@ -44,6 +46,7 @@ private:
     QTime timeupdate;
     QTime timetea;
     QTime timework;
+    QTime timeout;
 
     bool errorShown = false;
     bool hasUpdates = false;
@@ -158,7 +161,8 @@ protected: // события сворачивания окна
     void closeEvent(QCloseEvent *event) override; // объявление метода closeEvent()
 
 public slots:
-
+    void setCursorAndScrollToItem(const QString& itemName);
+    void onSearchTimeout();
 
     void on_action_1_triggered();
     void on_action_2_triggered();
@@ -178,7 +182,6 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
-
     void handleListItemClicked(QListWidgetItem *item, const QString& scriptDir);
 
     void processTableItem(int row, QTableWidget* tableWidget, QTextBrowser* detailsWidget);
@@ -192,7 +195,7 @@ private slots:
 
     void createSearchBar();
     void searchTextChanged(const QString& searchText);
-    void search();
+    void search(const QString& searchText);
 
     void setupTableContextMenu();
     void showTableContextMenu(const QPoint& pos);
@@ -210,7 +213,7 @@ private slots:
     void loadSound(int soundIndex);
     void loadSettings();
     void loadContentInstall();
-    void loadContent();
+    void loadContent(int value, bool valuepage);
     void loadSystemInfo();
     void loadingListWidget();
     void loadFolders();
@@ -242,16 +245,17 @@ private slots:
     void on_combo_mainpage_currentIndexChanged(int index);
     void on_combo_animload_currentIndexChanged(int index);
     void on_combo_cache_currentIndexChanged(int index);
-    void on_combo_host_currentIndexChanged(int index);
     void on_combo_lang_currentIndexChanged(int index);
     void on_combo_repo_currentIndexChanged(int index);
     void on_combo_helper_currentIndexChanged(int index);
     void on_combo_bench_currentIndexChanged(int index);
 
-    void on_check_repair_stateChanged();
-    void on_check_updateinstall_stateChanged();
-    void on_check_trayon_stateChanged();
-    void on_check_animload_stateChanged();
+    void on_check_repair_stateChanged(int arg1);
+    void on_check_updateinstall_stateChanged(int arg1);
+    void on_check_trayon_stateChanged(int arg1);
+    void on_check_animload_stateChanged(int arg1);
+    void on_check_autostart_stateChanged(int arg1);
+
 
     void onTableAurCellClicked(int row);
 
@@ -270,15 +274,12 @@ private slots:
     void on_time_tea_timeChanged(const QTime &time);
     void on_time_work_timeChanged(const QTime &time);
     void on_time_update_timeChanged(const QTime &time);
+    void on_time_timeout_timeChanged(const QTime &time);
 
-    void on_action_stop_triggered();
-    void on_action_restart_triggered();
-    void on_action_catalog_triggered();
     void on_action_bench_triggered();
     void on_action_system_triggered();
     void on_action_repair_triggered();
     void on_action_timer_triggered();
-    void on_action_host_triggered();
     void on_action_19_triggered();
     void on_action_addsh_triggered();
     void on_action_rmsh_triggered();
@@ -289,12 +290,12 @@ private slots:
     void on_action_34_triggered();
     void on_action_35_triggered();
     void on_action_13_triggered();
+    void on_action_host_triggered();
+    void on_action_restart_triggered();
+    void on_action_stop_triggered();
+    void on_action_catalog_triggered();
 
-    void on_push_server_clicked();
-    void on_push_conf_clicked();
-    void on_push_php_clicked();
     void on_push_grub_clicked();
-    void on_push_site_clicked();
     void on_push_repair_clicked();
     void on_action_snap_triggered();
     void on_push_pacman_clicked();
@@ -303,6 +304,8 @@ private slots:
     void on_list_sh_itemClicked(QListWidgetItem *item);
     void on_list_bench_itemClicked(QListWidgetItem *item);
     void on_push_vk_clicked();
+    void on_push_kde_clicked();
+    void on_action_driver_triggered();
 };
 
 #endif // MAINWINDOW_H

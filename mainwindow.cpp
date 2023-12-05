@@ -15,7 +15,7 @@ QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
 
-QString currentVersion = "8.0";
+QString currentVersion = "8.1";
 
 //автоматически управляют памятью или не требуют
 int pkg = 0; //пакетный менеджер 0-yay / 1-paru
@@ -23,15 +23,17 @@ int container = 2; //контейнеры: 2-snap
 int page = 0; // какая страница используется
 int animloadpage = 0;
 int trayon = 0; // закрывать без трея
+int autostart = 0; //автостарт
 int repair = 0; // создавать бэкап при удалении или нет
 int animload = 0; // анимация загрузки
 int updinst = 0; //проверять систему перед установкой пакетов или нет
 int volumenotify = 0; // громкость уведомлений
 int mainpage = 0; // главная страница
 int helpercache = 0; // кэш
-int host = 0;
 int benchlist = 0; //бенчлист
 int numPackages = 0;
+int list = 0;
+bool loadpage = true;
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -183,6 +185,7 @@ void MainWindow::on_action_9_triggered()
     ui->action_27->setVisible(true);
     ui->action_bench->setVisible(true);
     ui->action_repair->setVisible(true);
+    ui->action_system->setVisible(true);
 
     on_action_27_triggered();
     showLoadingAnimationMini(false);
@@ -191,13 +194,16 @@ void MainWindow::on_action_9_triggered()
 void MainWindow::on_action_3_triggered()
 {
     showLoadingAnimationMini(false);
-    showLoadingAnimation(true);
     mrpropper(6);
+    showLoadingAnimation(true);
     ui->label1->hide();
     ui->action_31->setVisible(true);
     ui->action_32->setVisible(true);
     ui->action_33->setVisible(true);
     ui->action_35->setVisible(true);
+
+    searchLineEdit->setPlaceholderText(tr("Введите URL адрес..."));
+    searchLineEdit->setFixedWidth(1000);
 
     if (*lang == "en_US")
         webEngineView2->setUrl(QUrl("https://wiki.archlinux.org/title/General_recommendations"));
@@ -230,7 +236,8 @@ void MainWindow::on_action_8_triggered()
         QString output = QString::fromUtf8(process->readAllStandardOutput());
         if (!output.contains("ocs-url")) {
 
-            on_action_2_triggered();
+            ui->action_2->trigger();
+
             searchLineEdit->setText("ocs-url");
 
             QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
@@ -239,13 +246,18 @@ void MainWindow::on_action_8_triggered()
             return;
         }
     }
-    showLoadingAnimation(true);
+
     mrpropper(7);
+    showLoadingAnimation(true);
     ui->label1->hide();
     ui->action_31->setVisible(true);
     ui->action_32->setVisible(true);
     ui->action_33->setVisible(true);
     ui->action_35->setVisible(true);
+
+    searchLineEdit->setPlaceholderText(tr("Введите URL адрес..."));
+    searchLineEdit->setFixedWidth(1000);
+
 
     if (*currentDesktop == "KDE")
         webEngineView2->setUrl(QUrl("https://store.kde.org/browse/"));
@@ -265,6 +277,7 @@ void MainWindow::on_action_8_triggered()
         sendNotification(tr("Ошибка"), tr("Для вашего окружения тем не найдено!"));
         return;
     }
+
     showLoadingAnimationMini(false);
 }
 
@@ -274,7 +287,6 @@ void MainWindow::on_action_12_triggered()
     ui->label1->setText(tr("Настройки приложения"));
     ui->action_28->setVisible(true);
     ui->action_timer->setVisible(true);
-    ui->action_system->setVisible(true);
 
     ui->tabWidget->setCurrentIndex(7);
     showLoadingAnimationMini(false);
@@ -283,99 +295,85 @@ void MainWindow::on_action_12_triggered()
 void MainWindow::on_action_host_triggered()
 {
     if (page == 10) return;
+
+    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+
+    process->start(packageCommands.value(pkg).value("query").at(0), QStringList() << packageCommands.value(pkg).value("query").at(1) << "apache");
+
+    if (process->waitForFinished()) {
+        QString output = QString::fromUtf8(process->readAllStandardOutput());
+        if (!output.contains("apache")) {
+
+            ui->action_2->trigger();
+
+            searchLineEdit->setText("apache");
+
+            QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
+            QCoreApplication::postEvent(searchLineEdit.data(), event);
+
+            sendNotification(tr("Ошибка"), tr("Установите пакет apache для управления веб-сервером!"));
+            return;
+        }
+    }
+
+
+    showLoadingAnimationMini(false);
+
     mrpropper(10);
+    showLoadingAnimation(true);
     ui->label1->setText(tr("Веб-сервер"));
     ui->action_5->setVisible(true);
     ui->action_restart->setVisible(true);
     ui->action_stop->setVisible(true);
     ui->action_catalog->setVisible(true);
 
-    ui->tabWidget->setCurrentIndex(3);
+    searchLineEdit->setPlaceholderText(tr("Введите URL адрес..."));
+    searchLineEdit->setFixedWidth(1000);
+
+    webEngineView2->setUrl(QUrl("http://localhost"));
+
     showLoadingAnimationMini(false);
 }
 
-//11-12 page заняты!
+//11-13 свободны
+
+void MainWindow::on_action_driver_triggered()
+{
+    mrpropper(14);
+    ui->label1->setText(tr("Переключение драйвера GPU"));
+    ui->action_nvidia->setVisible(true);
+    ui->action_amd->setVisible(true);
+    ui->action_intel->setVisible(true);
+    ui->tabWidget->setCurrentIndex(12);
+    showLoadingAnimationMini(false);
+}
 
 //---#####################################################################################################################################################
 //--################################################################## БЫСТРЫЕ ФУНКЦИИ ##################################################################
 //-#####################################################################################################################################################
-void MainWindow::on_push_server_clicked()
-{
-    if(host == 1)
-    {
-        QSharedPointer<QProcess> httpd = QSharedPointer<QProcess>::create();
-        httpd->start("sh", QStringList() << "-c" << "httpd -v");
-        httpd->waitForFinished(-1);
-        QString output = QString::fromUtf8(httpd->readAllStandardOutput()).trimmed();
-        sendNotification(tr("Информация"), output);
-    } else
-        sendNotification(tr("Ошибка"), tr("Сервер не выбран!"));
-}
-
-void MainWindow::on_push_php_clicked()
-{
-    QSharedPointer<QProcess> php = QSharedPointer<QProcess>::create();
-    php->start("sh", QStringList() << "-c" << "php -v");
-    php->waitForFinished(-1);
-    QString output = QString::fromUtf8(php->readAllStandardOutput()).trimmed();
-    sendNotification(tr("Информация"), output);
-}
-
 void MainWindow::on_action_restart_triggered()
 {
-    if(host == 1)
-    {
-        QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create();
-        httpProcess->start("pkexec", QStringList() << "sudo" << "systemctl" << "restart" << "httpd");
-        httpProcess->closeWriteChannel();
-        httpProcess->waitForFinished();
-    }
-    else if(host == 2)
-    {
-        QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create();
-        httpProcess->start("pkexec", QStringList() << "sudo" << "systemctl" << "restart" << "xampp.service");
-        httpProcess->closeWriteChannel();
-        httpProcess->waitForFinished();
-    }
-    else
-        sendNotification(tr("Ошибка"), tr("Сервер не выбран!"));
+    QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create();
+    httpProcess->start("pkexec", QStringList() << "sudo" << "systemctl" << "restart" << "httpd");
+    httpProcess->closeWriteChannel();
+    httpProcess->waitForFinished();
+
 }
 
 void MainWindow::on_action_stop_triggered()
 {
-    if (host == 1)
-    {
-        QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create();
-        httpProcess->start("pkexec", QStringList() << "sudo" << "systemctl" << "stop" << "httpd");
-        httpProcess->closeWriteChannel();
-        httpProcess->waitForFinished();
-    }
-    else if(host == 2)
-    {
-        QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create();
-        httpProcess->start("pkexec", QStringList() << "sudo" << "systemctl" << "stop" << "xampp.service");
-        httpProcess->closeWriteChannel();
-        httpProcess->waitForFinished();
-    }
-    else
-        sendNotification(tr("Ошибка"), tr("Сервер не выбран!"));
+    QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create();
+    httpProcess->start("pkexec", QStringList() << "sudo" << "systemctl" << "stop" << "httpd");
+    httpProcess->closeWriteChannel();
+    httpProcess->waitForFinished();
+
 }
 
 void MainWindow::on_action_catalog_triggered()
 {
-    if(host == 1)
-        QDesktopServices::openUrl(QUrl::fromLocalFile("/srv/http/"));
-    else
-        sendNotification(tr("Ошибка"), tr("Сервер не выбран!"));
+    QDesktopServices::openUrl(QUrl::fromLocalFile("/srv/http/"));
 }
 
-void MainWindow::on_push_conf_clicked()
-{
-    if(host == 1)
-        QDesktopServices::openUrl(QUrl::fromLocalFile("/etc/httpd/conf/httpd.conf"));
-    else
-        sendNotification(tr("Ошибка"), tr("Сервер не выбран!"));
-}
 
 void MainWindow::on_push_repair_clicked()
 {
@@ -400,8 +398,12 @@ void MainWindow::openDirectory(const QString &directoryPath)
 
 void MainWindow::on_action_27_triggered()
 {
-    page = 11;
+    page = 01;
     ui->label1->setText(tr("Информация о системе"));
+
+    ui->push_pacman->setVisible(false);
+    ui->push_kde->setVisible(false);
+
     searchLineEdit->setPlaceholderText(tr("Поиск журналов и конфигураций..."));
     searchLineEdit->setFixedWidth(1000);
 
@@ -411,30 +413,52 @@ void MainWindow::on_action_27_triggered()
 
 void MainWindow::on_action_bench_triggered()
 {
-    page = 12;
+    page = 02;
     ui->label1->setText(tr("Бенчмарки"));
+
+    ui->push_pacman->setVisible(false);
+    ui->push_kde->setVisible(false);
+
     searchLineEdit->setPlaceholderText(tr("Поиск бенчмарков..."));
     searchLineEdit->setFixedWidth(1000);
 
     ui->combo_bench->setVisible(true);
     ui->tabWidget->setCurrentIndex(10);
+}
 
+void MainWindow::on_action_system_triggered()
+{
+    ui->label1->setText(tr("Настройки системы"));
+
+    ui->push_pacman->setVisible(true);
+    ui->push_kde->setVisible(true);
+
+    searchLineEdit->setFixedWidth(0);
+
+    if (*currentDesktop == "KDE")
+        ui->push_kde->setDisabled(false);
+
+    ui->tabWidget->setCurrentIndex(8);
 }
 
 void MainWindow::on_action_repair_triggered()
 {
-    ui->label1->setText(tr("Оптимизиция"));
-    searchLineEdit->setFixedWidth(0);
+    page = 03;
+    ui->label1->setText(tr("Оптимизация"));
+
+    ui->push_pacman->setVisible(false);
+    ui->push_kde->setVisible(false);
+
+    searchLineEdit->setPlaceholderText(tr("Поиск конфигураций..."));
+    searchLineEdit->setFixedWidth(1000);
 
     ui->combo_bench->setVisible(false);
     ui->tabWidget->setCurrentIndex(11);
-
 }
 
 void MainWindow::on_action_28_triggered()
 {
     ui->label1->setText(tr("Настройки приложения"));
-    ui->push_pacman->setVisible(false);
 
     ui->tabWidget->setCurrentIndex(7);
 }
@@ -442,28 +466,14 @@ void MainWindow::on_action_28_triggered()
 void MainWindow::on_action_timer_triggered()
 {
     ui->label1->setText(tr("Настройки таймеров"));
-    ui->push_pacman->setVisible(false);
 
     ui->tabWidget->setCurrentIndex(9);
 }
 
 void MainWindow::on_action_19_triggered()
 {
-    on_action_12_triggered();
-    ui->label1->setText(tr("Настройки таймеров"));
-    ui->push_pacman->setVisible(false);
-
-    ui->tabWidget->setCurrentIndex(9);
+    on_action_timer_triggered();
 }
-
-void MainWindow::on_action_system_triggered()
-{
-    ui->label1->setText(tr("Настройки системы"));
-    ui->push_pacman->setVisible(true);
-
-    ui->tabWidget->setCurrentIndex(8);
-}
-
 
 void MainWindow::on_action_31_triggered()
 {
@@ -642,22 +652,10 @@ void MainWindow::on_action_5_triggered()
 {
     if (page == 10)
     {
-        if(host == 1)
-        {
             QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create();
             httpProcess->start("pkexec", QStringList() << "sudo" << "systemctl" << "start" << "httpd");
             httpProcess->closeWriteChannel();
             httpProcess->waitForFinished();
-        }
-        else if(host == 2)
-        {
-            QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create();
-            httpProcess->start("pkexec", QStringList() << "sudo" << "systemctl" << "start" << "xampp.service");
-            httpProcess->closeWriteChannel();
-            httpProcess->waitForFinished();
-        }
-        else
-            sendNotification(tr("Ошибка"), tr("Сервер не выбран!"));
     }
     else
     {
@@ -760,7 +758,7 @@ void MainWindow::on_action_6_triggered()
 
 void MainWindow::on_action_4_triggered()
 {
-    if (hasUpdates && updinst == 1 && page == 2) {
+    if (hasUpdates && updinst == 2 && page == 2) {
         sendNotification(tr("Внимание"), tr("Вначале требуется обновить систему до актуального состояния! Это поможет предотвратить конфликт зависимостей и избежать кучи других проблем!"));
         return;
     }
@@ -814,7 +812,7 @@ void MainWindow::on_action_4_triggered()
 
 void MainWindow::on_action_30_triggered()
 {
-    if (hasUpdates && updinst == 1 && page == 2) {
+    if (hasUpdates && updinst == 2 && page == 2) {
         sendNotification(tr("Внимание"), tr("Вначале требуется обновить систему до актуального состояния! Это поможет предотвратить конфликт зависимостей и избежать кучи других проблем!"));
         return;
     }
@@ -910,14 +908,9 @@ void MainWindow::on_action_addsh_triggered()
         if (file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
             QTextStream stream(&file);
-            if(*lang == "en_US")
-            {
-                stream << "#name_en_US " << nameRuLineEdit->text() << "\n";
-                stream << "#msg_en_US " << msgRuLineEdit->text() << "\n";
-            } else {
-                stream << "#name_ru_RU " << nameRuLineEdit->text() << "\n";
-                stream << "#msg_ru_RU " << msgRuLineEdit->text() << "\n";
-            }
+            stream << "#name_" + *lang + " " << nameRuLineEdit->text() << "\n";
+            stream << "#msg_ " + *lang + " " << msgRuLineEdit->text() << "\n";
+
             stream << "#icon 31" << "\n";
             stream << "#!/bin/bash" << "\n";
             stream << scriptTextEdit->toPlainText();
@@ -1203,21 +1196,23 @@ void MainWindow::createSearchBar()
 
     // Подключаем сигналы и слоты для обработки поиска и активации пунктов меню
     connect(searchLineEdit.data(), &QLineEdit::textChanged, this, &MainWindow::searchTextChanged);
-    connect(searchLineEdit.data(), &QLineEdit::returnPressed, this, &MainWindow::search);
+    connect(searchLineEdit.data(), &QLineEdit::returnPressed, this, [this] {
+        search(searchLineEdit->text());
+    });
 }
 
 void MainWindow::searchTextChanged(const QString& searchText)
 {
-    if (page == 11)
+    if (page == 01)
     {
         searchAndScroll(ui->list_journal, searchText);
         searchAndScroll(ui->list_cfg, searchText);
     }
-    else if (page == 12)
+    else if (page == 02)
         searchAndScroll(ui->list_bench, searchText);
-    else if (page == 3)
-        searchAndScroll(ui->list_sh, searchText);
-    else
+    else if (page == 03)
+        searchAndScroll(ui->list_repair, searchText);
+    else if (page == 2 || page == 4)
     {
         QTableWidget* tableWidget = nullptr;
 
@@ -1247,14 +1242,14 @@ void MainWindow::searchTextChanged(const QString& searchText)
     }
 }
 
-void MainWindow::search()
+void MainWindow::search(const QString& searchText)
 {
     if (page == 2)
-    {
-        QString searchText = searchLineEdit->text(); // Получаем текст из QLineEdit
         handleServerResponse(searchText);
-    }
+    else if (page == 6 || page == 7 || page == 10)
+        webEngineView2->setUrl(QUrl(searchText));
 }
+
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -1272,7 +1267,9 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     checkVersionAndClear();
     UpdateIcon();           //получаем иконку трея
 
-    loadContent();          //загрузка списков приложений игр и тп
+    list = 0;
+    loadContent(0,true);          //загрузка списков приложений игр и тп
+
     loadContentInstall();
 
     loadFolders();          //загрузка конфигов
@@ -1280,6 +1277,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     loadSystemInfo();
 
     ui->check_trayon->setChecked(trayon);
+    ui->check_autostart->setChecked(autostart);
     ui->check_repair->setChecked(repair);
     ui->check_animload->setChecked(animload);
     ui->check_updateinstall->setChecked(updinst);
@@ -1288,6 +1286,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->combo_animload->setCurrentIndex(animloadpage);
 
     ui->time_update->setTime(timeupdate);
+    ui->time_timeout->setTime(timeout);
+
     ui->time_tea->setTime(timetea);
     ui->time_work->setTime(timework);
     ui->line_tea->setText(*teatext);
@@ -1304,8 +1304,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
         helper = "yay";
     else
         helper = "paru";
-
-    ui->combo_host->setCurrentIndex(host);
 
     showLoadingAnimation(false);
 }
@@ -1337,6 +1335,7 @@ void MainWindow::checkVersionAndClear() {
         removeDirectory(mainDir + "journals/");
         removeDirectory(mainDir + "cfg/");
         removeDirectory(mainDir + "bench/");
+        removeDirectory(mainDir + "other/");
 
         sendNotification(tr("Обновление kLaus"), tr("Версия kLaus поменялась, конфигурация сброшена!"));
     }
@@ -1380,7 +1379,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if(trayon == 1){
+    if(trayon == 2) {
         iconMap.clear();
         delete actionLoad;
         delete previousAction;
@@ -1443,13 +1442,8 @@ void MainWindow::loadSettings()
     if (!webEngineView2) {
         webEngineView2 = new QWebEngineView(this);
 
-        // Создайте QVBoxLayout (или QHBoxLayout, в зависимости от вашего дизайна)
         QVBoxLayout *layout2 = new QVBoxLayout(ui->centralwidget);
-
-        // Устанавливаем отступы компоновщика в ноль
         layout2->setContentsMargins(0, 0, 0, 0);
-
-        // Добавление QWebEngineView в layout вашего окна
         layout2->addWidget(webEngineView2);
     }
 
@@ -1466,17 +1460,18 @@ void MainWindow::loadSettings()
     animloadpage = settings.value("AnimLoadPage", 0).toInt();
     helpercache = settings.value("HelperCache", 0).toInt();
     trayon = settings.value("TrayOn", 0).toInt();
-    repair = settings.value("RepairBackup", 1).toInt();
-    animload = settings.value("AnimLoad", 1).toInt();
-    updinst = settings.value("UpdateInstall", 1).toInt();
+    autostart = settings.value("Autostart", 0).toInt();
+    repair = settings.value("RepairBackup", 2).toInt();
+    animload = settings.value("AnimLoad", 2).toInt();
+    updinst = settings.value("UpdateInstall", 2).toInt();
     container = settings.value("Snap", 0).toInt();
     volumenotify = settings.value("VolumeNotify", 30).toInt();
-    host = settings.value("Host").toInt();
     lang = QSharedPointer<QString>::create(settings.value("Language").toString());
     teatext = QSharedPointer<QString>::create(settings.value("TeaText").toString());
     worktext = QSharedPointer<QString>::create(settings.value("WorkText").toString());
 
     timeupdate = QTime::fromString(settings.value("TimeUpdate").toString(), "HH:mm");
+    timeout = QTime::fromString(settings.value("TimeOut", "00:00:10").toString(), "HH:mm:ss");
     timetea = QTime::fromString(settings.value("TimeTea").toString(), "HH:mm");
     timework = QTime::fromString(settings.value("TimeWork").toString(), "HH:mm");
 
@@ -1494,27 +1489,51 @@ void MainWindow::loadSettings()
     ui->table_aur->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     switch(mainpage) {
-    case 0:
-        on_action_2_triggered();
-        break;
-    case 1:
-        on_action_17_triggered();
-        break;
-    case 2:
-        on_action_7_triggered();
-        break;
-    case 3:
-        on_action_9_triggered();
-        break;
-    case 4:
-        on_action_3_triggered();
-        break;
-    case 5:
-        on_action_8_triggered();
-        break;
-    case 6:
-        on_action_12_triggered();
-        break;
+        case 0:
+            on_action_2_triggered();
+            ui->action_2->setChecked(true);
+            previousAction = ui->action_2;
+            break;
+        case 1:
+            on_action_17_triggered();
+            ui->action_17->setChecked(true);
+            previousAction = ui->action_17;
+            break;
+        case 2:
+            on_action_driver_triggered();
+            ui->action_driver->setChecked(true);
+            previousAction = ui->action_driver;
+            break;
+        case 3:
+            on_action_9_triggered();
+            ui->action_9->setChecked(true);
+            previousAction = ui->action_9;
+            break;
+        case 4:
+            on_action_7_triggered();
+            ui->action_7->setChecked(true);
+            previousAction = ui->action_7;
+            break;
+        case 5:
+            on_action_3_triggered();
+            ui->action_3->setChecked(true);
+            previousAction = ui->action_3;
+            break;
+        case 6:
+            on_action_8_triggered();
+            ui->action_8->setChecked(true);
+            previousAction = ui->action_8;
+            break;
+        case 7:
+            on_action_host_triggered();
+            ui->action_host->setChecked(true);
+            previousAction = ui->action_host;
+            break;
+        case 8:
+            on_action_12_triggered();
+            ui->action_12->setChecked(true);
+            previousAction = ui->action_12;
+            break;
     }
 
     //-##################################################################################
@@ -1526,12 +1545,17 @@ void MainWindow::loadSettings()
 
     auto reloadFunction = [=]() {
         loadContentInstall();
-        loadContent();
+        list = 0;
+        loadContent(0,true);
     };
 
-    // В конструкторе вашего класса или где-то еще в вашем коде
     connect(ui->reload_aurpkg, &QPushButton::clicked, this, reloadFunction);
     connect(ui->reload_aur, &QPushButton::clicked, this, reloadFunction);
+
+    connect(webEngineView2, &QWebEngineView::urlChanged, this, [this](const QUrl &url) {
+        QString urlString = url.toString();
+        searchLineEdit->setText(urlString);
+    });
 
     //-##################################################################################
     //-############################### ЗАНЯТОЕ МЕСТО ####################################
@@ -1601,7 +1625,7 @@ void MainWindow::loadSettings()
 
     connect(webEngineView2->page(), &QWebEnginePage::loadFinished, this, [=](bool success) mutable{
         if (success) {
-            if (page == 6 || page == 7)
+            if (page == 6 || page == 7 || page == 10)
                 webEngineView2->show();
 
             else if (page == 2 || page == 4) {
@@ -1610,12 +1634,21 @@ void MainWindow::loadSettings()
                 ui->action_34->setVisible(false);
                 webEngineView2->show();
             }
-        } else if ((!errorShown && page == 2) || (!errorShown && page == 4)) {
+        } else {
+            if (page == 10) {
+                webEngineView2->reload();
+                errorShown = true;
+                return;
+            }
+
+            else if ((!errorShown && page == 2) || (!errorShown && page == 4)) {
                 sendNotification(tr("Ошибка"), tr("Страница не найдена (ошибка 404)"));
                 errorShown = true;  // Устанавливаем флаг, что уведомление было показано
+            }
         }
         showLoadingAnimation(false);
     });
+
     QTableWidget *table = ui->table_aur;
     table->setSelectionBehavior(QAbstractItemView::SelectRows);
 
@@ -1899,14 +1932,16 @@ void MainWindow::mrpropper(int value) //зачистка говна перед �
         action->setVisible(false);
     }
 
-
-    searchLineEdit->setFixedWidth(0);
-
     webEngineView2->setVisible(false);
     ui->combo_repo->setVisible(false);
     ui->combo_bench->setVisible(false);
     ui->push_pacman->setVisible(false);
+    ui->push_kde->setVisible(false);
     ui->label1->setVisible(true);
+
+    searchLineEdit->setFixedWidth(0);
+    searchLineEdit->setText("");
+
 }
 
 void MainWindow::TeaTimer()
@@ -2200,16 +2235,11 @@ void MainWindow::showLoadingAnimation(bool show)
     static QLabel* loadingLabel = nullptr;
 
     if (show) {
-        int leftShift = -100; // Измените это значение на ваше усмотрение
+        int leftShift = -100;
 
         if (!overlayWidget) {
             overlayWidget = new QWidget(ui->centralwidget);
             overlayWidget->setObjectName("OverlayWidget");
-            if (animloadpage == 0)
-                overlayWidget->setStyleSheet("QWidget#OverlayWidget { background-color: #472e91; }");
-            else
-                overlayWidget->setStyleSheet("QWidget#OverlayWidget { background-color: #2d2b79; }");
-
             overlayWidget->setGeometry(0, 0, width(), height());
             overlayWidget->raise();
         }
@@ -2221,7 +2251,24 @@ void MainWindow::showLoadingAnimation(bool show)
             loadingLabel->setFixedSize(500, 500);
         }
 
-        QMovie* loadingMovie = (animloadpage == 0) ? new QMovie(":/img/loading.gif") : new QMovie(":/img/loading2.gif");
+        QMovie* loadingMovie = nullptr;
+
+        if (page == 10){
+            loadingMovie = new QMovie(":/img/server.gif");
+            overlayWidget->setStyleSheet("QWidget#OverlayWidget { background-color: #0072ce; }");
+        }
+        else
+        {
+            if (animloadpage == 0){
+                loadingMovie = new QMovie(":/img/loading.gif");
+                overlayWidget->setStyleSheet("QWidget#OverlayWidget { background-color: #472e91; }");
+            }
+            else if (animloadpage == 1)
+            {
+                loadingMovie = new QMovie(":/img/loading2.gif");
+                overlayWidget->setStyleSheet("QWidget#OverlayWidget { background-color: #2d2b79; }");
+            }
+        }
 
         loadingLabel->setMovie(loadingMovie);
         loadingMovie->start();
@@ -2314,8 +2361,23 @@ void MainWindow::processTableItem(int row, QTableWidget* tableWidget, QTextBrows
 
 void MainWindow::onTableAurCellClicked(int row) {
     if (page == 2) {
-        processTableItem(row, ui->table_aur, ui->details_aur);
-    } else if (page == 4) {
+        QTableWidgetItem *item = ui->table_aur->item(row, 0);
+
+        bool iconFound = false;
+
+        for (const auto& iconName : appIcons) {
+            if (appIcons.contains(item->text()) && appIcons[item->text()] == iconName) {
+                loadContent(row + 1,loadpage);
+                iconFound = true;
+                break;
+            }
+        }
+
+        if (!iconFound) {
+            processTableItem(row, ui->table_aur, ui->details_aur);
+        }
+    }
+    else if (page == 4) {
         processTableItem(row, ui->table_app, ui->details_aurpkg);
     }
 }
@@ -2462,7 +2524,7 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
     return QIcon(":/img/pacman.png");
 }
 
-void MainWindow::loadContent()
+void MainWindow::loadContent(int value, bool valuepage)
 {
     ui->table_aur->setHorizontalHeaderLabels({tr("Названия пакетов")});
 
@@ -2472,9 +2534,385 @@ void MainWindow::loadContent()
 
     QString sourceFilePath;
     QString targetFilePath;
-    sourceFilePath = ":/other/list.txt";
-    targetFilePath = mainDir + "other/list.txt";
 
+    // 0 - лист
+
+    if (list == 0) {
+        sourceFilePath = ":/other/" + *lang + "/list.txt";
+        targetFilePath = mainDir + "other/" + *lang + "/list.txt";
+    }
+
+    if (value == 1)
+    {
+        if (list == 0)
+        {
+            sourceFilePath = ":/other/populaty.txt";
+            targetFilePath = mainDir + "other/populaty.txt";
+            list = 1;
+            valuepage = false;
+        }
+        else if (list == 2)
+        {
+            sourceFilePath = ":/other/network.txt";
+            targetFilePath = mainDir + "other/network.txt";
+            valuepage = false;
+        }
+        else if (list == 3)
+        {
+            sourceFilePath = ":/other/codecs.txt";
+            targetFilePath = mainDir + "other/codecs.txt";
+            valuepage = false;
+        }
+        else if (list == 4)
+        {
+            sourceFilePath = ":/other/terminals.txt";
+            targetFilePath = mainDir + "other/terminals.txt";
+            valuepage = false;
+        }
+        else if (list == 5)
+        {
+            sourceFilePath = ":/other/texteditors.txt";
+            targetFilePath = mainDir + "other/texteditors.txt";
+            valuepage = false;
+        }
+        else if (list == 6)
+        {
+            sourceFilePath = ":/other/network-security.txt";
+            targetFilePath = mainDir + "other/network-security.txt";
+            valuepage = false;
+        }
+    }
+    else if (value == 2)
+    {
+        if (list == 0)
+        {
+            sourceFilePath = ":/other/" + *lang + "/net.txt";
+            targetFilePath = mainDir + "other/" + *lang + "/net.txt";
+            list = 2;
+            valuepage = true;
+        }
+        else if (list == 2)
+        {
+            sourceFilePath = ":/other/browsers.txt";
+            targetFilePath = mainDir + "other/browsers.txt";
+            valuepage = false;
+        }
+        else if (list == 3)
+        {
+            sourceFilePath = ":/other/images.txt";
+            targetFilePath = mainDir + "other/images.txt";
+            valuepage = false;
+        }
+        else if (list == 4)
+        {
+            sourceFilePath = ":/other/files.txt";
+            targetFilePath = mainDir + "other/files.txt";
+            valuepage = false;
+        }
+        else if (list == 5)
+        {
+            sourceFilePath = ":/other/office.txt";
+            targetFilePath = mainDir + "other/office.txt";
+            valuepage = false;
+        }
+        else if (list == 6)
+        {
+            sourceFilePath = ":/other/firewall-management.txt";
+            targetFilePath = mainDir + "other/firewall-management.txt";
+            valuepage = false;
+        }
+    }
+    else if (value == 3)
+    {
+        if (list == 0)
+        {
+            sourceFilePath = ":/other/" + *lang + "/multimedia.txt";
+            targetFilePath = mainDir + "other/" + *lang + "/multimedia.txt";
+            list = 3;
+            valuepage = true;
+        }
+        else if (list == 2)
+        {
+            sourceFilePath = ":/other/servers.txt";
+            targetFilePath = mainDir + "other/servers.txt";
+            valuepage = false;
+        }
+        else if (list == 3)
+        {
+            sourceFilePath = ":/other/audio.txt";
+            targetFilePath = mainDir + "other/audio.txt";
+            valuepage = false;
+        }
+        else if (list == 4)
+        {
+            sourceFilePath = ":/other/development.txt";
+            targetFilePath = mainDir + "other/development.txt";
+            valuepage = false;
+        }
+        else if (list == 5)
+        {
+            sourceFilePath = ":/other/markup-languages.txt";
+            targetFilePath = mainDir + "other/markup-languages.txt";
+            valuepage = false;
+        }
+        else if (list == 6)
+        {
+            sourceFilePath = ":/other/threat-and-vulnerability-detection.txt";
+            targetFilePath = mainDir + "other/threat-and-vulnerability-detection.txt";
+            valuepage = false;
+        }
+    }
+    else if (value == 4)
+    {
+        if (list == 0)
+        {
+            sourceFilePath = ":/other/" + *lang + "/utility.txt";
+            targetFilePath = mainDir + "other/" + *lang + "/utility.txt";
+            list = 4;
+            valuepage = true;
+        }
+        else if (list == 2)
+        {
+            sourceFilePath = ":/other/file-sharing.txt";
+            targetFilePath = mainDir + "other/file-sharing.txt";
+            valuepage = false;
+        }
+        else if (list == 3)
+        {
+            sourceFilePath = ":/other/video.txt";
+            targetFilePath = mainDir + "other/video.txt";
+            valuepage = false;
+        }
+        else if (list == 4)
+        {
+            sourceFilePath = ":/other/text-input.txt";
+            targetFilePath = mainDir + "other/text-input.txt";
+            valuepage = false;
+        }
+        else if (list == 5)
+        {
+            sourceFilePath = ":/other/document-converters.txt";
+            targetFilePath = mainDir + "other/document-converters.txt";
+            valuepage = false;
+        }
+        else if (list == 6)
+        {
+            sourceFilePath = ":/other/file-security.txt";
+            targetFilePath = mainDir + "other/file-security.txt";
+            valuepage = false;
+        }
+    }
+    else if (value == 5)
+    {
+        if (list == 0)
+        {
+            sourceFilePath = ":/other/" + *lang + "/office.txt";
+            targetFilePath = mainDir + "other/" + *lang + "/office.txt";
+            list = 5;
+            valuepage = true;
+        }
+        else if (list == 2)
+        {
+            sourceFilePath = ":/other/communication.txt";
+            targetFilePath = mainDir + "other/communication.txt";
+            valuepage = false;
+        }
+        else if (list == 3)
+        {
+            sourceFilePath = ":/other/coll-managers.txt";
+            targetFilePath = mainDir + "other/coll-managers.txt";
+            valuepage = false;
+        }
+        else if (list == 4)
+        {
+            sourceFilePath = ":/other/disks.txt";
+            targetFilePath = mainDir + "other/disks.txt";
+            valuepage = false;
+        }
+        else if (list == 5)
+        {
+            sourceFilePath = ":/other/bibliographic-reference-manager.txt";
+            targetFilePath = mainDir + "other/bibliographic-reference-manager.txt";
+            valuepage = false;
+        }
+        else if (list == 6)
+        {
+            sourceFilePath = ":/other/anti-malware.txt";
+            targetFilePath = mainDir + "other/anti-malware.txt";
+            valuepage = false;
+        }
+    }
+    else if (value == 6)
+    {
+        if (list == 0)
+        {
+            sourceFilePath = ":/other/" + *lang + "/security.txt";
+            targetFilePath = mainDir + "other/" + *lang + "/security.txt";
+            list = 6;
+            valuepage = true;
+        }
+        else if (list == 2)
+        {
+            sourceFilePath = ":/other/news-and-rss.txt";
+            targetFilePath = mainDir + "other/news-and-rss.txt";
+            valuepage = false;
+        }
+        else if (list == 3)
+        {
+            sourceFilePath = ":/other/media-servers.txt";
+            targetFilePath = mainDir + "other/media-servers.txt";
+            valuepage = false;
+        }
+        else if (list == 4)
+        {
+            sourceFilePath = ":/other/system.txt";
+            targetFilePath = mainDir + "other/system.txt";
+            valuepage = false;
+        }
+        else if (list == 5)
+        {
+            sourceFilePath = ":/other/reader-sand-viewers.txt";
+            targetFilePath = mainDir + "other/reader-sand-viewers.txt";
+            valuepage = false;
+        }
+        else if (list == 6)
+        {
+            sourceFilePath = ":/other/screen-lockers.txt";
+            targetFilePath = mainDir + "other/screen-lockers.txt";
+            valuepage = false;
+        }
+    }
+    else if (value == 7)
+    {
+        if (list == 0)
+        {
+            sourceFilePath = ":/other/game.txt";
+            targetFilePath = mainDir + "other/game.txt";
+            list = 7;
+            valuepage = false;
+        }
+        else if (list == 2)
+        {
+            sourceFilePath = ":/other/remote-desktop.txt";
+            targetFilePath = mainDir + "other/remote-desktop.txt";
+            valuepage = false;
+        }
+        else if (list == 3)
+        {
+            sourceFilePath = ":/other/metadata.txt";
+            targetFilePath = mainDir + "other/metadata.txt";
+            valuepage = false;
+        }
+        else if (list == 5)
+        {
+            sourceFilePath = ":/other/document-managers.txt";
+            targetFilePath = mainDir + "other/document-managers.txt";
+            valuepage = false;
+        }
+        else if (list == 6)
+        {
+            sourceFilePath = ":/other/password-auditing.txt";
+            targetFilePath = mainDir + "other/password-auditing.txt";
+            valuepage = false;
+        }
+    }
+    else if (value == 8)
+    {
+        if (list == 0)
+        {
+            sourceFilePath = ":/other/phone.txt";
+            targetFilePath = mainDir + "other/phone.txt";
+            list = 8;
+            valuepage = true;
+        }
+        else if (list == 3)
+        {
+            sourceFilePath = ":/other/mobile-device-managers.txt";
+            targetFilePath = mainDir + "other/mobile-device-managers.txt";
+            valuepage = false;
+        }
+        else if (list == 5)
+        {
+            sourceFilePath = ":/other/scanning-software.txt";
+            targetFilePath = mainDir + "other/scanning-software.txt";
+            valuepage = false;
+        }
+        else if (list == 6)
+        {
+            sourceFilePath = ":/other/password-managers.txt";
+            targetFilePath = mainDir + "other/password-managers.txt";
+            valuepage = false;
+        }
+    }
+    else if (value == 9)
+    {
+        if (list == 3)
+        {
+            sourceFilePath = ":/other/optical-disc-burning.txt";
+            targetFilePath = mainDir + "other/optical-disc-burning.txt";
+            valuepage = false;
+        }
+        else if (list == 5)
+        {
+            sourceFilePath = ":/other/osr-software.txt";
+            targetFilePath = mainDir + "other/osr-software.txt";
+            valuepage = false;
+        }
+        else if (list == 6)
+        {
+            sourceFilePath = ":/other/cryptography.txt";
+            targetFilePath = mainDir + "other/cryptography.txt";
+            valuepage = false;
+        }
+    }
+    else if (value == 10)
+    {
+        if (list == 3)
+        {
+            sourceFilePath = ":/other/personal-video-recorders.txt";
+            targetFilePath = mainDir + "other/personal-video-recorders.txt";
+            valuepage = false;
+        }
+        else if (list == 5)
+        {
+            sourceFilePath = ":/other/notes.txt";
+            targetFilePath = mainDir + "other/notes.txt";
+            valuepage = false;
+        }
+        else if (list == 6)
+        {
+            sourceFilePath = ":/other/privilege-elevation.txt";
+            targetFilePath = mainDir + "other/privilege-elevation.txt";
+            valuepage = false;
+        }
+    }
+    else if (value == 11)
+    {
+        if (list == 5)
+        {
+            sourceFilePath = ":/other/special-writing-environments.txt";
+            targetFilePath = mainDir + "other/special-writing-environments.txt";
+            valuepage = false;
+        }
+    }
+    else if (value == 12)
+    {
+        if (list == 5)
+        {
+            sourceFilePath = ":/other/language.txt";
+            targetFilePath = mainDir + "other/language.txt";
+            valuepage = false;
+        }
+    }
+    else if (value == 13)
+    {
+        if (list == 5)
+        {
+            sourceFilePath = ":/other/barcode-generators-and-readers.txt";
+            targetFilePath = mainDir + "other/barcode-generators-and-readers.txt";
+            valuepage = false;
+        }
+    }
 
     QFileInfo fileInfo(targetFilePath);
     if (!fileInfo.exists())
@@ -2507,11 +2945,11 @@ void MainWindow::loadContent()
 
         if (!line.isEmpty())
         {
-            int index = line.indexOf(',');
+            int index = line.indexOf('}');
 
             if (index != -1)
             {
-                QString program = line.mid(2, index - 4);
+                QString program = line.mid(2, index - 3);
                 programs.append(program);
             }
         }
@@ -2530,28 +2968,60 @@ void MainWindow::loadContent()
 
         QString prefixToRemove = "";
 
-        static const QRegularExpression regex("(\\w+)/\\S+");
-        QRegularExpressionMatch match = regex.match(packageName);
+        if(valuepage)
+        {
+            static const QRegularExpression regex("(\\S+)/\\S+");
+            QRegularExpressionMatch match = regex.match(packageName);
 
-        if (match.hasMatch()) {
-            QString repoName = match.captured(1);
+            if (match.hasMatch()) {
+                QString repoName = match.captured(1);
 
-            iconPath = ":/img/" + repoName + ".png"; // Иконка для обычных пакетов
+                iconPath = "/usr/share/icons/Papirus/48x48/apps/" + repoName + ".svg";
 
-            prefixToRemove = repoName + "/";
+                QFileInfo fileInfo(iconPath);
+                if (!fileInfo.exists()) {
+                    iconPath = ":/img/" + repoName + ".png";
+                }
+
+                prefixToRemove = repoName + "/";
+            }
+
+            if (!prefixToRemove.isEmpty())
+                packageName.remove(0, prefixToRemove.length());
+
+        }
+        else
+        {
+            static const QRegularExpression regex("\\S+");
+            QRegularExpressionMatch match = regex.match(packageName);
+
+            QString packageNameIcon;
+            packageNameIcon = packageName;
+
+            for (const QString& ending : endingsToRemove) {
+                if (packageNameIcon.endsWith(ending)) {
+                    packageNameIcon.chop(ending.length());
+                    break;
+                }
+            }
+            iconPath = "/usr/share/icons/Papirus/48x48/apps/" + packageNameIcon + ".svg";
+
+            QFileInfo fileInfo(iconPath);
+            if (!fileInfo.exists()) {
+                iconPath = ":/img/pacman.png";
+            }
         }
 
         item->setIcon(QIcon(iconPath));
-
-        // Удаление префикса, если применимо
-        if (!prefixToRemove.isEmpty())
-            packageName.remove(0, prefixToRemove.length());
 
         item->setText(packageName);
         item->setForeground(color);
 
         ui->table_aur->insertRow(i);
         ui->table_aur->setItem(i, 0, item);
+
+        if(valuepage)
+            appIcons[packageName] = iconPath;
     }
 }
 
@@ -2622,6 +3092,30 @@ void MainWindow::loadContentInstall()
     }
 }
 
+void MainWindow::setCursorAndScrollToItem(const QString& itemName)
+{
+    // Найти элемент в таблице по имени
+    QTableWidgetItem *item = nullptr;
+    for (int row = 0; row < ui->table_aur->rowCount(); ++row) {
+        QTableWidgetItem *currentItem = ui->table_aur->item(row, 0);
+        if (currentItem && currentItem->text() == itemName) {
+            item = currentItem;
+            // Вызвать функцию onTableAurCellClicked с индексом строки
+            onTableAurCellClicked(row);
+            break;
+        }
+    }
+
+    if (item) {
+        // Установить текущий элемент и выделить его
+        ui->table_aur->setCurrentItem(item);
+        ui->table_aur->setCurrentItem(item, QItemSelectionModel::Select);
+
+        // Прокрутить к текущему элементу
+        ui->table_aur->scrollToItem(item);
+    }
+}
+
 void MainWindow::handleServerResponse(const QString& reply)
 {
     ui->table_aur->clearContents();
@@ -2629,7 +3123,6 @@ void MainWindow::handleServerResponse(const QString& reply)
     ui->table_aur->setColumnCount(1);
 
     miniAnimation(true,1);
-
 
     helperPackageNames.clear();
 
@@ -2640,41 +3133,6 @@ void MainWindow::handleServerResponse(const QString& reply)
     connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
 
     currentProcess->start(searchCommand, QStringList() << searchArg << reply);
-}
-
-void MainWindow::onSnapProcessFinished()
-{
-    QByteArray snapOutput = snapProcess->readAllStandardOutput();
-    QString snapOutputString = QString::fromUtf8(snapOutput).trimmed();
-
-    // Обработка вывода команды snap find
-    QStringList snapLines = snapOutputString.split('\n');
-
-    // Пропускаем первую строку (заголовок "Name")
-    snapLines.removeFirst();
-
-    for (const QString& snapLine : snapLines) {
-        if (!snapLine.isEmpty()) {
-            QString snapPackageName = snapLine.section(' ', 0, 0);
-            snapPackageNames.append(snapPackageName);
-        }
-    }
-
-    ui->table_aur->setRowCount(snapPackageNames.size());
-
-    for (int i = 0; i < snapPackageNames.size(); i++) {
-        QString packageName = snapPackageNames[i];
-        QColor color = generateRandomColor();
-        QTableWidgetItem *item = new QTableWidgetItem();
-
-        item->setIcon(QIcon(":/img/snap.png"));
-        item->setText(packageName);
-        item->setForeground(color);
-
-        ui->table_aur->setItem(i, 0, item);
-    }
-
-    miniAnimation(false,1);
 }
 
 void MainWindow::onCurrentProcessReadyRead()
@@ -2733,6 +3191,53 @@ void MainWindow::onCurrentProcessReadyRead()
         ui->table_aur->setItem(i, 0, item);
     }
 
+    miniAnimation(false, 1);
+
+    QString searchText = searchLineEdit->text();
+    setCursorAndScrollToItem(searchText);
+
+    // Запуск таймера с тайм-аутом
+    QTimer::singleShot(timeout.msecsSinceStartOfDay() / 1000, this, &MainWindow::onSearchTimeout);
+}
+
+void MainWindow::onSearchTimeout()
+{
+    currentProcess->kill();
+    miniAnimation(false, 1);
+}
+
+void MainWindow::onSnapProcessFinished()
+{
+    QByteArray snapOutput = snapProcess->readAllStandardOutput();
+    QString snapOutputString = QString::fromUtf8(snapOutput).trimmed();
+
+    // Обработка вывода команды snap find
+    QStringList snapLines = snapOutputString.split('\n');
+
+    // Пропускаем первую строку (заголовок "Name")
+    snapLines.removeFirst();
+
+    for (const QString& snapLine : snapLines) {
+        if (!snapLine.isEmpty()) {
+            QString snapPackageName = snapLine.section(' ', 0, 0);
+            snapPackageNames.append(snapPackageName);
+        }
+    }
+
+    ui->table_aur->setRowCount(snapPackageNames.size());
+
+    for (int i = 0; i < snapPackageNames.size(); i++) {
+        QString packageName = snapPackageNames[i];
+        QColor color = generateRandomColor();
+        QTableWidgetItem *item = new QTableWidgetItem();
+
+        item->setIcon(QIcon(":/img/snap.png"));
+        item->setText(packageName);
+        item->setForeground(color);
+
+        ui->table_aur->setItem(i, 0, item);
+    }
+
     miniAnimation(false,1);
 }
 
@@ -2776,8 +3281,8 @@ void MainWindow::loadingListWidget()
     QDir().mkpath(mainDir + "other/");
 
     QFile::copy(":/other/notify.png", mainDir + "other/notify.png");
-    QFile::copy(":/other/translations_en_US.txt", mainDir + "other/translations_en_US.txt");
-    QFile::copy(":/other/translations_ru_RU.txt", mainDir + "other/translations_ru_RU.txt");
+    QFile::copy(":/other/en_US/translations.txt", mainDir + "other/en_US/translations.txt");
+    QFile::copy(":/other/ru_RU/translations.txt", mainDir + "other/ru_RU/translations.txt");
     QFile::copy(":/other/main.sh", mainDir + "other/main.sh");
 }
 
@@ -3008,75 +3513,6 @@ void MainWindow::on_combo_animload_currentIndexChanged(int index)
     settings.setValue("AnimLoadPage", animloadpage);
 }
 
-void MainWindow::on_combo_host_currentIndexChanged(int index)
-{
-    host = index;
-    settings.setValue("Host", host);
-
-    if (host == 1)
-    {
-        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-        process->start("httpd", QStringList() << "-v");
-        process->waitForFinished();
-
-        if (process->exitCode() == 0) {
-            // Apache установлен
-            ui->combo_host->setCurrentIndex(1);
-        }
-        else {
-            // Apache не установлен, предложить установку
-            int reply = QMessageBox::question(this, "Установка Apache", "Apache не установлен. Хотите установить Apache?", QMessageBox::Yes | QMessageBox::No);
-            if (reply == QMessageBox::Yes) {
-                QSharedPointer<QProcess> installProcess = QSharedPointer<QProcess>::create();
-                installProcess->setProcessChannelMode(QProcess::MergedChannels);
-
-                Terminal terminal = getTerminal();
-                installProcess->start(terminal.binary, QStringList() << terminal.args << packageCommands.value(pkg).value("install") << "apache");
-
-                installProcess->closeWriteChannel();
-                installProcess->waitForFinished();
-                if (installProcess->exitCode() == 0)
-                    ui->combo_host->setCurrentIndex(1);
-                else {
-                    QMessageBox::critical(this, "Ошибка установки", "Произошла ошибка при установке Apache");
-                    ui->combo_host->setCurrentIndex(0);
-                }
-            } else
-                ui->combo_host->setCurrentIndex(0);
-        }
-    }
-    else if (host == 2)
-    {
-        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-        process->start("/opt/lampp/lampp", QStringList() << "status");
-        process->waitForFinished();
-
-        if (process->exitCode() == 0) {
-            ui->combo_host->setCurrentIndex(2);
-        }
-        else {
-            int reply = QMessageBox::question(this, "Установка XAMPP", "XAMPP не установлен. Хотите установить XAMPP?", QMessageBox::Yes | QMessageBox::No);
-            if (reply == QMessageBox::Yes) {
-                QSharedPointer<QProcess> installProcess = QSharedPointer<QProcess>::create();
-                installProcess->setProcessChannelMode(QProcess::MergedChannels);
-
-                Terminal terminal = getTerminal();
-                installProcess->start(terminal.binary, QStringList() << terminal.args << packageCommands.value(pkg).value("install") << "xampp");
-
-                installProcess->closeWriteChannel();
-                installProcess->waitForFinished();
-                if (installProcess->exitCode() == 0)
-                    ui->combo_host->setCurrentIndex(2);
-                else {
-                    QMessageBox::critical(this, "Ошибка установки", "Произошла ошибка при установке XAMPP");
-                    ui->combo_host->setCurrentIndex(0);
-                }
-            } else
-                ui->combo_host->setCurrentIndex(0);
-        }
-    }
-}
-
 void MainWindow::on_combo_lang_currentIndexChanged(int index)
 {
     QString lang;
@@ -3214,19 +3650,26 @@ void MainWindow::on_combo_cache_currentIndexChanged(int index)
 
 void MainWindow::on_time_update_timeChanged(const QTime &time)
 {
-    // Проверяем, что время корректно
     if (time.isValid()) {
-        timeupdate = time; // Обновляем глобальную переменную timeupdate
-        settings.setValue("TimeUpdate", timeupdate.toString("HH:mm")); // Сохраняем значение времени в настройках
+        timeupdate = time;
+        settings.setValue("TimeUpdate", timeupdate.toString("HH:mm"));
+    } else
+        sendNotification(tr("Ошибка"), tr("Неверный формат времени."));
+}
+
+void MainWindow::on_time_timeout_timeChanged(const QTime &time)
+{
+    if (time.isValid()) {
+        timeout = time;
+        settings.setValue("TimeUpdate", timeout.toString("HH:mm:ss"));
     } else
         sendNotification(tr("Ошибка"), tr("Неверный формат времени."));
 }
 
 void MainWindow::on_time_tea_timeChanged(const QTime &time)
 {
-    // Проверяем, что время корректно
     if (time.isValid()) {
-        timetea = time; // Обновляем глобальную переменную timetea
+        timetea = time;
         settings.setValue("TimeTea", timetea.toString("HH:mm")); // Сохраняем значение времени в настройках
 
         int msecsToTea = QTime(0, 0).msecsTo(timetea);
@@ -3245,10 +3688,9 @@ void MainWindow::on_time_tea_timeChanged(const QTime &time)
 
 void MainWindow::on_time_work_timeChanged(const QTime &time)
 {
-    // Проверяем, что время корректно
     if (time.isValid()) {
-        timework = time; // Обновляем глобальную переменную timetea
-        settings.setValue("TimeWork", timework.toString("HH:mm")); // Сохраняем значение времени в настройках
+        timework = time;
+        settings.setValue("TimeWork", timework.toString("HH:mm"));
 
         int msecsToTea = QTime(0, 0).msecsTo(timework);
 
@@ -3276,28 +3718,44 @@ void MainWindow::on_line_work_textChanged(const QString &arg1)
     settings.setValue("WorkText", arg1);
 }
 
-void MainWindow::on_check_trayon_stateChanged()
+void MainWindow::on_check_trayon_stateChanged(int arg1)
 {
-    trayon = ui->check_trayon->isChecked() ? 1 : 0;
-    settings.setValue("TrayOn", trayon);
+    settings.setValue("TrayOn", arg1);
 }
 
-void MainWindow::on_check_repair_stateChanged()
+void MainWindow::on_check_autostart_stateChanged(int arg1)
 {
-    repair = ui->check_repair->isChecked() ? 1 : 0;
-    settings.setValue("RepairBackup", repair);
+    settings.setValue("Autostart", arg1);
+
+    QString autostartFilePath = QDir::homePath() + "/.config/autostart/klaus.desktop";
+
+    if (arg1 == 0) {
+        if (QFile::exists(autostartFilePath)) {
+            QFile::remove(autostartFilePath);
+        }
+    } else {
+        if (!QFile::exists(autostartFilePath)) {
+            // Создаем символьную ссылку
+            QString sourceFilePath = "/usr/share/applications/klaus.desktop";
+            QFile::link(sourceFilePath, autostartFilePath);
+        }
+    }
 }
 
-void MainWindow::on_check_animload_stateChanged()
+void MainWindow::on_check_repair_stateChanged(int arg1)
 {
-    animload = ui->check_animload->isChecked() ? 1 : 0;
-    settings.setValue("AnimLoad", animload);
+    settings.setValue("RepairBackup",arg1);
 }
 
-void MainWindow::on_check_updateinstall_stateChanged()
+void MainWindow::on_check_animload_stateChanged(int arg1)
 {
-    updinst = ui->check_updateinstall->isChecked() ? 1 : 0;
-    settings.setValue("UpdateInstall", updinst);
+    settings.setValue("AnimLoad", arg1);
+}
+
+void MainWindow::on_check_updateinstall_stateChanged(int arg1)
+{
+    updinst = arg1;
+    settings.setValue("UpdateInstall", arg1);
 }
 
 void MainWindow::on_dial_volnotify_valueChanged(int value)
@@ -3429,7 +3887,7 @@ void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString&
         scriptPath = scriptDir + itemName;
 
 
-    if (hasUpdates && updinst == 1 && page == 2) {
+    if (hasUpdates && updinst == 2 && page == 2) {
         sendNotification(tr("Внимание"), tr("Вначале требуется обновить систему до актуального состояния! Это поможет предотвратить конфликт зависимостей и избежать кучи других проблем!"));
         return;
     }
@@ -3497,11 +3955,6 @@ void MainWindow::on_list_bench_itemClicked(QListWidgetItem *item)
 {
     QString scriptDir = mainDir + "bench/";
     handleListItemClicked(item, scriptDir);
-}
-
-void MainWindow::on_push_site_clicked()
-{
-    openUrl("http://localhost/");
 }
 
 void MainWindow::openUrl(const QString& url)
@@ -3598,3 +4051,13 @@ void MainWindow::on_push_pacman_clicked()
     }
 }
 
+
+void MainWindow::on_push_kde_clicked()
+{
+    QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), tr("Вы уверены, что хотите полностью сбросить конфигурацию DE? Вам придется заново все настроить."), QMessageBox::Yes | QMessageBox::No);
+    if (reply == QMessageBox::No) return;
+
+
+    Terminal terminal = getTerminal();
+    QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "sudo" << "rm" << QDir::homePath() + "/.config/kdeglobals");
+}

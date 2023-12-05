@@ -1,0 +1,10 @@
+{"mx-codecs/Кодеки"}
+{"multimedia-photo-viewer/Изображение"}
+{"audio-player/Аудио"}
+{"video-player/Видео"}
+{"tellico/Менеджеры коллекций"}
+{"org.kde.plasma.mediacontroller/Медиа-серверы"}
+{"mediainfo/Метаданные"}
+{"android-sdk/Менеджеры мобильных устройств"}
+{"disk-burner/Запись оптических дисков"}
+{"org.gnome.gitlab.YaLTeR.VideoTrimmer/Персональные видеомагнитофоны"}

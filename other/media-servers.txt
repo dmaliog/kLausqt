@@ -1,0 +1,16 @@
+{"airsonic"}
+{"dms"}
+{"emby-server"}
+{"gerbera"}
+{"icecast"}
+{"jellyfin"}
+{"jellyfin-media-player"}
+{"jellyfin-mpv-shim"}
+{"owntone-server"}
+{"plex-media-server"}
+{"minidlna"}
+{"rygel"}
+{"serviio"}
+{"subsonic"}
+{"tvheadend"}
+{"ums"}

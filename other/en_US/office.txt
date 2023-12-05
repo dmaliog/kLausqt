@@ -1,0 +1,13 @@
+{"accessories-text-editor/Text editors"}
+{"applications-office/Office"}
+{"typora/Markup languages"}
+{"converseen/Document converters"}
+{"referencer/Managers of bibliographic references"}
+{"accessories-ebook-reader/Readers and viewers"}
+{"accessories-dictionary/Document managers"}
+{"yast-scanner/Scanning"}
+{"accessories-character-map/Text recognition"}
+{"accessories-notes/Notes"}
+{"trelby/Special recording environments"}
+{"cs-language/Language"}
+{"com.github.mubitosh.qrshare/Barcode generators and readers"}

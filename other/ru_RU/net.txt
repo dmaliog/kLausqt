@@ -1,0 +1,7 @@
+{"cs-network/Сетевое подключение"}
+{"internet-web-browser/Веб-браузеры"}
+{"yast-tftp-server/Веб-серверы"}
+{"gnome-user-share/Совместное использование файлов"}
+{"wechat/Общение"}
+{"rss/Новости, RSS и блоги"}
+{"preferences-desktop-remote-desktop/Удаленный рабочий стол"}
