@@ -16,7 +16,7 @@ QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
 
-QString currentVersion = "8.2";
+QString currentVersion = "8.3";
 
 //автоматически управляют памятью или не требуют
 int pkg = 0; //пакетный менеджер 0-yay / 1-paru
@@ -35,7 +35,8 @@ int benchlist = 0; //бенчлист
 int numPackages = 0;
 int list = 0;
 bool loadpage = true;
-QString packagesArchiveAUR = "steam";
+QString packagesArchiveAUR;
+QString detailsAURdefault;
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -1304,6 +1305,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     loadingListWidget();
     loadSystemInfo();
 
+    detailsAURdefault = ui->details_aur->toHtml();
+
     ui->check_trayon->setChecked(trayon);
     ui->check_autostart->setChecked(autostart);
     ui->check_repair->setChecked(repair);
@@ -2410,7 +2413,6 @@ void MainWindow::processTableItem(int row, QTableWidget* tableWidget, QTextBrows
 
 void MainWindow::onTableAurCellClicked(int row) {
     if (page == 2) {
-
         QTableWidgetItem *item = ui->table_aur->item(row, 0);
 
         bool iconFound = false;
@@ -2423,13 +2425,11 @@ void MainWindow::onTableAurCellClicked(int row) {
             }
         }
 
-        if (!iconFound) {
+        if (!iconFound)
             processTableItem(row, ui->table_aur, ui->details_aur);
-        }
     }
-    else if (page == 4) {
+    else if (page == 4)
         processTableItem(row, ui->table_app, ui->details_aurpkg);
-    }
 }
 
 void MainWindow::miniAnimation(bool visible, QWidget* targetWidget)
@@ -3332,7 +3332,6 @@ void MainWindow::handleServerResponse(const QString& reply)
     connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
 
     connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
-        ui->details_aur->setText(tr("Пакет не найден!\nВозможно, он поменял свое название..."));
         miniAnimation(false, ui->table_aur);
     });
 
@@ -4272,6 +4271,7 @@ void MainWindow::on_reload_aur_clicked()
     QTimer::singleShot(500, this, [=]() {
         list = 0;
         loadContent(0,true);
+        ui->details_aur->setHtml(detailsAURdefault);
         miniAnimation(false,ui->table_aur);
     });
 }
@@ -4285,6 +4285,7 @@ void MainWindow::on_reload_aurpkg_clicked()
     ui->table_app->setRowCount(0);
 
     QTimer::singleShot(500, this, [=]() {
+        ui->details_aurpkg->setText(tr("Ничего не выбрано"));
         miniAnimation(false, ui->table_app);
         loadContentInstall();
     });
