@@ -3191,7 +3191,7 @@ void MainWindow::onReplyFinished(QNetworkReply *reply)
     }
     else {
         miniAnimation(false,ui->table_downgrade);
-        ui->details_downgrade->setText("Пакет не найден в архиве");
+        ui->details_downgrade->setText(tr("Пакет не найден в архиве"));
     }
     reply->deleteLater();
 }

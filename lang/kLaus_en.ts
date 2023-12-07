@@ -1326,6 +1326,11 @@ It may have changed its name...</translation>
         <translation>Select the package to install!</translation>
     </message>
     <message>
+        <location filename="../mainwindow.cpp" line="3194"/>
+        <source>Пакет не найден в архиве</source>
+        <translation>The package was not found in the archive</translation>
+    </message>
+    <message>
         <location filename="../mainwindow.cpp" line="3554"/>
         <source>Вы уверены, что хотите удалить каталог &quot;%1&quot; с конфигурацией?</source>
         <translation>Are you sure you want to delete the directory &quot;%1&quot; with the configuration?</translation>

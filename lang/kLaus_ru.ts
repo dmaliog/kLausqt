@@ -1267,6 +1267,11 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../mainwindow.cpp" line="3194"/>
+        <source>Пакет не найден в архиве</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.cpp" line="3554"/>
         <source>Вы уверены, что хотите удалить каталог &quot;%1&quot; с конфигурацией?</source>
         <translation type="unfinished"></translation>
