@@ -16,7 +16,7 @@ QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
 
-QString currentVersion = "8.5";
+QString currentVersion = "8.6";
 
 //автоматически управляют памятью или не требуют
 int pkg = 0; //пакетный менеджер 0-yay / 1-paru
@@ -363,21 +363,22 @@ void MainWindow::on_action_downgrade_triggered()
 //-#####################################################################################################################################################
 void MainWindow::on_action_restart_triggered()
 {
-    QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create();
-    httpProcess->start("pkexec", QStringList() << "sudo" << "systemctl" << "restart" << "httpd");
+    QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create(this);
+
+    httpProcess->startDetached("pkexec", QStringList() << "sudo" << "systemctl" << "restart" << "httpd");
     httpProcess->closeWriteChannel();
     httpProcess->waitForFinished();
-
 }
 
 void MainWindow::on_action_stop_triggered()
 {
-    QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create();
-    httpProcess->start("pkexec", QStringList() << "sudo" << "systemctl" << "stop" << "httpd");
+    QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create(this);
+
+    httpProcess->startDetached("pkexec", QStringList() << "sudo" << "systemctl" << "stop" << "httpd");
     httpProcess->closeWriteChannel();
     httpProcess->waitForFinished();
-
 }
+
 
 void MainWindow::on_action_catalog_triggered()
 {
@@ -662,10 +663,11 @@ void MainWindow::on_action_5_triggered()
 {
     if (page == 10)
     {
-            QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create();
-            httpProcess->start("pkexec", QStringList() << "sudo" << "systemctl" << "start" << "httpd");
-            httpProcess->closeWriteChannel();
-            httpProcess->waitForFinished();
+        QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create(this);
+
+        httpProcess->startDetached("pkexec", QStringList() << "sudo" << "systemctl" << "start" << "httpd");
+        httpProcess->closeWriteChannel();
+        httpProcess->waitForFinished();
     }
     else
     {
@@ -1745,10 +1747,17 @@ void MainWindow::loadSettings()
     action_7->setIcon(QIcon(":/img/5.png"));
     trayMenu->addAction(action_7);
 
+    QAction *action_downgrade = new QAction(tr("Понижение версий пакетов"), trayMenu);
+    action_downgrade->setIcon(QIcon(":/img/55.png"));
+    trayMenu->addAction(action_downgrade);
 
     QAction *action_9 = new QAction(tr("Информация о системе"), trayMenu);
     action_9->setIcon(QIcon(":/img/7.png"));
     trayMenu->addAction(action_9);
+
+    QAction *action_17 = new QAction(tr("Полезные скрипты"), trayMenu);
+    action_17->setIcon(QIcon(":/img/19.png"));
+    trayMenu->addAction(action_17);
 
     QAction *action_12 = new QAction(tr("Настройки"), trayMenu);
     action_12->setIcon(QIcon(":/img/9.png"));
@@ -1764,8 +1773,9 @@ void MainWindow::loadSettings()
     // Связывание событий нажатия на пункты меню с обработчиками
     connect(action_2, &QAction::triggered, this, &MainWindow::on_action_2_triggered);
     connect(action_7, &QAction::triggered, this, &MainWindow::on_action_7_triggered);
-    connect(action_11, &QAction::triggered, this, &MainWindow::on_action_11_triggered);
+    connect(action_downgrade, &QAction::triggered, this, &MainWindow::on_action_downgrade_triggered);
     connect(action_9, &QAction::triggered, this, &MainWindow::on_action_9_triggered);
+    connect(action_17, &QAction::triggered, this, &MainWindow::on_action_17_triggered);
     connect(action_12, &QAction::triggered, this, &MainWindow::on_action_12_triggered);
     connect(exitAction, &QAction::triggered, qApp, &QApplication::quit);
 
