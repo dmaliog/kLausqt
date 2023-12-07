@@ -267,8 +267,7 @@ private slots:
     void on_check_trayon_stateChanged(int arg1);
     void on_check_animload_stateChanged(int arg1);
     void on_check_autostart_stateChanged(int arg1);
-
-
+    
     void onTableAurCellClicked(int row);
 
     void on_dial_volnotify_valueChanged(int value);

@@ -16,7 +16,7 @@ QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
 
-QString currentVersion = "8.4";
+QString currentVersion = "8.5";
 
 //автоматически управляют памятью или не требуют
 int pkg = 0; //пакетный менеджер 0-yay / 1-paru
@@ -35,8 +35,8 @@ int benchlist = 0; //бенчлист
 int numPackages = 0;
 int list = 0;
 bool loadpage = true;
-QString packagesArchiveAUR;
-QString detailsAURdefault;
+QString packagesArchiveAUR = "steam";
+QString detailsAURdefault = " ";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -527,7 +527,7 @@ void MainWindow::on_action_34_triggered()
         tableWidget = ui->table_app;
     }
 
-    if (tableWidget->currentItem() == nullptr) {
+    if (tableWidget == nullptr || tableWidget->currentItem() == nullptr) {
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для просмотра информации!"));
         return;
     }
@@ -1132,6 +1132,9 @@ void MainWindow::showTableContextMenu(const QPoint& pos)
     } else if (page == 4) {
         tableWidget = ui->table_app;
     }
+
+    if (!tableWidget)
+        return;
 
     QTableWidgetItem* selectedItem = tableWidget->itemAt(pos);
 
@@ -2402,9 +2405,9 @@ void MainWindow::onTableAurCellClicked(int row) {
 
         bool iconFound = false;
 
-        for (const auto& iconName : appIcons) {
-            if (appIcons.contains(item->text()) && appIcons[item->text()] == iconName) {
-                loadContent(row + 1,loadpage);
+        for (auto it = appIcons.constBegin(); it != appIcons.constEnd(); ++it) {
+            if (appIcons.contains(item->text()) && appIcons[item->text()] == it.value()) {
+                loadContent(row + 1, loadpage);
                 iconFound = true;
                 break;
             }
@@ -3162,7 +3165,8 @@ void MainWindow::onReplyFinished(QNetworkReply *reply)
 
         // Извлечение текста ссылок с помощью регулярного выражения
         QString htmlContent(htmlData);
-        QRegularExpression linkRegex("<a [^>]*href=\"([^\"]*)\"[^>]*>.*</a>");
+        static QRegularExpression linkRegex("<a [^>]*href=\"([^\"]*)\"[^>]*>.*</a>");  // Статический объект
+
         int pos = 0;
 
         QRegularExpressionMatch match;
@@ -3185,12 +3189,14 @@ void MainWindow::addLinkToTable(const QString &link)
 {
     // Замена относительных путей "../" на пустую строку
     QString cleanedLink = link;
-    cleanedLink.replace(QRegularExpression("\\.\\./"), "");
+    static QRegularExpression dotDotExp("\\.\\./");  // Статический объект
+    cleanedLink.replace(dotDotExp, "");
 
     // Удаление пустых строк
-    cleanedLink.replace(QRegularExpression("^\n"), "");
+    static QRegularExpression newlineExp("^\n");  // Статический объект
+    cleanedLink.replace(newlineExp, "");
 
-    miniAnimation(false,ui->table_downgrade);
+    miniAnimation(false, ui->table_downgrade);
 
     // Проверка наличия ссылки в списке добавленных
     if (!cleanedLink.isEmpty() && !cleanedLink.contains(".sig") && !addedLinks.contains(cleanedLink)) {
@@ -4202,6 +4208,7 @@ void MainWindow::on_push_pacman_clicked()
     else
     {
         sendNotification(tr("Ошибка"), tr("Не удалось открыть pacman.conf"));
+        delete dialog;  // Удаляем dialog при ошибке
         return;
     }
 
@@ -4224,10 +4231,8 @@ void MainWindow::on_push_pacman_clicked()
 
     });
 
-    if (dialog->exec() == QDialog::Accepted)
-    {
-        // Здесь можно выполнить дополнительные действия после сохранения
-    }
+    editor->setParent(dialog);
+    layout->setParent(dialog);
 }
 
 
