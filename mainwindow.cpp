@@ -16,7 +16,7 @@ QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
 
-QString currentVersion = "8.3";
+QString currentVersion = "8.4";
 
 //автоматически управляют памятью или не требуют
 int pkg = 0; //пакетный менеджер 0-yay / 1-paru
@@ -1535,9 +1535,9 @@ void MainWindow::loadSettings()
             previousAction = ui->action_2;
             break;
         case 1:
-            on_action_17_triggered();
-            ui->action_17->setChecked(true);
-            previousAction = ui->action_17;
+            on_action_7_triggered();
+            ui->action_7->setChecked(true);
+            previousAction = ui->action_7;
             break;
         case 2:
             on_action_downgrade_triggered();
@@ -1550,26 +1550,11 @@ void MainWindow::loadSettings()
             previousAction = ui->action_9;
             break;
         case 4:
-            on_action_7_triggered();
-            ui->action_7->setChecked(true);
-            previousAction = ui->action_7;
+            on_action_17_triggered();
+            ui->action_17->setChecked(true);
+            previousAction = ui->action_17;
             break;
         case 5:
-            on_action_3_triggered();
-            ui->action_3->setChecked(true);
-            previousAction = ui->action_3;
-            break;
-        case 6:
-            on_action_8_triggered();
-            ui->action_8->setChecked(true);
-            previousAction = ui->action_8;
-            break;
-        case 7:
-            on_action_host_triggered();
-            ui->action_host->setChecked(true);
-            previousAction = ui->action_host;
-            break;
-        case 8:
             on_action_12_triggered();
             ui->action_12->setChecked(true);
             previousAction = ui->action_12;

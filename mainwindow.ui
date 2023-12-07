@@ -401,7 +401,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_auradd">
      <attribute name="title">
@@ -1438,38 +1438,11 @@ color:#5752e7;</string>
        <number>0</number>
       </property>
      </widget>
-     <widget class="QPushButton" name="back_aur">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>242</x>
-        <y>15</y>
-        <width>30</width>
-        <height>30</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="klausres.qrc">
-        <normaloff>:/img/35.png</normaloff>:/img/35.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>20</width>
-        <height>20</height>
-       </size>
-      </property>
-     </widget>
      <zorder>table_aur</zorder>
      <zorder>details_aur</zorder>
      <zorder>label_name_aur</zorder>
      <zorder>label_details_aur</zorder>
      <zorder>reload_aur</zorder>
-     <zorder>back_aur</zorder>
     </widget>
     <widget class="QWidget" name="tab_aurpkg">
      <attribute name="title">
@@ -2176,17 +2149,17 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </item>
           <item>
            <property name="text">
+            <string>Понижение версий пакетов</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Информация о системе</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
             <string>Полезные скрипты</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Системные журналы и конфигурации</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Кастомизация</string>
            </property>
           </item>
           <item>
@@ -4267,8 +4240,11 @@ QToolBar#toolBar_2 QToolButton:hover {
     <addaction name="action_2"/>
     <addaction name="action_7"/>
     <addaction name="separator"/>
+    <addaction name="action_downgrade"/>
     <addaction name="action_17"/>
+    <addaction name="separator"/>
     <addaction name="action_8"/>
+    <addaction name="action_host"/>
     <addaction name="separator"/>
     <addaction name="action_12"/>
    </widget>
@@ -4850,7 +4826,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <disabledoff>:/img/11.png</disabledoff>:/img/11.png</iconset>
    </property>
    <property name="text">
-    <string>Настроить сервер</string>
+    <string>Веб-сервер</string>
+   </property>
+   <property name="toolTip">
+    <string>Веб-сервер</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
