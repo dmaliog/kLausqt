@@ -401,7 +401,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab_auradd">
      <attribute name="title">
@@ -1438,11 +1438,38 @@ color:#5752e7;</string>
        <number>0</number>
       </property>
      </widget>
+     <widget class="QPushButton" name="back_aur">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>242</x>
+        <y>15</y>
+        <width>30</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="klausres.qrc">
+        <normaloff>:/img/35.png</normaloff>:/img/35.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
+      </property>
+     </widget>
      <zorder>table_aur</zorder>
      <zorder>details_aur</zorder>
      <zorder>label_name_aur</zorder>
      <zorder>label_details_aur</zorder>
      <zorder>reload_aur</zorder>
+     <zorder>back_aur</zorder>
     </widget>
     <widget class="QWidget" name="tab_aurpkg">
      <attribute name="title">
@@ -3653,7 +3680,7 @@ color:#5752e7;</string>
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_driver">
+    <widget class="QWidget" name="tab_downgrade">
      <attribute name="title">
       <string>Страница</string>
      </attribute>
@@ -3662,7 +3689,7 @@ color:#5752e7;</string>
        <rect>
         <x>20</x>
         <y>9</y>
-        <width>361</width>
+        <width>201</width>
         <height>41</height>
        </rect>
       </property>
@@ -3767,26 +3794,6 @@ color:#5752e7;</string>
       </attribute>
       <column/>
      </widget>
-     <widget class="QPushButton" name="push_downgrade">
-      <property name="geometry">
-       <rect>
-        <x>215</x>
-        <y>15</y>
-        <width>161</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="text">
-       <string>Применить</string>
-      </property>
-      <property name="icon">
-       <iconset resource="klausres.qrc">
-        <normaloff>:/img/16.png</normaloff>:/img/16.png</iconset>
-      </property>
-     </widget>
      <widget class="QTextBrowser" name="details_downgrade">
       <property name="enabled">
        <bool>true</bool>
@@ -3796,7 +3803,7 @@ color:#5752e7;</string>
         <x>660</x>
         <y>50</y>
         <width>721</width>
-        <height>271</height>
+        <height>461</height>
        </rect>
       </property>
       <property name="font">
@@ -3992,7 +3999,7 @@ background-color:#1a1a1a;
    <addaction name="action_2"/>
    <addaction name="action_7"/>
    <addaction name="separator"/>
-   <addaction name="action_driver"/>
+   <addaction name="action_downgrade"/>
    <addaction name="action_9"/>
    <addaction name="action_17"/>
    <addaction name="separator"/>
@@ -5015,16 +5022,18 @@ QToolBar#toolBar_2 QToolButton:hover {
     <enum>QAction::NoRole</enum>
    </property>
   </action>
-  <action name="action_driver">
+  <action name="action_downgrade">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="klausres.qrc">
-     <normaloff>:/img/55.png</normaloff>:/img/55.png</iconset>
+     <normaloff>:/img/55.png</normaloff>
+     <disabledoff>:/img/55.png</disabledoff>
+     <disabledon>:/img/55.png</disabledon>:/img/55.png</iconset>
    </property>
    <property name="text">
     <string>Переключение драйверов</string>
@@ -5034,6 +5043,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
   </action>
   <action name="action_nvidia">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="klausres.qrc">
      <normaloff>:/img/nvidia.png</normaloff>:/img/nvidia.png</iconset>

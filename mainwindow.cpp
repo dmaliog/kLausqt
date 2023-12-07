@@ -7,6 +7,7 @@
 #include <QSoundEffect>
 #include <unistd.h>
 #include <sys/utsname.h>
+#include <QRegularExpression>
 
 //---#####################################################################################################################################################
 //--############################################################## ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ################################################################
@@ -15,7 +16,7 @@ QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
 QSettings settings(filePath, QSettings::IniFormat);
 
-QString currentVersion = "8.1";
+QString currentVersion = "8.2";
 
 //автоматически управляют памятью или не требуют
 int pkg = 0; //пакетный менеджер 0-yay / 1-paru
@@ -34,6 +35,7 @@ int benchlist = 0; //бенчлист
 int numPackages = 0;
 int list = 0;
 bool loadpage = true;
+QString packagesArchiveAUR = "steam";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -55,7 +57,8 @@ QMap<int, QMap<QString, QStringList>> packageCommands = {
             {"remove_explicit", {"yay", "-Rs"}},
             {"query_depends", {"yay", "-Qdtq"}},
             {"clean_cache", {"yay", "-Sc"}},
-            {"clean_all_cache", {"yay", "-Scc"}}
+            {"clean_all_cache", {"yay", "-Scc"}},
+            {"localinstall", {"yay", "-U"}}
         }
     },
     {1,
@@ -73,7 +76,8 @@ QMap<int, QMap<QString, QStringList>> packageCommands = {
             {"remove_explicit", {"paru", "-Rs"}},
             {"query_depends", {"paru", "-Qdtq"}},
             {"clean_cache", {"paru", "-Sc"}},
-            {"clean_all_cache", {"paru", "-Scc"}}
+            {"clean_all_cache", {"paru", "-Scc"}},
+            {"localinstall", {"paru", "-U"}}
         }
     },
     {2,
@@ -335,16 +339,21 @@ void MainWindow::on_action_host_triggered()
     showLoadingAnimationMini(false);
 }
 
-//11-13 свободны
+//11-13 заняты
 
-void MainWindow::on_action_driver_triggered()
+void MainWindow::on_action_downgrade_triggered()
 {
     mrpropper(14);
-    ui->label1->setText(tr("Переключение драйвера GPU"));
+    ui->label1->setText(tr("Понижение версий пакетов"));
     ui->action_nvidia->setVisible(true);
     ui->action_amd->setVisible(true);
     ui->action_intel->setVisible(true);
+
+    searchLineEdit->setPlaceholderText(tr("Поиск по архиву..."));
+    searchLineEdit->setFixedWidth(1000);
+
     ui->tabWidget->setCurrentIndex(12);
+
     showLoadingAnimationMini(false);
 }
 
@@ -398,7 +407,7 @@ void MainWindow::openDirectory(const QString &directoryPath)
 
 void MainWindow::on_action_27_triggered()
 {
-    page = 01;
+    page = 111;
     ui->label1->setText(tr("Информация о системе"));
 
     ui->push_pacman->setVisible(false);
@@ -413,7 +422,7 @@ void MainWindow::on_action_27_triggered()
 
 void MainWindow::on_action_bench_triggered()
 {
-    page = 02;
+    page = 112;
     ui->label1->setText(tr("Бенчмарки"));
 
     ui->push_pacman->setVisible(false);
@@ -443,7 +452,7 @@ void MainWindow::on_action_system_triggered()
 
 void MainWindow::on_action_repair_triggered()
 {
-    page = 03;
+    page = 113;
     ui->label1->setText(tr("Оптимизация"));
 
     ui->push_pacman->setVisible(false);
@@ -1201,38 +1210,46 @@ void MainWindow::createSearchBar()
     });
 }
 
+
 void MainWindow::searchTextChanged(const QString& searchText)
 {
-    if (page == 01)
+    if (page == 2)
+        searchAndScroll(ui->table_aur, searchText);
+
+    else if (page == 4)
+        searchAndScroll(ui->table_app, searchText);
+
+    else if (page == 3)
+        searchAndScroll(ui->list_sh, searchText);
+
+    else if (page == 14)
+        searchAndScroll(ui->table_downgrade, searchText);
+
+    else if (page == 111)
     {
         searchAndScroll(ui->list_journal, searchText);
         searchAndScroll(ui->list_cfg, searchText);
     }
-    else if (page == 02)
+
+    else if (page == 112)
         searchAndScroll(ui->list_bench, searchText);
-    else if (page == 03)
+
+    else if (page == 113)
         searchAndScroll(ui->list_repair, searchText);
-    else if (page == 2 || page == 4)
+}
+
+void MainWindow::searchAndScroll(QAbstractItemView* view, const QString& text)
+{
+    if (QTableWidget* tableWidget = qobject_cast<QTableWidget*>(view))
     {
-        QTableWidget* tableWidget = nullptr;
-
-        if (page == 2) {
-            tableWidget = ui->table_aur;
-        } else if (page == 4) {
-            tableWidget = ui->table_app;
-        }
-
-        // Выполняем поиск и выделение в таблице
         int rowCount = tableWidget->rowCount();
         for (int i = 0; i < rowCount; ++i) {
-            QTableWidgetItem *item = tableWidget->item(i, 0);
+            QTableWidgetItem* item = tableWidget->item(i, 0);
             if (item) {
                 QString cellText = item->text();
                 QStringList words = cellText.split(' ', Qt::SkipEmptyParts);
-                if (!words.isEmpty() && words.first().startsWith(searchText, Qt::CaseInsensitive)) {
-
-                    // Выделяем всю строку
-                    tableWidget->setCurrentCell(item->row(), 0);
+                if (!words.isEmpty() && words.first().startsWith(text, Qt::CaseInsensitive)) {
+                    tableWidget->setCurrentCell(i, 0);
                     tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
                     tableWidget->scrollToItem(item, QAbstractItemView::EnsureVisible);
                     break;
@@ -1240,6 +1257,15 @@ void MainWindow::searchTextChanged(const QString& searchText)
             }
         }
     }
+    else if (QListWidget* listWidget = qobject_cast<QListWidget*>(view))
+    {
+        QList<QListWidgetItem*> matchingItems = listWidget->findItems(text, Qt::MatchContains);
+        if (!matchingItems.isEmpty()) {
+            listWidget->setCurrentItem(matchingItems.first());
+            listWidget->scrollToItem(matchingItems.first(), QAbstractItemView::PositionAtCenter);
+        }
+    }
+    // Добавьте дополнительные условия, если у вас есть другие типы представлений для поиска
 }
 
 void MainWindow::search(const QString& searchText)
@@ -1248,6 +1274,8 @@ void MainWindow::search(const QString& searchText)
         handleServerResponse(searchText);
     else if (page == 6 || page == 7 || page == 10)
         webEngineView2->setUrl(QUrl(searchText));
+    else if (page == 14)
+        checkForDowngrades(searchText);
 }
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
@@ -1304,6 +1332,15 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
         helper = "yay";
     else
         helper = "paru";
+
+
+    // Создание экземпляра QNetworkAccessManager
+    manager = new QNetworkAccessManager(this);
+
+    // Настройка обработки сигнала finished
+    connect(manager, &QNetworkAccessManager::finished, this, &MainWindow::onReplyFinished);
+
+    checkForDowngrades("steam");
 
     showLoadingAnimation(false);
 }
@@ -1500,9 +1537,9 @@ void MainWindow::loadSettings()
             previousAction = ui->action_17;
             break;
         case 2:
-            on_action_driver_triggered();
-            ui->action_driver->setChecked(true);
-            previousAction = ui->action_driver;
+            on_action_downgrade_triggered();
+            ui->action_downgrade->setChecked(true);
+            previousAction = ui->action_downgrade;
             break;
         case 3:
             on_action_9_triggered();
@@ -1543,14 +1580,7 @@ void MainWindow::loadSettings()
     connect(ui->table_aur, &QTableWidget::cellClicked, this, &MainWindow::onTableAurCellClicked);
     connect(ui->table_app, &QTableWidget::cellClicked, this, &MainWindow::onTableAurCellClicked);
 
-    auto reloadFunction = [=]() {
-        loadContentInstall();
-        list = 0;
-        loadContent(0,true);
-    };
-
-    connect(ui->reload_aurpkg, &QPushButton::clicked, this, reloadFunction);
-    connect(ui->reload_aur, &QPushButton::clicked, this, reloadFunction);
+    connect(ui->table_downgrade, &QTableWidget::cellDoubleClicked, this, &MainWindow::onTableDowngradeCellDoubleClicked);
 
     connect(webEngineView2, &QWebEngineView::urlChanged, this, [this](const QUrl &url) {
         QString urlString = url.toString();
@@ -1916,8 +1946,8 @@ bool isDescendantOfTabWidget(QWidget* widget) {
 
 void MainWindow::mrpropper(int value) //зачистка говна перед началом каждой вкладки
 {
-    miniAnimation(false,0);
-    miniAnimation(false,1);
+    miniAnimation(false,ui->details_aur);
+    miniAnimation(false,ui->table_aur);
     showLoadingAnimationMini(true);
 
     page = value;
@@ -2336,13 +2366,32 @@ void MainWindow::processTableItem(int row, QTableWidget* tableWidget, QTextBrows
         // Восстанавливаем позицию прокрутки
         detailsWidget->verticalScrollBar()->setValue(scrollBarValue);
 
-        miniAnimation(false,0);
+        miniAnimation(false,detailsWidget);
+    });
+
+    connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
+        if (exitCode != 0 || exitStatus == QProcess::CrashExit) {
+            QByteArray errorOutput = currentProcess->readAllStandardError();
+            QString errorMessage = QString::fromUtf8(errorOutput);
+
+            if (!errorMessage.trimmed().isEmpty())
+                detailsWidget->setText(errorMessage);
+            else
+                detailsWidget->setText(tr("Пакет не найден!\nВозможно, он поменял свое название..."));
+
+            searchLineEdit->setText(packageName);
+
+            QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
+            QCoreApplication::postEvent(searchLineEdit.data(), event);
+
+            miniAnimation(false,detailsWidget);
+        }
     });
 
     // Очищаем текстовый виджет перед началом нового запроса
     detailsWidget->clear();
 
-    miniAnimation(true,0);
+    miniAnimation(true,detailsWidget);
 
     if (container == 2) {
         currentProcess->start(packageCommands.value(container).value("snap_info").at(0), QStringList() << packageCommands.value(container).value("snap_info").at(1) << packageName);
@@ -2361,6 +2410,7 @@ void MainWindow::processTableItem(int row, QTableWidget* tableWidget, QTextBrows
 
 void MainWindow::onTableAurCellClicked(int row) {
     if (page == 2) {
+
         QTableWidgetItem *item = ui->table_aur->item(row, 0);
 
         bool iconFound = false;
@@ -2382,16 +2432,9 @@ void MainWindow::onTableAurCellClicked(int row) {
     }
 }
 
-void MainWindow::miniAnimation(bool visible, int index)
+void MainWindow::miniAnimation(bool visible, QWidget* targetWidget)
 {
     static QLabel* miniLoadLabel = nullptr;
-
-    QWidget* targetWidget = nullptr;
-
-    if (index == 0)
-        targetWidget = ui->details_aur;
-    else if (index == 1)
-        targetWidget = ui->table_aur;
 
     if (visible) {
         if (miniLoadLabel) {
@@ -2526,6 +2569,7 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
 
 void MainWindow::loadContent(int value, bool valuepage)
 {
+    miniAnimation(true,ui->table_aur);
     ui->table_aur->setHorizontalHeaderLabels({tr("Названия пакетов")});
 
     // Очищаем таблицу
@@ -2536,6 +2580,7 @@ void MainWindow::loadContent(int value, bool valuepage)
     QString targetFilePath;
 
     // 0 - лист
+
 
     if (list == 0) {
         sourceFilePath = ":/other/" + *lang + "/list.txt";
@@ -2914,6 +2959,7 @@ void MainWindow::loadContent(int value, bool valuepage)
         }
     }
 
+
     QFileInfo fileInfo(targetFilePath);
     if (!fileInfo.exists())
     {
@@ -3023,6 +3069,159 @@ void MainWindow::loadContent(int value, bool valuepage)
         if(valuepage)
             appIcons[packageName] = iconPath;
     }
+
+    miniAnimation(false,ui->table_aur);
+
+}
+
+void MainWindow::onTableDowngradeCellDoubleClicked() {
+    if (ui->table_downgrade->currentItem() == nullptr) {
+        sendNotification(tr("Внимание"), tr("Выберите пакет для установки!"));
+        return;
+    }
+
+    QString packageName = ui->table_downgrade->item(ui->table_downgrade->currentRow(), 0)->text();
+    Terminal terminal = getTerminal();
+
+    QString installUrl = "https://archive.archlinux.org/packages/" + QString(packagesArchiveAUR.at(0)) + "/" + packagesArchiveAUR +  "/" + packageName;
+
+    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+    process->setProgram(terminal.binary);
+    process->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("localinstall") << installUrl);
+    process->setProcessChannelMode(QProcess::MergedChannels);
+    process->start();
+    process->waitForFinished(-1);
+}
+
+void MainWindow::checkForDowngrades(const QString& packagesArchiveAUR)
+{
+    if (!packagesArchiveAUR.isEmpty())
+    {
+        miniAnimation(true, ui->table_downgrade);
+
+        // Очистка списка добавленных ссылок
+        addedLinks.clear();
+
+        // Очищаем таблицу
+        ui->table_downgrade->clearContents();
+        ui->table_downgrade->setRowCount(0);
+
+        // Получение первой буквы пакета
+        QChar firstLetter = packagesArchiveAUR.at(0);
+
+        // Формирование URL с добавлением первой буквы
+        QUrl url("https://archive.archlinux.org/packages/" + QString(firstLetter) + "/" + packagesArchiveAUR);
+        QNetworkRequest request(url);
+        manager->get(request);
+
+        QSharedPointer<QProcess> currentProcess = QSharedPointer<QProcess>::create();
+
+        connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, [=]() {
+            QByteArray output = currentProcess->readAllStandardOutput();
+            QString packageInfo = QString::fromUtf8(output);
+            currentProcess->waitForFinished();
+
+            QStringList lines = packageInfo.split("\n");
+            QString processedInfo;
+
+            for (const QString& line : lines) {
+                if (!line.isEmpty()) {
+                    int colonIndex = line.indexOf(':');
+                    if (colonIndex != -1) {
+                        QString header = line.left(colonIndex).trimmed();
+                        QString content = line.mid(colonIndex + 1).trimmed();
+
+                        header = "<b>" + header + ":</b> ";
+
+                        processedInfo += "<p><span>" + header + "</span>" + content + "</p>";
+                    }
+                }
+            }
+
+            // Устанавливаем информацию после обработки всей строки
+            ui->details_downgrade->append(processedInfo);
+
+            // Восстанавливаем позицию прокрутки
+            ui->details_downgrade->moveCursor(QTextCursor::Start);
+        });
+
+        connect(currentProcess.data(), &QProcess::readyReadStandardError, this, [=]() {
+            QByteArray errorOutput = currentProcess->readAllStandardError();
+            QString errorMessage = QString::fromUtf8(errorOutput);
+            currentProcess->waitForFinished();  // Добавлено для уверенности, что процесс завершен
+
+            // Если есть сообщение об ошибке, выводим его
+            if (!errorMessage.trimmed().isEmpty()) {
+                ui->details_downgrade->setText(errorMessage);
+            }
+        });
+
+        // Очищаем текстовый виджет перед началом нового запроса
+        ui->details_downgrade->clear();
+
+        QStringList command;
+        command = packageCommands.value(pkg).value("info");
+        currentProcess->start(command[0], QStringList() << command[1] << packagesArchiveAUR);
+    }
+}
+
+void MainWindow::onReplyFinished(QNetworkReply *reply)
+{
+    if (reply->error() == QNetworkReply::NoError)
+    {
+        if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 404)
+            return;
+
+        // Чтение содержимого ответа
+        QByteArray htmlData = reply->readAll();
+
+        // Извлечение текста ссылок с помощью регулярного выражения
+        QString htmlContent(htmlData);
+        QRegularExpression linkRegex("<a [^>]*href=\"([^\"]*)\"[^>]*>.*</a>");
+        int pos = 0;
+
+        QRegularExpressionMatch match;
+        pos = 0;
+        while ((match = linkRegex.match(htmlContent, pos)).hasMatch())
+        {
+            QString link = match.captured(1);
+            addLinkToTable(link);
+            pos += match.capturedLength();
+        }
+    }
+    else {
+        miniAnimation(false,ui->table_downgrade);
+        ui->details_downgrade->setText("Пакет не найден в архиве");
+    }
+    reply->deleteLater();
+}
+
+void MainWindow::addLinkToTable(const QString &link)
+{
+    // Замена относительных путей "../" на пустую строку
+    QString cleanedLink = link;
+    cleanedLink.replace(QRegularExpression("\\.\\./"), "");
+
+    // Удаление пустых строк
+    cleanedLink.replace(QRegularExpression("^\n"), "");
+
+    miniAnimation(false,ui->table_downgrade);
+
+    // Проверка наличия ссылки в списке добавленных
+    if (!cleanedLink.isEmpty() && !cleanedLink.contains(".sig") && !addedLinks.contains(cleanedLink)) {
+        int row = ui->table_downgrade->rowCount();
+        ui->table_downgrade->insertRow(row);
+
+        QTableWidgetItem *item = new QTableWidgetItem(cleanedLink);
+        item->setForeground(generateRandomColor());
+
+        item->setIcon(QIcon("/usr/share/icons/Papirus/48x48/mimetypes/application-x-xz-pkg.svg"));
+
+        ui->table_downgrade->setItem(row, 0, item);
+
+        // Добавление ссылки в список добавленных
+        addedLinks.insert(cleanedLink);
+    }
 }
 
 void MainWindow::loadContentInstall()
@@ -3122,7 +3321,7 @@ void MainWindow::handleServerResponse(const QString& reply)
     ui->table_aur->setRowCount(0);
     ui->table_aur->setColumnCount(1);
 
-    miniAnimation(true,1);
+    miniAnimation(true,ui->table_aur);
 
     helperPackageNames.clear();
 
@@ -3131,6 +3330,11 @@ void MainWindow::handleServerResponse(const QString& reply)
 
     currentProcess = QSharedPointer<QProcess>::create(this);
     connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
+
+    connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
+        ui->details_aur->setText(tr("Пакет не найден!\nВозможно, он поменял свое название..."));
+        miniAnimation(false, ui->table_aur);
+    });
 
     currentProcess->start(searchCommand, QStringList() << searchArg << reply);
 }
@@ -3191,7 +3395,7 @@ void MainWindow::onCurrentProcessReadyRead()
         ui->table_aur->setItem(i, 0, item);
     }
 
-    miniAnimation(false, 1);
+    miniAnimation(false,ui->table_aur);
 
     QString searchText = searchLineEdit->text();
     setCursorAndScrollToItem(searchText);
@@ -3203,7 +3407,7 @@ void MainWindow::onCurrentProcessReadyRead()
 void MainWindow::onSearchTimeout()
 {
     currentProcess->kill();
-    miniAnimation(false, 1);
+    miniAnimation(false,ui->table_aur);
 }
 
 void MainWindow::onSnapProcessFinished()
@@ -3238,18 +3442,9 @@ void MainWindow::onSnapProcessFinished()
         ui->table_aur->setItem(i, 0, item);
     }
 
-    miniAnimation(false,1);
+    miniAnimation(false,ui->table_aur);
 }
 
-
-void MainWindow::searchAndScroll(QListWidget* listWidget, const QString& text)
-{
-    QList<QListWidgetItem*> matchingItems = listWidget->findItems(text, Qt::MatchContains);
-    if (!matchingItems.empty()) {
-        listWidget->setCurrentItem(matchingItems.first());
-        listWidget->scrollToItem(matchingItems.first(), QAbstractItemView::PositionAtCenter);
-    }
-}
 
 void MainWindow::loadingListWidget()
 {
@@ -4061,3 +4256,37 @@ void MainWindow::on_push_kde_clicked()
     Terminal terminal = getTerminal();
     QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "sudo" << "rm" << QDir::homePath() + "/.config/kdeglobals");
 }
+
+void MainWindow::on_back_aur_clicked()
+{
+}
+
+void MainWindow::on_reload_aur_clicked()
+{
+    miniAnimation(true,ui->table_aur);
+
+    // Очищаем таблицу
+    ui->table_aur->clearContents();
+    ui->table_aur->setRowCount(0);
+
+    QTimer::singleShot(500, this, [=]() {
+        list = 0;
+        loadContent(0,true);
+        miniAnimation(false,ui->table_aur);
+    });
+}
+
+void MainWindow::on_reload_aurpkg_clicked()
+{
+    miniAnimation(true, ui->table_app);
+
+    // Очищаем таблицу
+    ui->table_app->clearContents();
+    ui->table_app->setRowCount(0);
+
+    QTimer::singleShot(500, this, [=]() {
+        miniAnimation(false, ui->table_app);
+        loadContentInstall();
+    });
+}
+

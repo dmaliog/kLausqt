@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "qnetworkaccessmanager.h"
 #include "qtextbrowser.h"
 #include <QLabel>
 #include <QWebEngineView>
@@ -35,6 +36,9 @@ public:
     QColor generateRandomColor();
 
 private:
+    QNetworkAccessManager *manager;
+    QSet<QString> addedLinks;
+
     QMap<QString, QString> appIcons;
 
     QWebEngineView *webEngineView2;
@@ -161,6 +165,7 @@ protected: // события сворачивания окна
     void closeEvent(QCloseEvent *event) override; // объявление метода closeEvent()
 
 public slots:
+
     void setCursorAndScrollToItem(const QString& itemName);
     void onSearchTimeout();
 
@@ -182,6 +187,13 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
+    void checkForDowngrades(const QString& packagesArchiveAUR);
+    void onTableDowngradeCellDoubleClicked();
+
+    void addLinkToTable(const QString &link);
+
+    void onReplyFinished(QNetworkReply *reply);
+
     void handleListItemClicked(QListWidgetItem *item, const QString& scriptDir);
 
     void processTableItem(int row, QTableWidget* tableWidget, QTextBrowser* detailsWidget);
@@ -200,7 +212,7 @@ private slots:
     void setupTableContextMenu();
     void showTableContextMenu(const QPoint& pos);
 
-    void miniAnimation(bool visible, int index);
+    void miniAnimation(bool visible, QWidget *targetWidget);
 
     QIcon getPackageIcon(const QString& packageName);
     QString getScriptContent(const QString& filePath);
@@ -240,7 +252,7 @@ private slots:
     void WorkTimer();
     void handleServerResponse(const QString &reply);
     void handleListItemDoubleClick(QListWidgetItem *item, const QString& scriptDir);
-    void searchAndScroll(QListWidget* listWidget, const QString& text);
+    void searchAndScroll(QAbstractItemView* view, const QString& text);
 
     void on_combo_mainpage_currentIndexChanged(int index);
     void on_combo_animload_currentIndexChanged(int index);
@@ -294,10 +306,11 @@ private slots:
     void on_action_restart_triggered();
     void on_action_stop_triggered();
     void on_action_catalog_triggered();
+    void on_action_downgrade_triggered();
+    void on_action_snap_triggered();
 
     void on_push_grub_clicked();
     void on_push_repair_clicked();
-    void on_action_snap_triggered();
     void on_push_pacman_clicked();
     void on_list_journal_itemClicked(QListWidgetItem *item);
     void on_list_cfg_itemClicked(QListWidgetItem *item);
@@ -305,7 +318,9 @@ private slots:
     void on_list_bench_itemClicked(QListWidgetItem *item);
     void on_push_vk_clicked();
     void on_push_kde_clicked();
-    void on_action_driver_triggered();
+    void on_back_aur_clicked();
+    void on_reload_aur_clicked();
+    void on_reload_aurpkg_clicked();
 };
 
 #endif // MAINWINDOW_H
