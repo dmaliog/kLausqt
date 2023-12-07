@@ -153,13 +153,13 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="4774"/>
-        <location filename="../mainwindow.cpp" line="3874"/>
+        <location filename="../mainwindow.cpp" line="3873"/>
         <source>Заваривание чая (выкл.)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="4786"/>
-        <location filename="../mainwindow.cpp" line="3894"/>
+        <location filename="../mainwindow.cpp" line="3893"/>
         <source>Зарядка (выкл.)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -847,15 +847,15 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <location filename="../mainwindow.cpp" line="3595"/>
         <location filename="../mainwindow.cpp" line="3605"/>
         <location filename="../mainwindow.cpp" line="3683"/>
-        <location filename="../mainwindow.cpp" line="3759"/>
-        <location filename="../mainwindow.cpp" line="3852"/>
-        <location filename="../mainwindow.cpp" line="3861"/>
-        <location filename="../mainwindow.cpp" line="3881"/>
-        <location filename="../mainwindow.cpp" line="3901"/>
-        <location filename="../mainwindow.cpp" line="4041"/>
-        <location filename="../mainwindow.cpp" line="4178"/>
-        <location filename="../mainwindow.cpp" line="4220"/>
-        <location filename="../mainwindow.cpp" line="4240"/>
+        <location filename="../mainwindow.cpp" line="3758"/>
+        <location filename="../mainwindow.cpp" line="3851"/>
+        <location filename="../mainwindow.cpp" line="3860"/>
+        <location filename="../mainwindow.cpp" line="3880"/>
+        <location filename="../mainwindow.cpp" line="3900"/>
+        <location filename="../mainwindow.cpp" line="4040"/>
+        <location filename="../mainwindow.cpp" line="4177"/>
+        <location filename="../mainwindow.cpp" line="4219"/>
+        <location filename="../mainwindow.cpp" line="4239"/>
         <source>Ошибка</source>
         <translation type="unfinished"></translation>
     </message>
@@ -882,7 +882,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <location filename="../mainwindow.cpp" line="948"/>
         <location filename="../mainwindow.cpp" line="1016"/>
         <location filename="../mainwindow.cpp" line="3077"/>
-        <location filename="../mainwindow.cpp" line="4086"/>
+        <location filename="../mainwindow.cpp" line="4085"/>
         <source>Внимание</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1059,7 +1059,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <message>
         <location filename="../mainwindow.cpp" line="774"/>
         <location filename="../mainwindow.cpp" line="828"/>
-        <location filename="../mainwindow.cpp" line="4086"/>
+        <location filename="../mainwindow.cpp" line="4085"/>
         <source>Вначале требуется обновить систему до актуального состояния! Это поможет предотвратить конфликт зависимостей и избежать кучи других проблем!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1145,57 +1145,57 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3878"/>
+        <location filename="../mainwindow.cpp" line="3877"/>
         <source>Заваривание чая (каждые %1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3898"/>
+        <location filename="../mainwindow.cpp" line="3897"/>
         <source>Зарядка (каждые %1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="4011"/>
+        <location filename="../mainwindow.cpp" line="4010"/>
         <source>Обычно, когда пакет становится сиротой, это означает, что он был установлен в качестве зависимости другого пакета, но этот пакет был удален, и больше нет других пакетов, которые бы зависели от данного. Удаление сирот из системы помогает поддерживать систему более чистой и оптимизированной. Вы действительно хотите удалить пакеты сироты?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="4030"/>
+        <location filename="../mainwindow.cpp" line="4029"/>
         <source>При обновлении пакетов старые версии пакетов сохраняются в кэше, чтобы вы могли откатиться к предыдущим версиям, если это необходимо. Однако, если вы не планируете откатываться к предыдущим версиям пакетов, удаление кэша может помочь вам освободить дополнительное место на диске. Вы действительно хотите удалить кэш только неустановленных пакетов (можно изменить в настройках)?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="4035"/>
+        <location filename="../mainwindow.cpp" line="4034"/>
         <source>При обновлении пакетов старые версии пакетов сохраняются в кэше, чтобы вы могли откатиться к предыдущим версиям, если это необходимо. Однако, если вы не планируете откатываться к предыдущим версиям пакетов, удаление кэша может помочь вам освободить дополнительное место на диске. Вы действительно хотите удалить кэш пакетов всех пакетов (можно изменить в настройках)?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="4041"/>
+        <location filename="../mainwindow.cpp" line="4040"/>
         <source>Yay и Paru так не умеют, измените настройки удаления кэша</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="4202"/>
+        <location filename="../mainwindow.cpp" line="4201"/>
         <source>Pacman Repository Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="4220"/>
+        <location filename="../mainwindow.cpp" line="4219"/>
         <source>Не удалось открыть pacman.conf</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="4240"/>
+        <location filename="../mainwindow.cpp" line="4239"/>
         <source>Не удалось выполнить аутентификацию</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="4044"/>
+        <location filename="../mainwindow.cpp" line="4043"/>
         <source>При обновлении пакетов старые версии пакетов сохраняются в кэше, чтобы вы могли откатиться к предыдущим версиям, если это необходимо. Однако, если вы не планируете откатываться к предыдущим версиям пакетов, удаление кэша может помочь вам освободить дополнительное место на диске. Вы действительно хотите удалить кэш всех пакетов кроме последних трех версий (можно изменить в настройках)?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="4178"/>
+        <location filename="../mainwindow.cpp" line="4177"/>
         <source>Установите Firefox или выберите рабочий браузер в качестве основного в настройках системы!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1314,12 +1314,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="4251"/>
+        <location filename="../mainwindow.cpp" line="4250"/>
         <source>Вы уверены, что хотите полностью сбросить конфигурацию DE? Вам придется заново все настроить.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="4288"/>
+        <location filename="../mainwindow.cpp" line="4287"/>
         <source>Ничего не выбрано</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1393,7 +1393,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <message>
         <location filename="../mainwindow.cpp" line="895"/>
         <location filename="../mainwindow.cpp" line="1062"/>
-        <location filename="../mainwindow.cpp" line="4230"/>
+        <location filename="../mainwindow.cpp" line="4229"/>
         <source>Сохранить</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1449,7 +1449,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1706"/>
-        <location filename="../mainwindow.cpp" line="3960"/>
+        <location filename="../mainwindow.cpp" line="3959"/>
         <source>Звук уведомлений: %1/100</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1469,36 +1469,36 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3737"/>
+        <location filename="../mainwindow.cpp" line="3736"/>
         <source>Смена языка</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3737"/>
+        <location filename="../mainwindow.cpp" line="3736"/>
         <source>Приложение будет перезагружено для смены языка</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3759"/>
+        <location filename="../mainwindow.cpp" line="3758"/>
         <source>У вас не установлен Snap!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3852"/>
-        <location filename="../mainwindow.cpp" line="3861"/>
-        <location filename="../mainwindow.cpp" line="3881"/>
-        <location filename="../mainwindow.cpp" line="3901"/>
+        <location filename="../mainwindow.cpp" line="3851"/>
+        <location filename="../mainwindow.cpp" line="3860"/>
+        <location filename="../mainwindow.cpp" line="3880"/>
+        <location filename="../mainwindow.cpp" line="3900"/>
         <source>Неверный формат времени.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="3554"/>
         <location filename="../mainwindow.cpp" line="3572"/>
-        <location filename="../mainwindow.cpp" line="4011"/>
-        <location filename="../mainwindow.cpp" line="4030"/>
-        <location filename="../mainwindow.cpp" line="4035"/>
-        <location filename="../mainwindow.cpp" line="4044"/>
-        <location filename="../mainwindow.cpp" line="4251"/>
+        <location filename="../mainwindow.cpp" line="4010"/>
+        <location filename="../mainwindow.cpp" line="4029"/>
+        <location filename="../mainwindow.cpp" line="4034"/>
+        <location filename="../mainwindow.cpp" line="4043"/>
+        <location filename="../mainwindow.cpp" line="4250"/>
         <source>Вопрос</source>
         <translation type="unfinished"></translation>
     </message>

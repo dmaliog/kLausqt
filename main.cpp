@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     QString filePath = mainDir + "settings.ini";
     QSettings settings(filePath, QSettings::IniFormat);
 
-    QString locale = "RU_ru";
+    QString locale = "ru_RU";
     int packageManagerIndex;
 
     // Проверяем, есть ли уже сохраненные значения в файле INI

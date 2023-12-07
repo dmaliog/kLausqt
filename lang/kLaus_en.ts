@@ -365,13 +365,13 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="4774"/>
-        <location filename="../mainwindow.cpp" line="3874"/>
+        <location filename="../mainwindow.cpp" line="3873"/>
         <source>Заваривание чая (выкл.)</source>
         <translation>Brewing tea (off)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="4786"/>
-        <location filename="../mainwindow.cpp" line="3894"/>
+        <location filename="../mainwindow.cpp" line="3893"/>
         <source>Зарядка (выкл.)</source>
         <translation>Charging (off)</translation>
     </message>
@@ -905,15 +905,15 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <location filename="../mainwindow.cpp" line="3595"/>
         <location filename="../mainwindow.cpp" line="3605"/>
         <location filename="../mainwindow.cpp" line="3683"/>
-        <location filename="../mainwindow.cpp" line="3759"/>
-        <location filename="../mainwindow.cpp" line="3852"/>
-        <location filename="../mainwindow.cpp" line="3861"/>
-        <location filename="../mainwindow.cpp" line="3881"/>
-        <location filename="../mainwindow.cpp" line="3901"/>
-        <location filename="../mainwindow.cpp" line="4041"/>
-        <location filename="../mainwindow.cpp" line="4178"/>
-        <location filename="../mainwindow.cpp" line="4220"/>
-        <location filename="../mainwindow.cpp" line="4240"/>
+        <location filename="../mainwindow.cpp" line="3758"/>
+        <location filename="../mainwindow.cpp" line="3851"/>
+        <location filename="../mainwindow.cpp" line="3860"/>
+        <location filename="../mainwindow.cpp" line="3880"/>
+        <location filename="../mainwindow.cpp" line="3900"/>
+        <location filename="../mainwindow.cpp" line="4040"/>
+        <location filename="../mainwindow.cpp" line="4177"/>
+        <location filename="../mainwindow.cpp" line="4219"/>
+        <location filename="../mainwindow.cpp" line="4239"/>
         <source>Ошибка</source>
         <translation>Error</translation>
     </message>
@@ -940,7 +940,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <location filename="../mainwindow.cpp" line="948"/>
         <location filename="../mainwindow.cpp" line="1016"/>
         <location filename="../mainwindow.cpp" line="3077"/>
-        <location filename="../mainwindow.cpp" line="4086"/>
+        <location filename="../mainwindow.cpp" line="4085"/>
         <source>Внимание</source>
         <translation>Attention</translation>
     </message>
@@ -1118,7 +1118,7 @@ It may have changed its name...</translation>
     <message>
         <location filename="../mainwindow.cpp" line="774"/>
         <location filename="../mainwindow.cpp" line="828"/>
-        <location filename="../mainwindow.cpp" line="4086"/>
+        <location filename="../mainwindow.cpp" line="4085"/>
         <source>Вначале требуется обновить систему до актуального состояния! Это поможет предотвратить конфликт зависимостей и избежать кучи других проблем!</source>
         <translation>First you need to update the system to the current state! This will help prevent dependency conflicts and avoid a bunch of other problems!</translation>
     </message>
@@ -1204,57 +1204,57 @@ It may have changed its name...</translation>
         <translation>Orphan packages</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3878"/>
+        <location filename="../mainwindow.cpp" line="3877"/>
         <source>Заваривание чая (каждые %1)</source>
         <translation>Brewing tea (every %1)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3898"/>
+        <location filename="../mainwindow.cpp" line="3897"/>
         <source>Зарядка (каждые %1)</source>
         <translation>Charging (every %1)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="4011"/>
+        <location filename="../mainwindow.cpp" line="4010"/>
         <source>Обычно, когда пакет становится сиротой, это означает, что он был установлен в качестве зависимости другого пакета, но этот пакет был удален, и больше нет других пакетов, которые бы зависели от данного. Удаление сирот из системы помогает поддерживать систему более чистой и оптимизированной. Вы действительно хотите удалить пакеты сироты?</source>
         <translation>Usually, when a package becomes an orphan, it means that it was installed as a dependency of another package, but this package has been removed, and there are no other packages that depend on this one anymore. Removing orphans from the system helps to keep the system cleaner and optimized. Do you really want to delete orphan packages?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="4030"/>
+        <location filename="../mainwindow.cpp" line="4029"/>
         <source>При обновлении пакетов старые версии пакетов сохраняются в кэше, чтобы вы могли откатиться к предыдущим версиям, если это необходимо. Однако, если вы не планируете откатываться к предыдущим версиям пакетов, удаление кэша может помочь вам освободить дополнительное место на диске. Вы действительно хотите удалить кэш только неустановленных пакетов (можно изменить в настройках)?</source>
         <translation>When updating packages, old versions of packages are stored in the cache so that you can roll back to previous versions if necessary. However, if you do not plan to roll back to previous versions of packages, deleting the cache can help you free up additional disk space. Do you really want to delete the cache of only non-installed packages (you can change it in the settings)?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="4035"/>
+        <location filename="../mainwindow.cpp" line="4034"/>
         <source>При обновлении пакетов старые версии пакетов сохраняются в кэше, чтобы вы могли откатиться к предыдущим версиям, если это необходимо. Однако, если вы не планируете откатываться к предыдущим версиям пакетов, удаление кэша может помочь вам освободить дополнительное место на диске. Вы действительно хотите удалить кэш пакетов всех пакетов (можно изменить в настройках)?</source>
         <translation>When updating packages, old versions of packages are stored in the cache so that you can roll back to previous versions if necessary. However, if you do not plan to roll back to previous versions of packages, deleting the cache can help you free up additional disk space. Do you really want to delete the package cache of all packages (can be changed in the settings)?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="4041"/>
+        <location filename="../mainwindow.cpp" line="4040"/>
         <source>Yay и Paru так не умеют, измените настройки удаления кэша</source>
         <translation>Yay and Paru do not know how to do this, change the cache deletion settings</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="4202"/>
+        <location filename="../mainwindow.cpp" line="4201"/>
         <source>Pacman Repository Editor</source>
         <translation>Packman Repository Editor</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="4220"/>
+        <location filename="../mainwindow.cpp" line="4219"/>
         <source>Не удалось открыть pacman.conf</source>
         <translation>Could not open pacman.conf</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="4240"/>
+        <location filename="../mainwindow.cpp" line="4239"/>
         <source>Не удалось выполнить аутентификацию</source>
         <translation>Authentication failed</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="4044"/>
+        <location filename="../mainwindow.cpp" line="4043"/>
         <source>При обновлении пакетов старые версии пакетов сохраняются в кэше, чтобы вы могли откатиться к предыдущим версиям, если это необходимо. Однако, если вы не планируете откатываться к предыдущим версиям пакетов, удаление кэша может помочь вам освободить дополнительное место на диске. Вы действительно хотите удалить кэш всех пакетов кроме последних трех версий (можно изменить в настройках)?</source>
         <translation>When updating packages, old versions of packages are stored in the cache so that you can roll back to previous versions if necessary. However, if you do not plan to roll back to previous versions of packages, deleting the cache can help you free up additional disk space. Do you really want to delete the cache of all packages except the last three versions (you can change it in the settings)?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="4178"/>
+        <location filename="../mainwindow.cpp" line="4177"/>
         <source>Установите Firefox или выберите рабочий браузер в качестве основного в настройках системы!</source>
         <translation>Install Firefox or choose a working browser as the main one in the system settings!</translation>
     </message>
@@ -1375,12 +1375,12 @@ Important: Archives starting with a dot are configurations from the home directo
         <translation>Failed to restore configuration via archive</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="4251"/>
+        <location filename="../mainwindow.cpp" line="4250"/>
         <source>Вы уверены, что хотите полностью сбросить конфигурацию DE? Вам придется заново все настроить.</source>
         <translation>Are you sure you want to completely reset the DE configuration? You will have to re-configure everything.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="4288"/>
+        <location filename="../mainwindow.cpp" line="4287"/>
         <source>Ничего не выбрано</source>
         <translation>Nothing is selected</translation>
     </message>
@@ -1454,7 +1454,7 @@ Important: Archives starting with a dot are configurations from the home directo
     <message>
         <location filename="../mainwindow.cpp" line="895"/>
         <location filename="../mainwindow.cpp" line="1062"/>
-        <location filename="../mainwindow.cpp" line="4230"/>
+        <location filename="../mainwindow.cpp" line="4229"/>
         <source>Сохранить</source>
         <translation>Save</translation>
     </message>
@@ -1510,7 +1510,7 @@ Important: Archives starting with a dot are configurations from the home directo
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1706"/>
-        <location filename="../mainwindow.cpp" line="3960"/>
+        <location filename="../mainwindow.cpp" line="3959"/>
         <source>Звук уведомлений: %1/100</source>
         <translation>Notification sound: %1/100</translation>
     </message>
@@ -1530,36 +1530,36 @@ Important: Archives starting with a dot are configurations from the home directo
         <translation>Memory: %1 /%2</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3737"/>
+        <location filename="../mainwindow.cpp" line="3736"/>
         <source>Смена языка</source>
         <translation>Language change</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3737"/>
+        <location filename="../mainwindow.cpp" line="3736"/>
         <source>Приложение будет перезагружено для смены языка</source>
         <translation>The application will be restarted to change the language</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3759"/>
+        <location filename="../mainwindow.cpp" line="3758"/>
         <source>У вас не установлен Snap!</source>
         <translation>You don&apos;t have Snap installed!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3852"/>
-        <location filename="../mainwindow.cpp" line="3861"/>
-        <location filename="../mainwindow.cpp" line="3881"/>
-        <location filename="../mainwindow.cpp" line="3901"/>
+        <location filename="../mainwindow.cpp" line="3851"/>
+        <location filename="../mainwindow.cpp" line="3860"/>
+        <location filename="../mainwindow.cpp" line="3880"/>
+        <location filename="../mainwindow.cpp" line="3900"/>
         <source>Неверный формат времени.</source>
         <translation>Incorrect time format.</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="3554"/>
         <location filename="../mainwindow.cpp" line="3572"/>
-        <location filename="../mainwindow.cpp" line="4011"/>
-        <location filename="../mainwindow.cpp" line="4030"/>
-        <location filename="../mainwindow.cpp" line="4035"/>
-        <location filename="../mainwindow.cpp" line="4044"/>
-        <location filename="../mainwindow.cpp" line="4251"/>
+        <location filename="../mainwindow.cpp" line="4010"/>
+        <location filename="../mainwindow.cpp" line="4029"/>
+        <location filename="../mainwindow.cpp" line="4034"/>
+        <location filename="../mainwindow.cpp" line="4043"/>
+        <location filename="../mainwindow.cpp" line="4250"/>
         <source>Вопрос</source>
         <translation>Question</translation>
     </message>

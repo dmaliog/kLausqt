@@ -14,9 +14,11 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QSettings settings(filePath, QSettings::IniFormat);
+QString currentVersion = "8.7";
+QString packagesArchiveAUR = "steam";
+QString detailsAURdefault = "";
 
-QString currentVersion = "8.6";
+QSettings settings(filePath, QSettings::IniFormat);
 
 //автоматически управляют памятью или не требуют
 int pkg = 0; //пакетный менеджер 0-yay / 1-paru
@@ -34,10 +36,8 @@ int helpercache = 0; // кэш
 int benchlist = 0; //бенчлист
 int numPackages = 0;
 int list = 0;
-bool loadpage = true;
-QString packagesArchiveAUR = "steam";
-QString detailsAURdefault = " ";
 
+bool loadpage = true;
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
 //-#####################################################################################################################################################
@@ -379,12 +379,10 @@ void MainWindow::on_action_stop_triggered()
     httpProcess->waitForFinished();
 }
 
-
 void MainWindow::on_action_catalog_triggered()
 {
     QDesktopServices::openUrl(QUrl::fromLocalFile("/srv/http/"));
 }
-
 
 void MainWindow::on_push_repair_clicked()
 {
@@ -522,11 +520,10 @@ void MainWindow::on_action_34_triggered()
 {
     QTableWidget* tableWidget = nullptr;
 
-    if (page == 2) {
+    if (page == 2)
         tableWidget = ui->table_aur;
-    } else if (page == 4) {
+    else if (page == 4)
         tableWidget = ui->table_app;
-    }
 
     if (tableWidget == nullptr || tableWidget->currentItem() == nullptr) {
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для просмотра информации!"));
@@ -539,9 +536,9 @@ void MainWindow::on_action_34_triggered()
 
     QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
 
-    if (container == 2 && page == 4) {
+    if (container == 2 && page == 4)
         process->start(packageCommands.value(container).value("snap_info").at(0), QStringList() << packageCommands.value(container).value("snap_info").at(1) << packageName);
-    } else
+    else
         process->start(packageCommands.value(pkg).value("show_info").at(0), QStringList() << packageCommands.value(pkg).value("show_info").at(1) << packageName);
 
     process->waitForFinished();
@@ -550,7 +547,7 @@ void MainWindow::on_action_34_triggered()
     QString packageInfo = QString::fromUtf8(output);
 
     // Ищем ссылку в тексте packageInfo
-    QString url;
+    QString url = "";
     if (container == 2  && page == 4) {
         int urlIndex = packageInfo.indexOf("store-url:");
         if (urlIndex != -1) {
@@ -646,9 +643,8 @@ void MainWindow::on_action_snap_triggered()
         process->start();
         process->waitForFinished(-1);
 
-        if (process->exitCode() == QProcess::NormalExit) {
+        if (process->exitCode() == QProcess::NormalExit)
             show();
-        }
     } else
         sendNotification(tr("Обновление"), tr("Snap пакеты в актуальном состоянии!"));
 }
@@ -705,7 +701,7 @@ void MainWindow::on_action_5_triggered()
             QString output = process->readAllStandardOutput();
 
             // Ищем строку, содержащую путь к файлу .desktop
-            QString desktopFilePath;
+            QString desktopFilePath = "";
             QStringList lines = output.split('\n');
             for (const QString& line : lines) {
                 if (line.contains(packageName) && line.contains(".desktop")) {
@@ -728,11 +724,10 @@ void MainWindow::on_action_6_triggered()
 {
     QTableWidget* tableWidget = nullptr;
 
-    if (page == 2) {
+    if (page == 2)
         tableWidget = ui->table_aur;
-    } else {
+    else
         tableWidget = ui->table_app;
-    }
 
     if (tableWidget->currentItem() == nullptr) {
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для удаления!"));
@@ -762,9 +757,8 @@ void MainWindow::on_action_6_triggered()
         process->start();
         process->waitForFinished(-1);
 
-        if (process->exitCode() == QProcess::NormalExit) {
+        if (process->exitCode() == QProcess::NormalExit)
             loadContentInstall();
-        }
     }
 }
 
@@ -1189,7 +1183,7 @@ void MainWindow::createSearchBar()
                            "QToolButton::menu-indicator { image: none; }");
     toolbar->setFixedHeight(38);
 
-    // Переносим содержимое вашего QMenuBar в панель инструментов
+    // Переносим содержимое QMenuBar в панель инструментов
     QMenuBar* myMenuBar = ui->menubar;
     for (QAction* action : myMenuBar->actions()) {
         if (action->menu()) {
@@ -1480,8 +1474,6 @@ void MainWindow::loadSettings()
     previousAction = ui->action_1; //предыдущий action [заглушка]
     actionLoad = ui->action_1; //предыдущий action Animation Mini [заглушка]
 
-
-
     webEngineView2 = nullptr;
 
     if (!webEngineView2) {
@@ -1637,7 +1629,7 @@ void MainWindow::loadSettings()
 
         if (page == 2 || page == 4 || page == 6 || page == 7) {
 
-            QFile scriptFile(":/loading.browser.js"); // Путь к вашему файлу скрипта
+            QFile scriptFile(":/loading.browser.js");
             if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
                 QTextStream stream(&scriptFile);
                 QString script = stream.readAll();
@@ -1771,6 +1763,7 @@ void MainWindow::loadSettings()
     trayIcon.setContextMenu(trayMenu);
 
     // Связывание событий нажатия на пункты меню с обработчиками
+    connect(action_11, &QAction::triggered, this, &MainWindow::on_action_11_triggered);
     connect(action_2, &QAction::triggered, this, &MainWindow::on_action_2_triggered);
     connect(action_7, &QAction::triggered, this, &MainWindow::on_action_7_triggered);
     connect(action_downgrade, &QAction::triggered, this, &MainWindow::on_action_downgrade_triggered);
@@ -1911,7 +1904,6 @@ void MainWindow::loadSettings()
 
 void MainWindow::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
-    // Ваш код обработки клика на иконке трея
     if (reason == QSystemTrayIcon::Trigger) {
         // Проверяем, было ли главное окно свернуто
         if (isHidden())
@@ -3683,7 +3675,6 @@ void MainWindow::restoreArchive(const QString& archivePath)
         sendNotification(tr("Ошибка"), tr("Не удалось восстановить конфигурацию через архив"));
 }
 
-
 //---#####################################################################################################################################################
 //--################################################################## СОБЫТИЯ ФУНКЦИЙ ##################################################################
 //-#####################################################################################################################################################
@@ -3710,10 +3701,9 @@ void MainWindow::on_combo_animload_currentIndexChanged(int index)
 
 void MainWindow::on_combo_lang_currentIndexChanged(int index)
 {
-    QString lang;
-    if (index == 0)
-        lang = "ru_RU";
-    else if (index == 1)
+    QString lang = "ru_RU";
+
+    if (index == 1)
         lang = "en_US";
 
     // Получение текущего значения lang из настроек
@@ -3966,7 +3956,7 @@ void MainWindow::handleListItemClicked(QListWidgetItem *item, const QString& scr
     if (item) {
         QString msg = item->data(Qt::UserRole).toString();
 
-        QString scriptPath;
+        QString scriptPath = "";
         QString itemName = item->text();
 
         QDir dir(scriptDir);
@@ -4245,7 +4235,6 @@ void MainWindow::on_push_pacman_clicked()
     layout->setParent(dialog);
 }
 
-
 void MainWindow::on_push_kde_clicked()
 {
     QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), tr("Вы уверены, что хотите полностью сбросить конфигурацию DE? Вам придется заново все настроить."), QMessageBox::Yes | QMessageBox::No);
@@ -4290,4 +4279,3 @@ void MainWindow::on_reload_aurpkg_clicked()
         loadContentInstall();
     });
 }
-
