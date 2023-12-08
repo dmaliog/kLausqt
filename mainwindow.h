@@ -317,7 +317,6 @@ private slots:
     void on_list_bench_itemClicked(QListWidgetItem *item);
     void on_push_vk_clicked();
     void on_push_kde_clicked();
-    void on_back_aur_clicked();
     void on_reload_aur_clicked();
     void on_reload_aurpkg_clicked();
 };

@@ -4164,8 +4164,8 @@ QToolBar#toolBar_2 QToolButton:hover {
     </property>
     <property name="geometry">
      <rect>
-      <x>443</x>
-      <y>112</y>
+      <x>380</x>
+      <y>84</y>
       <width>218</width>
       <height>179</height>
      </rect>
@@ -4244,7 +4244,6 @@ QToolBar#toolBar_2 QToolButton:hover {
     <addaction name="action_17"/>
     <addaction name="separator"/>
     <addaction name="action_8"/>
-    <addaction name="action_host"/>
     <addaction name="separator"/>
     <addaction name="action_12"/>
    </widget>
@@ -4416,10 +4415,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <disabledoff>:/img/9.png</disabledoff>:/img/9.png</iconset>
    </property>
    <property name="text">
-    <string>Дополнительные настройки</string>
+    <string>Настройки</string>
    </property>
    <property name="toolTip">
-    <string>Дополнительные настройки</string>
+    <string>Настройки</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4826,7 +4825,7 @@ QToolBar#toolBar_2 QToolButton:hover {
      <disabledoff>:/img/11.png</disabledoff>:/img/11.png</iconset>
    </property>
    <property name="text">
-    <string>Веб-сервер</string>
+    <string>Настроить веб-сервер</string>
    </property>
    <property name="toolTip">
     <string>Веб-сервер</string>
@@ -5015,7 +5014,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <disabledon>:/img/55.png</disabledon>:/img/55.png</iconset>
    </property>
    <property name="text">
-    <string>Переключение драйверов</string>
+    <string>Понижение версий пакетов</string>
+   </property>
+   <property name="toolTip">
+    <string>Понижение версий пакетов</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>

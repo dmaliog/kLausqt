@@ -14,7 +14,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "8.7";
+QString currentVersion = "8.8";
 QString packagesArchiveAUR = "steam";
 QString detailsAURdefault = "";
 
@@ -2403,18 +2403,21 @@ void MainWindow::processTableItem(int row, QTableWidget* tableWidget, QTextBrows
 
 void MainWindow::onTableAurCellClicked(int row) {
     if (page == 2) {
-        QTableWidgetItem *item = ui->table_aur->item(row, 0);
 
         bool iconFound = false;
+        if(list != 8)
+        {
+            QTableWidgetItem *item = ui->table_aur->item(row, 0);
 
-        for (auto it = appIcons.constBegin(); it != appIcons.constEnd(); ++it) {
-            if (appIcons.contains(item->text()) && appIcons[item->text()] == it.value()) {
-                loadContent(row + 1, loadpage);
-                iconFound = true;
-                break;
+
+            for (auto it = appIcons.constBegin(); it != appIcons.constEnd(); ++it) {
+                if (appIcons.contains(item->text()) && appIcons[item->text()] == it.value()) {
+                    loadContent(row + 1, loadpage);
+                    iconFound = true;
+                    break;
+                }
             }
         }
-
         if (!iconFound)
             processTableItem(row, ui->table_aur, ui->details_aur);
     }
@@ -4243,10 +4246,6 @@ void MainWindow::on_push_kde_clicked()
 
     Terminal terminal = getTerminal();
     QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "sudo" << "rm" << QDir::homePath() + "/.config/kdeglobals");
-}
-
-void MainWindow::on_back_aur_clicked()
-{
 }
 
 void MainWindow::on_reload_aur_clicked()
