@@ -14,7 +14,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "8.8";
+QString currentVersion = "8.9";
 QString packagesArchiveAUR = "steam";
 QString detailsAURdefault = "";
 
@@ -33,9 +33,10 @@ int updinst = 0; //проверять систему перед установк
 int volumenotify = 0; // громкость уведомлений
 int mainpage = 0; // главная страница
 int helpercache = 0; // кэш
-int benchlist = 0; //бенчлист
+int benchlist = 0; // бенчлист
 int numPackages = 0;
 int list = 0;
+int cacheremove = 0; // удаление кэша при выходе
 
 bool loadpage = true;
 //---#####################################################################################################################################################
@@ -59,7 +60,7 @@ QMap<int, QMap<QString, QStringList>> packageCommands = {
             {"query_depends", {"yay", "-Qdtq"}},
             {"clean_cache", {"yay", "-Sc"}},
             {"clean_all_cache", {"yay", "-Scc"}},
-            {"localinstall", {"yay", "-U"}}
+            {"localinstall", {"yay", "-Udd"}}
         }
     },
     {1,
@@ -78,7 +79,7 @@ QMap<int, QMap<QString, QStringList>> packageCommands = {
             {"query_depends", {"paru", "-Qdtq"}},
             {"clean_cache", {"paru", "-Sc"}},
             {"clean_all_cache", {"paru", "-Scc"}},
-            {"localinstall", {"paru", "-U"}}
+            {"localinstall", {"paru", "-Udd"}}
         }
     },
     {2,
@@ -340,7 +341,25 @@ void MainWindow::on_action_host_triggered()
     showLoadingAnimationMini(false);
 }
 
-//11-13 заняты
+void MainWindow::on_action_game_triggered()
+{
+    if (page == 11) return;
+    showLoadingAnimationMini(false);
+    mrpropper(11);
+    showLoadingAnimation(true);
+    ui->label1->hide();
+    ui->action_31->setVisible(true);
+    ui->action_32->setVisible(true);
+    ui->action_33->setVisible(true);
+    ui->action_35->setVisible(true);
+
+    searchLineEdit->setPlaceholderText(tr("Введите URL адрес..."));
+    searchLineEdit->setFixedWidth(1000);
+
+    webEngineView2->setUrl(QUrl("https://www.protondb.com/explore"));
+}
+
+//12-13 заняты
 
 void MainWindow::on_action_downgrade_triggered()
 {
@@ -514,6 +533,10 @@ void MainWindow::on_action_31_triggered()
             return;
         }
     }
+    else if (page == 11)
+    {
+        webEngineView2->setUrl(QUrl("https://www.protondb.com/explore"));
+    }
 }
 
 void MainWindow::on_action_34_triggered()
@@ -578,7 +601,7 @@ void MainWindow::on_action_34_triggered()
 
 void MainWindow::on_action_35_triggered()
 {
-    if (page == 6 || page == 7)
+    if (page == 6 || page == 7 || page == 11)
     {
         webEngineView2->back();
         return;
@@ -1265,14 +1288,13 @@ void MainWindow::searchAndScroll(QAbstractItemView* view, const QString& text)
             listWidget->scrollToItem(matchingItems.first(), QAbstractItemView::PositionAtCenter);
         }
     }
-    // Добавьте дополнительные условия, если у вас есть другие типы представлений для поиска
 }
 
 void MainWindow::search(const QString& searchText)
 {
     if (page == 2)
         handleServerResponse(searchText);
-    else if (page == 6 || page == 7 || page == 10)
+    else if (page == 6 || page == 7 || page == 10 || page == 11)
         webEngineView2->setUrl(QUrl(searchText));
     else if (page == 14)
         checkForDowngrades(searchText);
@@ -1304,6 +1326,11 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     loadingListWidget();
     loadSystemInfo();
 
+    ui->image_aur->setVisible(false);
+    ui->back_slider->setVisible(false);
+    ui->next_slider->setVisible(false);
+    ui->img_aur->setDisabled(true);
+
     detailsAURdefault = ui->details_aur->toHtml();
 
     ui->check_trayon->setChecked(trayon);
@@ -1314,6 +1341,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->combo_mainpage->setCurrentIndex(mainpage);
     ui->combo_helper->setCurrentIndex(pkg);
     ui->combo_animload->setCurrentIndex(animloadpage);
+    ui->check_cacheremove->setChecked(cacheremove);
 
     ui->time_update->setTime(timeupdate);
     ui->time_timeout->setTime(timeout);
@@ -1413,33 +1441,36 @@ void MainWindow::saveScripts(const QStringList& resourcePaths, const QString& ba
 
 MainWindow::~MainWindow()
 {
+    if (cacheremove == 2)
+    {
+        QDir cacheFolderDir(mainDir + "cache/");
+        cacheFolderDir.removeRecursively();
+    }
+
+    iconMap.clear();
+    delete actionLoad;
+    delete previousAction;
+
+    delete orphanButton;
+    delete cacheButtonHelper;
+    delete cacheButtonPacman;
+
+    // Очистить список
+    snapPackageNames.clear();
+    shResourcePaths.clear();
+    clearResourcePaths.clear();
+    journalsResourcePaths.clear();
+    cfgResourcePaths.clear();
+    benchResourcePaths.clear();
+    endingsToRemove.clear();
     delete ui;
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if(trayon == 2) {
-        iconMap.clear();
-        delete actionLoad;
-        delete previousAction;
-
-        delete orphanButton;
-        delete cacheButtonHelper;
-        delete cacheButtonPacman;
-
-        // Очистить список
-        snapPackageNames.clear();
-        shResourcePaths.clear();
-        clearResourcePaths.clear();
-        journalsResourcePaths.clear();
-        cfgResourcePaths.clear();
-        benchResourcePaths.clear();
-        endingsToRemove.clear();
-
+    if (trayon == 2) {
         QApplication::quit();
-    }
-    else
-    {
+    } else {
         hide();             // Скрываем главное окно
         event->ignore();    // Игнорируем событие закрытия
     }
@@ -1502,6 +1533,7 @@ void MainWindow::loadSettings()
     animload = settings.value("AnimLoad", 2).toInt();
     updinst = settings.value("UpdateInstall", 2).toInt();
     container = settings.value("Snap", 0).toInt();
+    cacheremove = settings.value("CacheRemove", 2).toInt();
     volumenotify = settings.value("VolumeNotify", 30).toInt();
     lang = QSharedPointer<QString>::create(settings.value("Language").toString());
     teatext = QSharedPointer<QString>::create(settings.value("TeaText").toString());
@@ -1640,7 +1672,7 @@ void MainWindow::loadSettings()
 
     connect(webEngineView2->page(), &QWebEnginePage::loadFinished, this, [=](bool success) mutable{
         if (success) {
-            if (page == 6 || page == 7 || page == 10)
+            if (page == 6 || page == 7 || page == 10 || page == 11)
                 webEngineView2->show();
 
             else if (page == 2 || page == 4) {
@@ -1826,7 +1858,7 @@ void MainWindow::loadSettings()
                     grubContent.remove(quotationRegex);
                 }
                 else {
-                    // Если первая попытка не удалась, попробуйте другой вариант ковычек
+
                     grubCmdlineRegex.setPattern("^GRUB_CMDLINE_LINUX_DEFAULT=['\"]?(.*)['\"]?$");
                     match = grubCmdlineRegex.match(line);
                     if (match.hasMatch()) {
@@ -2322,9 +2354,142 @@ void MainWindow::showLoadingAnimation(bool show)
     removeToolButtonTooltips(ui->toolBar_2);
 }
 
+void MainWindow::downloadAndSaveImages(const QString& packageName, const QStringList& urls, const QString& folder)
+{
+    miniAnimation(true, ui->image_aur);
+
+    // Проверка на созданную сцену
+    if (ui->image_aur->scene())
+        ui->image_aur->scene()->clear();
+
+
+    imageUrls = urls; // Сохраняем список URL-адресов
+    pixmaps.clear(); // Очищаем список QPixmap
+    currentIndex = 0; // Устанавливаем индекс текущего изображения в 0
+
+    QString cacheFolder = folder + packageName + "/";
+    QDir().mkpath(cacheFolder);
+
+    for (int i = 0; i < imageUrls.size(); ++i) {
+        const QString& imageUrl = imageUrls.at(i);
+        QString fileName = QString("%1_%2.png").arg(packageName).arg(i);
+        QString cacheFilePath = cacheFolder + fileName;
+
+        if (QFile::exists(cacheFilePath)) {
+            // Файл уже скачан, загружаем его в QPixmap
+            QPixmap pixmap(cacheFilePath);
+            pixmaps.append(pixmap);
+        } else {
+            QNetworkRequest imageRequest((QUrl(imageUrl)));
+            QNetworkReply* imageReply = networkManager.get(imageRequest);
+            QEventLoop loop;
+            connect(imageReply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+            loop.exec();
+
+            if (imageReply->error() == QNetworkReply::NoError) {
+                QPixmap pixmap;
+                pixmap.loadFromData(imageReply->readAll());
+                int targetWidth = 680;
+                int targetHeight = pixmap.height() * targetWidth / pixmap.width();
+                QSize newSize(targetWidth, targetHeight);
+                pixmap = pixmap.scaled(newSize, Qt::KeepAspectRatio);
+
+                pixmaps.append(pixmap);
+
+                // Сохраняем изображение в локальный кэш
+                pixmap.save(cacheFilePath);
+            }
+
+            imageReply->deleteLater();
+        }
+    }
+
+    // Отображаем первое изображение
+    updateImageView();
+    miniAnimation(false, ui->image_aur);
+}
+
+void MainWindow::updateImageView()
+{
+    if (!pixmaps.isEmpty() && currentIndex >= 0 && currentIndex < pixmaps.size()) {
+        QGraphicsScene* scene = new QGraphicsScene(this);
+        scene->addPixmap(pixmaps[currentIndex]);
+        ui->image_aur->setScene(scene);
+    }
+}
+
+void MainWindow::on_back_slider_clicked()
+{
+    currentIndex = (currentIndex - 1 + pixmaps.size()) % pixmaps.size();
+    updateImageView();
+}
+
+void MainWindow::on_next_slider_clicked()
+{
+    currentIndex = (currentIndex + 1) % pixmaps.size();
+    updateImageView();
+}
+
 void MainWindow::processTableItem(int row, QTableWidget* tableWidget, QTextBrowser* detailsWidget) {
     QTableWidgetItem* nameItem = tableWidget->item(row, 0);
     QString packageName = nameItem->text();
+
+    if (page == 2)
+    {
+        QString appName = packageName.split(' ')[0];
+
+        // Удаляем окончания
+        for (const QString& ending : endingsToRemove) {
+            if (appName.endsWith(ending)) {
+                appName.chop(ending.length());
+                break;
+            }
+        }
+
+
+        QString snapcraftUrl = "https://snapcraft.io/" + packageName;
+        QNetworkRequest request((QUrl(snapcraftUrl)));
+
+        QNetworkReply* reply = networkManager.get(request);
+
+        connect(reply, &QNetworkReply::finished, this, [=]() {
+            if (reply->error() == QNetworkReply::NoError) {
+
+                // Прочитать содержимое ответа
+                QByteArray htmlData = reply->readAll();
+
+                static const QRegularExpression screenshotRegex("<img[^>]*data-original=\"([^\"]*)\"");
+                QRegularExpressionMatchIterator matchIterator = screenshotRegex.globalMatch(htmlData);
+
+                QStringList imageUrls;
+
+                while (matchIterator.hasNext()) {
+                    QRegularExpressionMatch match = matchIterator.next();
+                    QString imageUrl = match.captured(1);
+
+                    imageUrls.append(imageUrl);
+                }
+
+                if (imageUrls.isEmpty()){
+                    ui->image_aur->setVisible(false);
+                    ui->img_aur->setDisabled(true);
+                    ui->img_aur->setChecked(false);
+
+                } else {
+                    downloadAndSaveImages(packageName, imageUrls, mainDir + "cache/");
+                    ui->img_aur->setDisabled(false);
+                }
+
+            } else {
+                ui->image_aur->setVisible(false);
+                ui->img_aur->setDisabled(true);
+                ui->img_aur->setChecked(false);
+            }
+
+            reply->deleteLater();
+        });
+    }
+
 
     QSharedPointer<QProcess> currentProcess = QSharedPointer<QProcess>::create();
 
@@ -2459,10 +2624,12 @@ void MainWindow::miniAnimation(bool visible, QWidget* targetWidget)
         }
 
         // Восстановление стандартного фона targetWidget
-        targetWidget->setStyleSheet("background-color: #272727;");
+        if (targetWidget == ui->image_aur)
+            targetWidget->setStyleSheet("background-color: #191919;");
+        else
+            targetWidget->setStyleSheet("background-color: #272727;");
     }
 }
-
 
 QIcon MainWindow::getPackageIcon(const QString& packageName) {
 
@@ -3908,6 +4075,7 @@ void MainWindow::on_line_work_textChanged(const QString &arg1)
 
 void MainWindow::on_check_trayon_stateChanged(int arg1)
 {
+    trayon = arg1;
     settings.setValue("TrayOn", arg1);
 }
 
@@ -3930,13 +4098,22 @@ void MainWindow::on_check_autostart_stateChanged(int arg1)
     }
 }
 
+void MainWindow::on_check_cacheremove_stateChanged(int arg1)
+{
+    cacheremove = arg1;
+    settings.setValue("CacheRemove",arg1);
+}
+
+
 void MainWindow::on_check_repair_stateChanged(int arg1)
 {
+    repair = arg1;
     settings.setValue("RepairBackup",arg1);
 }
 
 void MainWindow::on_check_animload_stateChanged(int arg1)
 {
+    animload = arg1;
     settings.setValue("AnimLoad", arg1);
 }
 
@@ -4199,7 +4376,6 @@ void MainWindow::on_push_pacman_clicked()
 
     QPlainTextEdit* editor = new QPlainTextEdit(dialog);
 
-    // Открываем и читаем содержимое файла /etc/pacman.conf
     QFile pacmanConfFile("/etc/pacman.conf");
     if (pacmanConfFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
@@ -4211,7 +4387,7 @@ void MainWindow::on_push_pacman_clicked()
     else
     {
         sendNotification(tr("Ошибка"), tr("Не удалось открыть pacman.conf"));
-        delete dialog;  // Удаляем dialog при ошибке
+        delete dialog;
         return;
     }
 
@@ -4224,7 +4400,6 @@ void MainWindow::on_push_pacman_clicked()
     layout->addWidget(saveButton);
 
     connect(saveButton, &QPushButton::clicked, this, [=]() {
-        // Выполняем запрос аутентификации через pkexec перед сохранением
         QString command = "sh -c 'cat > /etc/pacman.conf << EOF\n" + editor->toPlainText() + "\nEOF\n'";
 
         if (runPkexecCommand(command))
@@ -4236,6 +4411,8 @@ void MainWindow::on_push_pacman_clicked()
 
     editor->setParent(dialog);
     layout->setParent(dialog);
+
+    dialog->show();
 }
 
 void MainWindow::on_push_kde_clicked()
@@ -4255,6 +4432,8 @@ void MainWindow::on_reload_aur_clicked()
     // Очищаем таблицу
     ui->table_aur->clearContents();
     ui->table_aur->setRowCount(0);
+    ui->img_aur->setChecked(false);
+    ui->img_aur->setDisabled(true);
 
     QTimer::singleShot(500, this, [=]() {
         list = 0;
@@ -4277,4 +4456,20 @@ void MainWindow::on_reload_aurpkg_clicked()
         miniAnimation(false, ui->table_app);
         loadContentInstall();
     });
+}
+
+void MainWindow::on_img_aur_toggled(bool checked)
+{
+    if (checked)
+    {
+        ui->image_aur->setVisible(true);
+        ui->back_slider->setVisible(true);
+        ui->next_slider->setVisible(true);
+    }
+    else
+    {
+        ui->image_aur->setVisible(false);
+        ui->back_slider->setVisible(false);
+        ui->next_slider->setVisible(false);
+    }
 }

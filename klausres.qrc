@@ -222,5 +222,7 @@
         <file>other/cryptography.txt</file>
         <file>other/anti-malware.txt</file>
         <file>other/threat-and-vulnerability-detection.txt</file>
+        <file>img/56.png</file>
+        <file>img/57.png</file>
     </qresource>
 </RCC>

@@ -10,6 +10,7 @@
 #include <QListWidgetItem>
 #include <QProcess>
 #include <QTableWidget>
+#include <QGraphicsView>
 
 struct Terminal {
     QString binary;
@@ -17,6 +18,7 @@ struct Terminal {
 };
 
 Terminal getTerminal();
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -36,7 +38,13 @@ public:
     QColor generateRandomColor();
 
 private:
+    QStringList imageUrls;
+    QList<QPixmap> pixmaps;
+    int currentIndex;
+
     QNetworkAccessManager *manager;
+    QNetworkAccessManager networkManager;
+
     QSet<QString> addedLinks;
 
     QMap<QString, QString> appIcons;
@@ -69,9 +77,6 @@ private:
 
     //умные QLineEdit
     QSharedPointer<QLineEdit> searchLineEdit;
-
-    //умные QWebEngineView
-    QSharedPointer<QWebEngineView> webView;
 
     //умные QUrlQuery
     QSharedPointer<QUrlQuery> newParams;
@@ -165,10 +170,6 @@ protected: // события сворачивания окна
     void closeEvent(QCloseEvent *event) override; // объявление метода closeEvent()
 
 public slots:
-
-    void setCursorAndScrollToItem(const QString& itemName);
-    void onSearchTimeout();
-
     void on_action_1_triggered();
     void on_action_2_triggered();
     void on_action_3_triggered();
@@ -187,6 +188,12 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
+    void setCursorAndScrollToItem(const QString& itemName);
+    void onSearchTimeout();
+
+    void downloadAndSaveImages(const QString& packageName, const QStringList& imageUrls, const QString& folder);
+    void updateImageView();
+
     void checkForDowngrades(const QString& packagesArchiveAUR);
     void onTableDowngradeCellDoubleClicked();
 
@@ -267,6 +274,7 @@ private slots:
     void on_check_trayon_stateChanged(int arg1);
     void on_check_animload_stateChanged(int arg1);
     void on_check_autostart_stateChanged(int arg1);
+    void on_check_cacheremove_stateChanged(int arg1);
     
     void onTableAurCellClicked(int row);
 
@@ -307,6 +315,7 @@ private slots:
     void on_action_catalog_triggered();
     void on_action_downgrade_triggered();
     void on_action_snap_triggered();
+    void on_action_game_triggered();
 
     void on_push_grub_clicked();
     void on_push_repair_clicked();
@@ -319,6 +328,9 @@ private slots:
     void on_push_kde_clicked();
     void on_reload_aur_clicked();
     void on_reload_aurpkg_clicked();
+    void on_back_slider_clicked();
+    void on_next_slider_clicked();
+    void on_img_aur_toggled(bool checked);
 };
 
 #endif // MAINWINDOW_H
