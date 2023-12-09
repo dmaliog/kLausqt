@@ -402,7 +402,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>7</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_auradd">
      <attribute name="title">
@@ -1339,7 +1339,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
      <widget class="QPushButton" name="reload_aur">
       <property name="geometry">
        <rect>
-        <x>275</x>
+        <x>246</x>
         <y>15</y>
         <width>30</width>
         <height>30</height>
@@ -1364,7 +1364,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
        <rect>
         <x>20</x>
         <y>9</y>
-        <width>291</width>
+        <width>261</width>
         <height>41</height>
        </rect>
       </property>
@@ -1465,32 +1465,6 @@ color:#5752e7;</string>
        <size>
         <width>16</width>
         <height>16</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="back_aur">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>240</x>
-        <y>15</y>
-        <width>30</width>
-        <height>30</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="klausres.qrc">
-        <normaloff>:/img/35.png</normaloff>:/img/35.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>20</width>
-        <height>20</height>
        </size>
       </property>
      </widget>
@@ -1607,7 +1581,6 @@ color:#5752e7;</string>
      <zorder>label_details_aur</zorder>
      <zorder>reload_aur</zorder>
      <zorder>like_aur</zorder>
-     <zorder>back_aur</zorder>
      <zorder>image_aur</zorder>
      <zorder>back_slider</zorder>
      <zorder>img_aur</zorder>

@@ -17,6 +17,12 @@ struct Terminal {
     QString args;
 };
 
+struct PreviousState {
+    int value;
+    bool valuepage;
+    int list;
+};
+
 Terminal getTerminal();
 
 

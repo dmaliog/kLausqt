@@ -14,7 +14,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "8.9";
+QString currentVersion = "9.0";
 QString packagesArchiveAUR = "steam";
 QString detailsAURdefault = "";
 
@@ -1376,8 +1376,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 }
 
 void MainWindow::checkVersionAndClear() {
-    QString settingsFilePath = mainDir + "settings.ini";
-    QSettings settings(settingsFilePath, QSettings::IniFormat);
+    QSettings settings(filePath, QSettings::IniFormat);
     QString storedVersion = settings.value("Version").toString();
     QString storedLanguage = settings.value("Language").toString();
 
@@ -1448,8 +1447,8 @@ MainWindow::~MainWindow()
     }
 
     iconMap.clear();
-    delete actionLoad;
     delete previousAction;
+    //delete actionLoad;
 
     delete orphanButton;
     delete cacheButtonHelper;
@@ -1463,6 +1462,7 @@ MainWindow::~MainWindow()
     cfgResourcePaths.clear();
     benchResourcePaths.clear();
     endingsToRemove.clear();
+
     delete ui;
 }
 
@@ -1503,7 +1503,6 @@ void MainWindow::loadSettings()
     //-########################## НАСТРОЕННЫЕ ПЕРЕМЕННЫЕ ################################
     //-##################################################################################
     previousAction = ui->action_1; //предыдущий action [заглушка]
-    actionLoad = ui->action_1; //предыдущий action Animation Mini [заглушка]
 
     webEngineView2 = nullptr;
 
@@ -2258,7 +2257,8 @@ void MainWindow::showLoadingAnimationMini(bool show)
                 ui->toolBar->insertWidget(action, loadingLabel.data());
                 action->setVisible(false);
 
-                actionLoad = action;
+                if (action)
+                    actionLoad = action;
 
                 ui->toolBar->setEnabled(!show);
                 break; // Прерываем цикл после первого найденного checkable действия с установленной галочкой
@@ -2273,7 +2273,10 @@ void MainWindow::showLoadingAnimationMini(bool show)
             if (toolBarLayout) {
                 toolBarLayout->removeWidget(loadingLabel.data());
             }
-            actionLoad->setVisible(true);
+
+            if (actionLoad)
+                actionLoad->setVisible(true);
+
             ui->toolBar->setEnabled(true);
             removeToolButtonTooltips(ui->toolBar);
             removeToolButtonTooltips(ui->toolBar_2);
@@ -2741,13 +2744,13 @@ void MainWindow::loadContent(int value, bool valuepage)
 
     // 0 - лист
 
-
-    if (list == 0) {
+    if (value == 0) {
         sourceFilePath = ":/other/" + *lang + "/list.txt";
         targetFilePath = mainDir + "other/" + *lang + "/list.txt";
+        valuepage = true;
+        list = 0;
     }
-
-    if (value == 1)
+    else if (value == 1)
     {
         if (list == 0)
         {
@@ -3229,7 +3232,6 @@ void MainWindow::loadContent(int value, bool valuepage)
         if(valuepage)
             appIcons[packageName] = iconPath;
     }
-
     miniAnimation(false,ui->table_aur);
 
 }
@@ -3871,30 +3873,29 @@ void MainWindow::on_combo_animload_currentIndexChanged(int index)
 
 void MainWindow::on_combo_lang_currentIndexChanged(int index)
 {
-    QString lang = "ru_RU";
+    if (index == 0)
+        *lang = "ru_RU";
+    else if (index == 1)
+        *lang = "en_US";
 
-    if (index == 1)
-        lang = "en_US";
-
-    // Получение текущего значения lang из настроек
-    QString currentLang = settings.value("Language", "en_US").toString();
+    QString currentLang = settings.value("Language").toString();
 
     // Проверка, совпадает ли выбранный язык с текущим языком
-    if (currentLang != lang) {
-        settings.setValue("Language", lang);
+    if (currentLang != *lang) {
+        settings.setValue("Language", *lang);
+
+        sendNotification(tr("Смена языка"), tr("Приложение будет перезагружено для смены языка"));
 
         QTranslator translator;
-        if (lang == "ru_RU") {
+        if (*lang == "ru_RU") {
             if (translator.load(":/lang/kLaus_ru.qm")) {
                 qApp->installTranslator(&translator);
             }
-        } else if (lang == "en_US") {
+        } else if (*lang == "en_US") {
             if (translator.load(":/lang/kLaus_en.qm")) {
                 qApp->installTranslator(&translator);
             }
         }
-
-        sendNotification(tr("Смена языка"), tr("Приложение будет перезагружено для смены языка"));
 
         qApp->quit();
         QSharedPointer<QProcess>(new QProcess)->startDetached(qApp->arguments()[0], qApp->arguments());
