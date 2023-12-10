@@ -14,7 +14,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "9.2";
+QString currentVersion = "9.3";
 QString packagesArchiveAUR = "steam";
 QString detailsAURdefault = "";
 
@@ -3578,8 +3578,7 @@ void MainWindow::addLinkToTable(const QString &link)
 
             addedLinks.insert(cleanedLink);
         }
-
-        if (nvidia < 1 || packageVersion(link) == nvidiaVersion)
+        else if (nvidia < 1 || packageVersion(link) == nvidiaVersion)
         {
             ui->table_downgrade->insertRow(0);
             ui->table_downgrade->setItem(0, 0, item);
