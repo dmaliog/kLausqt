@@ -402,7 +402,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>12</number>
     </property>
     <widget class="QWidget" name="tab_auradd">
      <attribute name="title">
@@ -2219,10 +2219,150 @@ li.checked::marker { content: &quot;\2612&quot;; }
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_phone">
+    <widget class="QWidget" name="tab_driver">
      <attribute name="title">
       <string>tab_custom</string>
      </attribute>
+     <widget class="QLabel" name="label_driver">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>9</y>
+        <width>191</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background:#2e2b79;
+padding:0 15px;
+border-top-left-radius: 15px;
+border-top-right-radius: 15px;
+color:#5752e7;</string>
+      </property>
+      <property name="text">
+       <string>Подготовка</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::AutoText</enum>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+      <property name="margin">
+       <number>0</number>
+      </property>
+     </widget>
+     <widget class="QTextBrowser" name="details_driver">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>50</y>
+        <width>721</width>
+        <height>621</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QTextEdit {
+	background:#272727;
+}</string>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+      <property name="html">
+       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Информация неизвестна&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="openLinks">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="push_install">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>620</y>
+        <width>111</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Установить</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="push_back">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>620</y>
+        <width>111</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Отмена</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_driver_left">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>60</y>
+        <width>271</width>
+        <height>621</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/img/driver.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_logo">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>180</y>
+        <width>151</width>
+        <height>141</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/img/nvidia.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <zorder>label_driver_left</zorder>
+     <zorder>label_driver</zorder>
+     <zorder>details_driver</zorder>
+     <zorder>push_back</zorder>
+     <zorder>push_install</zorder>
+     <zorder>label_logo</zorder>
     </widget>
     <widget class="QWidget" name="tab_settings">
      <property name="styleSheet">
@@ -3825,7 +3965,7 @@ color:#5752e7;</string>
        <rect>
         <x>20</x>
         <y>9</y>
-        <width>201</width>
+        <width>371</width>
         <height>41</height>
        </rect>
       </property>
@@ -4011,6 +4151,29 @@ color:#5752e7;</string>
       <property name="margin">
        <number>0</number>
       </property>
+     </widget>
+     <widget class="QComboBox" name="combo_version_downgrade">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>196</x>
+        <y>14</y>
+        <width>191</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>Только совместимые</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Все версии</string>
+       </property>
+      </item>
      </widget>
     </widget>
    </widget>
@@ -5131,22 +5294,6 @@ QToolBar#toolBar_2 QToolButton:hover {
     <enum>QAction::NoRole</enum>
    </property>
   </action>
-  <action name="action_phone">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/54.png</normaloff>
-     <disabledoff>:/img/54.png</disabledoff>:/img/54.png</iconset>
-   </property>
-   <property name="text">
-    <string>Прошивка телефона</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
   <action name="action_downgrade">
    <property name="checkable">
     <bool>true</bool>
@@ -5172,7 +5319,7 @@ QToolBar#toolBar_2 QToolButton:hover {
   </action>
   <action name="action_nvidia">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="klausres.qrc">

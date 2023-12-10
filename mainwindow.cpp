@@ -14,7 +14,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "9.0";
+QString currentVersion = "9.1";
 QString packagesArchiveAUR = "steam";
 QString detailsAURdefault = "";
 
@@ -39,6 +39,27 @@ int list = 0;
 int cacheremove = 0; // удаление кэша при выходе
 
 bool loadpage = true;
+
+//переключение драйверов
+int nvidia = 0;
+QString nvidiaVersion = "";
+
+QString nvidiaDkms = "";
+QString nvidiaUtils = "";
+QString nvidiaSettings = "";
+QString libxnvctrl = "";
+QString openclNvidia = "";
+QString lib32NvidiaUtils = "";
+QString lib32OpenclNvidia = "";
+
+QString nvidiaDkmsName = "";
+QString nvidiaUtilsName = "";
+QString nvidiaSettingsName = "";
+QString libxnvctrlName = "";
+QString openclNvidiaName = "";
+QString lib32NvidiaUtilsName = "";
+QString lib32OpenclNvidiaName = "";
+
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
 //-#####################################################################################################################################################
@@ -369,13 +390,101 @@ void MainWindow::on_action_downgrade_triggered()
     ui->action_amd->setVisible(true);
     ui->action_intel->setVisible(true);
 
+    ui->label_downgrade->setFixedWidth(200);
+    ui->combo_version_downgrade->setVisible(false);
+
     searchLineEdit->setPlaceholderText(tr("Поиск по архиву..."));
     searchLineEdit->setFixedWidth(1000);
 
+    nvidia = 0;
     ui->tabWidget->setCurrentIndex(12);
 
     showLoadingAnimationMini(false);
 }
+
+void MainWindow::on_action_nvidia_triggered()
+{
+    ui->label_downgrade->setFixedWidth(371);
+    ui->combo_version_downgrade->setVisible(true);
+    ui->label1->setText(tr("Понижение пакетов NVIDIA"));
+
+    if (nvidia == 1) {
+        checkForDowngrades("nvidia-dkms");
+        ui->label1->setText(tr("Понижение пакетов NVIDIA [1/7]"));
+    }
+    else if (nvidia == 2) {
+        checkForDowngrades("nvidia-utils");
+        ui->label1->setText(tr("Понижение пакетов NVIDIA [2/7]"));
+    }
+    else if (nvidia == 3) {
+        checkForDowngrades("nvidia-settings");
+        ui->label1->setText(tr("Понижение пакетов NVIDIA [3/7]"));
+    }
+    else if (nvidia == 4) {
+        checkForDowngrades("libxnvctrl");
+        ui->label1->setText(tr("Понижение пакетов NVIDIA [4/7]"));
+    }
+    else if (nvidia == 5) {
+        checkForDowngrades("opencl-nvidia");
+        ui->label1->setText(tr("Понижение пакетов NVIDIA [5/7]"));
+    }
+    else if (nvidia == 6) {
+        checkForDowngrades("lib32-nvidia-utils");
+        ui->label1->setText(tr("Понижение пакетов NVIDIA [6/7]"));
+    }
+    else if (nvidia == 7) {
+        checkForDowngrades("lib32-opencl-nvidia");
+        ui->label1->setText(tr("Понижение пакетов NVIDIA [7/7]"));
+    }
+    else if (nvidia == 8)
+    {
+        ui->label1->setText(tr("Понижение пакетов NVIDIA"));
+        ui->tabWidget->setCurrentIndex(6);
+        ui->details_driver->setHtml(QString(tr("<b>Вы выбрали следующие пакеты:</b><br>"
+                                            "- <b>%1</b><br>"
+                                            "- <b>%2</b><br>"
+                                            "- <b>%3</b><br>"
+                                            "- <b>%4</b><br>"
+                                            "- <b>%5</b><br>"
+                                            "- <b>%6</b><br>"
+                                            "- <b>%7</b><br>"
+                                            "<br><span style=\"font-weight:700; color:#ad2429;\">Все версии должны совпадать, для избежания конфликтов зависимостей!</span><br><br>"
+                                            "<b>Внимание! Если у вас не загрузится компьютер после этих манипуляций:</b><br>"
+                                            "- Войдите в tty (CTRL+ALT+F2)<br>"
+                                            "- Запустите консольную утилиту downgrade и установите свои предыдущие версии драйверов<br>"
+                                            "- Перезагрузитесь")).arg(nvidiaDkmsName, nvidiaUtilsName, nvidiaSettingsName, libxnvctrlName, openclNvidiaName, lib32NvidiaUtilsName, lib32OpenclNvidiaName));
+
+    }
+    else
+    {
+        checkForDowngrades("nvidia-dkms");
+        ui->label1->setText(tr("Понижение пакетов NVIDIA [1/7]"));
+        nvidia = 1;
+    }
+}
+
+void MainWindow::on_push_install_clicked()
+{
+    Terminal terminal = getTerminal();
+    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+    process->setProgram(terminal.binary);
+    process->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("localinstall") << nvidiaDkms << nvidiaUtils << nvidiaSettings << libxnvctrl << openclNvidia << lib32NvidiaUtils << lib32OpenclNvidia);
+    process->setProcessChannelMode(QProcess::MergedChannels);
+    process->start();
+    process->waitForFinished(-1);
+
+    on_push_back_clicked(); //все кончилось
+}
+
+void MainWindow::on_push_back_clicked()
+{
+    //больше ничего не нужно от nvidia
+    nvidia = 0;
+    checkForDowngrades("steam");
+    ui->label1->setText(tr("Понижение версий пакетов"));
+    ui->tabWidget->setCurrentIndex(12);
+}
+
 
 //---#####################################################################################################################################################
 //--################################################################## БЫСТРЫЕ ФУНКЦИИ ##################################################################
@@ -1297,7 +1406,12 @@ void MainWindow::search(const QString& searchText)
     else if (page == 6 || page == 7 || page == 10 || page == 11)
         webEngineView2->setUrl(QUrl(searchText));
     else if (page == 14)
-        checkForDowngrades(searchText);
+    {
+        if (nvidia == 0)
+            checkForDowngrades(searchText);
+        else
+            sendNotification(tr("Ошибка"), tr("При установке драйверов, поиск не доступен!"));
+    }
 }
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
@@ -3236,6 +3350,18 @@ void MainWindow::loadContent(int value, bool valuepage)
 
 }
 
+QString packageVersion(const QString& packageName) {
+    static QRegularExpression regex(R"-(\d+\.\d+(?:\.\d+)*)-");
+    QRegularExpressionMatch match = regex.match(packageName);
+
+    if (match.hasMatch()) {
+        return match.captured(0);
+    } else {
+        // Обработка случая, когда версия не найдена
+        return "";
+    }
+}
+
 void MainWindow::onTableDowngradeCellDoubleClicked() {
     if (ui->table_downgrade->currentItem() == nullptr) {
         sendNotification(tr("Внимание"), tr("Выберите пакет для установки!"));
@@ -3243,9 +3369,69 @@ void MainWindow::onTableDowngradeCellDoubleClicked() {
     }
 
     QString packageName = ui->table_downgrade->item(ui->table_downgrade->currentRow(), 0)->text();
+
     Terminal terminal = getTerminal();
 
     QString installUrl = "https://archive.archlinux.org/packages/" + QString(packagesArchiveAUR.at(0)) + "/" + packagesArchiveAUR +  "/" + packageName;
+
+
+    if (nvidia == 1)
+    {
+        nvidiaVersion = packageVersion(packageName); //узнаем версию пакета для сортировки по остальным пакетам
+        nvidiaDkms = installUrl;
+        nvidiaDkmsName = packageName;
+        nvidia = 2;
+        on_action_nvidia_triggered();
+        return;
+    }
+    else if (nvidia == 2)
+    {
+        nvidiaUtils = installUrl;
+        nvidiaUtilsName = packageName;
+        nvidia = 3;
+        on_action_nvidia_triggered();
+        return;
+    }
+    else if (nvidia == 3)
+    {
+        nvidiaSettings = installUrl;
+        nvidiaSettingsName = packageName;
+        nvidia = 4;
+        on_action_nvidia_triggered();
+        return;
+    }
+    else if (nvidia == 4)
+    {
+        libxnvctrl = installUrl;
+        libxnvctrlName = packageName;
+        nvidia = 5;
+        on_action_nvidia_triggered();
+        return;
+    }
+    else if (nvidia == 5)
+    {
+        openclNvidia = installUrl;
+        openclNvidiaName = packageName;
+        nvidia = 6;
+        on_action_nvidia_triggered();
+        return;
+    }
+    else if (nvidia == 6)
+    {
+        lib32NvidiaUtils = installUrl;
+        lib32NvidiaUtilsName = packageName;
+        nvidia = 7;
+        on_action_nvidia_triggered();
+        return;
+    }
+    else if (nvidia == 7)
+    {
+        lib32OpenclNvidia = installUrl;
+        lib32OpenclNvidiaName = packageName;
+        nvidia = 8;
+        on_action_nvidia_triggered();
+        return;
+    }
 
     QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
     process->setProgram(terminal.binary);
@@ -3344,7 +3530,7 @@ void MainWindow::onReplyFinished(QNetworkReply *reply)
         int pos = 0;
 
         QRegularExpressionMatch match;
-        pos = 0;
+
         while ((match = linkRegex.match(htmlContent, pos)).hasMatch())
         {
             QString link = match.captured(1);
@@ -3372,20 +3558,19 @@ void MainWindow::addLinkToTable(const QString &link)
 
     miniAnimation(false, ui->table_downgrade);
 
-    // Проверка наличия ссылки в списке добавленных
-    if (!cleanedLink.isEmpty() && !cleanedLink.contains(".sig") && !addedLinks.contains(cleanedLink)) {
-        int row = ui->table_downgrade->rowCount();
-        ui->table_downgrade->insertRow(row);
-
+    if (!cleanedLink.isEmpty() && !cleanedLink.contains(".sig") && !addedLinks.contains(cleanedLink))
+    {
         QTableWidgetItem *item = new QTableWidgetItem(cleanedLink);
         item->setForeground(generateRandomColor());
-
         item->setIcon(QIcon("/usr/share/icons/Papirus/48x48/mimetypes/application-x-xz-pkg.svg"));
 
-        ui->table_downgrade->setItem(row, 0, item);
-
-        // Добавление ссылки в список добавленных
-        addedLinks.insert(cleanedLink);
+        // Проверка условия для добавления элемента
+        if (nvidia <= 1 || packageVersion(link) == nvidiaVersion)
+        {
+            ui->table_downgrade->insertRow(0);
+            ui->table_downgrade->setItem(0, 0, item);
+            addedLinks.insert(cleanedLink);
+        }
     }
 }
 
@@ -4474,3 +4659,4 @@ void MainWindow::on_img_aur_toggled(bool checked)
         ui->next_slider->setVisible(false);
     }
 }
+

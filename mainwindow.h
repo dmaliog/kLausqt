@@ -194,6 +194,7 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
+
     void setCursorAndScrollToItem(const QString& itemName);
     void onSearchTimeout();
 
@@ -337,6 +338,9 @@ private slots:
     void on_back_slider_clicked();
     void on_next_slider_clicked();
     void on_img_aur_toggled(bool checked);
+    void on_action_nvidia_triggered();
+    void on_push_back_clicked();
+    void on_push_install_clicked();
 };
 
 #endif // MAINWINDOW_H

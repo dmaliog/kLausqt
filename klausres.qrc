@@ -224,5 +224,6 @@
         <file>other/threat-and-vulnerability-detection.txt</file>
         <file>img/56.png</file>
         <file>img/57.png</file>
+        <file>img/driver.png</file>
     </qresource>
 </RCC>
