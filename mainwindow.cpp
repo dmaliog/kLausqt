@@ -14,7 +14,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "9.1";
+QString currentVersion = "9.2";
 QString packagesArchiveAUR = "steam";
 QString detailsAURdefault = "";
 
@@ -385,16 +385,14 @@ void MainWindow::on_action_game_triggered()
 void MainWindow::on_action_downgrade_triggered()
 {
     mrpropper(14);
-    ui->label1->setText(tr("Понижение версий пакетов"));
+    ui->label1->setText(tr("Откат пакетов"));
     ui->action_nvidia->setVisible(true);
-    ui->action_amd->setVisible(true);
-    ui->action_intel->setVisible(true);
-
-    ui->label_downgrade->setFixedWidth(200);
-    ui->combo_version_downgrade->setVisible(false);
 
     searchLineEdit->setPlaceholderText(tr("Поиск по архиву..."));
     searchLineEdit->setFixedWidth(1000);
+
+    if (nvidia >= 1)
+        sendNotification(tr("Внимание"), tr("Откат NVIDIA пакетов отменен!"));
 
     nvidia = 0;
     ui->tabWidget->setCurrentIndex(12);
@@ -404,41 +402,39 @@ void MainWindow::on_action_downgrade_triggered()
 
 void MainWindow::on_action_nvidia_triggered()
 {
-    ui->label_downgrade->setFixedWidth(371);
-    ui->combo_version_downgrade->setVisible(true);
-    ui->label1->setText(tr("Понижение пакетов NVIDIA"));
+    ui->label1->setText(tr("Откат пакетов NVIDIA"));
 
     if (nvidia == 1) {
         checkForDowngrades("nvidia-dkms");
-        ui->label1->setText(tr("Понижение пакетов NVIDIA [1/7]"));
+        ui->label1->setText(tr("Откат пакетов NVIDIA [1/7]"));
     }
     else if (nvidia == 2) {
         checkForDowngrades("nvidia-utils");
-        ui->label1->setText(tr("Понижение пакетов NVIDIA [2/7]"));
+        ui->label1->setText(tr("Откат пакетов NVIDIA [2/7]"));
     }
     else if (nvidia == 3) {
         checkForDowngrades("nvidia-settings");
-        ui->label1->setText(tr("Понижение пакетов NVIDIA [3/7]"));
+        ui->label1->setText(tr("Откат пакетов NVIDIA [3/7]"));
     }
     else if (nvidia == 4) {
         checkForDowngrades("libxnvctrl");
-        ui->label1->setText(tr("Понижение пакетов NVIDIA [4/7]"));
+        ui->label1->setText(tr("Откат пакетов NVIDIA [4/7]"));
     }
     else if (nvidia == 5) {
         checkForDowngrades("opencl-nvidia");
-        ui->label1->setText(tr("Понижение пакетов NVIDIA [5/7]"));
+        ui->label1->setText(tr("Откат пакетов NVIDIA [5/7]"));
     }
     else if (nvidia == 6) {
         checkForDowngrades("lib32-nvidia-utils");
-        ui->label1->setText(tr("Понижение пакетов NVIDIA [6/7]"));
+        ui->label1->setText(tr("Откат пакетов NVIDIA [6/7]"));
     }
     else if (nvidia == 7) {
         checkForDowngrades("lib32-opencl-nvidia");
-        ui->label1->setText(tr("Понижение пакетов NVIDIA [7/7]"));
+        ui->label1->setText(tr("Откат пакетов NVIDIA [7/7]"));
     }
     else if (nvidia == 8)
     {
-        ui->label1->setText(tr("Понижение пакетов NVIDIA"));
+        ui->label1->setText(tr("Откат пакетов NVIDIA"));
         ui->tabWidget->setCurrentIndex(6);
         ui->details_driver->setHtml(QString(tr("<b>Вы выбрали следующие пакеты:</b><br>"
                                             "- <b>%1</b><br>"
@@ -458,7 +454,7 @@ void MainWindow::on_action_nvidia_triggered()
     else
     {
         checkForDowngrades("nvidia-dkms");
-        ui->label1->setText(tr("Понижение пакетов NVIDIA [1/7]"));
+        ui->label1->setText(tr("Откат пакетов NVIDIA [1/7]"));
         nvidia = 1;
     }
 }
@@ -473,6 +469,7 @@ void MainWindow::on_push_install_clicked()
     process->start();
     process->waitForFinished(-1);
 
+    sendNotification(tr("Внимание"), tr("После отката пакетов NVIDIA, рекомендуется перезагрузка!"));
     on_push_back_clicked(); //все кончилось
 }
 
@@ -481,7 +478,7 @@ void MainWindow::on_push_back_clicked()
     //больше ничего не нужно от nvidia
     nvidia = 0;
     checkForDowngrades("steam");
-    ui->label1->setText(tr("Понижение версий пакетов"));
+    ui->label1->setText(tr("Откат пакетов"));
     ui->tabWidget->setCurrentIndex(12);
 }
 
@@ -1884,7 +1881,7 @@ void MainWindow::loadSettings()
     action_7->setIcon(QIcon(":/img/5.png"));
     trayMenu->addAction(action_7);
 
-    QAction *action_downgrade = new QAction(tr("Понижение версий пакетов"), trayMenu);
+    QAction *action_downgrade = new QAction(tr("Откат пакетов"), trayMenu);
     action_downgrade->setIcon(QIcon(":/img/55.png"));
     trayMenu->addAction(action_downgrade);
 
@@ -3564,8 +3561,25 @@ void MainWindow::addLinkToTable(const QString &link)
         item->setForeground(generateRandomColor());
         item->setIcon(QIcon("/usr/share/icons/Papirus/48x48/mimetypes/application-x-xz-pkg.svg"));
 
-        // Проверка условия для добавления элемента
-        if (nvidia <= 1 || packageVersion(link) == nvidiaVersion)
+        if (nvidia == 1)
+        {
+            int row = ui->table_downgrade->rowCount();
+
+            // Добавление новой строки вверху
+            ui->table_downgrade->insertRow(0);
+            ui->table_downgrade->setItem(0, 0, item);
+
+            // Удаляем лишние строки, оставляя только последние 5
+            while (row >= 5)
+            {
+                ui->table_downgrade->removeRow(row);
+                row--;
+            }
+
+            addedLinks.insert(cleanedLink);
+        }
+
+        if (nvidia < 1 || packageVersion(link) == nvidiaVersion)
         {
             ui->table_downgrade->insertRow(0);
             ui->table_downgrade->setItem(0, 0, item);
