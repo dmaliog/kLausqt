@@ -106,7 +106,6 @@
         <file>bench/dd.sh</file>
         <file>img/51.png</file>
         <file>img/53.png</file>
-        <file>img/wayland.png</file>
         <file>bench/7z.sh</file>
         <file>bench/peakperf.sh</file>
         <file>bench/basemark.sh</file>
@@ -225,5 +224,8 @@
         <file>img/56.png</file>
         <file>img/57.png</file>
         <file>img/driver.png</file>
+        <file>sh/amd.sh</file>
+        <file>sh/intel.sh</file>
+        <file>sh/nvidia.sh</file>
     </qresource>
 </RCC>

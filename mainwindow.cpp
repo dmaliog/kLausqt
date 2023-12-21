@@ -14,7 +14,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "9.3";
+QString currentVersion = "9.4";
 QString packagesArchiveAUR = "steam";
 QString detailsAURdefault = "";
 
@@ -285,7 +285,6 @@ void MainWindow::on_action_8_triggered()
     searchLineEdit->setPlaceholderText(tr("Введите URL адрес..."));
     searchLineEdit->setFixedWidth(1000);
 
-
     if (*currentDesktop == "KDE")
         webEngineView2->setUrl(QUrl("https://store.kde.org/browse/"));
     else if (*currentDesktop == "GNOME")
@@ -342,7 +341,6 @@ void MainWindow::on_action_host_triggered()
             return;
         }
     }
-
 
     showLoadingAnimationMini(false);
 
@@ -647,20 +645,20 @@ void MainWindow::on_action_31_triggered()
 
 void MainWindow::on_action_34_triggered()
 {
-    QTableWidget* tableWidget = nullptr;
+    QListWidget* listWidget = nullptr;
 
     if (page == 2)
-        tableWidget = ui->table_aur;
+        listWidget = ui->list_aur;
     else if (page == 4)
-        tableWidget = ui->table_app;
+        listWidget = ui->list_app;
 
-    if (tableWidget == nullptr || tableWidget->currentItem() == nullptr) {
+    if (listWidget == nullptr || listWidget->currentItem() == nullptr) {
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для просмотра информации!"));
         return;
     }
 
-    int currentRow = tableWidget->currentRow();
-    QTableWidgetItem* item = tableWidget->item(currentRow, 0);
+    int currentRow = listWidget->currentRow();
+    QListWidgetItem* item = listWidget->item(currentRow);
     QString packageName = item->text();
 
     QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
@@ -796,12 +794,12 @@ void MainWindow::on_action_5_triggered()
     }
     else
     {
-        if (ui->table_app->currentItem() == nullptr) {
+        if (ui->list_app->currentItem() == nullptr) {
             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для запуска!"));
             return;
         }
 
-        QString packageName = ui->table_app->currentItem()->text();
+        QString packageName = ui->list_app->currentItem()->text();
         packageName = packageName.left(packageName.indexOf(" "));
 
         if (container == 2  && page == 4) {
@@ -851,19 +849,19 @@ void MainWindow::on_action_5_triggered()
 
 void MainWindow::on_action_6_triggered()
 {
-    QTableWidget* tableWidget = nullptr;
+    QListWidget* listWidget = nullptr;
 
     if (page == 2)
-        tableWidget = ui->table_aur;
+        listWidget = ui->list_aur;
     else
-        tableWidget = ui->table_app;
+        listWidget = ui->list_app;
 
-    if (tableWidget->currentItem() == nullptr) {
+    if (listWidget->currentItem() == nullptr) {
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для удаления!"));
         return;
     }
 
-    QString packageName = tableWidget->item(tableWidget->currentRow(), 0)->text();
+    QString packageName = listWidget->item(listWidget->currentRow())->text();
     Terminal terminal = getTerminal();
 
     if (container == 2  && page == 4) {
@@ -898,20 +896,20 @@ void MainWindow::on_action_4_triggered()
         return;
     }
 
-    QTableWidget* tableWidget = nullptr;
+    QListWidget* listWidget = nullptr;
 
     if (page == 2) {
-        tableWidget = ui->table_aur;
+        listWidget = ui->list_aur;
     } else {
-        tableWidget = ui->table_app;
+        listWidget = ui->list_app;
     }
 
-    if (tableWidget->currentItem() == nullptr) {
+    if (listWidget->currentItem() == nullptr) {
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
         return;
     }
 
-    QString packageName = tableWidget->item(tableWidget->currentRow(), 0)->text();
+    QString packageName = listWidget->item(listWidget->currentRow())->text();
     Terminal terminal = getTerminal();
 
     if (container == 2  && page == 4)
@@ -952,12 +950,12 @@ void MainWindow::on_action_30_triggered()
         return;
     }
 
-    if (ui->table_aur->currentItem() == nullptr) {
+    if (ui->list_aur->currentItem() == nullptr) {
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
         return;
     }
 
-    QString packageName = ui->table_aur->item(ui->table_aur->currentRow(), 0)->text();
+    QString packageName = ui->list_aur->item(ui->list_aur->currentRow())->text();
     Terminal terminal = getTerminal();
 
     QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "bash" << mainDir + "sh/PKGBUILD.sh" << *lang << helper << packageName);
@@ -1242,26 +1240,26 @@ void MainWindow::on_action_editsh_triggered()
 //---#####################################################################################################################################################
 //--################################################################# ОСНОВНЫЕ ФУНКЦИИ ##################################################################
 //-#####################################################################################################################################################
-void MainWindow::setupTableContextMenu()
+void MainWindow::setupListContextMenu()
 {
-    connect(ui->table_aur, &QWidget::customContextMenuRequested, this, &MainWindow::showTableContextMenu);
-    connect(ui->table_app, &QWidget::customContextMenuRequested, this, &MainWindow::showTableContextMenu);
+    connect(ui->list_aur, &QListWidget::customContextMenuRequested, this, &MainWindow::showListContextMenu);
+    connect(ui->list_app, &QListWidget::customContextMenuRequested, this, &MainWindow::showListContextMenu);
 }
 
-void MainWindow::showTableContextMenu(const QPoint& pos)
+void MainWindow::showListContextMenu(const QPoint& pos)
 {
-    QTableWidget* tableWidget = nullptr;
+    QListWidget* listWidget = nullptr;
 
     if (page == 2) {
-        tableWidget = ui->table_aur;
+        listWidget = ui->list_aur;
     } else if (page == 4) {
-        tableWidget = ui->table_app;
+        listWidget = ui->list_app;
     }
 
-    if (!tableWidget)
+    if (!listWidget)
         return;
 
-    QTableWidgetItem* selectedItem = tableWidget->itemAt(pos);
+    QListWidgetItem* selectedItem = listWidget->itemAt(pos);
 
     if (!selectedItem)
         return;
@@ -1284,9 +1282,7 @@ void MainWindow::showTableContextMenu(const QPoint& pos)
 
     if (page == 2) {
         contextMenu.addAction(&action1);
-
         contextMenu.addAction(&action2);
-
     } else if (page == 4) {
         contextMenu.addAction(&action5);
         contextMenu.addAction(&action6);
@@ -1294,7 +1290,7 @@ void MainWindow::showTableContextMenu(const QPoint& pos)
     }
     contextMenu.addAction(&action4);
 
-    contextMenu.exec(tableWidget->viewport()->mapToGlobal(pos));
+    contextMenu.exec(listWidget->viewport()->mapToGlobal(pos));
 }
 
 void MainWindow::createSearchBar()
@@ -1343,16 +1339,16 @@ void MainWindow::createSearchBar()
 void MainWindow::searchTextChanged(const QString& searchText)
 {
     if (page == 2)
-        searchAndScroll(ui->table_aur, searchText);
+        searchAndScroll(ui->list_aur, searchText);
 
     else if (page == 4)
-        searchAndScroll(ui->table_app, searchText);
+        searchAndScroll(ui->list_app, searchText);
 
     else if (page == 3)
         searchAndScroll(ui->list_sh, searchText);
 
     else if (page == 14)
-        searchAndScroll(ui->table_downgrade, searchText);
+        searchAndScroll(ui->list_downgrade, searchText);
 
     else if (page == 111)
     {
@@ -1369,24 +1365,7 @@ void MainWindow::searchTextChanged(const QString& searchText)
 
 void MainWindow::searchAndScroll(QAbstractItemView* view, const QString& text)
 {
-    if (QTableWidget* tableWidget = qobject_cast<QTableWidget*>(view))
-    {
-        int rowCount = tableWidget->rowCount();
-        for (int i = 0; i < rowCount; ++i) {
-            QTableWidgetItem* item = tableWidget->item(i, 0);
-            if (item) {
-                QString cellText = item->text();
-                QStringList words = cellText.split(' ', Qt::SkipEmptyParts);
-                if (!words.isEmpty() && words.first().startsWith(text, Qt::CaseInsensitive)) {
-                    tableWidget->setCurrentCell(i, 0);
-                    tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
-                    tableWidget->scrollToItem(item, QAbstractItemView::EnsureVisible);
-                    break;
-                }
-            }
-        }
-    }
-    else if (QListWidget* listWidget = qobject_cast<QListWidget*>(view))
+    if (QListWidget* listWidget = qobject_cast<QListWidget*>(view))
     {
         QList<QListWidgetItem*> matchingItems = listWidget->findItems(text, Qt::MatchContains);
         if (!matchingItems.isEmpty()) {
@@ -1420,7 +1399,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     //-######################### ПОДКЛЮЧЕНИЕ КОНФИГУРАЦИЙ ###############################
     //-##################################################################################
 
-    setupTableContextMenu();
+    setupListContextMenu();
     createSearchBar();
 
     loadSettings();         //загрузка настроек
@@ -1613,7 +1592,7 @@ void MainWindow::loadSettings()
     //-##################################################################################
     //-########################## НАСТРОЕННЫЕ ПЕРЕМЕННЫЕ ################################
     //-##################################################################################
-    previousAction = ui->action_1; //предыдущий action [заглушка]
+    previousAction = ui->action_2; //предыдущий action [заглушка]
 
     webEngineView2 = nullptr;
 
@@ -1665,7 +1644,7 @@ void MainWindow::loadSettings()
     ui->toolBar_2->setContextMenuPolicy(Qt::PreventContextMenu);
 
     // Запрещаем редактирование ячеек
-    ui->table_aur->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->list_aur->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     switch(mainpage) {
         case 0:
@@ -1704,10 +1683,10 @@ void MainWindow::loadSettings()
     //-############################## СИГНАЛЫ И СЛОТЫ ###################################
     //-##################################################################################
     connect(ui->time_update, &QTimeEdit::timeChanged, this, &MainWindow::onTimeChanged);
-    connect(ui->table_aur, &QTableWidget::cellClicked, this, &MainWindow::onTableAurCellClicked);
-    connect(ui->table_app, &QTableWidget::cellClicked, this, &MainWindow::onTableAurCellClicked);
+    connect(ui->list_aur, &QListWidget::itemClicked, this, &MainWindow::onListAurItemClicked);
+    connect(ui->list_app, &QListWidget::itemClicked, this, &MainWindow::onListAurItemClicked);
 
-    connect(ui->table_downgrade, &QTableWidget::cellDoubleClicked, this, &MainWindow::onTableDowngradeCellDoubleClicked);
+    connect(ui->list_downgrade, &QListWidget::itemDoubleClicked, this, &MainWindow::onListDowngradeItemDoubleClicked);
 
     connect(webEngineView2, &QWebEngineView::urlChanged, this, [this](const QUrl &url) {
         QString urlString = url.toString();
@@ -1806,8 +1785,7 @@ void MainWindow::loadSettings()
         showLoadingAnimation(false);
     });
 
-    QTableWidget *table = ui->table_aur;
-    table->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->list_aur->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     //-##################################################################################
     //-###################### КОПИРОВАНИЕ ИНФОРМАЦИИ О СИСТЕМЕ ##########################
@@ -2082,7 +2060,7 @@ bool isDescendantOfTabWidget(QWidget* widget) {
 void MainWindow::mrpropper(int value) //зачистка говна перед началом каждой вкладки
 {
     miniAnimation(false,ui->details_aur);
-    miniAnimation(false,ui->table_aur);
+    miniAnimation(false,ui->list_aur);
     showLoadingAnimationMini(true);
 
     page = value;
@@ -2544,8 +2522,8 @@ void MainWindow::on_next_slider_clicked()
     updateImageView();
 }
 
-void MainWindow::processTableItem(int row, QTableWidget* tableWidget, QTextBrowser* detailsWidget) {
-    QTableWidgetItem* nameItem = tableWidget->item(row, 0);
+void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser* detailsWidget) {
+    QListWidgetItem* nameItem = listWidget->item(row);
     QString packageName = nameItem->text();
 
     if (page == 2)
@@ -2680,15 +2658,12 @@ void MainWindow::processTableItem(int row, QTableWidget* tableWidget, QTextBrows
     currentProcess->start(command[0], QStringList() << command[1] << packageName);
 }
 
-void MainWindow::onTableAurCellClicked(int row) {
+void MainWindow::onListAurItemClicked(QListWidgetItem *item)
+{
     if (page == 2) {
-
+        int row = ui->list_aur->row(item);
         bool iconFound = false;
-        if(list != 8)
-        {
-            QTableWidgetItem *item = ui->table_aur->item(row, 0);
-
-
+        if (list != 8) {
             for (auto it = appIcons.constBegin(); it != appIcons.constEnd(); ++it) {
                 if (appIcons.contains(item->text()) && appIcons[item->text()] == it.value()) {
                     loadContent(row + 1, loadpage);
@@ -2698,10 +2673,11 @@ void MainWindow::onTableAurCellClicked(int row) {
             }
         }
         if (!iconFound)
-            processTableItem(row, ui->table_aur, ui->details_aur);
+            processListItem(row, ui->list_aur, ui->details_aur);
+    } else if (page == 4) {
+        int row = ui->list_app->row(item);
+        processListItem(row, ui->list_app, ui->details_aurpkg);
     }
-    else if (page == 4)
-        processTableItem(row, ui->table_app, ui->details_aurpkg);
 }
 
 void MainWindow::miniAnimation(bool visible, QWidget* targetWidget)
@@ -2843,12 +2819,10 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
 
 void MainWindow::loadContent(int value, bool valuepage)
 {
-    miniAnimation(true,ui->table_aur);
-    ui->table_aur->setHorizontalHeaderLabels({tr("Названия пакетов")});
+    miniAnimation(true,ui->list_aur);
 
     // Очищаем таблицу
-    ui->table_aur->clearContents();
-    ui->table_aur->setRowCount(0);
+    ui->list_aur->clear();
 
     QString sourceFilePath;
     QString targetFilePath;
@@ -3280,7 +3254,7 @@ void MainWindow::loadContent(int value, bool valuepage)
     for (int i = 0; i < programs.size(); i++) {
         QString packageName = programs[i];
         QColor color = generateRandomColor();
-        QTableWidgetItem *item = new QTableWidgetItem();
+        QListWidgetItem *item = new QListWidgetItem();
 
         QString iconPath;
 
@@ -3337,13 +3311,12 @@ void MainWindow::loadContent(int value, bool valuepage)
         item->setText(packageName);
         item->setForeground(color);
 
-        ui->table_aur->insertRow(i);
-        ui->table_aur->setItem(i, 0, item);
+        ui->list_aur->addItem(item);
 
         if(valuepage)
             appIcons[packageName] = iconPath;
     }
-    miniAnimation(false,ui->table_aur);
+    miniAnimation(false,ui->list_aur);
 
 }
 
@@ -3359,13 +3332,16 @@ QString packageVersion(const QString& packageName) {
     }
 }
 
-void MainWindow::onTableDowngradeCellDoubleClicked() {
-    if (ui->table_downgrade->currentItem() == nullptr) {
+void MainWindow::onListDowngradeItemDoubleClicked(QListWidgetItem *currentItem) {
+
+    QString packageName;
+
+    if (currentItem != nullptr) {
+        packageName = currentItem->text();
+    } else {
         sendNotification(tr("Внимание"), tr("Выберите пакет для установки!"));
         return;
     }
-
-    QString packageName = ui->table_downgrade->item(ui->table_downgrade->currentRow(), 0)->text();
 
     Terminal terminal = getTerminal();
 
@@ -3442,14 +3418,13 @@ void MainWindow::checkForDowngrades(const QString& packagesArchiveAUR)
 {
     if (!packagesArchiveAUR.isEmpty())
     {
-        miniAnimation(true, ui->table_downgrade);
+        miniAnimation(true, ui->list_downgrade);
 
         // Очистка списка добавленных ссылок
         addedLinks.clear();
 
         // Очищаем таблицу
-        ui->table_downgrade->clearContents();
-        ui->table_downgrade->setRowCount(0);
+        ui->list_downgrade->clear();
 
         // Получение первой буквы пакета
         QChar firstLetter = packagesArchiveAUR.at(0);
@@ -3531,18 +3506,18 @@ void MainWindow::onReplyFinished(QNetworkReply *reply)
         while ((match = linkRegex.match(htmlContent, pos)).hasMatch())
         {
             QString link = match.captured(1);
-            addLinkToTable(link);
+            addLinkToList(link);
             pos += match.capturedLength();
         }
     }
     else {
-        miniAnimation(false,ui->table_downgrade);
+        miniAnimation(false,ui->list_downgrade);
         ui->details_downgrade->setText(tr("Пакет не найден в архиве"));
     }
     reply->deleteLater();
 }
 
-void MainWindow::addLinkToTable(const QString &link)
+void MainWindow::addLinkToList(const QString &link)
 {
     // Замена относительных путей "../" на пустую строку
     QString cleanedLink = link;
@@ -3553,35 +3528,29 @@ void MainWindow::addLinkToTable(const QString &link)
     static QRegularExpression newlineExp("^\n");  // Статический объект
     cleanedLink.replace(newlineExp, "");
 
-    miniAnimation(false, ui->table_downgrade);
+    miniAnimation(false, ui->list_downgrade);
 
     if (!cleanedLink.isEmpty() && !cleanedLink.contains(".sig") && !addedLinks.contains(cleanedLink))
     {
-        QTableWidgetItem *item = new QTableWidgetItem(cleanedLink);
+        QListWidgetItem *item = new QListWidgetItem(QIcon("/usr/share/icons/Papirus/48x48/mimetypes/application-x-xz-pkg.svg"), cleanedLink);
         item->setForeground(generateRandomColor());
-        item->setIcon(QIcon("/usr/share/icons/Papirus/48x48/mimetypes/application-x-xz-pkg.svg"));
 
         if (nvidia == 1)
         {
-            int row = ui->table_downgrade->rowCount();
+            // Добавление нового элемента вверх списка
+            ui->list_downgrade->insertItem(0, item);
 
-            // Добавление новой строки вверху
-            ui->table_downgrade->insertRow(0);
-            ui->table_downgrade->setItem(0, 0, item);
-
-            // Удаляем лишние строки, оставляя только последние 5
-            while (row >= 5)
+            // Удаляем лишние элементы, оставляя только последние 5
+            while (ui->list_downgrade->count() > 5)
             {
-                ui->table_downgrade->removeRow(row);
-                row--;
+                delete ui->list_downgrade->takeItem(ui->list_downgrade->count() - 1);
             }
 
             addedLinks.insert(cleanedLink);
         }
         else if (nvidia < 1 || packageVersion(link) == nvidiaVersion)
         {
-            ui->table_downgrade->insertRow(0);
-            ui->table_downgrade->setItem(0, 0, item);
+            ui->list_downgrade->insertItem(0, item);
             addedLinks.insert(cleanedLink);
         }
     }
@@ -3624,9 +3593,7 @@ void MainWindow::loadContentInstall()
     }
 
     numPackages = allPackagesCombined.size();
-    ui->table_app->setHorizontalHeaderLabels({tr("Названия пакетов")});
-    ui->table_app->clearContents();
-    ui->table_app->setRowCount(numPackages);
+    ui->list_app->clear();
 
     for (int i = 0; i < numPackages; ++i) {
         const QString& package = allPackagesCombined.at(i);
@@ -3642,7 +3609,7 @@ void MainWindow::loadContentInstall()
         }
 
         // Создаем ячейку таблицы с иконкой и текстом
-        QTableWidgetItem* item = new QTableWidgetItem(packageName);
+        QListWidgetItem* item = new QListWidgetItem(packageName);
         item->setIcon(packageIcon);
 
         // Раскрашиваем
@@ -3650,41 +3617,40 @@ void MainWindow::loadContentInstall()
         item->setForeground(color);
 
         // Добавляем ячейку в таблицу
-        ui->table_app->setItem(i, 0, item);
+        ui->list_app->addItem(item);
     }
 }
 
 void MainWindow::setCursorAndScrollToItem(const QString& itemName)
 {
-    // Найти элемент в таблице по имени
-    QTableWidgetItem *item = nullptr;
-    for (int row = 0; row < ui->table_aur->rowCount(); ++row) {
-        QTableWidgetItem *currentItem = ui->table_aur->item(row, 0);
+    // Найти элемент в списке по имени
+    QListWidgetItem *item = nullptr;
+    for (int row = 0; row < ui->list_aur->count(); ++row) {
+        QListWidgetItem *currentItem = ui->list_aur->item(row);
         if (currentItem && currentItem->text() == itemName) {
             item = currentItem;
-            // Вызвать функцию onTableAurCellClicked с индексом строки
-            onTableAurCellClicked(row);
+            // Вызвать функцию onListAurItemClicked с текущим элементом
+            onListAurItemClicked(item);
             break;
         }
     }
 
     if (item) {
         // Установить текущий элемент и выделить его
-        ui->table_aur->setCurrentItem(item);
-        ui->table_aur->setCurrentItem(item, QItemSelectionModel::Select);
+        ui->list_aur->setCurrentItem(item);
+        QItemSelectionModel *selectionModel = ui->list_aur->selectionModel();
+        selectionModel->select(ui->list_aur->model()->index(ui->list_aur->row(item), 0), QItemSelectionModel::Select);
 
         // Прокрутить к текущему элементу
-        ui->table_aur->scrollToItem(item);
+        ui->list_aur->scrollToItem(item);
     }
 }
 
 void MainWindow::handleServerResponse(const QString& reply)
 {
-    ui->table_aur->clearContents();
-    ui->table_aur->setRowCount(0);
-    ui->table_aur->setColumnCount(1);
+    ui->list_aur->clear();  // Очищаем содержимое QListWidget
 
-    miniAnimation(true,ui->table_aur);
+    miniAnimation(true, ui->list_aur);
 
     helperPackageNames.clear();
 
@@ -3695,7 +3661,7 @@ void MainWindow::handleServerResponse(const QString& reply)
     connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
 
     connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
-        miniAnimation(false, ui->table_aur);
+        miniAnimation(false, ui->list_aur);
     });
 
     currentProcess->start(searchCommand, QStringList() << searchArg << reply);
@@ -3703,9 +3669,10 @@ void MainWindow::handleServerResponse(const QString& reply)
 
 void MainWindow::onCurrentProcessReadyRead()
 {
+    ui->list_aur->clear();
+
     while (currentProcess->canReadLine()) {
         QByteArray line = currentProcess->readLine();
-
         QString lineString = QString::fromUtf8(line).trimmed();
 
         QRegularExpression regex(*repo); // Добавлено условие для extra
@@ -3713,51 +3680,41 @@ void MainWindow::onCurrentProcessReadyRead()
         if (match.hasMatch()) {
             QString packageName = match.captured(1);
             helperPackageNames.append(packageName);
-        }
-    }
 
-    // Установка общего количества строк в таблице
-    ui->table_aur->setRowCount(helperPackageNames.size());
+            QString iconPath = "";
+            QString prefixToRemove = "";
 
-    for (int i = 0; i < helperPackageNames.size(); i++) {
-        QString packageName = helperPackageNames[i];
-        QColor color = generateRandomColor();
-        QTableWidgetItem *item = new QTableWidgetItem();
+            static const QRegularExpression regex("(\\w+)/\\S+");
+            QRegularExpressionMatch match = regex.match(packageName);
 
-        QString iconPath = "";
-        QString prefixToRemove = "";
+            if (match.hasMatch()) {
+                QString repoName = match.captured(1);
 
-        static const QRegularExpression regex("(\\w+)/\\S+");
-        QRegularExpressionMatch match = regex.match(packageName);
+                // Проверяем наличие изображения repoName.png в ресурсах
+                if (QFile::exists(":/img/" + repoName + ".png")) {
+                    iconPath = ":/img/" + repoName + ".png";
+                } else {
+                    // Если изображение repoName.png не найдено, используем pacman.png
+                    iconPath = ":/img/pacman.png";
+                }
 
-        if (match.hasMatch()) {
-            QString repoName = match.captured(1);
-
-            // Проверяем наличие изображения repoName.png в ресурсах
-            if (QFile::exists(":/img/" + repoName + ".png")) {
-                iconPath = ":/img/" + repoName + ".png";
-            } else {
-                // Если изображение repoName.png не найдено, используем pacman.png
-                iconPath = ":/img/pacman.png";
+                prefixToRemove = repoName + "/";
             }
 
-            prefixToRemove = repoName + "/";
+            // Удаление префикса, если применимо
+            if (!prefixToRemove.isEmpty()) {
+                packageName.remove(0, prefixToRemove.length());
+            }
+
+            QListWidgetItem *item = new QListWidgetItem(QIcon(iconPath), packageName);
+            QColor color = generateRandomColor();
+            item->setForeground(color);
+
+            ui->list_aur->addItem(item);
         }
-
-        item->setIcon(QIcon(iconPath));
-
-        // Удаление префикса, если применимо
-        if (!prefixToRemove.isEmpty()) {
-            packageName.remove(0, prefixToRemove.length());
-        }
-
-        item->setText(packageName);
-        item->setForeground(color);
-
-        ui->table_aur->setItem(i, 0, item);
     }
 
-    miniAnimation(false,ui->table_aur);
+    miniAnimation(false, ui->list_aur);
 
     QString searchText = searchLineEdit->text();
     setCursorAndScrollToItem(searchText);
@@ -3769,7 +3726,7 @@ void MainWindow::onCurrentProcessReadyRead()
 void MainWindow::onSearchTimeout()
 {
     currentProcess->kill();
-    miniAnimation(false,ui->table_aur);
+    miniAnimation(false,ui->list_aur);
 }
 
 void MainWindow::onSnapProcessFinished()
@@ -3783,28 +3740,23 @@ void MainWindow::onSnapProcessFinished()
     // Пропускаем первую строку (заголовок "Name")
     snapLines.removeFirst();
 
+    ui->list_aur->clear();
+
     for (const QString& snapLine : snapLines) {
         if (!snapLine.isEmpty()) {
             QString snapPackageName = snapLine.section(' ', 0, 0);
-            snapPackageNames.append(snapPackageName);
+            QColor color = generateRandomColor();
+
+            QListWidgetItem *item = new QListWidgetItem();
+            item->setIcon(QIcon(":/img/snap.png"));
+            item->setText(snapPackageName);
+            item->setForeground(color);
+
+            ui->list_aur->addItem(item);
         }
     }
 
-    ui->table_aur->setRowCount(snapPackageNames.size());
-
-    for (int i = 0; i < snapPackageNames.size(); i++) {
-        QString packageName = snapPackageNames[i];
-        QColor color = generateRandomColor();
-        QTableWidgetItem *item = new QTableWidgetItem();
-
-        item->setIcon(QIcon(":/img/snap.png"));
-        item->setText(packageName);
-        item->setForeground(color);
-
-        ui->table_aur->setItem(i, 0, item);
-    }
-
-    miniAnimation(false,ui->table_aur);
+    miniAnimation(false, ui->list_aur);
 }
 
 
@@ -3826,9 +3778,9 @@ void MainWindow::loadingListWidget()
     cacheButtonPacman = new QListWidgetItem(tr("Кэш пакетов Pacman"), ui->list_clear);
     orphanButton = new QListWidgetItem(tr("Пакеты сироты"), ui->list_clear);
 
-    cacheButtonHelper->setIcon(QIcon(":/img/14.png"));
-    cacheButtonPacman->setIcon(QIcon(":/img/14.png"));
-    orphanButton->setIcon(QIcon(":/img/14.png"));
+    cacheButtonHelper->setIcon(QIcon("/usr/share/icons/Papirus/48x48/apps/pacman.svg"));
+    cacheButtonPacman->setIcon(QIcon("/usr/share/icons/Papirus/48x48/apps/pacman.svg"));
+    orphanButton->setIcon(QIcon("/usr/share/icons/Papirus/48x48/apps/ark.svg"));
 
     cacheButtonHelper->setForeground(generateRandomColor());
     cacheButtonPacman->setForeground(generateRandomColor());
@@ -3878,7 +3830,14 @@ void MainWindow::loadScripts(const QString& baseDir, QListWidget* listWidget)
                 else if (line.startsWith("#icon"))
                 {
                     QString iconNumber = line.mid(6).trimmed();
-                    iconPath = QString(":/img/%1.png").arg(iconNumber);
+
+                    iconPath = QString("/usr/share/icons/Papirus/48x48/apps/%1.svg").arg(iconNumber);
+
+                    QFileInfo fileInfo(iconPath);
+                    if (!fileInfo.exists()) {
+                        iconPath = QString(":/img/%1.png").arg(iconNumber);
+                    }
+
                 }
             }
             scriptFile.close();
@@ -3896,6 +3855,12 @@ void MainWindow::loadScripts(const QString& baseDir, QListWidget* listWidget)
         otherScripts.append(item);
     }
 
+    // Сортировка по названию
+    std::sort(otherScripts.begin(), otherScripts.end(), [](const QListWidgetItem* a, const QListWidgetItem* b) {
+        return a->text().localeAwareCompare(b->text()) < 0;
+    });
+
+    // Добавление отсортированных элементов в QListWidget
     for (QListWidgetItem* item : otherScripts)
     {
         listWidget->addItem(item);
@@ -3987,11 +3952,16 @@ void MainWindow::loadFolders()
 
     ui->list_repair->clear();
     int itemCount = 0;
+
     // Загрузка папок из папки .config
     QStringList configFolderList = configDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
 
     for (const QString& folderName : configFolderList) {
-        ui->list_repair->addItem(new QListWidgetItem(QIcon(":/img/14.png"), folderName));
+        QString iconPath = QString("/usr/share/icons/Papirus/48x48/apps/") + folderName + ".svg";
+        if (!QFileInfo::exists(iconPath)) {
+            iconPath = "/usr/share/icons/Papirus/48x48/apps/gnome-do.svg";
+        }
+        ui->list_repair->addItem(new QListWidgetItem(QIcon(iconPath), folderName));
         itemCount++;
     }
 
@@ -4010,7 +3980,23 @@ void MainWindow::loadFolders()
             folderName == ".icons" ||
             folderName == ".cache")
             continue; // Пропускаем папки без точек или исключения
-        ui->list_repair->addItem(new QListWidgetItem(QIcon(":/img/14.png"), folderName));
+
+        QString iconName = folderName;
+        QString iconPath;
+
+        if (iconName.startsWith('.') && iconName.length() > 1) {
+            iconName = iconName.mid(1); // Убираем точку из начала названия
+            iconPath = QString("/usr/share/icons/Papirus/48x48/apps/") + iconName + ".svg";
+        } else {
+            iconPath = QString("/usr/share/icons/Papirus/48x48/apps/") + iconName + ".svg";
+        }
+
+        if (!QFileInfo::exists(iconPath)) {
+            // Если иконка с названием ".svg" не существует, используем "gnome-do.svg"
+            iconPath = "/usr/share/icons/Papirus/48x48/apps/gnome-do.svg";
+        }
+
+        ui->list_repair->addItem(new QListWidgetItem(QIcon(iconPath), folderName));
         itemCount++;
     }
 
@@ -4168,7 +4154,13 @@ void MainWindow::on_combo_bench_currentIndexChanged(int index)
                 else if (line.startsWith("#icon"))
                 {
                     QString iconNumber = line.mid(6).trimmed();
-                    iconPath = QString(":/img/%1.png").arg(iconNumber);
+
+                    iconPath = QString("/usr/share/icons/Papirus/48x48/apps/%1.svg").arg(iconNumber);
+
+                    QFileInfo fileInfo(iconPath);
+                    if (!fileInfo.exists()) {
+                        iconPath = QString(":/img/%1.png").arg(iconNumber);
+                    }
                 }
             }
             scriptFile.close();
@@ -4183,7 +4175,9 @@ void MainWindow::on_combo_bench_currentIndexChanged(int index)
             item->setIcon(icon);
         }
 
-        if ((index == 1 && !iconPath.isEmpty() && iconPath == ":/img/53.png") || (index == 1 && !iconPath.isEmpty() && iconPath == ":/img/29.png") || (index == 2 && !iconPath.isEmpty() && iconPath == ":/img/49.png") || (index == 3 && !iconPath.isEmpty() && iconPath == ":/img/21.png"))
+        if ((index == 1 && !iconPath.isEmpty() && (iconPath == "/usr/share/icons/Papirus/48x48/apps/org.kde.plasma.systemmonitor.svg" || iconPath == "/usr/share/icons/Papirus/48x48/apps/org.kde.plasma.systemmonitor.cpucore.svg")) ||
+            (index == 2 && !iconPath.isEmpty() && iconPath == "/usr/share/icons/Papirus/48x48/apps/io.elementary.monitor.svg") ||
+            (index == 3 && !iconPath.isEmpty() && iconPath == "/usr/share/icons/Papirus/48x48/apps/multimedia-photo-viewer.svg"))
         {
             comboBenchScripts.append(item);
         }
@@ -4302,7 +4296,6 @@ void MainWindow::on_check_cacheremove_stateChanged(int arg1)
     cacheremove = arg1;
     settings.setValue("CacheRemove",arg1);
 }
-
 
 void MainWindow::on_check_repair_stateChanged(int arg1)
 {
@@ -4462,7 +4455,6 @@ void MainWindow::on_list_sh_itemDoubleClicked(QListWidgetItem *item) {
     QString scriptDir = mainDir + "sh/";
     handleListItemDoubleClick(item, scriptDir);
 }
-
 
 void MainWindow::on_list_journal_itemDoubleClicked(QListWidgetItem *item) {
     QString scriptDir = mainDir + "journals/";
@@ -4626,33 +4618,31 @@ void MainWindow::on_push_kde_clicked()
 
 void MainWindow::on_reload_aur_clicked()
 {
-    miniAnimation(true,ui->table_aur);
+    miniAnimation(true, ui->list_aur);
 
-    // Очищаем таблицу
-    ui->table_aur->clearContents();
-    ui->table_aur->setRowCount(0);
+    // Очищаем QListWidget
+    ui->list_aur->clear();
     ui->img_aur->setChecked(false);
     ui->img_aur->setDisabled(true);
 
     QTimer::singleShot(500, this, [=]() {
         list = 0;
-        loadContent(0,true);
+        loadContent(0, true);
         ui->details_aur->setHtml(detailsAURdefault);
-        miniAnimation(false,ui->table_aur);
+        miniAnimation(false, ui->list_aur);
     });
 }
 
 void MainWindow::on_reload_aurpkg_clicked()
 {
-    miniAnimation(true, ui->table_app);
+    miniAnimation(true, ui->list_app);
 
-    // Очищаем таблицу
-    ui->table_app->clearContents();
-    ui->table_app->setRowCount(0);
+    // Очищаем QListWidget
+    ui->list_app->clear();
 
     QTimer::singleShot(500, this, [=]() {
         ui->details_aurpkg->setText(tr("Ничего не выбрано"));
-        miniAnimation(false, ui->table_app);
+        miniAnimation(false, ui->list_app);
         loadContentInstall();
     });
 }

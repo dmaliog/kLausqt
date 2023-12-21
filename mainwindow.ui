@@ -115,8 +115,7 @@ QScrollBar::sub-line {
     width: 0px;
 }
 
-QListWidget::item:selected,
-QTableView::item:selected {
+QListWidget::item:selected {
     background-color: #1e1e1e;
     color: white;
     outline: none;
@@ -146,7 +145,6 @@ QSpinBox,
 QScrollArea,
 QLineEdit,
 QTextEdit,
-QTableWidget,
 QListWidget,
 QGraphicsView {
     background-color: #272727;
@@ -154,51 +152,6 @@ QGraphicsView {
     border: 1px solid #222222;
 	color:#dbd7da;
     padding: 5px;
-}
-
-QTableWidget::item {
-    border:none;
-}
-
-QTableWidget QHeaderView {
-    background-color: #1f1f1f;
-    border:none;
-	border-top-left-radius: 5px;
-}
-
-QTableWidget QHeaderView::section {
-    background-color: #1f1f1f;
-    border:0;
-    padding:5px;
-    font-size:10pt;
-	font-weight: bold;
-}
-
-QTableWidget QHeaderView::section:selected {
-    background-color: #202020;
-    color: #FFFFFF;
-    border:none;
-}
-
-QTableWidget QHeaderView::section:hover {
-    background-color: #202020;
-    color: #FFFFFF;
-    border:none;
-}
-
-QTableWidget QTableView::item {
-    padding:10px;
-    border:none;
-}
-
-QTableWidget QTableView::item:selected {
-    background-color: #916ee4;
-    color: #FFFFFF;
-    border:none;
-}
-
-QTableWidget QHeaderView::section:first {
-    border-top-left-radius: 5px;
 }
 
 QCheckBox {
@@ -277,6 +230,16 @@ QMenu::separator {
     height: 1px;
     background-color: #2c2e2d;
     margin: 2px 0;
+}
+
+QToolBar::separator {
+    background-color: #1c1c1c;
+}
+
+QToolBar::separator::handle:vertical {
+    border-bottom: 1px solid #222222;
+    height: 1px; 
+    margin: 2px 7px;
 }
 
 QMenu::icon {
@@ -402,890 +365,17 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>12</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_auradd">
      <attribute name="title">
       <string>tab_auradd</string>
      </attribute>
-     <widget class="QTextBrowser" name="details_makepkg">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>750</x>
-        <y>50</y>
-        <width>631</width>
-        <height>521</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QTextEdit {
-	background:#272727;
-}</string>
-      </property>
-      <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAsNeeded</enum>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-      <property name="html">
-       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Перед публикацией обязательно ознакомьтесь с &lt;a href=&quot;https://wiki.archlinux.org/title/AUR_submission_guidelines_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#4d471e;&quot;&gt;правилами публикации AUR.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;1 шаг.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Заполните сборочный файл PKGBUILD. От данного файла зависит то, насколько успешно будет собран пакет.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Будьте внимательны при заполнении!&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;2 шаг.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;После заполнения нажмите кнопку &amp;quot;Сгенерировать&amp;quot;.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;После генирации, в локальный каталог с пакетом сгенирируется 2 файла:&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- PKGBUILD&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- .SCRINFO&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Вы можете убедится в их корректности и переходить к следующему шагу.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;3 шаг.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Если вас все устраивает, то просто нажмите &amp;quot;Отправить&amp;quot;.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Эти файлы отправятся в репозиторий AUR который вы указали. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-      <property name="openLinks">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_details_makepkg">
-      <property name="geometry">
-       <rect>
-        <x>760</x>
-        <y>9</y>
-        <width>321</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background:#2e2b79;
-padding:0 15px;
-border-top-left-radius: 15px;
-border-top-right-radius: 15px;
-color:#5752e7;</string>
-      </property>
-      <property name="text">
-       <string>Инструкция</string>
-      </property>
-      <property name="textFormat">
-       <enum>Qt::AutoText</enum>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-      </property>
-      <property name="margin">
-       <number>0</number>
-      </property>
-     </widget>
-     <widget class="QScrollArea" name="scroll_makepkg">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>51</y>
-        <width>721</width>
-        <height>641</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
-      </property>
-      <widget class="QWidget" name="scrollArea_makepkg">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>709</width>
-         <height>629</height>
-        </rect>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_10">
-        <item row="9" column="0">
-         <widget class="QLabel" name="label_url">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-           </font>
-          </property>
-          <property name="locale">
-           <locale language="Russian" country="Russia"/>
-          </property>
-          <property name="text">
-           <string>Ссылка на Github</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::AutoText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-          </property>
-          <property name="margin">
-           <number>4</number>
-          </property>
-         </widget>
-        </item>
-        <item row="13" column="0">
-         <widget class="QLabel" name="label_optdepends">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-           </font>
-          </property>
-          <property name="locale">
-           <locale language="Russian" country="Russia"/>
-          </property>
-          <property name="text">
-           <string>Необязательные  зависимости</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::AutoText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-          </property>
-          <property name="margin">
-           <number>4</number>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="2">
-         <widget class="QLineEdit" name="line_pkgdesc">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="contextMenuPolicy">
-           <enum>Qt::NoContextMenu</enum>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="placeholderText">
-           <string>Например: Arch manager that allows you to download, install, delete packages...</string>
-          </property>
-         </widget>
-        </item>
-        <item row="13" column="2">
-         <widget class="QLineEdit" name="line_optdepends">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="contextMenuPolicy">
-           <enum>Qt::NoContextMenu</enum>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="placeholderText">
-           <string>Например: 'ocs-url'</string>
-          </property>
-         </widget>
-        </item>
-        <item row="8" column="0">
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="14" column="0">
-         <spacer name="verticalSpacer_10">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="10" column="0">
-         <widget class="QLabel" name="label_license">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-           </font>
-          </property>
-          <property name="locale">
-           <locale language="Russian" country="Russia"/>
-          </property>
-          <property name="text">
-           <string>Лицензия</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::AutoText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-          </property>
-          <property name="margin">
-           <number>4</number>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="2">
-         <widget class="QLineEdit" name="line_pkgname">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="contextMenuPolicy">
-           <enum>Qt::NoContextMenu</enum>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="placeholderText">
-           <string>Например: klaus-bin</string>
-          </property>
-         </widget>
-        </item>
-        <item row="16" column="0">
-         <widget class="QLabel" name="label_run">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-           </font>
-          </property>
-          <property name="locale">
-           <locale language="Russian" country="Russia"/>
-          </property>
-          <property name="text">
-           <string>Название исполняемого файла</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::AutoText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-          </property>
-          <property name="margin">
-           <number>4</number>
-          </property>
-         </widget>
-        </item>
-        <item row="17" column="0">
-         <widget class="QLabel" name="label_desktop">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-           </font>
-          </property>
-          <property name="locale">
-           <locale language="Russian" country="Russia"/>
-          </property>
-          <property name="text">
-           <string>Название '.desktop' файла</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::AutoText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-          </property>
-          <property name="margin">
-           <number>4</number>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_pkgname">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-           </font>
-          </property>
-          <property name="locale">
-           <locale language="Russian" country="Russia"/>
-          </property>
-          <property name="text">
-           <string>Название пакета</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::AutoText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-          </property>
-          <property name="margin">
-           <number>4</number>
-          </property>
-         </widget>
-        </item>
-        <item row="10" column="2">
-         <widget class="QLineEdit" name="line_license">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="contextMenuPolicy">
-           <enum>Qt::NoContextMenu</enum>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="placeholderText">
-           <string>Например: GPL 2.0</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <spacer name="verticalSpacer_9">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="4" column="2">
-         <widget class="QLineEdit" name="line_pkgver">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="contextMenuPolicy">
-           <enum>Qt::NoContextMenu</enum>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="placeholderText">
-           <string>Например: 8.0</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="label_pkgver">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-           </font>
-          </property>
-          <property name="locale">
-           <locale language="Russian" country="Russia"/>
-          </property>
-          <property name="text">
-           <string>Версия пакета</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::AutoText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-          </property>
-          <property name="margin">
-           <number>4</number>
-          </property>
-         </widget>
-        </item>
-        <item row="12" column="2">
-         <widget class="QLineEdit" name="line_depends">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="contextMenuPolicy">
-           <enum>Qt::NoContextMenu</enum>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="placeholderText">
-           <string>Например: 'qt6-base' 'qt6-multimedia' 'qt6-webengine' 'yay' 'zenity' 'libnotify' 'zip' 'tar'</string>
-          </property>
-         </widget>
-        </item>
-        <item row="16" column="2">
-         <widget class="QLineEdit" name="line_run">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="contextMenuPolicy">
-           <enum>Qt::NoContextMenu</enum>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="placeholderText">
-           <string>Например: klauspro</string>
-          </property>
-         </widget>
-        </item>
-        <item row="11" column="0">
-         <spacer name="verticalSpacer_4">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="0" column="2">
-         <widget class="QLineEdit" name="line_aurcatalog">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="contextMenuPolicy">
-           <enum>Qt::NoContextMenu</enum>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="placeholderText">
-           <string>Например: ~/kLaus-bin</string>
-          </property>
-         </widget>
-        </item>
-        <item row="12" column="0">
-         <widget class="QLabel" name="label_depends">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-           </font>
-          </property>
-          <property name="locale">
-           <locale language="Russian" country="Russia"/>
-          </property>
-          <property name="text">
-           <string>Зависимости</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::AutoText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-          </property>
-          <property name="margin">
-           <number>4</number>
-          </property>
-         </widget>
-        </item>
-        <item row="9" column="2">
-         <widget class="QLineEdit" name="line_url">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="contextMenuPolicy">
-           <enum>Qt::NoContextMenu</enum>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="placeholderText">
-           <string>Например: https://github.com/dmaliog/kLausqt/</string>
-          </property>
-         </widget>
-        </item>
-        <item row="17" column="2">
-         <widget class="QLineEdit" name="line_desktop">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="contextMenuPolicy">
-           <enum>Qt::NoContextMenu</enum>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="placeholderText">
-           <string>Например: klaus</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="0">
-         <widget class="QLabel" name="label_pkgdesc">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-           </font>
-          </property>
-          <property name="locale">
-           <locale language="Russian" country="Russia"/>
-          </property>
-          <property name="text">
-           <string>Описание пакета</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::AutoText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-          </property>
-          <property name="margin">
-           <number>4</number>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_aurcatalog">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-           </font>
-          </property>
-          <property name="locale">
-           <locale language="Russian" country="Russia"/>
-          </property>
-          <property name="text">
-           <string>Каталог вашего пакета</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::AutoText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-          </property>
-          <property name="margin">
-           <number>4</number>
-          </property>
-         </widget>
-        </item>
-        <item row="15" column="0">
-         <widget class="QLabel" name="label_sha256sums">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-           </font>
-          </property>
-          <property name="locale">
-           <locale language="Russian" country="Russia"/>
-          </property>
-          <property name="text">
-           <string>SHA256</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::AutoText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-          </property>
-          <property name="margin">
-           <number>4</number>
-          </property>
-         </widget>
-        </item>
-        <item row="15" column="2">
-         <widget class="QLineEdit" name="line_sha256sums">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="contextMenuPolicy">
-           <enum>Qt::NoContextMenu</enum>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="placeholderText">
-           <string>Например: https://github.com/dmaliog/kLausqt/</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </widget>
-     <widget class="QLabel" name="label_name_makepkg">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>10</y>
-        <width>391</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background:#2e2b79;
-padding:0 15px;
-border-top-left-radius: 15px;
-border-top-right-radius: 15px;
-color:#5752e7;</string>
-      </property>
-      <property name="text">
-       <string>Создание PKGBUILD</string>
-      </property>
-      <property name="textFormat">
-       <enum>Qt::AutoText</enum>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-      </property>
-      <property name="margin">
-       <number>0</number>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="push_makepkg">
-      <property name="geometry">
-       <rect>
-        <x>264</x>
-        <y>15</y>
-        <width>141</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="text">
-       <string> Сгенерировать</string>
-      </property>
-      <property name="icon">
-       <iconset resource="klausres.qrc">
-        <normaloff>:/img/15.png</normaloff>:/img/15.png</iconset>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="push_makepkgaur">
-      <property name="geometry">
-       <rect>
-        <x>934</x>
-        <y>15</y>
-        <width>141</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="text">
-       <string> Отправить</string>
-      </property>
-      <property name="icon">
-       <iconset resource="klausres.qrc">
-        <normaloff>:/img/32.png</normaloff>:/img/32.png</iconset>
-      </property>
-     </widget>
     </widget>
     <widget class="QWidget" name="tab_aur">
      <attribute name="title">
       <string>tab_aur</string>
      </attribute>
-     <widget class="QTableWidget" name="table_aur">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>50</y>
-        <width>631</width>
-        <height>641</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>16</pointsize>
-       </font>
-      </property>
-      <property name="focusPolicy">
-       <enum>Qt::NoFocus</enum>
-      </property>
-      <property name="contextMenuPolicy">
-       <enum>Qt::CustomContextMenu</enum>
-      </property>
-      <property name="toolTipDuration">
-       <number>0</number>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAsNeeded</enum>
-      </property>
-      <property name="horizontalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOff</enum>
-      </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-      <property name="selectionMode">
-       <enum>QAbstractItemView::SingleSelection</enum>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>20</width>
-        <height>20</height>
-       </size>
-      </property>
-      <property name="showGrid">
-       <bool>false</bool>
-      </property>
-      <property name="columnCount">
-       <number>1</number>
-      </property>
-      <attribute name="horizontalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
-      <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>631</number>
-      </attribute>
-      <attribute name="horizontalHeaderHighlightSections">
-       <bool>true</bool>
-      </attribute>
-      <attribute name="verticalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
-      <attribute name="verticalHeaderShowSortIndicator" stdset="0">
-       <bool>false</bool>
-      </attribute>
-      <column/>
-     </widget>
      <widget class="QTextBrowser" name="details_aur">
       <property name="enabled">
        <bool>true</bool>
@@ -1575,25 +665,7 @@ color:#5752e7;</string>
        </size>
       </property>
      </widget>
-     <zorder>table_aur</zorder>
-     <zorder>details_aur</zorder>
-     <zorder>label_name_aur</zorder>
-     <zorder>label_details_aur</zorder>
-     <zorder>reload_aur</zorder>
-     <zorder>like_aur</zorder>
-     <zorder>image_aur</zorder>
-     <zorder>back_slider</zorder>
-     <zorder>img_aur</zorder>
-     <zorder>next_slider</zorder>
-    </widget>
-    <widget class="QWidget" name="tab_aurpkg">
-     <attribute name="title">
-      <string>tab_aurpkg</string>
-     </attribute>
-     <widget class="QTableWidget" name="table_app">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
+     <widget class="QListWidget" name="list_aur">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1604,7 +676,8 @@ color:#5752e7;</string>
       </property>
       <property name="font">
        <font>
-        <pointsize>16</pointsize>
+        <pointsize>12</pointsize>
+        <bold>false</bold>
        </font>
       </property>
       <property name="focusPolicy">
@@ -1613,50 +686,25 @@ color:#5752e7;</string>
       <property name="contextMenuPolicy">
        <enum>Qt::CustomContextMenu</enum>
       </property>
-      <property name="toolTipDuration">
-       <number>0</number>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAsNeeded</enum>
-      </property>
       <property name="horizontalScrollBarPolicy">
        <enum>Qt::ScrollBarAlwaysOff</enum>
       </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-      <property name="selectionMode">
-       <enum>QAbstractItemView::SingleSelection</enum>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>20</width>
-        <height>20</height>
-       </size>
-      </property>
-      <property name="showGrid">
-       <bool>false</bool>
-      </property>
-      <property name="columnCount">
-       <number>1</number>
-      </property>
-      <attribute name="horizontalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
-      <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>631</number>
-      </attribute>
-      <attribute name="verticalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
-      <attribute name="verticalHeaderShowSortIndicator" stdset="0">
-       <bool>false</bool>
-      </attribute>
-      <column/>
      </widget>
+     <zorder>details_aur</zorder>
+     <zorder>label_name_aur</zorder>
+     <zorder>label_details_aur</zorder>
+     <zorder>reload_aur</zorder>
+     <zorder>like_aur</zorder>
+     <zorder>image_aur</zorder>
+     <zorder>back_slider</zorder>
+     <zorder>img_aur</zorder>
+     <zorder>next_slider</zorder>
+     <zorder>list_aur</zorder>
+    </widget>
+    <widget class="QWidget" name="tab_aurpkg">
+     <attribute name="title">
+      <string>tab_aurpkg</string>
+     </attribute>
      <widget class="QPushButton" name="reload_aurpkg">
       <property name="geometry">
        <rect>
@@ -1848,12 +896,37 @@ color:#5752e7;</string>
        </property>
       </item>
      </widget>
-     <zorder>table_app</zorder>
+     <widget class="QListWidget" name="list_app">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>631</width>
+        <height>641</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
+      <property name="contextMenuPolicy">
+       <enum>Qt::CustomContextMenu</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+     </widget>
      <zorder>details_aurpkg</zorder>
      <zorder>label_name_aurpkg</zorder>
      <zorder>label_details_aurpkg</zorder>
      <zorder>combo_repo</zorder>
      <zorder>reload_aurpkg</zorder>
+     <zorder>list_app</zorder>
     </widget>
     <widget class="QWidget" name="tab_site">
      <attribute name="title">
@@ -2508,7 +1581,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </item>
           <item>
            <property name="text">
-            <string>Понижение версий пакетов</string>
+            <string>Откат пакетов</string>
            </property>
           </item>
           <item>
@@ -4000,76 +3073,6 @@ color:#5752e7;</string>
        <number>0</number>
       </property>
      </widget>
-     <widget class="QTableWidget" name="table_downgrade">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>50</y>
-        <width>631</width>
-        <height>641</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>16</pointsize>
-       </font>
-      </property>
-      <property name="focusPolicy">
-       <enum>Qt::NoFocus</enum>
-      </property>
-      <property name="contextMenuPolicy">
-       <enum>Qt::CustomContextMenu</enum>
-      </property>
-      <property name="toolTipDuration">
-       <number>0</number>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAsNeeded</enum>
-      </property>
-      <property name="horizontalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOff</enum>
-      </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-      <property name="selectionMode">
-       <enum>QAbstractItemView::SingleSelection</enum>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>20</width>
-        <height>20</height>
-       </size>
-      </property>
-      <property name="showGrid">
-       <bool>false</bool>
-      </property>
-      <property name="columnCount">
-       <number>1</number>
-      </property>
-      <attribute name="horizontalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
-      <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>631</number>
-      </attribute>
-      <attribute name="horizontalHeaderHighlightSections">
-       <bool>true</bool>
-      </attribute>
-      <attribute name="verticalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
-      <attribute name="verticalHeaderShowSortIndicator" stdset="0">
-       <bool>false</bool>
-      </attribute>
-      <column/>
-     </widget>
      <widget class="QTextBrowser" name="details_downgrade">
       <property name="enabled">
        <bool>true</bool>
@@ -4150,6 +3153,28 @@ color:#5752e7;</string>
       </property>
       <property name="margin">
        <number>0</number>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="list_downgrade">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>631</width>
+        <height>641</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
       </property>
      </widget>
     </widget>
@@ -4466,7 +3491,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     </property>
     <property name="geometry">
      <rect>
-      <x>380</x>
+      <x>316</x>
       <y>84</y>
       <width>218</width>
       <height>179</height>
@@ -4556,40 +3581,6 @@ QToolBar#toolBar_2 QToolButton:hover {
    <addaction name="menu_4"/>
    <addaction name="menu_5"/>
   </widget>
-  <action name="action_1">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/1.png</normaloff>
-     <disabledoff>:/img/1.png</disabledoff>:/img/1.png</iconset>
-   </property>
-   <property name="text">
-    <string>Добавить приложение в каталог</string>
-   </property>
-   <property name="iconText">
-    <string notr="true">Добавить приложение в каталог</string>
-   </property>
-   <property name="toolTip">
-    <string>Добавить приложение в каталог</string>
-   </property>
-   <property name="statusTip">
-    <string notr="true"/>
-   </property>
-   <property name="whatsThis">
-    <string notr="true"/>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-   <property name="shortcutVisibleInContextMenu">
-    <bool>true</bool>
-   </property>
-  </action>
   <action name="action_2">
    <property name="checkable">
     <bool>true</bool>

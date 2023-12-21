@@ -9,7 +9,6 @@
 #include <QMainWindow>
 #include <QListWidgetItem>
 #include <QProcess>
-#include <QTableWidget>
 #include <QGraphicsView>
 
 struct Terminal {
@@ -117,7 +116,10 @@ private:
                                    ":/sh/save.sh",
                                    ":/sh/load.sh",
                                    ":/sh/zen.sh",
-                                   ":/sh/snap.sh"};
+                                   ":/sh/snap.sh",
+                                   ":/sh/amd.sh",
+                                   ":/sh/nvidia.sh",
+                                   ":/sh/intel.sh"};
 
     QStringList clearResourcePaths = {":/clear/clear_trash.sh"};
 
@@ -202,15 +204,15 @@ private slots:
     void updateImageView();
 
     void checkForDowngrades(const QString& packagesArchiveAUR);
-    void onTableDowngradeCellDoubleClicked();
+    void onListDowngradeItemDoubleClicked(QListWidgetItem *item);
 
-    void addLinkToTable(const QString &link);
+    void addLinkToList(const QString &link);
 
     void onReplyFinished(QNetworkReply *reply);
 
     void handleListItemClicked(QListWidgetItem *item, const QString& scriptDir);
 
-    void processTableItem(int row, QTableWidget* tableWidget, QTextBrowser* detailsWidget);
+    void processListItem(int row, QListWidget* listWidget, QTextBrowser* detailsWidget);
 
     void onSnapProcessFinished();
     void onCurrentProcessReadyRead();
@@ -223,8 +225,8 @@ private slots:
     void searchTextChanged(const QString& searchText);
     void search(const QString& searchText);
 
-    void setupTableContextMenu();
-    void showTableContextMenu(const QPoint& pos);
+    void setupListContextMenu();
+    void showListContextMenu(const QPoint& pos);
 
     void miniAnimation(bool visible, QWidget *targetWidget);
 
@@ -283,7 +285,7 @@ private slots:
     void on_check_autostart_stateChanged(int arg1);
     void on_check_cacheremove_stateChanged(int arg1);
     
-    void onTableAurCellClicked(int row);
+    void onListAurItemClicked(QListWidgetItem *item);
 
     void on_dial_volnotify_valueChanged(int value);
 
