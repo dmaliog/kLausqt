@@ -12,7 +12,6 @@
 {"opencore-amr"}
 {"speex"}
 {"libdca"}
-{"libmpcdec"}
 {"faac"}
 {"faad2"}
 {"libfdk-aac"}
@@ -39,7 +38,6 @@
 {"xvidcore"}
 {"libtheora"}
 {"libvpx"}
-{"xvidcore"}
 {"mkvtoolnix-gui"}
 {"mkvtoolnix-cli"}
 {"mp4joiner"}
@@ -53,6 +51,5 @@
 {"gst-plugins-good"}
 {"gst-plugins-ugly"}
 {"gst-plugin-libde265"}
-{"libde265"}
 {"gst-plugin-openh264"}
 {"gst-plugin-va"}

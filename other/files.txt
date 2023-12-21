@@ -104,7 +104,6 @@
 {"gprename"}
 {"krename"}
 {"metamorphose2"}
-{"thunar"}
 {"catfish"}
 {"corehunt"}
 {"czkawka-gui"}

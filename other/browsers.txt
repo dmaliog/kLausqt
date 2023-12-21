@@ -52,7 +52,6 @@
 {"vimb"}
 {"wyeb-git"}
 {"dillo"}
-{"links"}
 {"netsurf"}
 {"palemoon"}
 {"amfora"}

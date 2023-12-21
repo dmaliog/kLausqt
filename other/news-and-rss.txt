@@ -31,7 +31,6 @@
 {"pcd"}
 {"cpod"}
 {"gnome-podcasts"}
-{"gpodder"}
 {"vocal"}
 {"kasts"}
 {"pocket-casts-linux"}

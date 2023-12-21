@@ -35,7 +35,6 @@
 {"zps"}
 {"psensor"}
 {"xsensors"}
-{"netdata"}
 {"coolercontrol"}
 {"gnome-shell-extension-freon"}
 {"sensors-applet"}
@@ -70,7 +69,6 @@
 {"fontypython"}
 {"gnome-font-viewer"}
 {"plasma-desktop"}
-{"mate-utils"}
 {"man-pages-cs"}
 {"man-pages-da"}
 {"man-pages-de"}
@@ -137,7 +135,6 @@
 {"ybacklight"}
 {"xbacklight-notify"}
 {"acpi-backlight-notify"}
-{"clight"}
 {"icc-brightness-gnome-git"}
 {"redshift"}
 {"xcalib"}
@@ -147,7 +144,6 @@
 {"dcamprof"}
 {"displaycal"}
 {"gnome-color-manager"}
-{"xcalib"}
 {"deepin-printer"}
 {"gtklp"}
 {"print-manager"}
@@ -163,7 +159,6 @@
 {"laptop-mode-tools"}
 {"libsmbios"}
 {"powertop"}
-{"systemd"}
 {"tlp"}
 {"batsignal"}
 {"cbatticon"}

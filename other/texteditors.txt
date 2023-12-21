@@ -58,7 +58,6 @@
 {"pantheon-code"}
 {"pluma"}
 {"qscite"}
-{"plan9port"}
 {"9base"}
 {"scite"}
 {"sublime-text-dev"}

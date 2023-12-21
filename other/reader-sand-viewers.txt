@@ -33,7 +33,7 @@
 {"pdfchain"}
 {"pdfjumbler"}
 {"pdfmixtool"}
-{"{"pdfsam"}
+{"pdfsam"}
 {"pdfslicer"}
 {"pdftricks"}
 {"briss"}

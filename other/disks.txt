@@ -57,9 +57,7 @@
 {"dvdisaster"}
 {"ext4magic"}
 {"foremost"}
-{"testdisk"}
 {"scalpel-git"}
-{"testdisk"}
 {"czkawka-cli"}
 {"duff"}
 {"fclones"}

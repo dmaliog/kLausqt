@@ -21,7 +21,6 @@
 {"fatrat-git"}
 {"forklift-git"}
 {"freerapid"}
-{"youtube-viewer"}
 {"gwget"}
 {"gydl-git"}
 {"gyre"}
@@ -79,7 +78,6 @@
 {"ncftp"}
 {"tnftp"}
 {"bftpd"}
-{"inetutils"}
 {"proftpd"}
 {"pure-ftpd"}
 {"openssh"}

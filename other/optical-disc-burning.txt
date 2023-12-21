@@ -27,7 +27,6 @@
 {"freac"}
 {"goobox"}
 {"grip"}
-{"k3b"}
 {"kaudiocreator-git"}
 {"ripperx"}
 {"rubyripper"}

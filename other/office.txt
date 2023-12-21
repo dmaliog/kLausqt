@@ -7,7 +7,6 @@
 {"wps-office"}
 {"yozo-office"}
 {"abiword"}
-{"calligra"}
 {"ted"}
 {"wordgrinder"}
 {"pageedit"}

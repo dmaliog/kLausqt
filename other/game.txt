@@ -148,7 +148,6 @@
 {"bovo"}
 {"cgoban"}
 {"chroma"}
-{"crack-attack"}
 {"five-or-more"}
 {"flying-robots"}
 {"gnome-2048"}
@@ -214,7 +213,6 @@
 {"clonehero"}
 {"etterna"}
 {"funkin-git"}
-{"open-hexagon-git"}
 {"opsu"}
 {"osu"}
 {"outfox_bin"}
@@ -301,7 +299,6 @@
 {"redeclipse"}
 {"serioussam-vk"}
 {"ecwolf"}
-{"ecwolf"}
 {"tesseract-game"}
 {"tremulous-grangerhub-bin"}
 {"unrealtournament4"}
@@ -310,7 +307,6 @@
 {"rcr"}
 {"rcf"}
 {"warsow"}
-{"ecwolf"}
 {"enemy-territory"}
 {"etlegacy32"}
 {"worldofpadman"}
@@ -334,7 +330,6 @@
 {"pioneer"}
 {"principia-git"}
 {"pydance"}
-{"rigsofrods"}
 {"thrive-bin"}
 {"powder-toy"}
 {"vegastrike"}
@@ -356,7 +351,6 @@
 {"openra"}
 {"openhv"}
 {"7kaa"}
-{"springlobby"}
 {"unknown-horizons"}
 {"warzone2100"}
 {"widelands"}

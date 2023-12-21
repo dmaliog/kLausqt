@@ -71,12 +71,10 @@
 {"tagtool"}
 {"coquillo"}
 {"easytag"}
-{"quodlibet"}
 {"gabtag"}
 {"kid3"}
 {"kid3-qt"}
 {"ktageditor"}
-{"mp3info"}
 {"tagger"}
 {"picard"}
 {"ntag"}

@@ -10,7 +10,6 @@
 {"feh"}
 {"gpicview"}
 {"gwenview"}
-{"fbida"}
 {"image-roll"}
 {"imv"}
 {"koko"}
@@ -100,7 +99,6 @@
 {"oqapy"}
 {"rawstudio"}
 {"rawtherapee"}
-{"digikam"}
 {"geotag"}
 {"geotagging"}
 {"gottengeography"}
@@ -180,7 +178,6 @@
 {"imgur-screenshot"}
 {"ksnip"}
 {"lightscreen"}
-{"lximage-qt"}
 {"maim"}
 {"mate-utils"}
 {"menyoki"}

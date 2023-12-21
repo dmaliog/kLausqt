@@ -3,4 +3,3 @@
 {"skanlite"}
 {"skanpage"}
 {"xsane"}
-{"scantailor-advanced"}

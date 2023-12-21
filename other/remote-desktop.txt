@@ -13,12 +13,10 @@
 {"vinagre"}
 {"freerdp"}
 {"x2goclient"}
-{"freerdp"}
 {"kmsvnc"}
 {"krfb"}
 {"nomachine"}
 {"wayvnc"}
-{"tigervnc"}
 {"x11vnc"}
 {"x2goserver"}
 {"xpra"}

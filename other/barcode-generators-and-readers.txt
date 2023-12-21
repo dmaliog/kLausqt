@@ -8,5 +8,4 @@
 {"qrab"}
 {"qreator"}
 {"qtqr"}
-{"zbar"}
 {"zint-qt"}

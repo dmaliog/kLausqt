@@ -94,7 +94,6 @@
 {"fltk"}
 {"glade"}
 {"kde-dev-utils"}
-{"qt5-tools"}
 {"bless"}
 {"ghex"}
 {"hyx"}
@@ -123,7 +122,6 @@
 {"violetumleditor"}
 {"devhelp"}
 {"doc-browser-git"}
-{"qt5-tools"}
 {"quickdocs"}
 {"bugzilla"}
 {"flyspray"}

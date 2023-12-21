@@ -5,12 +5,9 @@
 {"ferm"}
 {"firehol"}
 {"firetable"}
-{"firewalld"}
 {"shorewall"}
 {"pgl"}
 {"vuurmuur"}
 {"fwbuilder"}
-{"firewalld"}
 {"gufw"}
-{"pgl"}
 {"portmaster-stub-bin"}

@@ -58,7 +58,6 @@
 {"pidgin"}
 {"qutim"}
 {"smuxi"}
-{"thunderbird"}
 {"volt"}
 {"bitchx-git"}
 {"emacs"}
@@ -70,7 +69,6 @@
 {"senpai-irc-git"}
 {"sic"}
 {"tiny-irc-client-git"}
-{"seamonkey"}
 {"hexchat"}
 {"konversation"}
 {"kvirc"}
