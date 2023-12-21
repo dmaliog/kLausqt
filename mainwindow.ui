@@ -117,12 +117,14 @@ QScrollBar::sub-line {
 
 QListWidget::item:selected {
     background-color: #1e1e1e;
+	border-radius: 5px;
     color: white;
     outline: none;
 }
 
-QListWidget::item:hover {
-    background-color: #1e1e1e;
+QListWidget::item:hover:!selected {
+    background-color: #242424;
+    border-radius: 5px;
 }
 
 QMessageBox {
