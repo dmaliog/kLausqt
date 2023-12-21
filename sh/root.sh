@@ -4,7 +4,7 @@
 #name_en_US Remove SUDO password (caution!)
 #msg_en_US <b>Sudo</b> is a utility that grants root privileges to perform administrative operations according to its settings. It allows you to easily control access to important applications in the system. By default, when installing Ubuntu, the first user (the one that is created during installation) is granted full rights to use sudo.<br><br>The script removes the sudo password request for this user.
 
-#icon 51
+#icon password-manager
 
 #!/bin/bash
 

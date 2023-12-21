@@ -4,7 +4,7 @@
 #name_en_US Install Zen Kernel
 #msg_en_US <b>Zen Kernel</b> is a kernel for public use systems or, more simply, for a desktop, where additional features are integrated that are not included in the main core (for example, support for new hardware and changes that speed up work).<br><br>The script helps in easy installation of the Zen kernel with its headers and updates GRUB after its installation.
 
-#icon 10
+#icon tux
 
 #!/bin/bash
 

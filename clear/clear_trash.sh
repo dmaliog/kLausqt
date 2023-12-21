@@ -4,7 +4,7 @@
 #name_en_US Trash (forced)
 #msg_en_US Do you really want to delete all files and folders from the trash?
 
-#icon 14
+#icon trashindicator
 
 #!/bin/bash
 

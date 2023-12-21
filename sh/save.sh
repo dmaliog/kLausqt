@@ -4,7 +4,7 @@
 #name_en_US Create a local package
 #msg_en_US <b>Pacman</b> is a package manager that finds harmony between the binary format of packages and an easy—to-use build system. Pacman's main goal is to provide convenient package management, whether from official repositories or created manually.<br><br>Pacman supports auxiliary tools such as Paru or Yay, extending its functionality. Thanks to these tools, Pacman becomes even more flexible.<br><br>The script creates a local package using Pacman auxiliary tools.
 
-#icon 5
+#icon system-software-install
 
 #!/bin/bash
 

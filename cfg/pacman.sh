@@ -4,7 +4,7 @@
 #name_en_US Pacman Repository Configuration (/etc/pacman.conf)
 #msg_en_US <b>/etc/pacman.conf</b> is the main configuration file for the Pacman package manager. This file defines pacman settings, such as package repositories, mirrors, search parameters, updates, and more.
 
-#icon 27
+#icon gnome-do
 
 #!/bin/bash
 

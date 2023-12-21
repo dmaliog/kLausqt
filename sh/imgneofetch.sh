@@ -4,7 +4,7 @@
 #name_en_US Add a picture to neofetch
 #msg_en_US <b>Neofetch</b> is a very easy—to-use and cross-platform utility that allows you to display information about the system in the terminal, next to a beautiful picture. As an image, you can use the logo of your distribution or any other image.<br><br>This utility is very similar to ScreenFetch or LinuxLogo, but it is more customizable and flexible, and also contains some additional features.<br><br>The script installs your picture in Neofetch.
 
-#icon 21
+#icon kipi-dngconverter
 
 #!/bin/bash
 

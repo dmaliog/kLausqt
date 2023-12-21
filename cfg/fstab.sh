@@ -4,7 +4,7 @@
 #name_en_US File System Mount Configuration (/etc/fstab)
 #msg_en_US <b>/etc/fstab</b> is a configuration file for mounting file systems. It contains information about which file systems are automatically mounted when the system boots, as well as mounting options such as security settings and access rights.
 
-#icon 27
+#icon gnome-do
 
 #!/bin/bash
 

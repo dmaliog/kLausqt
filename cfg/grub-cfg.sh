@@ -4,7 +4,7 @@
 #name_en_US GRUB2 Bootloader Configuration (/boot/grub/grub.cfg)
 #msg_en_US <b>/boot/grub/grub.cfg</b> is a GRUB2 bootloader configuration file that is used in most modern Linux distributions. It contains information about the various operating systems and kernels installed on the computer, as well as the parameters necessary to boot them.
 
-#icon 27
+#icon gnome-do
 
 #!/bin/bash
 
