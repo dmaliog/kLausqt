@@ -4,7 +4,7 @@
 #name_en_US KDiskMark - measures disk performance
 #msg_en_US <b>KDiskMark</b> is a utility for measuring disk performance. It provides a simple interface and allows you to check the speed of reading and writing on various disk devices, such as hard drives (HDD), solid-state drives (SSD) and USB flash drives.
 
-#icon 29
+#icon org.kde.plasma.systemmonitor.cpucore
 
 #!/bin/bash
 

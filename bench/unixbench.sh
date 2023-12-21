@@ -4,7 +4,7 @@
 #name_en_US UnixBench - measures computer performance
 #msg_en_US <b>UnixBench</b> is a popular benchmark for evaluating the performance of Unix-like systems. It measures computer performance by performing a series of test loads on various system components, such as processor, memory, disk, network, and others.
 
-#icon 53
+#icon org.kde.plasma.systemmonitor
 
 #!/bin/bash
 

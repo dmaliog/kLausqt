@@ -4,7 +4,7 @@
 #name_en_US intel-gpu-tools - diagnoses Intel's embedded GPU
 #msg_en_US <b>intel-gpu-tools</b> is a set of utilities and tools for working with Intel GPUs. It provides various commands and functions that allow you to get information about the Intel graphics hardware, monitor its status, debug and configure its operation.
 
-#icon 21
+#icon multimedia-photo-viewer
 
 #!/bin/bash
 

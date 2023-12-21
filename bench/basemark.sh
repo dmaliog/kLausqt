@@ -4,7 +4,7 @@
 #name_en_US Basemark - measures graphics performance
 #msg_en_US <b>Basemark</b> is a popular set of tests for evaluating the graphics performance of computer systems, especially graphics processing units (GPUs). It provides various tests and benchmarks that allow you to measure and compare the performance of the graphics subsystem in various scenarios, such as 3D graphics, virtual reality (VR), computer games and other graphically intensive applications.
 
-#icon 21
+#icon multimedia-photo-viewer
 
 #!/bin/bash
 

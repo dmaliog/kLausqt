@@ -4,7 +4,7 @@
 #name_en_US s-tui - measures CPU performance
 #msg_en_US <b>s-tui</b> is a command line tool for monitoring and testing CPU performance. It provides an interactive interface for displaying various processor parameters, such as CPU utilization, temperature, frequency, and other indicators.
 
-#icon 49
+#icon io.elementary.monitor
 
 #!/bin/bash
 

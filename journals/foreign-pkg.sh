@@ -4,7 +4,7 @@
 #name_en_US List of installed packages (from third-party repositories)
 #msg_en_US <b>helper -Qm</b> shows a list of all packages that were installed into the system manually, that is, not from official repositories, but from third-party sources, such as AUR (Arch User Repository).
 
-#icon 31
+#icon applications-all
 
 #!/bin/bash
 

@@ -4,7 +4,7 @@
 #name_en_US TTCP - measures the bandwidth of a network connection
 #msg_en_US <b>TTCP (Test TCP)</b> is a solution for measuring the bandwidth of a network connection over the TCP protocol. It is designed to test and evaluate the performance of network connections by transferring data between two nodes. The utility must be installed on both nodes, between which the bandwidth must be determined.
 
-#icon 53
+#icon org.kde.plasma.systemmonitor
 
 #!/bin/bash
 

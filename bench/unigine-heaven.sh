@@ -4,7 +4,7 @@
 #name_en_US Unigine Heaven - measures graphics performance
 #msg_en_US <b>Unigine Heaven (2009)</b> — This benchmark is one of the most popular tests for evaluating the performance of graphics cards. It offers an impressive 3D environment with dynamic lighting, particles, fog, water effects and other details.
 
-#icon 21
+#icon multimedia-photo-viewer
 
 #!/bin/bash
 

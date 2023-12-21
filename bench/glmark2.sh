@@ -4,7 +4,7 @@
 #name_en_US GLmark2 - measures graphics performance
 #msg_en_US <b>GLmark2</b> is a benchmark designed to measure the performance of an OpenGL-based graphics system on various devices. It uses various test scenarios and rendering techniques to evaluate graphical performance, including texture processing, lighting, particle effects, shadows, and other graphical operations.
 
-#icon 21
+#icon multimedia-photo-viewer
 
 #!/bin/bash
 

@@ -4,7 +4,7 @@
 #name_en_US The list of Systemd services and their loading time (systemd-analyze)
 #msg_en_US <b>systemd-analyze blame</b> shows which services take up most of the time when the system boots and can be optimized or disabled for faster loading.
 
-#icon 31
+#icon org.gnome.baobab
 
 #!/bin/bash
 

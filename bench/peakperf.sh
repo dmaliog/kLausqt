@@ -4,7 +4,7 @@
 #name_en_US peakperfo - measures CPU performance
 #msg_en_US <b>peakperf</b> is a microbenchmark that tries to achieve peak performance on x86_64 processors. Some issues may reduce the performance provided by your processor, such as CPU cooling. With peakperf, you can check whether your processor is delivering the full power it is capable of.
 
-#icon 53
+#icon org.kde.plasma.systemmonitor
 
 #!/bin/bash
 

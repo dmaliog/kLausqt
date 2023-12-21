@@ -4,7 +4,7 @@
 #name_en_US Unigine Valley - measures graphics performance
 #msg_en_US <b>Unigine Valley (2013)</b> — This benchmark is a detailed 3D environment with mountain landscapes, rivers, forests and dynamic lighting. It uses advanced technology to test the performance of graphics systems.
 
-#icon 21
+#icon multimedia-photo-viewer
 
 #!/bin/bash
 

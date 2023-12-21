@@ -4,7 +4,7 @@
 #name_en_US gputest - measures graphics performance
 #msg_en_US <b>gputest</b> is a software tool that is used to test and evaluate the performance of a graphics processor (GPU). It provides various tests and loads that can be used to test GPU graphics power and stability.
 
-#icon 21
+#icon multimedia-photo-viewer
 
 #!/bin/bash
 

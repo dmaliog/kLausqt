@@ -4,7 +4,7 @@
 #name_en_US Unigine Tropics - measures graphics performance
 #msg_en_US <b>Unigine Tropics (2008)</b> — This benchmark offers a tropical 3D environment with picturesque landscapes, vegetation, water effects and dynamic lighting. It allows you to test the performance of graphics systems in a realistic tropical environment.
 
-#icon 21
+#icon multimedia-photo-viewer
 
 #!/bin/bash
 

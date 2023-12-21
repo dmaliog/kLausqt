@@ -4,7 +4,7 @@
 #name_en_US bonnie++ - measures FS performance
 #msg_en_US <b>Bonnie++</b> is a file system performance testing software. It provides a set of tools for measuring the speed of reading and writing on disk, the performance of file operations, the cache of the file system and other parameters related to data storage on disk. Important: By default, bonnie++ writes at least two volumes of RAM to disk. If you do not want to waste the resource of your SSD, use non-standard options.
 
-#icon 49
+#icon io.elementary.monitor
 
 #!/bin/bash
 

@@ -4,7 +4,7 @@
 #name_en_US General Information (neofetch)
 #msg_en_US <b>neofetch</b> shows information about the operating system version, PROCESSOR used, type and amount of memory, as well as other information such as the user's name and avatar, as well as information about the language and terminal emulator.
 
-#icon 31
+#icon hwinfo
 
 #!/bin/bash
 

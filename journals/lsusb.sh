@@ -4,7 +4,7 @@
 #name_en_US Information about Connected USB Devices (lsusb)
 #msg_en_US <b>lsusb</b> shows a list of all connected USB devices and detailed information about each of them, such as manufacturer ID, device model, serial number, data transfer rate and other technical information.
 
-#icon 31
+#icon mkusb
 
 #!/bin/bash
 

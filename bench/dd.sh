@@ -4,7 +4,7 @@
 #name_en_US dd - measures the speed of reading and writing
 #msg_en_US <b>dd</b> measures read speed and write speed. This method depends on the alignment of the partitions! In other words, if the partitions are aligned incorrectly, this will affect the results of testing, since it is performed in a mounted file system.
 
-#icon 53
+#icon org.kde.plasma.systemmonitor
 
 #!/bin/bash
 

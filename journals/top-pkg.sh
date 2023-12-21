@@ -4,7 +4,7 @@
 #name_en_US Statistics of installed packages
 #msg_en_US <b>helper -Ps</b> shows statistics of package usage on your system, including the number of installed, updated and deleted packages, as well as how much time has passed since the last system update. It also shows a list of installed packages that are not dependencies of other packages.
 
-#icon 31
+#icon applications-all
 
 #!/bin/bash
 

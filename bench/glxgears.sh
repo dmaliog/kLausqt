@@ -4,7 +4,7 @@
 #name_en_US glxgears - measures graphics performance
 #msg_en_US <b>glxgears</b> is a simple 3D graphics demo that is often used as a performance test for graphics systems running on the X Window System.
 
-#icon 21
+#icon multimedia-photo-viewer
 
 #!/bin/bash
 

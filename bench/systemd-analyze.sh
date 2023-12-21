@@ -4,7 +4,7 @@
 #name_en_US systemd-analyze - analyzes the loading time of components and services
 #msg_en_US <b>systemd-analyze</b> — analyzes the loading time of various components and services during startup and creates a graphical representation that shows the dependencies and the sequence of execution of these components.
 
-#icon 53
+#icon org.kde.plasma.systemmonitor
 
 #!/bin/bash
 

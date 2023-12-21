@@ -4,7 +4,7 @@
 #name_en_US time - measures the execution time of commands
 #msg_en_US <b>time</b> is used to measure the execution time of commands or programs. It allows you to determine the total time spent on executing a command, as well as to evaluate the use of processor time and memory.
 
-#icon 53
+#icon org.kde.plasma.systemmonitor
 
 #!/bin/bash
 

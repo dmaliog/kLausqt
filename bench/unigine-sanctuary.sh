@@ -4,7 +4,7 @@
 #name_en_US Unigine Sanctuary - measures graphics performance
 #msg_en_US <b>Unigine Sanctuary (2007)</b> is a demo benchmark created to test the performance of graphics systems. It offers a colorful 3D environment with detailed landscapes, vegetation and weather effects.
 
-#icon 21
+#icon multimedia-photo-viewer
 
 #!/bin/bash
 

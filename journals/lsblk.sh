@@ -4,7 +4,7 @@
 #name_en_US Disk and Partition Information (lsblk)
 #msg_en_US <b>lsblk -f -o+SIZE</b> shows information about block devices such as hard drives, flash drives, CD/DVD drives, etc. It allows you to find out the list of devices, their file systems and sizes.
 
-#icon 31
+#icon disk-usage-analyzer
 
 #!/bin/bash
 

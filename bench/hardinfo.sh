@@ -4,7 +4,7 @@
 #name_en_US HardInfo - measures system performance
 #msg_en_US <b>HardInfo</b> is a system profiler and benchmark. It is able to receive information from both hardware and basic software and organize it in an easy-to-use graphical interface.
 
-#icon 49
+#icon io.elementary.monitor
 
 #!/bin/bash
 

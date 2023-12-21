@@ -4,7 +4,7 @@
 #name_en_US GFXBench - measures graphics performance
 #msg_en_US <b>GFXBench</b> is a popular benchmark designed to evaluate the performance of graphics and computing capabilities of various devices, such as mobile devices, computers and game consoles. It provides a variety of tests and scenarios that allow you to evaluate the performance of the graphics processor (GPU) and the central processing unit (CPU) in various tasks, including 3D rendering, game effects, physical simulations and other graphical operations.
 
-#icon 21
+#icon multimedia-photo-viewer
 
 #!/bin/bash
 

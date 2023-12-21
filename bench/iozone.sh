@@ -4,7 +4,7 @@
 #name_en_US IOzone - measures I/O performance
 #msg_en_US <b>IOzone (Input/Output Zone)</b> is a software tool for measuring input/output (I/O) performance on file systems and storage devices. It allows you to test various aspects of performance, such as file read/write speed, data block size, parallelism of operations and other parameters.
 
-#icon 49
+#icon io.elementary.monitor
 
 #!/bin/bash
 

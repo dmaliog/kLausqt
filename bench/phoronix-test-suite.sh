@@ -4,7 +4,7 @@
 #name_en_US Phoronix Test Suite - measures system performance
 #msg_en_US <b>Phoronix Test Suite (PTS)</b> is a powerful set of tools and benchmarks for performance testing and comparative analysis of computer systems. It provides a wide range of tests and benchmarks that allow you to measure the performance of the processor, graphics accelerator, memory, disk subsystem, network and other system components.
 
-#icon 49
+#icon io.elementary.monitor
 
 #!/bin/bash
 

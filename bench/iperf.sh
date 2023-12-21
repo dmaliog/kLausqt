@@ -4,7 +4,7 @@
 #name_en_US iperf - measures the bandwidth of a network connection
 #msg_en_US <b>iperf</b> is a tool for measuring network bandwidth. It allows you to test the data transfer rate between two nodes in a network to evaluate the performance of a network connection. iperf can be used to conduct tests on a local network or over the Internet between remote nodes.
 
-#icon 53
+#icon org.kde.plasma.systemmonitor
 
 #!/bin/bash
 

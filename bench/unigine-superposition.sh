@@ -4,7 +4,7 @@
 #name_en_US Unigine Superposition - measures graphics performance
 #msg_en_US <b>Unigine Superposition (2017)</b> — This one of the latest benchmarks from Unigine. It offers a realistic 3D environment with various effects including dynamic lighting, particles, fog, shadows and more. Superposition allows you to evaluate the performance of graphics systems in demanding conditions.
 
-#icon 21
+#icon multimedia-photo-viewer
 
 #!/bin/bash
 

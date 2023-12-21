@@ -4,7 +4,7 @@
 #name_en_US List of installed packages (from official repositories)
 #msg_en_US <b>helper -Qn</b> shows a list of installed packages that are not dependencies of other packages (i.e. that were installed explicitly, and not as a result of installing other packages).
 
-#icon 31
+#icon applications-all
 
 #!/bin/bash
 

@@ -4,7 +4,7 @@
 #name_en_US Detailed information about hardware (inxi)
 #msg_en_US <b>ini -Fxxc0z</b> shows detailed information about hardware (CPU/RAM/GPU - their frequency and number of cores), disks, etc.
 
-#icon 31
+#icon gnome-firmware
 
 #!/bin/bash
 

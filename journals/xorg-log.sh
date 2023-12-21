@@ -4,7 +4,7 @@
 #name_en_US The X server log (/var/log/Xorg.0.log)
 #msg_en_US <b>/var/log/Xorg.0.log</b> is the X server log file that is responsible for displaying the graphical interface in Linux. This file contains messages related to the launch, configuration, and errors of the X server. It is often used to find and solve problems with the graphical interface, such as missing images, system freezes, incorrect screen resolution, etc.
 
-#icon 31
+#icon app.xemu.xemu
 
 #!/bin/bash
 

@@ -4,7 +4,7 @@
 #name_en_US Disk and Partition Information (fdisk)
 #msg_en_US <b>fdisk -l</b> is used to display information about all available hard drives and their partitions on the computer. It allows you to find out the sizes and types of partitions, as well as information about the file systems that are installed on them.
 
-#icon 31
+#icon disk-usage-analyzer
 
 #!/bin/bash
 

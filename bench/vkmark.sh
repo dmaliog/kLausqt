@@ -4,7 +4,7 @@
 #name_en_US VkMark - measures the performance of Vulkan graphics
 #msg_en_US <b>VkMark</b> is a benchmark for testing the performance of graphics cards and systems with Vulkan API support. It is designed specifically to evaluate and compare performance in graphics applications using Vulkan, such as games and virtual reality applications.
 
-#icon 21
+#icon multimedia-photo-viewer
 
 #!/bin/bash
 

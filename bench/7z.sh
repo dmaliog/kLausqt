@@ -4,7 +4,7 @@
 #name_en_US 7z - measures the speed of compression and placement
 #msg_en_US <b>7z benchmark</b> is used to perform a performance benchmark using the 7z utility. It performs compression and decompression speed testing of files of different types and sizes to evaluate system performance and optimal compression settings.
 
-#icon 53
+#icon org.kde.plasma.systemmonitor
 
 #!/bin/bash
 

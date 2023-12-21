@@ -4,7 +4,7 @@
 #name_en_US GNOME Disk Utility - measures disk performance
 #msg_en_US <b>GNOME Disk Utility</b> provides information about disk performance. It allows you to measure the speed of reading and writing on the disk, as well as to evaluate the performance of the disk system. You can use GNOME Disk Utility to check the performance of your disks or compare different disk devices. disk, network, and others.
 
-#icon 29
+#icon org.kde.plasma.systemmonitor.cpucore
 
 #!/bin/bash
 

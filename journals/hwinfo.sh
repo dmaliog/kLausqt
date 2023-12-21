@@ -4,7 +4,7 @@
 #name_en_US Brief information about Hardware (hwinfo)
 #msg_en_US <b>hwinfo --short</b> shows brief information about hardware (processor, motherboard, video card, hard disk, sound card, etc.). Contains information about each detected device, including its model, manufacturer, type, condition, and drivers used.
 
-#icon 31
+#icon gnome-firmware
 
 #!/bin/bash
 

@@ -4,7 +4,7 @@
 #name_en_US hdparm - measures disk performance
 #msg_en_US <b>hdparm</b> — allows you to estimate the throughput of reading data from the hard disk and its cache, which can be useful in analyzing and testing the performance of data storage.
 
-#icon 53
+#icon org.kde.plasma.systemmonitor
 
 #!/bin/bash
 
