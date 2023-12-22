@@ -1,7 +1,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "qcompleter.h"
 #include "qnetworkaccessmanager.h"
+#include "qsettings.h"
+#include "qstandarditemmodel.h"
 #include "qtextbrowser.h"
 #include <QLabel>
 #include <QWebEngineView>
@@ -43,6 +46,10 @@ public:
     QColor generateRandomColor();
 
 private:
+    QSharedPointer<QLineEdit> searchLineEdit;
+    QCompleter* completer;
+    QStandardItemModel* completerModel;
+
     QStringList imageUrls;
     QList<QPixmap> pixmaps;
     int currentIndex;
@@ -79,9 +86,6 @@ private:
     //умные Qlabel
     QSharedPointer<QLabel> loadingAnimationLabel;
     QScopedPointer<QLabel> loadingLabel;
-
-    //умные QLineEdit
-    QSharedPointer<QLineEdit> searchLineEdit;
 
     //умные QUrlQuery
     QSharedPointer<QUrlQuery> newParams;
@@ -174,8 +178,9 @@ private:
     QStringList endingsToRemove = QStringList() << "-bin" << "-git" << "-qt" << "-qt4" << "-qt5" << "-qt6"
                                                 << "qt-" << "qt4-" << "qt5-" << "qt6-" << "-gtk"
                                                 << "-gtk2" << "-gtk3";
-protected: // события сворачивания окна
+protected:
     void closeEvent(QCloseEvent *event) override; // объявление метода closeEvent()
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 public slots:
     void on_action_1_triggered();
@@ -196,6 +201,18 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
+    QString findIconPath(const QString &iconNumber);
+
+    QStringList executeCommand(const QStringList& command);
+
+    void connectProcessSignals(QSharedPointer<QProcess>& process, QTextBrowser* outputWidget);
+    QString processPackageInfo(const QString& packageInfo);
+
+    void handleServerResponseSearch(const QString& reply);
+    void onCurrentProcessReadyReadSearch();
+    void createAndAddListItemSearch(const QString& packageName);
+
+    void updateCompleterModel();
 
     void setCursorAndScrollToItem(const QString& itemName);
     void onSearchTimeout();

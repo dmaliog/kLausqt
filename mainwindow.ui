@@ -367,7 +367,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>11</number>
     </property>
     <widget class="QWidget" name="tab_auradd">
      <attribute name="title">
@@ -3028,6 +3028,35 @@ color:#5752e7;</string>
       </property>
       <property name="styleSheet">
        <string notr="true"/>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="push_repair">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>395</x>
+        <y>15</y>
+        <width>30</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="klausres.qrc">
+        <normaloff>:/img/1.png</normaloff>:/img/1.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
       </property>
      </widget>
     </widget>
