@@ -1,3 +1,4 @@
+{"aimp"}
 {"mpd"}
 {"funkwhale"}
 {"sonospy-git"}

@@ -1,3 +1,4 @@
+{"myoffice-standard-home-edition-bin"}
 {"calligra"}
 {"libreoffice-still"}
 {"libreoffice-fresh"}

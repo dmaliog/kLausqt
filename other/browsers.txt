@@ -1,3 +1,4 @@
+{"yandex-browser"}
 {"browsh"}
 {"elinks"}
 {"links"}
