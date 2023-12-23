@@ -15,7 +15,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "9.8";
+QString currentVersion = "9.9";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 int container = 2; //контейнеры: 2-snap
@@ -707,6 +707,7 @@ void MainWindow::on_action_6_triggered()
     Terminal terminal = getTerminal();
 
     if (container == 2  && page == 4) {
+        hide();
         QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
         process->setProgram(terminal.binary);
         process->setArguments(QStringList() << terminal.args << packageCommands.value(container).value("snap_remove") << packageName);
@@ -716,9 +717,11 @@ void MainWindow::on_action_6_triggered()
 
         if (process->exitCode() == QProcess::NormalExit) {
             loadContentInstall();
+            show();
         }
 
     } else {
+        hide();
         QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
         process->setProgram(terminal.binary);
         process->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("remove") << packageName);
@@ -727,7 +730,10 @@ void MainWindow::on_action_6_triggered()
         process->waitForFinished(-1);
 
         if (process->exitCode() == QProcess::NormalExit)
+        {
             loadContentInstall();
+            show();
+        }
     }
 }
 
@@ -755,30 +761,38 @@ void MainWindow::on_action_4_triggered()
 
     if (container == 2  && page == 4)
     {
+        hide();
         QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
         process->setProgram(terminal.binary);
         process->setArguments(QStringList() << terminal.args << packageCommands.value(container).value("snap_refresh") << packageName);
         process->setProcessChannelMode(QProcess::MergedChannels);
-        process->startDetached();
+        process->start();
         process->waitForFinished(-1);
 
         if (process->exitCode() == QProcess::NormalExit)
+        {
             loadContentInstall();
+            show();
+        }
     }
     else
     {
         if (clearinstall && (pkg == 0 || pkg == 1))
             removeDirectory(QDir::homePath() + "/.cache/" + ((pkg == 0) ? "yay/" : "paru/clone/") + packageName);
 
+        hide();
         QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
         process->setProgram(terminal.binary);
         process->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("install") << packageName);
         process->setProcessChannelMode(QProcess::MergedChannels);
-        process->startDetached();
+        process->start();
         process->waitForFinished(-1);
 
         if (process->exitCode() == QProcess::NormalExit)
+        {
             loadContentInstall();
+            show();
+        }
     }
 }
 
