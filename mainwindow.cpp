@@ -15,7 +15,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "9.9";
+QString currentVersion = "10.0";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 int container = 2; //контейнеры: 2-snap
@@ -371,6 +371,7 @@ void MainWindow::on_action_nvidia_triggered()
 
 void MainWindow::on_push_install_clicked()
 {
+    hide();
     Terminal terminal = getTerminal();
     QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
     process->setProgram(terminal.binary);
@@ -378,8 +379,13 @@ void MainWindow::on_push_install_clicked()
     process->setProcessChannelMode(QProcess::MergedChannels);
     process->start();
     process->waitForFinished(-1);
-    sendNotification(tr("Внимание"), tr("После отката пакетов NVIDIA, рекомендуется перезагрузка!"));
-    on_push_back_clicked();
+
+    if (process->exitCode() == QProcess::NormalExit)
+    {
+        show();
+        sendNotification(tr("Внимание"), tr("После отката пакетов NVIDIA, рекомендуется перезагрузка!"));
+        on_push_back_clicked();
+    }
 }
 
 void MainWindow::on_push_back_clicked()
@@ -3026,12 +3032,16 @@ void MainWindow::onListDowngradeItemDoubleClicked(QListWidgetItem *currentItem) 
         return;
     }
 
+    hide();
     QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
     process->setProgram(terminal.binary);
     process->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("localinstall") << installUrl);
     process->setProcessChannelMode(QProcess::MergedChannels);
     process->start();
     process->waitForFinished(-1);
+
+    if (process->exitCode() == QProcess::NormalExit)
+        show();
 }
 
 void MainWindow::checkForDowngrades(const QString& packagesArchiveAUR)
