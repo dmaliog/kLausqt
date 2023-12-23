@@ -15,15 +15,12 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "9.7";
+QString currentVersion = "9.8";
 QString packagesArchiveAUR = "steam";
-QString detailsAURdefault = "";
-
 QSettings settings(filePath, QSettings::IniFormat);
-
-//автоматически управляют памятью или не требуют
-int pkg = 0; //пакетный менеджер 0-yay / 1-paru
 int container = 2; //контейнеры: 2-snap
+int nvidia = 0; // nvidia
+int pkg = 0; //пакетный менеджер 0-yay / 1-paru
 int page = 0; // какая страница используется
 int animloadpage = 0;
 int trayon = 0; // закрывать без трея
@@ -31,6 +28,7 @@ int autostart = 0; //автостарт
 int repair = 0; // создавать бэкап при удалении или нет
 int animload = 0; // анимация загрузки
 int updinst = 0; //проверять систему перед установкой пакетов или нет
+int clearinstall = 2; //удалить пакет перед новой установкой
 int volumenotify = 0; // громкость уведомлений
 int mainpage = 0; // главная страница
 int helpercache = 0; // кэш
@@ -38,28 +36,6 @@ int benchlist = 0; // бенчлист
 int numPackages = 0;
 int list = 0;
 int cacheremove = 0; // удаление кэша при выходе
-
-bool loadpage = true;
-
-//переключение драйверов
-int nvidia = 0;
-QString nvidiaVersion = "";
-
-QString nvidiaDkms = "";
-QString nvidiaUtils = "";
-QString nvidiaSettings = "";
-QString libxnvctrl = "";
-QString openclNvidia = "";
-QString lib32NvidiaUtils = "";
-QString lib32OpenclNvidia = "";
-
-QString nvidiaDkmsName = "";
-QString nvidiaUtilsName = "";
-QString nvidiaSettingsName = "";
-QString libxnvctrlName = "";
-QString openclNvidiaName = "";
-QString lib32NvidiaUtilsName = "";
-QString lib32OpenclNvidiaName = "";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -140,10 +116,7 @@ Terminal getTerminal()
 
 void MainWindow::on_action_1_triggered()
 {
-    mrpropper(1);
-    ui->label1->setText(tr("Добавить пакет в AUR"));
-    ui->tabWidget->setCurrentIndex(0);
-    showLoadingAnimationMini(false);
+//свободно
 }
 
 void MainWindow::on_action_2_triggered()
@@ -362,58 +335,35 @@ void MainWindow::on_action_downgrade_triggered()
 
 void MainWindow::on_action_nvidia_triggered()
 {
-    ui->label1->setText(tr("Откат пакетов NVIDIA"));
+    QString driverNames[] = {"nvidia-dkms", "nvidia-utils", "nvidia-settings", "libxnvctrl", "opencl-nvidia", "lib32-nvidia-utils", "lib32-opencl-nvidia"};
+    int driverIndex = nvidia;
 
-    if (nvidia == 1) {
-        checkForDowngrades("nvidia-dkms");
-        ui->label1->setText(tr("Откат пакетов NVIDIA [1/7]"));
+    if (driverIndex >= 1 && driverIndex <= 7)
+    {
+        checkForDowngrades(driverNames[driverIndex - 1]);
+        ui->label1->setText(tr("Откат пакетов NVIDIA [%1/7]").arg(driverIndex));
     }
-    else if (nvidia == 2) {
-        checkForDowngrades("nvidia-utils");
-        ui->label1->setText(tr("Откат пакетов NVIDIA [2/7]"));
-    }
-    else if (nvidia == 3) {
-        checkForDowngrades("nvidia-settings");
-        ui->label1->setText(tr("Откат пакетов NVIDIA [3/7]"));
-    }
-    else if (nvidia == 4) {
-        checkForDowngrades("libxnvctrl");
-        ui->label1->setText(tr("Откат пакетов NVIDIA [4/7]"));
-    }
-    else if (nvidia == 5) {
-        checkForDowngrades("opencl-nvidia");
-        ui->label1->setText(tr("Откат пакетов NVIDIA [5/7]"));
-    }
-    else if (nvidia == 6) {
-        checkForDowngrades("lib32-nvidia-utils");
-        ui->label1->setText(tr("Откат пакетов NVIDIA [6/7]"));
-    }
-    else if (nvidia == 7) {
-        checkForDowngrades("lib32-opencl-nvidia");
-        ui->label1->setText(tr("Откат пакетов NVIDIA [7/7]"));
-    }
-    else if (nvidia == 8)
+    else if (driverIndex == 8)
     {
         ui->label1->setText(tr("Откат пакетов NVIDIA"));
         ui->tabWidget->setCurrentIndex(6);
         ui->details_driver->setHtml(QString(tr("<b>Вы выбрали следующие пакеты:</b><br>"
-                                            "- <b>%1</b><br>"
-                                            "- <b>%2</b><br>"
-                                            "- <b>%3</b><br>"
-                                            "- <b>%4</b><br>"
-                                            "- <b>%5</b><br>"
-                                            "- <b>%6</b><br>"
-                                            "- <b>%7</b><br>"
-                                            "<br><span style=\"font-weight:700; color:#ad2429;\">Все версии должны совпадать, для избежания конфликтов зависимостей!</span><br><br>"
-                                            "<b>Внимание! Если у вас не загрузится компьютер после этих манипуляций:</b><br>"
-                                            "- Войдите в tty (CTRL+ALT+F2)<br>"
-                                            "- Запустите консольную утилиту downgrade и установите свои предыдущие версии драйверов<br>"
-                                            "- Перезагрузитесь")).arg(nvidiaDkmsName, nvidiaUtilsName, nvidiaSettingsName, libxnvctrlName, openclNvidiaName, lib32NvidiaUtilsName, lib32OpenclNvidiaName));
-
+                                               "- <b>%1</b><br>"
+                                               "- <b>%2</b><br>"
+                                               "- <b>%3</b><br>"
+                                               "- <b>%4</b><br>"
+                                               "- <b>%5</b><br>"
+                                               "- <b>%6</b><br>"
+                                               "- <b>%7</b><br>"
+                                               "<br><span style=\"font-weight:700; color:#ad2429;\">Все версии должны совпадать, для избежания конфликтов зависимостей!</span><br><br>"
+                                               "<b>Внимание! Если у вас не загрузится компьютер после этих манипуляций:</b><br>"
+                                               "- Войдите в tty (CTRL+ALT+F2)<br>"
+                                               "- Запустите консольную утилиту downgrade и установите свои предыдущие версии драйверов<br>"
+                                               "- Перезагрузитесь")).arg(nvidiaDkmsName, nvidiaUtilsName, nvidiaSettingsName, libxnvctrlName, openclNvidiaName, lib32NvidiaUtilsName, lib32OpenclNvidiaName));
     }
     else
     {
-        checkForDowngrades("nvidia-dkms");
+        checkForDowngrades(driverNames[0]);
         ui->label1->setText(tr("Откат пакетов NVIDIA [1/7]"));
         nvidia = 1;
     }
@@ -540,109 +490,98 @@ void MainWindow::on_action_19_triggered()
 
 void MainWindow::on_action_31_triggered()
 {
-    if (page == 6)
+    switch (page)
     {
-        if (*lang == "en_US")
-            webEngineView2->setUrl(QUrl("https://wiki.archlinux.org/title/General_recommendations"));
-        else
-            webEngineView2->setUrl(QUrl("https://wiki.archlinux.org/title/General_recommendations_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)"));
-    }
-    else if (page == 7)
-    {
-        if(*currentDesktop == "KDE")
-            webEngineView2->setUrl(QUrl("https://store.kde.org/browse/"));
-        else if(*currentDesktop == "GNOME")
-            webEngineView2->setUrl(QUrl("https://www.pling.com/s/Gnome/browse/"));
-        else if(*currentDesktop == "XFCE")
-            webEngineView2->setUrl(QUrl("https://www.pling.com/s/XFCE/browse/"));
-        else if(*currentDesktop == "LXQt")
-            webEngineView2->setUrl(QUrl("https://store.kde.org/browse?cat=446"));
-        else if(*currentDesktop == "Cinnamon")
-            webEngineView2->setUrl(QUrl("https://www.pling.com/s/Cinnamon/browse/"));
-        else if(*currentDesktop == "MATE")
-            webEngineView2->setUrl(QUrl("https://www.pling.com/s/Mate/browse/"));
-        else if (*currentDesktop == "Enlightenment")
-            webEngineView2->setUrl(QUrl("https://www.pling.com/s/Enlightenment/browse/"));
-        else {
-            sendNotification(tr("Ошибка"), tr("Для вашего окружения тем не найдено!"));
-            return;
+        case 6:
+            webEngineView2->setUrl(QUrl((*lang == "en_US") ? "https://wiki.archlinux.org/title/General_recommendations" :
+                                            "https://wiki.archlinux.org/title/General_recommendations_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)"));
+            break;
+        case 7:
+        {
+            const QMap<QString, QString> desktopUrls{
+                                                     {"KDE", "https://store.kde.org/browse/"},
+                                                     {"GNOME", "https://www.pling.com/s/Gnome/browse/"},
+                                                     {"XFCE", "https://www.pling.com/s/XFCE/browse/"},
+                                                     {"LXQt", "https://store.kde.org/browse?cat=446"},
+                                                     {"Cinnamon", "https://www.pling.com/s/Cinnamon/browse/"},
+                                                     {"MATE", "https://www.pling.com/s/Mate/browse/"},
+                                                     {"Enlightenment", "https://www.pling.com/s/Enlightenment/browse/"}};
+
+            if (desktopUrls.contains(*currentDesktop))
+                webEngineView2->setUrl(QUrl(desktopUrls.value(*currentDesktop)));
+            else
+            {
+                sendNotification(tr("Ошибка"), tr("Для вашего окружения тем не найдено!"));
+                return;
+            }
+            break;
         }
+        case 11:
+            webEngineView2->setUrl(QUrl("https://www.protondb.com/explore"));
+            break;
     }
-    else if (page == 11)
-        webEngineView2->setUrl(QUrl("https://www.protondb.com/explore"));
 }
 
 void MainWindow::on_action_34_triggered()
 {
     QListWidget* listWidget = nullptr;
 
-    if (page == 2)
-        listWidget = ui->list_aur;
+    if ((page == 2 && container != 2) || (page == 4 && container == 2))
+            listWidget = ui->list_aur;
     else if (page == 4)
-        listWidget = ui->list_app;
+            listWidget = ui->list_app;
 
-    if (listWidget == nullptr || listWidget->currentItem() == nullptr) {
-        sendNotification(tr("Внимание"), tr("Выберите пакет из списка для просмотра информации!"));
-        return;
+    if (!listWidget || !listWidget->currentItem()) {
+            sendNotification(tr("Внимание"), tr("Выберите пакет из списка для просмотра информации!"));
+            return;
     }
 
     int currentRow = listWidget->currentRow();
-    QListWidgetItem* item = listWidget->item(currentRow);
-    QString packageName = item->text();
+    QString packageName = listWidget->item(currentRow)->text();
 
-    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+    QStringList command;
 
     if (container == 2 && page == 4)
-        process->start(packageCommands.value(container).value("snap_info").at(0), QStringList() << packageCommands.value(container).value("snap_info").at(1) << packageName);
+            command = packageCommands.value(container).value("snap_info");
     else
-        process->start(packageCommands.value(pkg).value("show_info").at(0), QStringList() << packageCommands.value(pkg).value("show_info").at(1) << packageName);
+            command = packageCommands.value(pkg).value("show_info");
 
+    command << packageName;
+
+    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+    process->start(command.at(0), command.mid(1));
     process->waitForFinished();
 
-    QByteArray output = process->readAllStandardOutput();
-    QString packageInfo = QString::fromUtf8(output);
+    QString packageInfo = QString::fromUtf8(process->readAllStandardOutput());
 
-    // Ищем ссылку в тексте packageInfo
     QString url = "";
-    if (container == 2  && page == 4) {
-        int urlIndex = packageInfo.indexOf("store-url:");
-        if (urlIndex != -1) {
+    int urlIndex = packageInfo.indexOf((container == 2 && page == 4) ? "store-url:" : "URL");
+
+    if (urlIndex != -1) {
             int start = packageInfo.indexOf("https://", urlIndex);
             int end = packageInfo.indexOf("\n", start);
             if (start != -1 && end != -1) {
                 url = packageInfo.mid(start, end - start).trimmed();
             }
-        }
-    } else {
-        int urlIndex = packageInfo.indexOf("URL");
-        if (urlIndex != -1) {
-            int start = packageInfo.indexOf(":", urlIndex);
-            int end = packageInfo.indexOf("\n", start);
-            if (start != -1 && end != -1) {
-                url = packageInfo.mid(start + 1, end - start - 1).trimmed();
-            }
-        }
     }
 
     if (!url.isEmpty()) {
-        showLoadingAnimation(true);
-        webEngineView2->setUrl(QUrl(url));
+            showLoadingAnimation(true);
+            webEngineView2->setUrl(QUrl(url));
     } else
-        sendNotification(tr("Внимание"), tr("URL отсутствует!"));
+            sendNotification(tr("Внимание"), tr("URL отсутствует!"));
 }
 
 void MainWindow::on_action_35_triggered()
 {
     if (page == 6 || page == 7 || page == 11)
     {
-        webEngineView2->back();
-        return;
+            webEngineView2->back();
+            return;
     }
+
     ui->action_34->setVisible(true);
-
-    if (page == 4)
-        ui->action_11->setVisible(true);
-
+    ui->action_11->setVisible(page == 4);
     ui->action_35->setVisible(false);
     webEngineView2->hide();
 }
@@ -654,10 +593,8 @@ void MainWindow::on_action_32_triggered()
 
 void MainWindow::on_action_33_triggered()
 {
-    QUrl url = webEngineView2->url();
-    QString urlString = url.toDisplayString();
     QClipboard *clipboard = QGuiApplication::clipboard();
-    clipboard->setText(urlString);
+    clipboard->setText(webEngineView2->url().toDisplayString());
     sendNotification(tr("Буфер обмена"), tr("Ссылка успешно скопирована в буфер обмена!"));
 }
 
@@ -711,59 +648,44 @@ void MainWindow::on_action_13_triggered()
 void MainWindow::on_action_5_triggered()
 {
     if (page == 10)
-    {
-        QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create(this);
-        httpProcess->startDetached("pkexec", QStringList() << "sudo" << "systemctl" << "start" << "httpd");
-        httpProcess->closeWriteChannel();
-        httpProcess->waitForFinished();
-    }
+        QProcess::startDetached("pkexec", {"sudo", "systemctl", "start", "httpd"});
     else
     {
-        if (ui->list_app->currentItem() == nullptr) {
+        QListWidget* listWidget = ui->list_app;
+
+        if (listWidget->currentItem() == nullptr) {
             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для запуска!"));
             return;
         }
 
-        QString packageName = ui->list_app->currentItem()->text();
-        packageName = packageName.left(packageName.indexOf(" "));
+        QString packageName = listWidget->currentItem()->text().split(" ").first();
 
-        if (container == 2  && page == 4) {
-            QString snapDesktopDir = "/var/lib/snapd/desktop/applications/";
+        QString desktopFilePath;
+        if (container == 2 && page == 4) {
+            QDir dir("/var/lib/snapd/desktop/applications/");
+            QStringList snapDesktopFiles = dir.entryList({packageName + "_*.desktop"}, QDir::Files);
 
-            QDir dir(snapDesktopDir);
-            QStringList snapDesktopFiles = dir.entryList(QStringList() << packageName + "_*.desktop", QDir::Files);
-
-            if (!snapDesktopFiles.isEmpty()) {
-                QString desktopFilePath = snapDesktopDir + snapDesktopFiles.first();
-                QString desktopFileName = QFileInfo(desktopFilePath).fileName();
-                QSharedPointer<QProcess>(new QProcess)->startDetached("gtk-launch", QStringList() << desktopFileName);
-            } else
-                sendNotification(tr("Ошибка"), tr("Файл .desktop не найден для пакета ") + packageName);
-
+            if (!snapDesktopFiles.isEmpty())
+                desktopFilePath = dir.filePath(snapDesktopFiles.first());
         } else {
+            QProcess process;
+            process.start(packageCommands.value(pkg).value("list_files").at(0), {packageCommands.value(pkg).value("list_files").at(1), packageName});
+            process.waitForFinished(-1);
 
-            // Выполняем команду `-Ql packageName` и захватываем вывод
-            QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-            process->start(packageCommands.value(pkg).value("list_files").at(0), QStringList() << packageCommands.value(pkg).value("list_files").at(1) << packageName);
-            process->waitForFinished(-1);
-            QString output = process->readAllStandardOutput();
-
-            // Ищем строку, содержащую путь к файлу .desktop
-            QString desktopFilePath = "";
-            QStringList lines = output.split('\n');
-            for (const QString& line : lines) {
+            QString output = process.readAllStandardOutput();
+            for (const QString& line : output.split('\n')) {
                 if (line.contains(packageName) && line.contains(".desktop")) {
                     desktopFilePath = line.split(' ').last();
                     break;
                 }
             }
-
-            if (!desktopFilePath.isEmpty()) {
-                QString desktopFileName = QFileInfo(desktopFilePath).fileName();
-                QSharedPointer<QProcess>(new QProcess)->startDetached("gtk-launch", QStringList() << desktopFileName);
-            } else
-                sendNotification(tr("Ошибка"), tr("Файл .desktop не найден для пакета ") + packageName);
         }
+
+        if (!desktopFilePath.isEmpty()) {
+            QString desktopFileName = QFileInfo(desktopFilePath).fileName();
+            QProcess::startDetached("gtk-launch", {desktopFileName});
+        } else
+            sendNotification(tr("Ошибка"), tr("Файл .desktop не найден для пакета ") + packageName);
     }
 }
 
@@ -837,7 +759,7 @@ void MainWindow::on_action_4_triggered()
         process->setProgram(terminal.binary);
         process->setArguments(QStringList() << terminal.args << packageCommands.value(container).value("snap_refresh") << packageName);
         process->setProcessChannelMode(QProcess::MergedChannels);
-        process->start();
+        process->startDetached();
         process->waitForFinished(-1);
 
         if (process->exitCode() == QProcess::NormalExit)
@@ -845,11 +767,14 @@ void MainWindow::on_action_4_triggered()
     }
     else
     {
+        if (clearinstall && (pkg == 0 || pkg == 1))
+            removeDirectory(QDir::homePath() + "/.cache/" + ((pkg == 0) ? "yay/" : "paru/clone/") + packageName);
+
         QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
         process->setProgram(terminal.binary);
         process->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("install") << packageName);
         process->setProcessChannelMode(QProcess::MergedChannels);
-        process->start();
+        process->startDetached();
         process->waitForFinished(-1);
 
         if (process->exitCode() == QProcess::NormalExit)
@@ -1320,7 +1245,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     //-##################################################################################
     //-######################### ПОДКЛЮЧЕНИЕ КОНФИГУРАЦИЙ ###############################
     //-##################################################################################
-
     setupListContextMenu();
     createSearchBar();
     loadSettings();
@@ -1348,6 +1272,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->check_repair->setChecked(repair);
     ui->check_animload->setChecked(animload);
     ui->check_updateinstall->setChecked(updinst);
+    ui->check_clearinstall->setChecked(clearinstall);
     ui->combo_mainpage->setCurrentIndex(mainpage);
     ui->combo_helper->setCurrentIndex(pkg);
     ui->combo_animload->setCurrentIndex(animloadpage);
@@ -1395,8 +1320,7 @@ void MainWindow::checkVersionAndClear() {
         QStringList subDirs = baseDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
         for (const QString& subDir : subDirs) {
             if (!excludedFolders.contains(subDir)) {
-                QDir subDirDir(baseDir.absoluteFilePath(subDir));
-                subDirDir.removeRecursively();
+                removeDirectory(baseDir.absoluteFilePath(subDir));
             }
         }
 
@@ -1436,9 +1360,7 @@ void MainWindow::saveScripts(const QStringList& resourcePaths, const QString& ba
 MainWindow::~MainWindow()
 {
     if (cacheremove == 2)
-    {
-        QDir(mainDir + "cache/").removeRecursively();
-    }
+        removeDirectory(mainDir + "cache/");
 
     iconMap.clear();
     delete previousAction;
@@ -1514,6 +1436,7 @@ void MainWindow::loadSettings()
     repair = settings.value("RepairBackup", 2).toInt();
     animload = settings.value("AnimLoad", 2).toInt();
     updinst = settings.value("UpdateInstall", 2).toInt();
+    clearinstall = settings.value("ClearInstall", 2).toInt();
     container = settings.value("Snap", 0).toInt();
     cacheremove = settings.value("CacheRemove", 2).toInt();
     volumenotify = settings.value("VolumeNotify", 30).toInt();
@@ -3449,8 +3372,7 @@ void MainWindow::createArchive(const QString& folderPath, const QString& folderN
     if (reply == QMessageBox::No) return;
 
     if (repair == 0) {
-        QDir folder2(folderPath + folderName);
-        folder2.removeRecursively();
+        removeDirectory(folderPath + folderName);
         loadFolders();
         sendNotification(tr("Конфигурация"), tr("Конфигурация успешно удалена!"));
     } else {
@@ -3470,7 +3392,7 @@ void MainWindow::createArchive(const QString& folderPath, const QString& folderN
                     zipProcess->waitForFinished();
 
                     if (zipProcess->exitCode() == 0) {
-                        QDir(folderPath + folderName).removeRecursively();
+                        removeDirectory(folderPath + folderName);
                         loadFolders();
                         sendNotification(tr("Конфигурация"), tr("Резервная копия %1 успешно создана! Конфигурация удалена!").arg(archivePath));
                         return;
@@ -3478,7 +3400,7 @@ void MainWindow::createArchive(const QString& folderPath, const QString& folderN
                 }
             }
         }
-        sendNotification(tr("Ошибка"), tr("Резервная копия не создана или отменена."));
+        sendNotification(tr("Ошибка"), tr("Резервная копия не создана или отменена"));
     }
 }
 
@@ -3799,6 +3721,12 @@ void MainWindow::on_check_updateinstall_stateChanged(int arg1)
 {
     updinst = arg1;
     settings.setValue("UpdateInstall", arg1);
+}
+
+void MainWindow::on_check_clearinstall_stateChanged(int arg1)
+{
+    clearinstall = arg1;
+    settings.setValue("ClearInstall", arg1);
 }
 
 void MainWindow::on_dial_volnotify_valueChanged(int value)

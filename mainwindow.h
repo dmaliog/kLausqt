@@ -37,6 +37,24 @@ public:
     QColor generateRandomColor();
 
 private:
+    QString detailsAURdefault;
+
+    QString nvidiaVersion;
+    QString nvidiaDkms;
+    QString nvidiaUtils;
+    QString nvidiaSettings;
+    QString libxnvctrl;
+    QString openclNvidia;
+    QString lib32NvidiaUtils;
+    QString lib32OpenclNvidia;
+    QString nvidiaDkmsName;
+    QString nvidiaUtilsName;
+    QString nvidiaSettingsName;
+    QString libxnvctrlName;
+    QString openclNvidiaName;
+    QString lib32NvidiaUtilsName;
+    QString lib32OpenclNvidiaName;
+
     // Умные указатели
     QSharedPointer<QLineEdit> searchLineEdit;
     QCompleter* completer;
@@ -52,6 +70,7 @@ private:
     QSharedPointer<QString> currentDesktop;
     QSharedPointer<QString> repo;
     QSharedPointer<QString> lang;
+
     QSharedPointer<QTimer> updateIconTimer;
     QSharedPointer<QTimer> teaTimer;
     QSharedPointer<QTimer> workTimer;
@@ -80,6 +99,7 @@ private:
     bool errorShown = false;
     bool hasUpdates = false;
     bool hasUpdatesSnap = false;
+    bool loadpage = true;
 
     // QAction
     QAction* actionLoad = nullptr;
@@ -151,9 +171,10 @@ private:
                                       ":/bench/hardinfo.sh",
                                       ":/bench/iozone.sh"};
 
+
     QStringList endingsToRemove = QStringList() << "-bin" << "-git" << "-qt" << "-qt4" << "-qt5" << "-qt6"
-                                                << "qt-" << "qt4-" << "qt5-" << "qt6-" << "-gtk"
-                                                << "-gtk2" << "-gtk3";
+                                                << "qt-" << "qt4-" << "qt5-" << "qt6-" << "-gtk" << "-gtk2"
+                                                << "-gtk3" << "-cvs" << "-svn" << "-hg" << "-darcs" << "-bzr";
 protected:
     void closeEvent(QCloseEvent *event) override; // объявление метода closeEvent()
     bool eventFilter(QObject *obj, QEvent *event) override;
@@ -250,6 +271,7 @@ private slots:
     void on_combo_bench_currentIndexChanged(int index);
     void on_check_repair_stateChanged(int arg1);
     void on_check_updateinstall_stateChanged(int arg1);
+    void on_check_clearinstall_stateChanged(int arg1);
     void on_check_trayon_stateChanged(int arg1);
     void on_check_animload_stateChanged(int arg1);
     void on_check_autostart_stateChanged(int arg1);
