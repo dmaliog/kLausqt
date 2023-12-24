@@ -15,7 +15,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "10.0";
+QString currentVersion = "10.1";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 int container = 2; //контейнеры: 2-snap
@@ -371,21 +371,19 @@ void MainWindow::on_action_nvidia_triggered()
 
 void MainWindow::on_push_install_clicked()
 {
-    hide();
-    Terminal terminal = getTerminal();
-    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-    process->setProgram(terminal.binary);
-    process->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("localinstall") << nvidiaDkms << nvidiaUtils << nvidiaSettings << libxnvctrl << openclNvidia << lib32NvidiaUtils << lib32OpenclNvidia);
-    process->setProcessChannelMode(QProcess::MergedChannels);
-    process->start();
-    process->waitForFinished(-1);
 
-    if (process->exitCode() == QProcess::NormalExit)
-    {
-        show();
+
+    Terminal terminal = getTerminal();
+    currentProcess = QSharedPointer<QProcess>::create(this);
+    connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
+    connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
         sendNotification(tr("Внимание"), tr("После отката пакетов NVIDIA, рекомендуется перезагрузка!"));
         on_push_back_clicked();
-    }
+    });
+    currentProcess->setProgram(terminal.binary);
+    currentProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("localinstall") << nvidiaDkms << nvidiaUtils << nvidiaSettings << libxnvctrl << openclNvidia << lib32NvidiaUtils << lib32OpenclNvidia);
+    currentProcess->setProcessChannelMode(QProcess::MergedChannels);
+    currentProcess->start();
 }
 
 void MainWindow::on_push_back_clicked()
@@ -608,20 +606,16 @@ void MainWindow::on_action_11_triggered()
 {
     UpdateIcon();
     if (hasUpdates) {
-        hide();
         Terminal terminal = getTerminal();
-        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-
-        process->setProgram(terminal.binary);
-        process->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("update"));
-        process->setProcessChannelMode(QProcess::MergedChannels);
-        process->start();
-        process->waitForFinished(-1);
-
-        if (process->exitCode() == QProcess::NormalExit) {
+        currentProcess = QSharedPointer<QProcess>::create(this);
+        connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
+        connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
             UpdateIcon();
-            show();
-        }
+        });
+        currentProcess->setProgram(terminal.binary);
+        currentProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("update"));
+        currentProcess->setProcessChannelMode(QProcess::MergedChannels);
+        currentProcess->start();
     } else
         sendNotification(tr("Обновление"), tr("Система в актуальном состоянии!"));
 }
@@ -630,17 +624,16 @@ void MainWindow::on_action_snap_triggered()
 {
     UpdateSnap();
     if (hasUpdatesSnap) {
-        hide();
         Terminal terminal = getTerminal();
-        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-        process->setProgram(terminal.binary);
-        process->setArguments(QStringList() << terminal.args << packageCommands.value(container).value("snap_find"));
-        process->setProcessChannelMode(QProcess::MergedChannels);
-        process->start();
-        process->waitForFinished(-1);
-
-        if (process->exitCode() == QProcess::NormalExit)
-            show();
+        currentProcess = QSharedPointer<QProcess>::create(this);
+        connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
+        connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
+            //ничего делать не нужно
+        });
+        currentProcess->setProgram(terminal.binary);
+        currentProcess->setArguments(QStringList() << terminal.args << packageCommands.value(container).value("snap_find"));
+        currentProcess->setProcessChannelMode(QProcess::MergedChannels);
+        currentProcess->start();
     } else
         sendNotification(tr("Обновление"), tr("Snap пакеты в актуальном состоянии!"));
 }
@@ -713,33 +706,25 @@ void MainWindow::on_action_6_triggered()
     Terminal terminal = getTerminal();
 
     if (container == 2  && page == 4) {
-        hide();
-        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-        process->setProgram(terminal.binary);
-        process->setArguments(QStringList() << terminal.args << packageCommands.value(container).value("snap_remove") << packageName);
-        process->setProcessChannelMode(QProcess::MergedChannels);
-        process->start();
-        process->waitForFinished(-1);
-
-        if (process->exitCode() == QProcess::NormalExit) {
+        currentProcess = QSharedPointer<QProcess>::create(this);
+        connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
+        connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
             loadContentInstall();
-            show();
-        }
-
+        });
+        currentProcess->setProgram(terminal.binary);
+        currentProcess->setArguments(QStringList() << terminal.args << packageCommands.value(container).value("snap_remove") << packageName);
+        currentProcess->setProcessChannelMode(QProcess::MergedChannels);
+        currentProcess->start();
     } else {
-        hide();
-        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-        process->setProgram(terminal.binary);
-        process->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("remove") << packageName);
-        process->setProcessChannelMode(QProcess::MergedChannels);
-        process->start();
-        process->waitForFinished(-1);
-
-        if (process->exitCode() == QProcess::NormalExit)
-        {
+        currentProcess = QSharedPointer<QProcess>::create(this);
+        connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
+        connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
             loadContentInstall();
-            show();
-        }
+        });
+        currentProcess->setProgram(terminal.binary);
+        currentProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("remove") << packageName);
+        currentProcess->setProcessChannelMode(QProcess::MergedChannels);
+        currentProcess->start();
     }
 }
 
@@ -767,38 +752,30 @@ void MainWindow::on_action_4_triggered()
 
     if (container == 2  && page == 4)
     {
-        hide();
-        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-        process->setProgram(terminal.binary);
-        process->setArguments(QStringList() << terminal.args << packageCommands.value(container).value("snap_refresh") << packageName);
-        process->setProcessChannelMode(QProcess::MergedChannels);
-        process->start();
-        process->waitForFinished(-1);
-
-        if (process->exitCode() == QProcess::NormalExit)
-        {
+        currentProcess = QSharedPointer<QProcess>::create(this);
+        connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
+        connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
             loadContentInstall();
-            show();
-        }
+        });
+        currentProcess->setProgram(terminal.binary);
+        currentProcess->setArguments(QStringList() << terminal.args << packageCommands.value(container).value("snap_refresh") << packageName);
+        currentProcess->setProcessChannelMode(QProcess::MergedChannels);
+        currentProcess->start();
     }
     else
     {
         if (clearinstall && (pkg == 0 || pkg == 1))
             removeDirectory(QDir::homePath() + "/.cache/" + ((pkg == 0) ? "yay/" : "paru/clone/") + packageName);
 
-        hide();
-        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-        process->setProgram(terminal.binary);
-        process->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("install") << packageName);
-        process->setProcessChannelMode(QProcess::MergedChannels);
-        process->start();
-        process->waitForFinished(-1);
-
-        if (process->exitCode() == QProcess::NormalExit)
-        {
+        currentProcess = QSharedPointer<QProcess>::create(this);
+        connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
+        connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
             loadContentInstall();
-            show();
-        }
+        });
+        currentProcess->setProgram(terminal.binary);
+        currentProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("install") << packageName);
+        currentProcess->setProcessChannelMode(QProcess::MergedChannels);
+        currentProcess->start();
     }
 }
 
@@ -825,27 +802,17 @@ void MainWindow::on_push_grub_clicked()
     QString grubContent = ui->line_grub->text().trimmed();
     QString timeout = ui->spin_grub->value() > 0 ? QString::number(ui->spin_grub->value()) : "5";
 
-    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-    process->setProgram("pkexec");
+    currentProcess = QSharedPointer<QProcess>::create(this);
+    connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
+    connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
+        sendNotification(tr("GRUB изменен"), tr("Изменения GRUB вступят в силу после перезагрузки."));
+    });
+    currentProcess->setProgram("pkexec");
     QStringList arguments;
     arguments << "bash" << "-c" << "sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"" + grubContent + "\"/; s/^GRUB_TIMEOUT=.*/GRUB_TIMEOUT=\"" + timeout + "\"/' " + filename + " && sudo grub-mkconfig -o /boot/grub/grub.cfg";
-    process->setArguments(arguments);
-
-    process->start();
-    if (!process->waitForStarted()) {
-        sendNotification(tr("Ошибка выполнения"), tr("Не удалось запустить pkexec"));
-        return;
-    }
-
-    if (!process->waitForFinished(-1)) {
-        sendNotification(tr("Ошибка выполнения"), tr("Не удалось выполнить команду pkexec"));
-        return;
-    }
-
-    if (process->exitCode() != QProcess::NormalExit || process->exitStatus() != QProcess::ExitStatus::NormalExit)
-        return;
-
-    sendNotification(tr("GRUB изменен"), tr("Изменения GRUB вступят в силу после перезагрузки."));
+    currentProcess->setArguments(arguments);
+    currentProcess->setProcessChannelMode(QProcess::MergedChannels);
+    currentProcess->start();
 }
 
 void MainWindow::on_action_addsh_triggered()
@@ -3032,16 +2999,15 @@ void MainWindow::onListDowngradeItemDoubleClicked(QListWidgetItem *currentItem) 
         return;
     }
 
-    hide();
-    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-    process->setProgram(terminal.binary);
-    process->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("localinstall") << installUrl);
-    process->setProcessChannelMode(QProcess::MergedChannels);
-    process->start();
-    process->waitForFinished(-1);
-
-    if (process->exitCode() == QProcess::NormalExit)
-        show();
+    currentProcess = QSharedPointer<QProcess>::create(this);
+    connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
+    connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
+        //ничего делать не надо
+    });
+    currentProcess->setProgram(terminal.binary);
+    currentProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("localinstall") << installUrl);
+    currentProcess->setProcessChannelMode(QProcess::MergedChannels);
+    currentProcess->start();
 }
 
 void MainWindow::checkForDowngrades(const QString& packagesArchiveAUR)
