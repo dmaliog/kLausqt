@@ -367,7 +367,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab_auradd">
      <attribute name="title">
@@ -854,7 +854,7 @@ color:#5752e7;</string>
      </widget>
      <widget class="QComboBox" name="combo_repo">
       <property name="enabled">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="geometry">
        <rect>
@@ -1521,7 +1521,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </font>
           </property>
           <property name="text">
-           <string>Проверять актуальность системы перед установкой новых пакетов</string>
+           <string>Проверить актуальность системы перед установкой новых пакетов</string>
           </property>
          </widget>
         </item>
@@ -1652,7 +1652,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
            <string notr="true"/>
           </property>
           <property name="text">
-           <string>Показывать анимацию загрузки</string>
+           <string>Показать анимацию загрузки</string>
           </property>
           <property name="autoRepeat">
            <bool>false</bool>
@@ -1706,7 +1706,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
            <string notr="true"/>
           </property>
           <property name="text">
-           <string>Закрывать без сворачивания в трей</string>
+           <string>Закрыть без сворачивания в трей</string>
           </property>
          </widget>
         </item>
@@ -1763,7 +1763,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
            <string notr="true"/>
           </property>
           <property name="text">
-           <string>Запуск при старте системы</string>
+           <string>Запустить при старте системы</string>
           </property>
          </widget>
         </item>
@@ -1798,6 +1798,42 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </property>
           <property name="text">
            <string>Очистить кэш скриншотов при выходе</string>
+          </property>
+         </widget>
+        </item>
+        <item row="13" column="0" colspan="2">
+         <widget class="QCheckBox" name="check_clearinstall">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="tabletTracking">
+           <bool>false</bool>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>Очистить каталог пакета перед началом установки</string>
+          </property>
+          <property name="autoRepeat">
+           <bool>false</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+          <property name="tristate">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -3028,6 +3064,35 @@ color:#5752e7;</string>
       </property>
       <property name="styleSheet">
        <string notr="true"/>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="push_repair">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>395</x>
+        <y>15</y>
+        <width>30</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="klausres.qrc">
+        <normaloff>:/img/1.png</normaloff>:/img/1.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
       </property>
      </widget>
     </widget>

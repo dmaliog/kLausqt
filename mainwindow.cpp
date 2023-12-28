@@ -15,15 +15,12 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "9.6";
+QString currentVersion = "10.3";
 QString packagesArchiveAUR = "steam";
-QString detailsAURdefault = "";
-
 QSettings settings(filePath, QSettings::IniFormat);
-
-//автоматически управляют памятью или не требуют
-int pkg = 0; //пакетный менеджер 0-yay / 1-paru
 int container = 2; //контейнеры: 2-snap
+int nvidia = 0; // nvidia
+int pkg = 0; //пакетный менеджер 0-yay / 1-paru
 int page = 0; // какая страница используется
 int animloadpage = 0;
 int trayon = 0; // закрывать без трея
@@ -31,6 +28,7 @@ int autostart = 0; //автостарт
 int repair = 0; // создавать бэкап при удалении или нет
 int animload = 0; // анимация загрузки
 int updinst = 0; //проверять систему перед установкой пакетов или нет
+int clearinstall = 2; //удалить пакет перед новой установкой
 int volumenotify = 0; // громкость уведомлений
 int mainpage = 0; // главная страница
 int helpercache = 0; // кэш
@@ -38,28 +36,6 @@ int benchlist = 0; // бенчлист
 int numPackages = 0;
 int list = 0;
 int cacheremove = 0; // удаление кэша при выходе
-
-bool loadpage = true;
-
-//переключение драйверов
-int nvidia = 0;
-QString nvidiaVersion = "";
-
-QString nvidiaDkms = "";
-QString nvidiaUtils = "";
-QString nvidiaSettings = "";
-QString libxnvctrl = "";
-QString openclNvidia = "";
-QString lib32NvidiaUtils = "";
-QString lib32OpenclNvidia = "";
-
-QString nvidiaDkmsName = "";
-QString nvidiaUtilsName = "";
-QString nvidiaSettingsName = "";
-QString libxnvctrlName = "";
-QString openclNvidiaName = "";
-QString lib32NvidiaUtilsName = "";
-QString lib32OpenclNvidiaName = "";
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -128,29 +104,15 @@ Terminal getTerminal()
         {"/usr/bin/alacritty", "-e"},
         {"/usr/bin/xterm", "-e"}
     };
-
-    // Итерируемся по списку, пока не найдем установленный терминал
     for (const Terminal& terminal : terminalList) {
         if (QFile::exists(terminal.binary))
             return terminal;
     }
-
-    // Возвращаем пустой объект Terminal, если не найден ни один терминал
     return Terminal();
 }
-
-
 //---#####################################################################################################################################################
 //--################################################################# ОСНОВНЫЕ ФУНКЦИИ ##################################################################
 //-#####################################################################################################################################################
-
-void MainWindow::on_action_1_triggered()
-{
-    mrpropper(1);
-    ui->label1->setText(tr("Добавить пакет в AUR"));
-    ui->tabWidget->setCurrentIndex(0);
-    showLoadingAnimationMini(false);
-}
 
 void MainWindow::on_action_2_triggered()
 {
@@ -158,12 +120,9 @@ void MainWindow::on_action_2_triggered()
     ui->label1->setText(tr("Каталог пакетов"));
     searchLineEdit->setPlaceholderText(tr("Поиск по пакетам..."));
     searchLineEdit->setFixedWidth(1000);
-
     ui->tabWidget->setCurrentIndex(1);
-
     ui->action_4->setVisible(true);
     ui->action_30->setVisible(true);
-
     ui->action_34->setVisible(true);
     showLoadingAnimationMini(false);
 }
@@ -174,16 +133,12 @@ void MainWindow::on_action_7_triggered()
     ui->label1->setText(tr("Каталог установленных пакетов"));
     searchLineEdit->setPlaceholderText(tr("Поиск установленных пакетов..."));
     searchLineEdit->setFixedWidth(1000);
-
     ui->combo_repo->setVisible(true);
-
     ui->tabWidget->setCurrentIndex(2);
-
     ui->action_11->setVisible(true);
     ui->action_5->setVisible(true);
     ui->action_6->setVisible(true);
     ui->action_34->setVisible(true);
-
     showLoadingAnimationMini(false);
 }
 
@@ -192,14 +147,11 @@ void MainWindow::on_action_17_triggered()
     mrpropper(3);
     searchLineEdit->setPlaceholderText(tr("Поиск скриптов..."));
     searchLineEdit->setFixedWidth(1000);
-
     ui->label1->setText(tr("Полезные скрипты"));
     ui->action_addsh->setVisible(true);
     ui->action_editsh->setVisible(true);
     ui->action_rmsh->setVisible(true);
-
     ui->tabWidget->setCurrentIndex(4);
-
     showLoadingAnimationMini(false);
 }
 
@@ -208,12 +160,10 @@ void MainWindow::on_action_9_triggered()
     mrpropper(5);
     searchLineEdit->setPlaceholderText(tr("Поиск журналов и конфигураций..."));
     searchLineEdit->setFixedWidth(1000);
-
     ui->action_27->setVisible(true);
     ui->action_bench->setVisible(true);
     ui->action_repair->setVisible(true);
     ui->action_system->setVisible(true);
-
     on_action_27_triggered();
     showLoadingAnimationMini(false);
 }
@@ -228,10 +178,8 @@ void MainWindow::on_action_3_triggered()
     ui->action_32->setVisible(true);
     ui->action_33->setVisible(true);
     ui->action_35->setVisible(true);
-
     searchLineEdit->setPlaceholderText(tr("Введите URL адрес..."));
     searchLineEdit->setFixedWidth(1000);
-
     if (*lang == "en_US")
         webEngineView2->setUrl(QUrl("https://wiki.archlinux.org/title/General_recommendations"));
     else
@@ -248,7 +196,6 @@ void MainWindow::on_push_vk_clicked()
     ui->action_32->setVisible(true);
     ui->action_33->setVisible(true);
     ui->action_35->setVisible(true);
-
     webEngineView2->setUrl(QUrl("https://vk.com/linux2"));
 }
 
@@ -258,7 +205,6 @@ void MainWindow::on_action_8_triggered()
     QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
 
     process->start(packageCommands.value(pkg).value("query").at(0), QStringList() << packageCommands.value(pkg).value("query").at(1) << "ocs-url");
-
     if (process->waitForFinished()) {
         QString output = QString::fromUtf8(process->readAllStandardOutput());
         if (!output.contains("ocs-url")) {
@@ -303,7 +249,6 @@ void MainWindow::on_action_8_triggered()
         sendNotification(tr("Ошибка"), tr("Для вашего окружения тем не найдено!"));
         return;
     }
-
     showLoadingAnimationMini(false);
 }
 
@@ -313,7 +258,6 @@ void MainWindow::on_action_12_triggered()
     ui->label1->setText(tr("Настройки приложения"));
     ui->action_28->setVisible(true);
     ui->action_timer->setVisible(true);
-
     ui->tabWidget->setCurrentIndex(7);
     showLoadingAnimationMini(false);
 }
@@ -321,9 +265,7 @@ void MainWindow::on_action_12_triggered()
 void MainWindow::on_action_host_triggered()
 {
     if (page == 10) return;
-
     QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-
     process->start(packageCommands.value(pkg).value("query").at(0), QStringList() << packageCommands.value(pkg).value("query").at(1) << "apache");
 
     if (process->waitForFinished()) {
@@ -331,7 +273,6 @@ void MainWindow::on_action_host_triggered()
         if (!output.contains("apache")) {
 
             ui->action_2->trigger();
-
             searchLineEdit->setText("apache");
 
             QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
@@ -341,9 +282,7 @@ void MainWindow::on_action_host_triggered()
             return;
         }
     }
-
     showLoadingAnimationMini(false);
-
     mrpropper(10);
     showLoadingAnimation(true);
     ui->label1->setText(tr("Веб-сервер"));
@@ -351,12 +290,9 @@ void MainWindow::on_action_host_triggered()
     ui->action_restart->setVisible(true);
     ui->action_stop->setVisible(true);
     ui->action_catalog->setVisible(true);
-
     searchLineEdit->setPlaceholderText(tr("Введите URL адрес..."));
     searchLineEdit->setFixedWidth(1000);
-
     webEngineView2->setUrl(QUrl("http://localhost"));
-
     showLoadingAnimationMini(false);
 }
 
@@ -371,10 +307,8 @@ void MainWindow::on_action_game_triggered()
     ui->action_32->setVisible(true);
     ui->action_33->setVisible(true);
     ui->action_35->setVisible(true);
-
     searchLineEdit->setPlaceholderText(tr("Введите URL адрес..."));
     searchLineEdit->setFixedWidth(1000);
-
     webEngineView2->setUrl(QUrl("https://www.protondb.com/explore"));
 }
 
@@ -385,73 +319,46 @@ void MainWindow::on_action_downgrade_triggered()
     mrpropper(14);
     ui->label1->setText(tr("Откат пакетов"));
     ui->action_nvidia->setVisible(true);
-
     searchLineEdit->setPlaceholderText(tr("Поиск по архиву..."));
     searchLineEdit->setFixedWidth(1000);
-
     if (nvidia >= 1)
         sendNotification(tr("Внимание"), tr("Откат NVIDIA пакетов отменен!"));
-
     nvidia = 0;
     ui->tabWidget->setCurrentIndex(12);
-
     showLoadingAnimationMini(false);
 }
 
 void MainWindow::on_action_nvidia_triggered()
 {
-    ui->label1->setText(tr("Откат пакетов NVIDIA"));
+    QString driverNames[] = {"nvidia-dkms", "nvidia-utils", "nvidia-settings", "libxnvctrl", "opencl-nvidia", "lib32-nvidia-utils", "lib32-opencl-nvidia"};
+    int driverIndex = nvidia;
 
-    if (nvidia == 1) {
-        checkForDowngrades("nvidia-dkms");
-        ui->label1->setText(tr("Откат пакетов NVIDIA [1/7]"));
+    if (driverIndex >= 1 && driverIndex <= 7)
+    {
+        checkForDowngrades(driverNames[driverIndex - 1]);
+        ui->label1->setText(tr("Откат пакетов NVIDIA [%1/7]").arg(driverIndex));
     }
-    else if (nvidia == 2) {
-        checkForDowngrades("nvidia-utils");
-        ui->label1->setText(tr("Откат пакетов NVIDIA [2/7]"));
-    }
-    else if (nvidia == 3) {
-        checkForDowngrades("nvidia-settings");
-        ui->label1->setText(tr("Откат пакетов NVIDIA [3/7]"));
-    }
-    else if (nvidia == 4) {
-        checkForDowngrades("libxnvctrl");
-        ui->label1->setText(tr("Откат пакетов NVIDIA [4/7]"));
-    }
-    else if (nvidia == 5) {
-        checkForDowngrades("opencl-nvidia");
-        ui->label1->setText(tr("Откат пакетов NVIDIA [5/7]"));
-    }
-    else if (nvidia == 6) {
-        checkForDowngrades("lib32-nvidia-utils");
-        ui->label1->setText(tr("Откат пакетов NVIDIA [6/7]"));
-    }
-    else if (nvidia == 7) {
-        checkForDowngrades("lib32-opencl-nvidia");
-        ui->label1->setText(tr("Откат пакетов NVIDIA [7/7]"));
-    }
-    else if (nvidia == 8)
+    else if (driverIndex == 8)
     {
         ui->label1->setText(tr("Откат пакетов NVIDIA"));
         ui->tabWidget->setCurrentIndex(6);
         ui->details_driver->setHtml(QString(tr("<b>Вы выбрали следующие пакеты:</b><br>"
-                                            "- <b>%1</b><br>"
-                                            "- <b>%2</b><br>"
-                                            "- <b>%3</b><br>"
-                                            "- <b>%4</b><br>"
-                                            "- <b>%5</b><br>"
-                                            "- <b>%6</b><br>"
-                                            "- <b>%7</b><br>"
-                                            "<br><span style=\"font-weight:700; color:#ad2429;\">Все версии должны совпадать, для избежания конфликтов зависимостей!</span><br><br>"
-                                            "<b>Внимание! Если у вас не загрузится компьютер после этих манипуляций:</b><br>"
-                                            "- Войдите в tty (CTRL+ALT+F2)<br>"
-                                            "- Запустите консольную утилиту downgrade и установите свои предыдущие версии драйверов<br>"
-                                            "- Перезагрузитесь")).arg(nvidiaDkmsName, nvidiaUtilsName, nvidiaSettingsName, libxnvctrlName, openclNvidiaName, lib32NvidiaUtilsName, lib32OpenclNvidiaName));
-
+                                               "- <b>%1</b><br>"
+                                               "- <b>%2</b><br>"
+                                               "- <b>%3</b><br>"
+                                               "- <b>%4</b><br>"
+                                               "- <b>%5</b><br>"
+                                               "- <b>%6</b><br>"
+                                               "- <b>%7</b><br>"
+                                               "<br><span style=\"font-weight:700; color:#ad2429;\">Все версии должны совпадать, для избежания конфликтов зависимостей!</span><br><br>"
+                                               "<b>Внимание! Если у вас не загрузится компьютер после этих манипуляций:</b><br>"
+                                               "- Войдите в tty (CTRL+ALT+F2)<br>"
+                                               "- Запустите консольную утилиту downgrade и установите свои предыдущие версии драйверов<br>"
+                                               "- Перезагрузитесь")).arg(nvidiaDkmsName, nvidiaUtilsName, nvidiaSettingsName, libxnvctrlName, openclNvidiaName, lib32NvidiaUtilsName, lib32OpenclNvidiaName));
     }
     else
     {
-        checkForDowngrades("nvidia-dkms");
+        checkForDowngrades(driverNames[0]);
         ui->label1->setText(tr("Откат пакетов NVIDIA [1/7]"));
         nvidia = 1;
     }
@@ -459,35 +366,34 @@ void MainWindow::on_action_nvidia_triggered()
 
 void MainWindow::on_push_install_clicked()
 {
-    Terminal terminal = getTerminal();
-    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-    process->setProgram(terminal.binary);
-    process->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("localinstall") << nvidiaDkms << nvidiaUtils << nvidiaSettings << libxnvctrl << openclNvidia << lib32NvidiaUtils << lib32OpenclNvidia);
-    process->setProcessChannelMode(QProcess::MergedChannels);
-    process->start();
-    process->waitForFinished(-1);
 
-    sendNotification(tr("Внимание"), tr("После отката пакетов NVIDIA, рекомендуется перезагрузка!"));
-    on_push_back_clicked(); //все кончилось
+
+    Terminal terminal = getTerminal();
+    currentProcess = QSharedPointer<QProcess>::create(this);
+    connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
+    connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
+        sendNotification(tr("Внимание"), tr("После отката пакетов NVIDIA, рекомендуется перезагрузка!"));
+        on_push_back_clicked();
+    });
+    currentProcess->setProgram(terminal.binary);
+    currentProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("localinstall") << nvidiaDkms << nvidiaUtils << nvidiaSettings << libxnvctrl << openclNvidia << lib32NvidiaUtils << lib32OpenclNvidia);
+    currentProcess->setProcessChannelMode(QProcess::MergedChannels);
+    currentProcess->start();
 }
 
 void MainWindow::on_push_back_clicked()
 {
-    //больше ничего не нужно от nvidia
     nvidia = 0;
     checkForDowngrades("steam");
     ui->label1->setText(tr("Откат пакетов"));
     ui->tabWidget->setCurrentIndex(12);
 }
-
-
 //---#####################################################################################################################################################
 //--################################################################## БЫСТРЫЕ ФУНКЦИИ ##################################################################
 //-#####################################################################################################################################################
 void MainWindow::on_action_restart_triggered()
 {
     QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create(this);
-
     httpProcess->startDetached("pkexec", QStringList() << "sudo" << "systemctl" << "restart" << "httpd");
     httpProcess->closeWriteChannel();
     httpProcess->waitForFinished();
@@ -496,7 +402,6 @@ void MainWindow::on_action_restart_triggered()
 void MainWindow::on_action_stop_triggered()
 {
     QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create(this);
-
     httpProcess->startDetached("pkexec", QStringList() << "sudo" << "systemctl" << "stop" << "httpd");
     httpProcess->closeWriteChannel();
     httpProcess->waitForFinished();
@@ -509,36 +414,22 @@ void MainWindow::on_action_catalog_triggered()
 
 void MainWindow::on_push_repair_clicked()
 {
-    // Открываем диалог выбора архива с помощью Zenity
     QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-
     process->start("zenity", QStringList() << "--file-selection" << tr("--title=Выберите архив") << "--file-filter=*.zip");
-
     if (process->waitForFinished() && process->exitCode() == 0) {
-        // Получаем путь выбранного архива
         QString archivePath = process->readAllStandardOutput().trimmed();
-
-        // Восстанавливаем архив
         restoreArchive(archivePath);
     }
-}
-
-void MainWindow::openDirectory(const QString &directoryPath)
-{
-    QDesktopServices::openUrl(QUrl::fromLocalFile(QDir::homePath() + directoryPath));
 }
 
 void MainWindow::on_action_27_triggered()
 {
     page = 111;
     ui->label1->setText(tr("Информация о системе"));
-
     ui->push_pacman->setVisible(false);
     ui->push_kde->setVisible(false);
-
     searchLineEdit->setPlaceholderText(tr("Поиск журналов и конфигураций..."));
     searchLineEdit->setFixedWidth(1000);
-
     ui->combo_bench->setVisible(false);
     ui->tabWidget->setCurrentIndex(5);
 }
@@ -547,13 +438,10 @@ void MainWindow::on_action_bench_triggered()
 {
     page = 112;
     ui->label1->setText(tr("Бенчмарки"));
-
     ui->push_pacman->setVisible(false);
     ui->push_kde->setVisible(false);
-
     searchLineEdit->setPlaceholderText(tr("Поиск бенчмарков..."));
     searchLineEdit->setFixedWidth(1000);
-
     ui->combo_bench->setVisible(true);
     ui->tabWidget->setCurrentIndex(10);
 }
@@ -561,12 +449,9 @@ void MainWindow::on_action_bench_triggered()
 void MainWindow::on_action_system_triggered()
 {
     ui->label1->setText(tr("Настройки системы"));
-
     ui->push_pacman->setVisible(true);
     ui->push_kde->setVisible(true);
-
     searchLineEdit->setFixedWidth(0);
-
     if (*currentDesktop == "KDE")
         ui->push_kde->setDisabled(false);
 
@@ -577,13 +462,10 @@ void MainWindow::on_action_repair_triggered()
 {
     page = 113;
     ui->label1->setText(tr("Оптимизация"));
-
     ui->push_pacman->setVisible(false);
     ui->push_kde->setVisible(false);
-
     searchLineEdit->setPlaceholderText(tr("Поиск конфигураций..."));
     searchLineEdit->setFixedWidth(1000);
-
     ui->combo_bench->setVisible(false);
     ui->tabWidget->setCurrentIndex(11);
 }
@@ -591,14 +473,12 @@ void MainWindow::on_action_repair_triggered()
 void MainWindow::on_action_28_triggered()
 {
     ui->label1->setText(tr("Настройки приложения"));
-
     ui->tabWidget->setCurrentIndex(7);
 }
 
 void MainWindow::on_action_timer_triggered()
 {
     ui->label1->setText(tr("Настройки таймеров"));
-
     ui->tabWidget->setCurrentIndex(9);
 }
 
@@ -609,37 +489,35 @@ void MainWindow::on_action_19_triggered()
 
 void MainWindow::on_action_31_triggered()
 {
-    if (page == 6)
+    switch (page)
     {
-        if (*lang == "en_US")
-            webEngineView2->setUrl(QUrl("https://wiki.archlinux.org/title/General_recommendations"));
-        else
-            webEngineView2->setUrl(QUrl("https://wiki.archlinux.org/title/General_recommendations_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)"));
-    }
-    else if (page == 7)
-    {
-        if(*currentDesktop == "KDE")
-            webEngineView2->setUrl(QUrl("https://store.kde.org/browse/"));
-        else if(*currentDesktop == "GNOME")
-            webEngineView2->setUrl(QUrl("https://www.pling.com/s/Gnome/browse/"));
-        else if(*currentDesktop == "XFCE")
-            webEngineView2->setUrl(QUrl("https://www.pling.com/s/XFCE/browse/"));
-        else if(*currentDesktop == "LXQt")
-            webEngineView2->setUrl(QUrl("https://store.kde.org/browse?cat=446"));
-        else if(*currentDesktop == "Cinnamon")
-            webEngineView2->setUrl(QUrl("https://www.pling.com/s/Cinnamon/browse/"));
-        else if(*currentDesktop == "MATE")
-            webEngineView2->setUrl(QUrl("https://www.pling.com/s/Mate/browse/"));
-        else if (*currentDesktop == "Enlightenment")
-            webEngineView2->setUrl(QUrl("https://www.pling.com/s/Enlightenment/browse/"));
-        else {
-            sendNotification(tr("Ошибка"), tr("Для вашего окружения тем не найдено!"));
-            return;
+        case 6:
+            webEngineView2->setUrl(QUrl((*lang == "en_US") ? "https://wiki.archlinux.org/title/General_recommendations" :
+                                            "https://wiki.archlinux.org/title/General_recommendations_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)"));
+            break;
+        case 7:
+        {
+            const QMap<QString, QString> desktopUrls{
+                                                     {"KDE", "https://store.kde.org/browse/"},
+                                                     {"GNOME", "https://www.pling.com/s/Gnome/browse/"},
+                                                     {"XFCE", "https://www.pling.com/s/XFCE/browse/"},
+                                                     {"LXQt", "https://store.kde.org/browse?cat=446"},
+                                                     {"Cinnamon", "https://www.pling.com/s/Cinnamon/browse/"},
+                                                     {"MATE", "https://www.pling.com/s/Mate/browse/"},
+                                                     {"Enlightenment", "https://www.pling.com/s/Enlightenment/browse/"}};
+
+            if (desktopUrls.contains(*currentDesktop))
+                webEngineView2->setUrl(QUrl(desktopUrls.value(*currentDesktop)));
+            else
+            {
+                sendNotification(tr("Ошибка"), tr("Для вашего окружения тем не найдено!"));
+                return;
+            }
+            break;
         }
-    }
-    else if (page == 11)
-    {
-        webEngineView2->setUrl(QUrl("https://www.protondb.com/explore"));
+        case 11:
+            webEngineView2->setUrl(QUrl("https://www.protondb.com/explore"));
+            break;
     }
 }
 
@@ -647,76 +525,63 @@ void MainWindow::on_action_34_triggered()
 {
     QListWidget* listWidget = nullptr;
 
-    if (page == 2)
-        listWidget = ui->list_aur;
+    if ((page == 2 && container != 2) || (page == 4 && container == 2))
+            listWidget = ui->list_aur;
     else if (page == 4)
-        listWidget = ui->list_app;
+            listWidget = ui->list_app;
 
-    if (listWidget == nullptr || listWidget->currentItem() == nullptr) {
-        sendNotification(tr("Внимание"), tr("Выберите пакет из списка для просмотра информации!"));
-        return;
+    if (!listWidget || !listWidget->currentItem()) {
+            sendNotification(tr("Внимание"), tr("Выберите пакет из списка для просмотра информации!"));
+            return;
     }
 
     int currentRow = listWidget->currentRow();
-    QListWidgetItem* item = listWidget->item(currentRow);
-    QString packageName = item->text();
+    QString packageName = listWidget->item(currentRow)->text();
 
-    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+    QStringList command;
 
     if (container == 2 && page == 4)
-        process->start(packageCommands.value(container).value("snap_info").at(0), QStringList() << packageCommands.value(container).value("snap_info").at(1) << packageName);
+            command = packageCommands.value(container).value("snap_info");
     else
-        process->start(packageCommands.value(pkg).value("show_info").at(0), QStringList() << packageCommands.value(pkg).value("show_info").at(1) << packageName);
+            command = packageCommands.value(pkg).value("show_info");
 
+    command << packageName;
+
+    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+    process->start(command.at(0), command.mid(1));
     process->waitForFinished();
 
-    QByteArray output = process->readAllStandardOutput();
-    QString packageInfo = QString::fromUtf8(output);
+    QString packageInfo = QString::fromUtf8(process->readAllStandardOutput());
 
-    // Ищем ссылку в тексте packageInfo
     QString url = "";
-    if (container == 2  && page == 4) {
-        int urlIndex = packageInfo.indexOf("store-url:");
-        if (urlIndex != -1) {
+    int urlIndex = packageInfo.indexOf((container == 2 && page == 4) ? "store-url:" : "URL");
+
+    if (urlIndex != -1) {
             int start = packageInfo.indexOf("https://", urlIndex);
             int end = packageInfo.indexOf("\n", start);
             if (start != -1 && end != -1) {
                 url = packageInfo.mid(start, end - start).trimmed();
             }
-        }
-    } else {
-        int urlIndex = packageInfo.indexOf("URL");
-        if (urlIndex != -1) {
-            int start = packageInfo.indexOf(":", urlIndex);
-            int end = packageInfo.indexOf("\n", start);
-            if (start != -1 && end != -1) {
-                url = packageInfo.mid(start + 1, end - start - 1).trimmed();
-            }
-        }
     }
 
     if (!url.isEmpty()) {
-        showLoadingAnimation(true);
-        webEngineView2->setUrl(QUrl(url));
-    } else {
-        sendNotification(tr("Внимание"), tr("URL отсутствует!"));
-    }
+            showLoadingAnimation(true);
+            webEngineView2->setUrl(QUrl(url));
+    } else
+            sendNotification(tr("Внимание"), tr("URL отсутствует!"));
 }
 
 void MainWindow::on_action_35_triggered()
 {
     if (page == 6 || page == 7 || page == 11)
     {
-        webEngineView2->back();
-        return;
+            webEngineView2->back();
+            return;
     }
+
     ui->action_34->setVisible(true);
-
-    if (page == 4)
-        ui->action_11->setVisible(true);
-
+    ui->action_11->setVisible(page == 4);
     ui->action_35->setVisible(false);
-
     webEngineView2->hide();
 }
 
@@ -727,11 +592,8 @@ void MainWindow::on_action_32_triggered()
 
 void MainWindow::on_action_33_triggered()
 {
-    QUrl url = webEngineView2->url();
-    QString urlString = url.toDisplayString();
-
     QClipboard *clipboard = QGuiApplication::clipboard();
-    clipboard->setText(urlString);
+    clipboard->setText(webEngineView2->url().toDisplayString());
     sendNotification(tr("Буфер обмена"), tr("Ссылка успешно скопирована в буфер обмена!"));
 }
 
@@ -739,20 +601,16 @@ void MainWindow::on_action_11_triggered()
 {
     UpdateIcon();
     if (hasUpdates) {
-        hide();
         Terminal terminal = getTerminal();
-        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-
-        process->setProgram(terminal.binary);
-        process->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("update"));
-        process->setProcessChannelMode(QProcess::MergedChannels);
-        process->start();
-        process->waitForFinished(-1);
-
-        if (process->exitCode() == QProcess::NormalExit) {
+        currentProcess = QSharedPointer<QProcess>::create(this);
+        connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
+        connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
             UpdateIcon();
-            show();
-        }
+        });
+        currentProcess->setProgram(terminal.binary);
+        currentProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("update"));
+        currentProcess->setProcessChannelMode(QProcess::MergedChannels);
+        currentProcess->start();
     } else
         sendNotification(tr("Обновление"), tr("Система в актуальном состоянии!"));
 }
@@ -761,17 +619,16 @@ void MainWindow::on_action_snap_triggered()
 {
     UpdateSnap();
     if (hasUpdatesSnap) {
-        hide();
         Terminal terminal = getTerminal();
-        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-        process->setProgram(terminal.binary);
-        process->setArguments(QStringList() << terminal.args << packageCommands.value(container).value("snap_find"));
-        process->setProcessChannelMode(QProcess::MergedChannels);
-        process->start();
-        process->waitForFinished(-1);
-
-        if (process->exitCode() == QProcess::NormalExit)
-            show();
+        currentProcess = QSharedPointer<QProcess>::create(this);
+        connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
+        connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
+            //ничего делать не нужно
+        });
+        currentProcess->setProgram(terminal.binary);
+        currentProcess->setArguments(QStringList() << terminal.args << packageCommands.value(container).value("snap_find"));
+        currentProcess->setProcessChannelMode(QProcess::MergedChannels);
+        currentProcess->start();
     } else
         sendNotification(tr("Обновление"), tr("Snap пакеты в актуальном состоянии!"));
 }
@@ -785,65 +642,44 @@ void MainWindow::on_action_13_triggered()
 void MainWindow::on_action_5_triggered()
 {
     if (page == 10)
-    {
-        QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create(this);
-
-        httpProcess->startDetached("pkexec", QStringList() << "sudo" << "systemctl" << "start" << "httpd");
-        httpProcess->closeWriteChannel();
-        httpProcess->waitForFinished();
-    }
+        QProcess::startDetached("pkexec", {"sudo", "systemctl", "start", "httpd"});
     else
     {
-        if (ui->list_app->currentItem() == nullptr) {
+        QListWidget* listWidget = ui->list_app;
+
+        if (listWidget->currentItem() == nullptr) {
             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для запуска!"));
             return;
         }
 
-        QString packageName = ui->list_app->currentItem()->text();
-        packageName = packageName.left(packageName.indexOf(" "));
+        QString packageName = listWidget->currentItem()->text().split(" ").first();
 
-        if (container == 2  && page == 4) {
-            // Путь к каталогу snap, содержащему файлы .desktop
-            QString snapDesktopDir = "/var/lib/snapd/desktop/applications/";
+        QString desktopFilePath;
+        if (container == 2 && page == 4) {
+            QDir dir("/var/lib/snapd/desktop/applications/");
+            QStringList snapDesktopFiles = dir.entryList({packageName + "_*.desktop"}, QDir::Files);
 
-            QDir dir(snapDesktopDir);
-            QStringList snapDesktopFiles = dir.entryList(QStringList() << packageName + "_*.desktop", QDir::Files);
-
-            if (!snapDesktopFiles.isEmpty()) {
-                // Возьмем первый найденный файл .desktop, но также можно добавить логику для выбора конкретного, если их несколько
-                QString desktopFilePath = snapDesktopDir + snapDesktopFiles.first();
-
-                // Запускаем файл .desktop
-                QString desktopFileName = QFileInfo(desktopFilePath).fileName();
-                QSharedPointer<QProcess>(new QProcess)->startDetached("gtk-launch", QStringList() << desktopFileName);
-            } else {
-                sendNotification(tr("Ошибка"), tr("Файл .desktop не найден для пакета ") + packageName);
-            }
+            if (!snapDesktopFiles.isEmpty())
+                desktopFilePath = dir.filePath(snapDesktopFiles.first());
         } else {
+            QProcess process;
+            process.start(packageCommands.value(pkg).value("list_files").at(0), {packageCommands.value(pkg).value("list_files").at(1), packageName});
+            process.waitForFinished(-1);
 
-            // Выполняем команду `-Ql packageName` и захватываем вывод
-            QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-            process->start(packageCommands.value(pkg).value("list_files").at(0), QStringList() << packageCommands.value(pkg).value("list_files").at(1) << packageName);
-            process->waitForFinished(-1);
-            QString output = process->readAllStandardOutput();
-
-            // Ищем строку, содержащую путь к файлу .desktop
-            QString desktopFilePath = "";
-            QStringList lines = output.split('\n');
-            for (const QString& line : lines) {
+            QString output = process.readAllStandardOutput();
+            for (const QString& line : output.split('\n')) {
                 if (line.contains(packageName) && line.contains(".desktop")) {
                     desktopFilePath = line.split(' ').last();
                     break;
                 }
             }
-
-            if (!desktopFilePath.isEmpty()) {
-                // Запускаем файл .desktop
-                QString desktopFileName = QFileInfo(desktopFilePath).fileName();
-                QSharedPointer<QProcess>(new QProcess)->startDetached("gtk-launch", QStringList() << desktopFileName);
-            } else
-                sendNotification(tr("Ошибка"), tr("Файл .desktop не найден для пакета ") + packageName);
         }
+
+        if (!desktopFilePath.isEmpty()) {
+            QString desktopFileName = QFileInfo(desktopFilePath).fileName();
+            QProcess::startDetached("gtk-launch", {desktopFileName});
+        } else
+            sendNotification(tr("Ошибка"), tr("Файл .desktop не найден для пакета ") + packageName);
     }
 }
 
@@ -865,27 +701,25 @@ void MainWindow::on_action_6_triggered()
     Terminal terminal = getTerminal();
 
     if (container == 2  && page == 4) {
-        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-        process->setProgram(terminal.binary);
-        process->setArguments(QStringList() << terminal.args << packageCommands.value(container).value("snap_remove") << packageName);
-        process->setProcessChannelMode(QProcess::MergedChannels);
-        process->start();
-        process->waitForFinished(-1);
-
-        if (process->exitCode() == QProcess::NormalExit) {
+        currentProcess = QSharedPointer<QProcess>::create(this);
+        connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
+        connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
             loadContentInstall();
-        }
-
+        });
+        currentProcess->setProgram(terminal.binary);
+        currentProcess->setArguments(QStringList() << terminal.args << packageCommands.value(container).value("snap_remove") << packageName);
+        currentProcess->setProcessChannelMode(QProcess::MergedChannels);
+        currentProcess->start();
     } else {
-        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-        process->setProgram(terminal.binary);
-        process->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("remove") << packageName);
-        process->setProcessChannelMode(QProcess::MergedChannels);
-        process->start();
-        process->waitForFinished(-1);
-
-        if (process->exitCode() == QProcess::NormalExit)
+        currentProcess = QSharedPointer<QProcess>::create(this);
+        connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
+        connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
             loadContentInstall();
+        });
+        currentProcess->setProgram(terminal.binary);
+        currentProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("remove") << packageName);
+        currentProcess->setProcessChannelMode(QProcess::MergedChannels);
+        currentProcess->start();
     }
 }
 
@@ -898,11 +732,10 @@ void MainWindow::on_action_4_triggered()
 
     QListWidget* listWidget = nullptr;
 
-    if (page == 2) {
+    if (page == 2)
         listWidget = ui->list_aur;
-    } else {
+    else
         listWidget = ui->list_app;
-    }
 
     if (listWidget->currentItem() == nullptr) {
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
@@ -914,34 +747,32 @@ void MainWindow::on_action_4_triggered()
 
     if (container == 2  && page == 4)
     {
-        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-        process->setProgram(terminal.binary);
-
-        process->setArguments(QStringList() << terminal.args << packageCommands.value(container).value("snap_refresh") << packageName);
-
-
-        process->setProcessChannelMode(QProcess::MergedChannels);
-        process->start();
-        process->waitForFinished(-1);
-
-        if (process->exitCode() == QProcess::NormalExit) {
+        currentProcess = QSharedPointer<QProcess>::create(this);
+        connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
+        connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
             loadContentInstall();
-        }
+        });
+        currentProcess->setProgram(terminal.binary);
+        currentProcess->setArguments(QStringList() << terminal.args << packageCommands.value(container).value("snap_refresh") << packageName);
+        currentProcess->setProcessChannelMode(QProcess::MergedChannels);
+        currentProcess->start();
     }
     else
     {
-        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-        process->setProgram(terminal.binary);
-        process->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("install") << packageName);
-        process->setProcessChannelMode(QProcess::MergedChannels);
-        process->start();
-        process->waitForFinished(-1);
+        if (clearinstall && (pkg == 0 || pkg == 1))
+            removeDirectory(QDir::homePath() + "/.cache/" + ((pkg == 0) ? "yay/" : "paru/clone/") + packageName);
 
-        if (process->exitCode() == QProcess::NormalExit)
+        currentProcess = QSharedPointer<QProcess>::create(this);
+        connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
+        connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
             loadContentInstall();
+        });
+        currentProcess->setProgram(terminal.binary);
+        currentProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("install") << packageName);
+        currentProcess->setProcessChannelMode(QProcess::MergedChannels);
+        currentProcess->start();
     }
 }
-
 
 void MainWindow::on_action_30_triggered()
 {
@@ -957,7 +788,6 @@ void MainWindow::on_action_30_triggered()
 
     QString packageName = ui->list_aur->item(ui->list_aur->currentRow())->text();
     Terminal terminal = getTerminal();
-
     QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "bash" << mainDir + "sh/PKGBUILD.sh" << *lang << helper << packageName);
 }
 
@@ -967,55 +797,34 @@ void MainWindow::on_push_grub_clicked()
     QString grubContent = ui->line_grub->text().trimmed();
     QString timeout = ui->spin_grub->value() > 0 ? QString::number(ui->spin_grub->value()) : "5";
 
-    // Создаем процесс для выполнения команды с pkexec
-    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-    process->setProgram("pkexec");
+    currentProcess = QSharedPointer<QProcess>::create(this);
+    connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
+    connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
+        sendNotification(tr("GRUB изменен"), tr("Изменения GRUB вступят в силу после перезагрузки."));
+    });
+    currentProcess->setProgram("pkexec");
     QStringList arguments;
     arguments << "bash" << "-c" << "sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"" + grubContent + "\"/; s/^GRUB_TIMEOUT=.*/GRUB_TIMEOUT=\"" + timeout + "\"/' " + filename + " && sudo grub-mkconfig -o /boot/grub/grub.cfg";
-    process->setArguments(arguments);
-
-    // Запускаем процесс с pkexec
-    process->start();
-    if (!process->waitForStarted()) {
-        sendNotification(tr("Ошибка выполнения"), tr("Не удалось запустить pkexec"));
-        return;
-    }
-
-    // Ждем, пока процесс завершится
-    if (!process->waitForFinished(-1)) {
-        sendNotification(tr("Ошибка выполнения"), tr("Не удалось выполнить команду pkexec"));
-        return;
-    }
-
-    // Проверяем код выхода
-    if (process->exitCode() != QProcess::NormalExit || process->exitStatus() != QProcess::ExitStatus::NormalExit) {
-        return;
-    }
-    sendNotification(tr("GRUB изменен"), tr("Изменения GRUB вступят в силу после перезагрузки."));
+    currentProcess->setArguments(arguments);
+    currentProcess->setProcessChannelMode(QProcess::MergedChannels);
+    currentProcess->start();
 }
 
 void MainWindow::on_action_addsh_triggered()
 {
-    // Создание диалогового окна
     QDialog* dialog = new QDialog(this);
     dialog->setWindowTitle(tr("Добавить скрипт"));
 
-    // Создание элементов управления
     QLabel* nameLabel = new QLabel(tr("Имя файла:"), dialog);
     QLineEdit* nameLineEdit = new QLineEdit(dialog);
-
     QLabel* nameRuLabel = new QLabel(tr("Название скрипта:"), dialog);
     QLineEdit* nameRuLineEdit = new QLineEdit(dialog);
-
     QLabel* msgRuLabel = new QLabel(tr("Описание скрипта:"), dialog);
     QLineEdit* msgRuLineEdit = new QLineEdit(dialog);
-
     QLabel* scriptLabel = new QLabel(tr("Тело скрипта:"), dialog);
     QTextEdit* scriptTextEdit = new QTextEdit(dialog);
-
     QPushButton* saveButton = new QPushButton(tr("Сохранить"), dialog);
 
-    // Создание компоновщика для размещения элементов управления
     QVBoxLayout* layout = new QVBoxLayout(dialog);
     dialog->setStyleSheet("QWidget{background-color:#2d2b79;} QLineEdit,QTextEdit{background-color:#21205b;padding:10px;border-radius:10px;} QLabel{color:#fff;font-size:10pt;}QPushButton{border-radius:10px;padding:5px 20px;background-color:#916ee4;color:#fff;}");
 
@@ -1028,11 +837,8 @@ void MainWindow::on_action_addsh_triggered()
     layout->addWidget(scriptLabel);
     layout->addWidget(scriptTextEdit);
     layout->addWidget(saveButton);
-
-    // Установка компоновщика для диалогового окна
     dialog->setLayout(layout);
 
-    // Обработка нажатия на кнопку "Сохранить"
     connect(saveButton, &QPushButton::clicked, this, [=]() {
         QString fileName = nameLineEdit->text() + ".sh";
         QString filePath = mainDir + "sh/" + fileName;
@@ -1043,14 +849,11 @@ void MainWindow::on_action_addsh_triggered()
             QTextStream stream(&file);
             stream << "#name_" + *lang + " " << nameRuLineEdit->text() << "\n";
             stream << "#msg_ " + *lang + " " << msgRuLineEdit->text() << "\n";
-
             stream << "#icon 31" << "\n";
             stream << "#!/bin/bash" << "\n";
             stream << scriptTextEdit->toPlainText();
-
             file.close();
 
-            // Загрузка обновленного списка скриптов
             loadScripts(mainDir + "sh/", ui->list_sh);
             sendNotification(tr("Добавление"), tr("Скрипт успешно добавлен!"));
         }
@@ -1058,8 +861,6 @@ void MainWindow::on_action_addsh_triggered()
         dialog->close();
         dialog->deleteLater();
     });
-
-    // Отображение диалогового окна
     dialog->exec();
 }
 
@@ -1070,16 +871,9 @@ void MainWindow::on_action_rmsh_triggered()
         return;
     }
 
-    // Получаем указатель на текущий выбранный элемент списка
     QListWidgetItem* selectedItem = ui->list_sh->currentItem();
-
-    // Получаем содержимое элемента списка (название скрипта на основе языка)
     QString itemContent = selectedItem->text();
-
-    // Создаем QMap для хранения соответствия имени скрипта и его пути
     QMap<QString, QString> scriptMap;
-
-    // Ищем файлы со скриптами и заполняем QMap
     QDir dir(mainDir + "sh/");
     QStringList filter;
     filter << "*.sh";
@@ -1087,8 +881,6 @@ void MainWindow::on_action_rmsh_triggered()
     for (const QFileInfo& fileInfo : fileList)
     {
         QString filePath = fileInfo.filePath();
-
-        // Читаем содержимое файла для сопоставления имени скрипта
         QFile scriptFile(filePath);
         if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text))
         {
@@ -1107,10 +899,7 @@ void MainWindow::on_action_rmsh_triggered()
         }
     }
 
-    // Получаем путь к файлу, соответствующему выбранному элементу списка
     QString filePath = scriptMap.value(itemContent);
-
-    // Удаляем файл и элемент списка, если путь найден
     if (!filePath.isEmpty() && QFile::remove(filePath))
     {
         delete ui->list_sh->takeItem(ui->list_sh->row(selectedItem));
@@ -1128,7 +917,7 @@ QString MainWindow::getScriptContent(const QString& filePath)
         scriptFile.close();
         return content;
     }
-    return QString(); // Возвращаем пустую строку в случае ошибки чтения файла
+    return QString();
 }
 
 void MainWindow::on_action_editsh_triggered()
@@ -1137,14 +926,8 @@ void MainWindow::on_action_editsh_triggered()
         sendNotification(tr("Внимание"), tr("Выберите скрипт из списка для изменения!"));
         return;
     }
-
-    // Получаем указатель на текущий выбранный элемент списка
     QListWidgetItem* selectedItem = ui->list_sh->currentItem();
-
-    // Получаем содержимое элемента списка (название скрипта на основе языка)
     QString itemContent = selectedItem->text();
-
-    // Ищем файл с соответствующим названием скрипта
     QDir dir(mainDir + "sh/");
     QStringList filter;
     filter << "*.sh";
@@ -1153,8 +936,6 @@ void MainWindow::on_action_editsh_triggered()
     {
         QString filePath = fileInfo.filePath();
         QString fileName = fileInfo.fileName();
-
-        // Читаем содержимое файла для сопоставления имени скрипта
         QFile scriptFile(filePath);
         if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text))
         {
@@ -1167,44 +948,27 @@ void MainWindow::on_action_editsh_triggered()
                     QString itemName = line.mid(12).trimmed();
                     if (itemName == itemContent)
                     {
-                        // Закрываем файл, чтобы его можно было перезаписать
                         scriptFile.close();
-
-                        // Создаем диалоговое окно для редактирования содержимого
                         QDialog* editDialog = new QDialog(this);
                         editDialog->setWindowTitle(tr("Редактировать скрипт"));
                         editDialog->resize(500, 300);
-
-                        // Создаем элементы интерфейса
                         QLabel* nameLabel = new QLabel(tr("Имя файла:"));
                         QLineEdit* nameEdit = new QLineEdit(fileName);
                         QLabel* scriptLabel = new QLabel(tr("Тело скрипта:"));
                         QTextEdit* scriptEdit = new QTextEdit();
                         QPushButton* saveButton = new QPushButton(tr("Сохранить"));
-
-                        // Устанавливаем содержимое скрипта в поле редактирования
                         scriptEdit->setPlainText(getScriptContent(filePath));
-
                         QVBoxLayout* layout = new QVBoxLayout(editDialog);
                         editDialog->setStyleSheet("QWidget{background-color:#2d2b79;} QLineEdit,QTextEdit{background-color:#21205b;padding:10px;border-radius:10px;} QLabel{color:#fff;font-size:10pt;}QPushButton{border-radius:10px;padding:5px 20px;background-color:#916ee4;color:#fff;}");
-
-                        // Добавляем элементы в компоновщик
                         layout->addWidget(nameLabel);
                         layout->addWidget(nameEdit);
                         layout->addWidget(scriptLabel);
                         layout->addWidget(scriptEdit);
                         layout->addWidget(saveButton);
-
-                        // Устанавливаем компоновщик для диалогового окна
                         editDialog->setLayout(layout);
-
-                        // Подключаем сигнал нажатия кнопки "Сохранить" к соответствующему слоту
                         connect(saveButton, &QPushButton::clicked, this, [=]() mutable {
-                            // Получаем новое имя файла и новое содержимое скрипта
                             QString newFileName = nameEdit->text();
                             QString newScriptContent = scriptEdit->toPlainText();
-
-                            // Перезаписываем файл с новыми данными
                             QString newFilePath = mainDir + "sh/" + newFileName;
                             QFile newScriptFile(newFilePath);
                             if (newScriptFile.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -1213,19 +977,11 @@ void MainWindow::on_action_editsh_triggered()
                                 newScriptStream << newScriptContent;
                                 newScriptFile.close();
                             }
-
-                            // Обновляем элемент списка с новым именем
                             selectedItem->setText(newFileName);
-
-                            // Закрываем окно редактирования скрипта
                             editDialog->close();
-
-                            // Обновляем список скриптов
                             loadScripts(mainDir + "sh/", ui->list_sh);
                             sendNotification(tr("Сохранение"), tr("Скрипт успешно изменен!"));
                         });
-
-                        // Отображаем диалоговое окно
                         editDialog->exec();
                         return;
                     }
@@ -1236,7 +992,6 @@ void MainWindow::on_action_editsh_triggered()
         }
     }
 }
-
 //---#####################################################################################################################################################
 //--################################################################# ОСНОВНЫЕ ФУНКЦИИ ##################################################################
 //-#####################################################################################################################################################
@@ -1260,7 +1015,6 @@ void MainWindow::showListContextMenu(const QPoint& pos)
         return;
 
     QListWidgetItem* selectedItem = listWidget->itemAt(pos);
-
     if (!selectedItem)
         return;
 
@@ -1277,7 +1031,6 @@ void MainWindow::showListContextMenu(const QPoint& pos)
     connect(&action3, &QAction::triggered, this, &MainWindow::on_action_6_triggered);
     connect(&action4, &QAction::triggered, this, &MainWindow::on_action_34_triggered);
     connect(&action5, &QAction::triggered, this, &MainWindow::on_action_5_triggered);
-
     connect(&action6, &QAction::triggered, this, &MainWindow::on_action_4_triggered);
 
     if (page == 2) {
@@ -1289,26 +1042,22 @@ void MainWindow::showListContextMenu(const QPoint& pos)
         contextMenu.addAction(&action3);
     }
     contextMenu.addAction(&action4);
-
     contextMenu.exec(listWidget->viewport()->mapToGlobal(pos));
 }
 
 void MainWindow::createSearchBar()
 {
     ui->menubar->hide();
-
-    // Создаем главную панель инструментов
     QToolBar* toolbar = addToolBar("topmenu");
-    toolbar->setMovable(false); // Запрещаем перемещение панели инструментов
-    toolbar->setContentsMargins(0, 0, 0, 0); // Устанавливаем отступы на нулевые
-    toolbar->setContextMenuPolicy(Qt::PreventContextMenu); // Запрещаем контекстное меню панели инструментов
+    toolbar->setMovable(false);
+    toolbar->setContentsMargins(0, 0, 0, 0);
+    toolbar->setContextMenuPolicy(Qt::PreventContextMenu);
     toolbar->setStyleSheet("QToolBar { background: #1f1f1f; color: #ffffff; padding: 3px;}"
                            "QToolButton { spacing: 3px; padding: 5px; margin-right:5px; border: 0; }"
                            "QToolButton:selected, QToolButton:pressed,QToolButton:hover { border-radius: 5px; background-color: #916ee4; }"
                            "QToolButton::menu-indicator { image: none; }");
     toolbar->setFixedHeight(38);
 
-    // Переносим содержимое QMenuBar в панель инструментов
     QMenuBar* myMenuBar = ui->menubar;
     for (QAction* action : myMenuBar->actions()) {
         if (action->menu()) {
@@ -1317,12 +1066,11 @@ void MainWindow::createSearchBar()
             menuButton->setText(action->text());
             menuButton->setIcon(action->icon()); // Устанавливаем иконку из пункта меню, если есть
             menuButton->setMenu(action->menu());
-
             toolbar->addWidget(menuButton);
         }
     }
 
-    // Создаем строку поиска
+    // Поиск
     searchLineEdit = QSharedPointer<QLineEdit>(new QLineEdit(this));
     searchLineEdit->setContextMenuPolicy(Qt::CustomContextMenu);
     searchLineEdit->setStyleSheet("QLineEdit {padding-left:30px;border-radius: 5px;background-image: url(:/img/m4.png);border:0;background-repeat: no-repeat;background-position: left center;background-color: #242424;}");
@@ -1330,22 +1078,12 @@ void MainWindow::createSearchBar()
     searchLineEdit->setContentsMargins(10, 0, 10, 0);
     toolbar->addWidget(searchLineEdit.data());
 
-    // Создаем QStandardItemModel вместо QStringListModel
+    // Комплитер
     completerModel = new QStandardItemModel(this);
     completer = new QCompleter(completerModel, this);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setFilterMode(Qt::MatchContains);
-
     searchLineEdit->setCompleter(completer);
-
-    // Загружаем историю поиска
-    QStringList history = searchHistorySettings.value("history").toStringList();
-
-    // Создаем элементы из истории и добавляем их в модель
-    for (const QString& entry : history) {
-        QStandardItem* item = new QStandardItem(QIcon(":/img/24.png"), entry);
-        completerModel->appendRow(item);
-    }
 
     if (QAbstractItemView* popup = completer->popup()) {
         popup->setStyleSheet("QAbstractItemView {background-color:#1f1f1f;padding: 3px 5px; border: 0;border-radius: 5px;}"
@@ -1359,14 +1097,13 @@ void MainWindow::createSearchBar()
 
     connect(searchLineEdit.data(), &QLineEdit::textChanged, this, [=](const QString& searchText) {
         searchTextChanged(searchText);
-        updateCompleterModel(searchText);
+        updateCompleterModel();
     });
 
     connect(searchLineEdit.data(), &QLineEdit::returnPressed, this, [this] {
         search(searchLineEdit->text());
     });
 
-    // Внутри функции, где создается searchLineEdit
     searchLineEdit->installEventFilter(this);
 }
 
@@ -1384,17 +1121,13 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
 
 void MainWindow::handleServerResponseSearch(const QString& reply)
 {
-    // Отключаем предыдущий процесс, если он существует
     if (currentProcess && currentProcess->state() == QProcess::Running) {
-        currentProcess->disconnect(); // Отключаем все сигналы и слоты
-        currentProcess->kill(); // Принудительно завершаем процесс
-        currentProcess->waitForFinished(); // Ждем завершения
+        currentProcess->disconnect();
+        currentProcess->kill();
+        currentProcess->waitForFinished();
     }
-
-    // Очищаем модель комплитера
     completerModel->clear();
 
-    // Запускаем новый процесс
     QString searchCommand = packageCommands.value(pkg).value("search").at(0);
     QStringList arguments = {packageCommands.value(pkg).value("search").at(1), reply};
 
@@ -1405,7 +1138,6 @@ void MainWindow::handleServerResponseSearch(const QString& reply)
 
 void MainWindow::onCurrentProcessReadyReadSearch()
 {
-    // Очищаем модель комплитера
     completerModel->clear();
 
     while (currentProcess->canReadLine()) {
@@ -1417,14 +1149,13 @@ void MainWindow::onCurrentProcessReadyReadSearch()
             createAndAddListItemSearch(match.captured(1));
         }
     }
-
-    // Вызываем complete() для отображения подсказок
     completer->complete();
 }
 
 void MainWindow::createAndAddListItemSearch(const QString& packageName)
 {
-    QRegularExpressionMatch match = QRegularExpression("(\\w+)/\\S+").match(packageName);
+    static const QRegularExpression regex("(\\w+)/\\S+");
+    QRegularExpressionMatch match = regex.match(packageName);
 
     if (match.hasMatch()) {
         QString repoName = match.captured(1);
@@ -1433,7 +1164,6 @@ void MainWindow::createAndAddListItemSearch(const QString& packageName)
         QString packageNameWithoutPrefix = packageName;
         QString prefixToRemove = repoName + "/";
 
-        // Удаление префикса, если применимо
         if (!prefixToRemove.isEmpty() && packageNameWithoutPrefix.startsWith(prefixToRemove)) {
             packageNameWithoutPrefix.remove(0, prefixToRemove.length());
         }
@@ -1445,15 +1175,11 @@ void MainWindow::createAndAddListItemSearch(const QString& packageName)
 
 void MainWindow::search(const QString& searchText)
 {
-    if (page == 2){
-        saveSearchHistory(searchText);
-
+    if (page == 2)
         handleServerResponse(searchText);
-    }
     else if (page == 6 || page == 7 || page == 10 || page == 11)
         webEngineView2->setUrl(QUrl(searchText));
-    else if (page == 14)
-    {
+    else if (page == 14) {
         if (nvidia == 0)
             checkForDowngrades(searchText);
         else
@@ -1463,63 +1189,26 @@ void MainWindow::search(const QString& searchText)
 
 void MainWindow::searchTextChanged(const QString& searchText)
 {
-    if (page == 2)
-        searchAndScroll(ui->list_aur, searchText);
-
-    else if (page == 4)
-        searchAndScroll(ui->list_app, searchText);
-
-    else if (page == 3)
-        searchAndScroll(ui->list_sh, searchText);
-
-    else if (page == 14)
-        searchAndScroll(ui->list_downgrade, searchText);
-
-    else if (page == 111)
-    {
-        searchAndScroll(ui->list_journal, searchText);
-        searchAndScroll(ui->list_cfg, searchText);
+    switch (page) {
+        case 2: searchAndScroll(ui->list_aur, searchText); break;
+        case 4: searchAndScroll(ui->list_app, searchText); break;
+        case 3: searchAndScroll(ui->list_sh, searchText); break;
+        case 14: searchAndScroll(ui->list_downgrade, searchText); break;
+        case 111: searchAndScroll(ui->list_journal, searchText); searchAndScroll(ui->list_cfg, searchText); break;
+        case 112: searchAndScroll(ui->list_bench, searchText); break;
+        case 113: searchAndScroll(ui->list_repair, searchText); break;
+        default: break;
     }
-
-    else if (page == 112)
-        searchAndScroll(ui->list_bench, searchText);
-
-    else if (page == 113)
-        searchAndScroll(ui->list_repair, searchText);
 }
 
-void MainWindow::saveSearchHistory(const QString& searchText)
+void MainWindow::updateCompleterModel()
 {
-    QStringList history = searchHistorySettings.value("history").toStringList();
-    history.prepend(searchText); // Добавляем в начало истории
-    history.removeDuplicates(); // Удаляем дубликаты
-    while (history.size() > maxHistorySize) {
-        history.removeLast(); // Обрезаем до максимального размера
-    }
-    searchHistorySettings.setValue("history", history);
-}
-
-void MainWindow::updateCompleterModel(const QString& searchText) {
-    // Очищаем модель
     completerModel->clear();
-
-    if(page == 2)
-    {
-        QStringList history = searchHistorySettings.value("history").toStringList();
-
-        // Создаем элементы из истории и добавляем только те, которые соответствуют фильтру
-        for (const QString& entry : history) {
-            if (entry.contains(searchText, Qt::CaseInsensitive)) {
-                QStandardItem* item = new QStandardItem(QIcon(":/img/24.png"), entry);
-                completerModel->appendRow(item);
-            }
-        }
-
+    if (page == 2 || page == 4)
         completer->complete();
-    }
 }
 
-
+//not
 void MainWindow::searchAndScroll(QAbstractItemView* view, const QString& text)
 {
     if (QListWidget* listWidget = qobject_cast<QListWidget*>(view))
@@ -1535,26 +1224,21 @@ void MainWindow::searchAndScroll(QAbstractItemView* view, const QString& text)
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-
     //-##################################################################################
     //-######################### ПОДКЛЮЧЕНИЕ КОНФИГУРАЦИЙ ###############################
     //-##################################################################################
-
     setupListContextMenu();
     createSearchBar();
-
-    loadSettings();         //загрузка настроек
+    loadSettings();
 
     checkVersionAndClear();
-    UpdateIcon();           //получаем иконку трея
+    UpdateIcon();
 
     list = 0;
-    loadContent(0,true);          //загрузка списков приложений игр и тп
+    loadContent(0, true);
 
     loadContentInstall();
-
-    loadFolders();          //загрузка конфигов
+    loadFolders();
     loadingListWidget();
     loadSystemInfo();
 
@@ -1570,6 +1254,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->check_repair->setChecked(repair);
     ui->check_animload->setChecked(animload);
     ui->check_updateinstall->setChecked(updinst);
+    ui->check_clearinstall->setChecked(clearinstall);
     ui->combo_mainpage->setCurrentIndex(mainpage);
     ui->combo_helper->setCurrentIndex(pkg);
     ui->combo_animload->setCurrentIndex(animloadpage);
@@ -1585,28 +1270,22 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     ui->dial_volnotify->setValue(volumenotify);
 
-    if(*lang == "ru_RU")
+    if (*lang == "ru_RU")
         ui->combo_lang->setCurrentIndex(0);
-    else if(*lang == "en_US")
+    else if (*lang == "en_US")
         ui->combo_lang->setCurrentIndex(1);
 
-    if(pkg == 0)
-        helper = "yay";
-    else
-        helper = "paru";
+    helper = (pkg == 0) ? "yay" : "paru";
 
-
-    // Создание экземпляра QNetworkAccessManager
+    // Создание QNetworkAccessManager
     manager = new QNetworkAccessManager(this);
-
-    // Настройка обработки сигнала finished
     connect(manager, &QNetworkAccessManager::finished, this, &MainWindow::onReplyFinished);
 
     checkForDowngrades("steam");
-
     showLoadingAnimation(false);
 }
 
+//not
 void MainWindow::checkVersionAndClear() {
     QSettings settings(filePath, QSettings::IniFormat);
     QString storedVersion = settings.value("Version").toString();
@@ -1623,8 +1302,7 @@ void MainWindow::checkVersionAndClear() {
         QStringList subDirs = baseDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
         for (const QString& subDir : subDirs) {
             if (!excludedFolders.contains(subDir)) {
-                QDir subDirDir(baseDir.absoluteFilePath(subDir));
-                subDirDir.removeRecursively();
+                removeDirectory(baseDir.absoluteFilePath(subDir));
             }
         }
 
@@ -1634,7 +1312,6 @@ void MainWindow::checkVersionAndClear() {
         removeDirectory(mainDir + "cfg/");
         removeDirectory(mainDir + "bench/");
         removeDirectory(mainDir + "other/");
-
         sendNotification(tr("Обновление kLaus"), tr("Версия kLaus поменялась, конфигурация сброшена!"));
     }
 }
@@ -1644,18 +1321,13 @@ void MainWindow::removeScripts(const QStringList& resourcePaths, const QString& 
     QDir().mkpath(baseDir);
     for (const QString& path : resourcePaths)
     {
-        QString fileName = QFileInfo(path).fileName();
-        QString filePath = baseDir + fileName;
-        QFile::remove(filePath);
+        QFile::remove(baseDir + QFileInfo(path).fileName());
     }
 }
 
 void MainWindow::removeDirectory(const QString& dirPath)
 {
-    QDir dir(dirPath);
-    if (dir.exists()) {
-        dir.removeRecursively(); // Удаляем папку и ее содержимое рекурсивно
-    }
+    QDir(dirPath).removeRecursively();
 }
 
 void MainWindow::saveScripts(const QStringList& resourcePaths, const QString& baseDir)
@@ -1663,30 +1335,22 @@ void MainWindow::saveScripts(const QStringList& resourcePaths, const QString& ba
     QDir().mkpath(baseDir);
     for (const QString& path : resourcePaths)
     {
-        QString fileName = QFileInfo(path).fileName();
-        QString filePath = baseDir + fileName;
-
-        QFile::copy(path, filePath);
+        QFile::copy(path, baseDir + QFileInfo(path).fileName());
     }
 }
 
 MainWindow::~MainWindow()
 {
     if (cacheremove == 2)
-    {
-        QDir cacheFolderDir(mainDir + "cache/");
-        cacheFolderDir.removeRecursively();
-    }
+        removeDirectory(mainDir + "cache/");
 
     iconMap.clear();
     delete previousAction;
     //delete actionLoad;
-
     delete orphanButton;
     delete cacheButtonHelper;
     delete cacheButtonPacman;
 
-    // Очистить список
     snapPackageNames.clear();
     shResourcePaths.clear();
     clearResourcePaths.clear();
@@ -1701,23 +1365,17 @@ MainWindow::~MainWindow()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (trayon == 2) {
-        QApplication::quit();
+        qApp->quit();
     } else {
-        hide();             // Скрываем главное окно
-        event->ignore();    // Игнорируем событие закрытия
+        hide();
+        event->ignore();
     }
 }
 
 void MainWindow::loadSound(int soundIndex)
 {
     QSoundEffect* beep = new QSoundEffect(this);
-    QString soundPath;
-
-    if (soundIndex == 1)
-        soundPath = "qrc:/media/message.wav";
-    else
-        soundPath = "qrc:/media/sound.wav";
-
+    const QString soundPath = (soundIndex == 1) ? "qrc:/media/message.wav" : "qrc:/media/sound.wav";
     beep->setSource(QUrl(soundPath));
 
     if (soundIndex == 1) {
@@ -1725,17 +1383,16 @@ void MainWindow::loadSound(int soundIndex)
         volnotify = static_cast<float>(static_cast<int>(volnotify * 10.0f)) / 10.0f;
         beep->setVolume(volnotify);
     }
-
     beep->play();
 }
 
+//not
 void MainWindow::loadSettings()
 {
     //-##################################################################################
     //-########################## НАСТРОЕННЫЕ ПЕРЕМЕННЫЕ ################################
     //-##################################################################################
-    previousAction = ui->action_2; //предыдущий action [заглушка]
-
+    previousAction = ui->action_2; //[заглушка]
     webEngineView2 = nullptr;
 
     if (!webEngineView2) {
@@ -1745,12 +1402,10 @@ void MainWindow::loadSettings()
         layout2->setContentsMargins(0, 0, 0, 0);
         layout2->addWidget(webEngineView2);
     }
-
-    webEngineView2->raise(); // браузер выше всех
+    webEngineView2->raise();
 
     removeToolButtonTooltips(ui->toolBar);
     removeToolButtonTooltips(ui->toolBar_2);
-
     //-##################################################################################
     //-############################## ОСНОВНАЯ ЧАСТЬ ####################################
     //-##################################################################################
@@ -1763,6 +1418,7 @@ void MainWindow::loadSettings()
     repair = settings.value("RepairBackup", 2).toInt();
     animload = settings.value("AnimLoad", 2).toInt();
     updinst = settings.value("UpdateInstall", 2).toInt();
+    clearinstall = settings.value("ClearInstall", 2).toInt();
     container = settings.value("Snap", 0).toInt();
     cacheremove = settings.value("CacheRemove", 2).toInt();
     volumenotify = settings.value("VolumeNotify", 30).toInt();
@@ -1781,12 +1437,8 @@ void MainWindow::loadSettings()
     webEngineView2->setZoomFactor(0.9);
     ui->toolBar_2->setFixedWidth(100);
 
-    //запретить выключать панели
     ui->toolBar->setContextMenuPolicy(Qt::PreventContextMenu);
     ui->toolBar_2->setContextMenuPolicy(Qt::PreventContextMenu);
-
-    // Запрещаем редактирование ячеек
-    ui->list_aur->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     switch(mainpage) {
         case 0:
@@ -1820,65 +1472,46 @@ void MainWindow::loadSettings()
             previousAction = ui->action_12;
             break;
     }
-
     //-##################################################################################
     //-############################## СИГНАЛЫ И СЛОТЫ ###################################
     //-##################################################################################
     connect(ui->time_update, &QTimeEdit::timeChanged, this, &MainWindow::onTimeChanged);
     connect(ui->list_aur, &QListWidget::itemClicked, this, &MainWindow::onListAurItemClicked);
     connect(ui->list_app, &QListWidget::itemClicked, this, &MainWindow::onListAurItemClicked);
-
     connect(ui->list_downgrade, &QListWidget::itemDoubleClicked, this, &MainWindow::onListDowngradeItemDoubleClicked);
-
     connect(webEngineView2, &QWebEngineView::urlChanged, this, [this](const QUrl &url) {
         QString urlString = url.toString();
         searchLineEdit->setText(urlString);
     });
-
     //-##################################################################################
     //-############################### ЗАНЯТОЕ МЕСТО ####################################
     //-##################################################################################
     QProgressBar* progressBar = new QProgressBar();
     progressBar->setFixedSize(50, 30);
-
-    // Получаем информацию о корневом каталоге
     QStorageInfo storageInfo = QStorageInfo::root();
-
-    // Получаем количество свободных байтов на диске
     qint64 freeBytes = storageInfo.bytesAvailable();
-
-    // Вычисляем процент занятого места на диске
     int usedPercentage = 100 - static_cast<int>((freeBytes * 100) / storageInfo.bytesTotal());
-
-    // Устанавливаем значение прогресс-бара в процентах
     progressBar->setValue(usedPercentage);
-
-    // Устанавливаем текст на прогресс-баре, отображающий количество свободных гигабайтов
     progressBar->setFormat("");
-
     QLabel* label = new QLabel(tr("свободно %1 ГиБ").arg(QString::number(freeBytes / (1024.0 * 1024.0 * 1024.0), 'f', 2)));
 
     QWidget* containerWidget = new QWidget();
     QHBoxLayout* layout = new QHBoxLayout(containerWidget);
-    layout->addStretch(); // Добавляем растягивающий элемент, чтобы выровнять элементы по правому краю
+    layout->addStretch();
     layout->addWidget(progressBar);
     layout->addWidget(label);
     layout->setContentsMargins(0, 0, 0, 0);
+    ui->statusBar->addPermanentWidget(containerWidget, 1);
 
-    ui->statusBar->addPermanentWidget(containerWidget, 1); // Установите растягиваемый элемент с индексом 1
-
-    // Устанавливаем цвет для прогресс-бара
     QColor customColor(42, 40, 112);
     QPalette palette = progressBar->palette();
     palette.setColor(QPalette::Highlight, customColor);
     progressBar->setPalette(palette);
 
-    // Выравниваем содержимое статусного бара по правому краю
     QHBoxLayout* statusBarLayout = qobject_cast<QHBoxLayout*>(ui->statusBar->layout());
     if (statusBarLayout)
         statusBarLayout->setAlignment(Qt::AlignRight);
 
-    // Выравниваем текст метки по правому краю
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     //-##################################################################################
@@ -1886,10 +1519,7 @@ void MainWindow::loadSettings()
     //-##################################################################################
     QWebEngineProfile* profile = QWebEngineProfile::defaultProfile();
     profile->setHttpCacheType(QWebEngineProfile::MemoryHttpCache);
-
-
     connect(webEngineView2->page(), &QWebEnginePage::loadStarted, this, [=]() {
-
         if (page == 2 || page == 4 || page == 6 || page == 7) {
 
             QFile scriptFile(":/loading.browser.js");
@@ -1900,7 +1530,6 @@ void MainWindow::loadSettings()
             }
         }
     });
-
     connect(webEngineView2->page(), &QWebEnginePage::loadFinished, this, [=](bool success) mutable{
         if (success) {
             if (page == 6 || page == 7 || page == 10 || page == 11)
@@ -1926,9 +1555,7 @@ void MainWindow::loadSettings()
         }
         showLoadingAnimation(false);
     });
-
     ui->list_aur->setSelectionBehavior(QAbstractItemView::SelectRows);
-
     //-##################################################################################
     //-###################### КОПИРОВАНИЕ ИНФОРМАЦИИ О СИСТЕМЕ ##########################
     //-##################################################################################
@@ -1939,12 +1566,10 @@ void MainWindow::loadSettings()
 
         connect(action, &QAction::triggered, this, [action, this]() {
 
-            // Копирование текста в буфер обмена
             QString text = action->text();
             QClipboard* clipboard = QApplication::clipboard();
             clipboard->setText(text);
 
-            // Копирование пользовательских данных в буфер обмена
             QVariant data = action->data();
             if (data.isValid()) {
                 QString customData = data.toString();
@@ -1959,7 +1584,6 @@ void MainWindow::loadSettings()
     //-##################################################################################
     QString labelvolnotify = QString(tr("Звук уведомлений: %1/100")).arg(volumenotify);
     ui->label_volnotify->setText(labelvolnotify);
-
     //-##################################################################################
     //-############################# ТАЙМЕР ИКОНКИ ТРЕЯ #################################
     //-##################################################################################
@@ -1968,16 +1592,13 @@ void MainWindow::loadSettings()
     updateIconTimer->setSingleShot(false);
     connect(updateIconTimer.data(), &QTimer::timeout, this, &MainWindow::UpdateIcon);
     updateIconTimer->start();
-
     //-##################################################################################
     //-############################## ТАЙМЕР COFFETIME ##################################
     //-##################################################################################
     teaTimer = QSharedPointer<QTimer>::create(this);
     connect(teaTimer.data(), &QTimer::timeout, this, &MainWindow::TeaTimer);
-
     workTimer = QSharedPointer<QTimer>::create(this);
     connect(workTimer.data(), &QTimer::timeout, this, &MainWindow::WorkTimer);
-
     //-##################################################################################
     //-################################# ИКОНКИ ТРЕЯ ####################################
     //-##################################################################################
@@ -1985,14 +1606,12 @@ void MainWindow::loadSettings()
     trayIcon.setToolTip("kLaus ;)");
     trayIcon.show();
 
-     // Создание контекстного меню для иконки трея
     QMenu *trayMenu = new QMenu();
 
     QAction *action_11 = new QAction(tr("Обновить систему"), trayMenu);
     action_11->setIcon(QIcon(":/img/16.png"));
     trayMenu->addAction(action_11);
 
-    // Создание действия
     QAction *action_2 = new QAction(tr("Каталог пакетов"), trayMenu);
     action_2->setIcon(QIcon(":/img/2.png"));
     trayMenu->addAction(action_2);
@@ -2021,10 +1640,7 @@ void MainWindow::loadSettings()
     exitAction->setIcon(QIcon(":/img/18.png"));
     trayMenu->addAction(exitAction);
 
-    // Установка контекстного меню для иконки трея
     trayIcon.setContextMenu(trayMenu);
-
-    // Связывание событий нажатия на пункты меню с обработчиками
     connect(action_11, &QAction::triggered, this, &MainWindow::on_action_11_triggered);
     connect(action_2, &QAction::triggered, this, &MainWindow::on_action_2_triggered);
     connect(action_7, &QAction::triggered, this, &MainWindow::on_action_7_triggered);
@@ -2034,7 +1650,6 @@ void MainWindow::loadSettings()
     connect(action_12, &QAction::triggered, this, &MainWindow::on_action_12_triggered);
     connect(exitAction, &QAction::triggered, qApp, &QApplication::quit);
 
-    // Связываем событие клика на иконке с обработчиком
     connect(&trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::onTrayIconActivated);
     //-##################################################################################
     //-############################## ПЕРЕКЛЮЧЕНИЕ МЕНЮ #################################
@@ -2046,7 +1661,6 @@ void MainWindow::loadSettings()
         action->setChecked(true);
         previousAction = action;
     });
-
     //-##################################################################################
     //-##################################### GRUB #######################################
     //-##################################################################################
@@ -2057,14 +1671,11 @@ void MainWindow::loadSettings()
         ui->line_grub->setDisabled(true);
         ui->spin_grub->setDisabled(true);
         ui->line_grub->setText(tr("GRUB не установлен"));
-        // Ошибка открытия файла
     } else {
-
         QTextStream in(&grub);
         QString grubContent;
         QString timeoutStr;
 
-        // Обновленные регулярные выражения для поиска значений с обоими вариантами ковычек
         static QRegularExpression timeoutRegex("^GRUB_TIMEOUT=['\"]?(\\d+)['\"]?$");
         static QRegularExpression grubCmdlineRegex("^GRUB_CMDLINE_LINUX_DEFAULT=['\"]?(.*)['\"]?$");
 
@@ -2079,7 +1690,6 @@ void MainWindow::loadSettings()
                 }
                 continue;
             }
-
             if (line.startsWith("GRUB_CMDLINE_LINUX_DEFAULT=")) {
                 QRegularExpressionMatch match = grubCmdlineRegex.match(line);
                 if (match.hasMatch()) {
@@ -2088,7 +1698,6 @@ void MainWindow::loadSettings()
                     grubContent.remove(quotationRegex);
                 }
                 else {
-
                     grubCmdlineRegex.setPattern("^GRUB_CMDLINE_LINUX_DEFAULT=['\"]?(.*)['\"]?$");
                     match = grubCmdlineRegex.match(line);
                     if (match.hasMatch()) {
@@ -2097,123 +1706,78 @@ void MainWindow::loadSettings()
                         grubContent.remove(quotationRegex);
                     }
                 }
-                break; // Закончит цикл поиска
+                break;
             }
         }
         grub.close();
 
-        int timeout = timeoutStr.toInt(); // получаем значение timeout из файла
-        ui->spin_grub->setValue(timeout); // устанавливаем значение в QSpinBox
+        int timeout = timeoutStr.toInt();
+        ui->spin_grub->setValue(timeout);
         ui->line_grub->setText(grubContent);
+    }
+    //-##################################################################################
+    //-########################## СПИСОК РЕПОЗИТОРИЕВ ###################################
+    //-##################################################################################
+    QFile pacman("/etc/pacman.conf");
+    if (pacman.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&pacman);
+        QStringList sections;
 
-        //-##################################################################################
-        //-########################## СПИСОК РЕПОЗИТОРИЕВ ###################################
-        //-##################################################################################
-        QFile pacman("/etc/pacman.conf");
-        if (pacman.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            QTextStream in(&pacman);
-            QStringList sections;
-
-            while (!in.atEnd()) {
-                QString line = in.readLine().trimmed();
-                if (line.startsWith('[') && line.endsWith(']')) {
-                    QString section = line.mid(1, line.length() - 2);
-                    if (section != "options") { // Исключение секции [options]
-                        sections.append(section);
-                    }
+        while (!in.atEnd()) {
+            QString line = in.readLine().trimmed();
+            if (line.startsWith('[') && line.endsWith(']')) {
+                QString section = line.mid(1, line.length() - 2);
+                if (section != "options") { // Исключение секции [options]
+                    sections.append(section);
                 }
             }
-
-            pacman.close();
-
-            QString regexPattern = "^(" + sections.join("/\\S+|") + "/\\S+|aur/\\S+)"; // Формирование регулярного выражения
-
-            // Сохранение значения regexPattern в настройках
-            settings.setValue("Repository", regexPattern);
-
-            // Присваивание значения переменной repo
-            repo = QSharedPointer<QString>::create(regexPattern);
         }
+        pacman.close();
 
-        //-##################################################################################
-        //-########################### MINI LODING ANIMATION ################################
-        //-##################################################################################
-        loadingLabel.reset(new QLabel(this));
-        loadingLabel->setVisible(false);
-        // Создаем виджет QLabel для анимации загрузки
-        loadingLabel->setFixedSize(58, 53); // Устанавливаем размеры виджета
-
-        // Создаем объект QMovie для загрузки анимации из файла .gif
-        QMovie* loadingAnimation = new QMovie(":/img/miniload.gif");
-
-        // Задаем желаемые размеры
-        int newWidth = 50; // Новая ширина
-        int newHeight = 50; // Новая высота
-
-        // Изменяем размеры анимации с сохранением пропорций
-        loadingAnimation->setScaledSize(QSize(newWidth, newHeight));
-
-        // Устанавливаем анимацию в QLabel
-        loadingLabel->setMovie(loadingAnimation);
-
-        // Запускаем анимацию
-        loadingAnimation->start();
-
-        // Добавляем фоновый цвет под иконкой анимации
-        loadingLabel->setStyleSheet("margin-left:4px;padding-left:2px;border:0;");
+        QString regexPattern = "^(" + sections.join("/\\S+|") + "/\\S+|aur/\\S+)"; // Формирование регулярного выражения
+        settings.setValue("Repository", regexPattern);
+        repo = QSharedPointer<QString>::create(regexPattern);
     }
+    //-##################################################################################
+    //-########################### MINI LODING ANIMATION ################################
+    //-##################################################################################
+    loadingLabel.reset(new QLabel(this));
+    loadingLabel->setVisible(false);
+    loadingLabel->setFixedSize(58, 53);
+
+    QMovie* loadingAnimation = new QMovie(":/img/miniload.gif");
+    loadingAnimation->setScaledSize(QSize(50, 50));
+
+    loadingLabel->setMovie(loadingAnimation);
+    loadingAnimation->start();
+    loadingLabel->setStyleSheet("margin-left:4px;padding-left:2px;border:0;");
 }
 
 void MainWindow::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
-    if (reason == QSystemTrayIcon::Trigger) {
-        // Проверяем, было ли главное окно свернуто
-        if (isHidden())
-            show(); // Если главное окно свернуто, показываем его и делаем активным
-        else
-            hide(); // Если главное окно открыто, сворачиваем его
-    }
+    if (reason == QSystemTrayIcon::Trigger)
+        isHidden() ? show() : hide();
 }
 
 void MainWindow::removeToolButtonTooltips(QToolBar* toolbar) {
-    // Получение стиля текущей темы
-    QList<QAction*> actions = toolbar->actions();
-
-    // Отключение отображения подсказок для виджетов
-    for (QAction* action : actions) {
-        QWidget* widget = toolbar->widgetForAction(action);
-        if (widget) {
+    for (QAction* action : toolbar->actions()) {
+        if (QWidget* widget = toolbar->widgetForAction(action)) {
             widget->setToolTip("");
-            widget->setToolTipDuration(0); // Отключение подсказок
+            widget->setToolTipDuration(0);
         }
     }
 }
 
-bool isDescendantOfTabWidget(QWidget* widget) {
-    while (widget) {
-        if (qobject_cast<QTabWidget*>(widget->parentWidget())) {
-            return true;
-        }
-        widget = widget->parentWidget();
-    }
-    return false;
-}
-
-void MainWindow::mrpropper(int value) //зачистка говна перед началом каждой вкладки
-{
-    miniAnimation(false,ui->details_aur);
-    miniAnimation(false,ui->list_aur);
+void MainWindow::mrpropper(int value) {
+    miniAnimation(false, ui->details_aur);
+    miniAnimation(false, ui->list_aur);
     showLoadingAnimationMini(true);
-
     page = value;
 
-    //останавливаем страницы и ошибки
     webEngineView2->page()->triggerAction(QWebEnginePage::Stop);
     errorShown = true;
 
-    //удаляем все action-ы
-    QList<QAction*> allActions = ui->toolBar_2->actions();
-    for (QAction* action : allActions) {
+    for (QAction* action : ui->toolBar_2->actions()) {
         action->setVisible(false);
     }
 
@@ -2225,74 +1789,48 @@ void MainWindow::mrpropper(int value) //зачистка говна перед �
     ui->label1->setVisible(true);
 
     searchLineEdit->setFixedWidth(0);
-    searchLineEdit->setText("");
-
+    searchLineEdit->clear();
 }
 
 void MainWindow::TeaTimer()
 {
-    if (teatext->isEmpty())
-        sendNotification(tr("Отдохни!"), tr("Пора пить чай!"));
-    else
-        sendNotification(tr("Отдохни!"), *teatext);
+    sendNotification(tr("Отдохни!"), teatext->isEmpty() ? tr("Пора пить чай!") : *teatext);
 }
 
 void MainWindow::WorkTimer()
 {
-    if (teatext->isEmpty())
-        sendNotification(tr("Отдохни!"), tr("Пора сделать зарядку!"));
-    else
-        sendNotification(tr("Отдохни!"), *worktext);
+    sendNotification(tr("Отдохни!"), teatext->isEmpty() ? tr("Пора сделать зарядку!") : *worktext);
 }
 
 void MainWindow::setHasUpdates(bool updates)
 {
     trayIcon.setIcon(QIcon(updates ? ":/img/tray.png" : ":/img/2.png"));
-    hasUpdates = updates; // Обновление значения переменной hasUpdates
+    hasUpdates = updates;
 }
 
 void MainWindow::UpdateIcon()
 {
-    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-    process->setReadChannel(QProcess::StandardOutput);
-    process->start("sh", QStringList() << "-c" << "checkupdates | wc -l");
-    process->waitForFinished();
+    QProcess process;
+    process.start("sh", QStringList() << "-c" << "checkupdates | wc -l");
+    process.waitForFinished();
 
-    if (process->exitCode() == QProcess::NormalExit) {
-        QByteArray output = process->readAll();
-        int numUpdates = output.trimmed().toInt();
-
-        if (numUpdates == 0) {
-            setHasUpdates(false);
-            updateIconTimer->start();
-        } else {
-            setHasUpdates(true);
-            updateIconTimer->stop();
-        }
+    if (process.exitCode() == QProcess::NormalExit) {
+        int numUpdates = process.readAll().trimmed().toInt();
+        setHasUpdates(numUpdates > 0);
+        updateIconTimer->start();
     } else
-        setHasUpdates(false); // Обработка ошибки при выполнении команды
+        setHasUpdates(false);
 }
 
 void MainWindow::UpdateSnap()
 {
-    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-    process->setReadChannel(QProcess::StandardOutput);
-    process->start("sh", QStringList() << "-c" << "snap refresh --list | wc -l");
-    process->waitForFinished();
-
-    if (process->exitCode() == QProcess::NormalExit) {
-        QByteArray output = process->readAll();
-        int numUpdates = output.trimmed().toInt();
-
-        if (numUpdates == 0)
-            hasUpdatesSnap = false;
-        else
-            hasUpdatesSnap = true;
-
-    } else
-        hasUpdatesSnap = false; // Обработка ошибки при выполнении команды
+    QProcess process;
+    process.start("sh", QStringList() << "-c" << "snap refresh --list | wc -l");
+    process.waitForFinished();
+    hasUpdatesSnap = (process.exitCode() == QProcess::NormalExit) && (process.readAll().trimmed().toInt() > 0);
 }
 
+//not
 void MainWindow::loadSystemInfo()
 {
     //-##################################################################################
@@ -2305,7 +1843,7 @@ void MainWindow::loadSystemInfo()
     QString hostnameMessage = QString("%1 (%2)").arg(hostname, name_2);
     ui->action_hostname->setText(hostnameMessage);
 
-    // Получаем информацию о системе
+    //Информация о системе
     struct utsname systemInfo;
     if (uname(&systemInfo) == 0) {
         QString release = QString::fromUtf8(systemInfo.release);
@@ -2324,14 +1862,14 @@ void MainWindow::loadSystemInfo()
         ui->action_release->setText(release_text);
     }
 
-    // Получаем количество пакетов pacman
+    // Pacman
     QSharedPointer<QProcess> pacmanProcess = QSharedPointer<QProcess>::create();
     pacmanProcess->start("sh", QStringList() << "-c" << packageCommands.value(pkg).value("query_q").join(" ") + " | wc -l");
 
     pacmanProcess->waitForFinished(-1);
     QString pacmanPackagesCount = QString::fromUtf8(pacmanProcess->readAllStandardOutput()).trimmed();
 
-    // Получаем количество пакетов flatpak
+    // Flatpak
     QSharedPointer<QProcess> flatpakProcess = QSharedPointer<QProcess>::create();
     flatpakProcess->start("sh", QStringList() << "-c" << "flatpak list --app | wc -l");
     flatpakProcess->waitForFinished(-1);
@@ -2340,7 +1878,7 @@ void MainWindow::loadSystemInfo()
     QString packagesText = QString("Pacman: %1, Flatpak: %2").arg(pacmanPackagesCount, flatpakPackagesCount);
     ui->action_packages->setText(packagesText);
 
-    // Получаем разрешение
+    // Разрешение
     QScreen *screen = QGuiApplication::primaryScreen();
     QSize screenSize = screen->size();
     int screenWidth = screenSize.width();
@@ -2365,7 +1903,7 @@ void MainWindow::loadSystemInfo()
     }
     ui->action_cpu->setText(cpuInfo);
 
-    // Получаем GPU
+    // GPU
     QSharedPointer<QProcess> gpuProcess = QSharedPointer<QProcess>::create();
     gpuProcess->start("sh", QStringList() << "-c" << "lspci | grep -i 'VGA'");
     if (gpuProcess->waitForFinished()) {
@@ -2378,7 +1916,7 @@ void MainWindow::loadSystemInfo()
         }
     }
 
-    // Получаем Memory
+    // Memory
     QSharedPointer<QProcess> memoryProcess = QSharedPointer<QProcess>::create();
     memoryProcess->start("sh", QStringList() << "-c" << "free -m");
     memoryProcess->waitForFinished();
@@ -2423,7 +1961,6 @@ void MainWindow::loadSystemInfo()
             }
         }
     }
-
     ui->action_iphost->setText(tr("Внешний IP: %1").arg(externalIp));
     ui->action_iplocal->setText(tr("Внутренний IP: %1").arg(localIp));
 }
@@ -2432,67 +1969,45 @@ QColor MainWindow::generateRandomColor()
 {
     QColor color;
     do {
-        int hue = QRandomGenerator::global()->bounded(360);
-        int saturation = QRandomGenerator::global()->bounded(200);
-        int value = QRandomGenerator::global()->bounded(150, 256);
-        color = QColor::fromHsv(hue, saturation, value);
-
+        color = QColor::fromHsv(QRandomGenerator::global()->bounded(360),
+                                QRandomGenerator::global()->bounded(200),
+                                QRandomGenerator::global()->bounded(150, 256));
     } while (color.blue() > 200 || !color.isValid());
     return color;
 }
 
 void MainWindow::onTimeChanged(const QTime& time)
 {
-    // Если время не задано (00:00), ничего не делаем
     if (time == QTime(0, 0))
         return;
 
-    // Получаем текущее время
-    QTime currentTime = QTime::currentTime();
-
-    // Получаем выбранное время
     QTime selectedTime = time;
+    int interval = QTime(0, 0).msecsTo(selectedTime);
 
-    // Вычисляем разницу между текущим временем и выбранным временем в миллисекундах
-    int interval = currentTime.msecsTo(selectedTime);
-
-    // Если выбранное время уже прошло, добавляем 24 часа к интервалу
     if (interval < 0)
-        interval += 24 * 60 * 60 * 1000; // 24 часа в миллисекундах
+        interval += 24 * 60 * 60 * 1000;
 
-    // Устанавливаем таймер для первого вызова функции
     QTimer::singleShot(interval, this, &MainWindow::on_action_11_triggered);
 
-    // Устанавливаем таймер для повторных вызовов функции каждый день
     QTimer* timer = new QTimer(this);
-
     connect(timer, &QTimer::timeout, this, &MainWindow::on_action_11_triggered);
-
-    timer->start(24 * 60 * 60 * 1000); // 24 часа в миллисекундах
+    timer->start(24 * 60 * 60 * 1000);
 }
-
 
 void MainWindow::showLoadingAnimationMini(bool show)
 {
     if (show)
     {
-        // Перебираем все действия в ToolBar
-        QList<QAction*> actions = ui->toolBar->actions();
-        for (QAction* action : actions)
+        for (QAction* action : ui->toolBar->actions())
         {
             if (action->isCheckable() && action->isChecked())
             {
                 loadingLabel->setVisible(true);
-
-                // Заменяем иконку действия на QLabel с анимацией
                 ui->toolBar->insertWidget(action, loadingLabel.data());
                 action->setVisible(false);
-
-                if (action)
-                    actionLoad = action;
-
+                actionLoad = action;
                 ui->toolBar->setEnabled(!show);
-                break; // Прерываем цикл после первого найденного checkable действия с установленной галочкой
+                break;
             }
         }
     }
@@ -2500,8 +2015,7 @@ void MainWindow::showLoadingAnimationMini(bool show)
     {
         QTimer::singleShot(500, this, [=]() {
             loadingLabel->setVisible(false);
-            QLayout *toolBarLayout = ui->toolBar->layout();
-            if (toolBarLayout) {
+            if (QLayout *toolBarLayout = ui->toolBar->layout()) {
                 toolBarLayout->removeWidget(loadingLabel.data());
             }
 
@@ -2512,13 +2026,13 @@ void MainWindow::showLoadingAnimationMini(bool show)
             removeToolButtonTooltips(ui->toolBar);
             removeToolButtonTooltips(ui->toolBar_2);
         });
-
     }
 }
 
 void MainWindow::showLoadingAnimation(bool show)
 {
-    if (animload == 0) return;
+    if (animload == 0 || animloadpage > 1)
+        return;
 
     static QWidget* overlayWidget = nullptr;
     static QLabel* loadingLabel = nullptr;
@@ -2541,21 +2055,22 @@ void MainWindow::showLoadingAnimation(bool show)
         }
 
         QMovie* loadingMovie = nullptr;
+        QString backgroundColor;
 
         if (page == 10){
             loadingMovie = new QMovie(":/img/server.gif");
-            overlayWidget->setStyleSheet("QWidget#OverlayWidget { background-color: #0072ce; }");
+            backgroundColor = "#0072ce";
         }
         else
         {
             if (animloadpage == 0){
                 loadingMovie = new QMovie(":/img/loading.gif");
-                overlayWidget->setStyleSheet("QWidget#OverlayWidget { background-color: #472e91; }");
+                backgroundColor = "#472e91";
             }
             else if (animloadpage == 1)
             {
                 loadingMovie = new QMovie(":/img/loading2.gif");
-                overlayWidget->setStyleSheet("QWidget#OverlayWidget { background-color: #2d2b79; }");
+                backgroundColor = "#2d2b79";
             }
         }
 
@@ -2565,9 +2080,9 @@ void MainWindow::showLoadingAnimation(bool show)
         loadingLabel->move((overlayWidget->width() - loadingLabel->width()) / 2 + leftShift,
                            (overlayWidget->height() - loadingLabel->height()) / 2);
 
+        overlayWidget->setStyleSheet(QString("QWidget#OverlayWidget { background-color: %1; }").arg(backgroundColor));
         overlayWidget->show();
         loadingLabel->show();
-
     } else {
         if (overlayWidget) {
             overlayWidget->hide();
@@ -2582,24 +2097,20 @@ void MainWindow::showLoadingAnimation(bool show)
             loadingLabel = nullptr;
         }
     }
-
-    // удаление подсказок
     removeToolButtonTooltips(ui->toolBar);
     removeToolButtonTooltips(ui->toolBar_2);
 }
 
+//not
 void MainWindow::downloadAndSaveImages(const QString& packageName, const QStringList& urls, const QString& folder)
 {
     miniAnimation(true, ui->image_aur);
-
-    // Проверка на созданную сцену
     if (ui->image_aur->scene())
         ui->image_aur->scene()->clear();
 
-
-    imageUrls = urls; // Сохраняем список URL-адресов
-    pixmaps.clear(); // Очищаем список QPixmap
-    currentIndex = 0; // Устанавливаем индекс текущего изображения в 0
+    imageUrls = urls;
+    pixmaps.clear();
+    currentIndex = 0;
 
     QString cacheFolder = folder + packageName + "/";
     QDir().mkpath(cacheFolder);
@@ -2610,7 +2121,6 @@ void MainWindow::downloadAndSaveImages(const QString& packageName, const QString
         QString cacheFilePath = cacheFolder + fileName;
 
         if (QFile::exists(cacheFilePath)) {
-            // Файл уже скачан, загружаем его в QPixmap
             QPixmap pixmap(cacheFilePath);
             pixmaps.append(pixmap);
         } else {
@@ -2629,20 +2139,17 @@ void MainWindow::downloadAndSaveImages(const QString& packageName, const QString
                 pixmap = pixmap.scaled(newSize, Qt::KeepAspectRatio);
 
                 pixmaps.append(pixmap);
-
-                // Сохраняем изображение в локальный кэш
                 pixmap.save(cacheFilePath);
             }
 
             imageReply->deleteLater();
         }
     }
-
-    // Отображаем первое изображение
     updateImageView();
     miniAnimation(false, ui->image_aur);
 }
 
+//not
 void MainWindow::updateImageView()
 {
     if (!pixmaps.isEmpty() && currentIndex >= 0 && currentIndex < pixmaps.size()) {
@@ -2664,6 +2171,7 @@ void MainWindow::on_next_slider_clicked()
     updateImageView();
 }
 
+//not
 void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser* detailsWidget) {
     QListWidgetItem* nameItem = listWidget->item(row);
     QString packageName = nameItem->text();
@@ -2672,7 +2180,6 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
     {
         QString appName = packageName.split(' ')[0];
 
-        // Удаляем окончания
         for (const QString& ending : endingsToRemove) {
             if (appName.endsWith(ending)) {
                 appName.chop(ending.length());
@@ -2687,8 +2194,6 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
         connect(reply, &QNetworkReply::finished, this, [=]() {
             if (reply->error() == QNetworkReply::NoError) {
-
-                // Прочитать содержимое ответа
                 QByteArray htmlData = reply->readAll();
 
                 static const QRegularExpression screenshotRegex("<img[^>]*data-original=\"([^\"]*)\"");
@@ -2725,15 +2230,11 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
 
     QSharedPointer<QProcess> currentProcess = QSharedPointer<QProcess>::create();
-
-    // Сохраняем текущую позицию прокрутки
     int scrollBarValue = detailsWidget->verticalScrollBar()->value();
 
     connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, [=]() {
         QByteArray output = currentProcess->readAllStandardOutput();
         QString packageInfo = QString::fromUtf8(output);
-
-        // Process the packageInfo string
         QStringList lines = packageInfo.split("\n");
         QString processedInfo;
 
@@ -2743,20 +2244,14 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
                 if (colonIndex != -1) {
                     QString header = line.left(colonIndex).trimmed();
                     QString content = line.mid(colonIndex + 1).trimmed();
-
                     header = "<b>" + header + ":</b> ";
-
                     processedInfo += "<p><span>" + header + "</span>" + content + "</p>";
                 }
             }
         }
 
-        // Устанавливаем информацию после обработки всей строки
         detailsWidget->append(processedInfo);
-
-        // Восстанавливаем позицию прокрутки
         detailsWidget->verticalScrollBar()->setValue(scrollBarValue);
-
         miniAnimation(false,detailsWidget);
     });
 
@@ -2774,12 +2269,10 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
             QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
             QCoreApplication::postEvent(searchLineEdit.data(), event);
-
             miniAnimation(false,detailsWidget);
         }
     });
 
-    // Очищаем текстовый виджет перед началом нового запроса
     detailsWidget->clear();
 
     miniAnimation(true,detailsWidget);
@@ -2799,6 +2292,7 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
     currentProcess->start(command[0], QStringList() << command[1] << packageName);
 }
 
+//not
 void MainWindow::onListAurItemClicked(QListWidgetItem *item)
 {
     if (page == 2) {
@@ -2821,6 +2315,7 @@ void MainWindow::onListAurItemClicked(QListWidgetItem *item)
     }
 }
 
+//not
 void MainWindow::miniAnimation(bool visible, QWidget* targetWidget)
 {
     static QLabel* miniLoadLabel = nullptr;
@@ -2844,8 +2339,6 @@ void MainWindow::miniAnimation(bool visible, QWidget* targetWidget)
 
         miniLoadLabel->setGeometry(x, y, 221, 31);
         miniLoadLabel->setVisible(true);
-
-        // Изменение фона targetWidget
         targetWidget->setStyleSheet("background-color: #222222;");
     } else {
         if (miniLoadLabel) {
@@ -2853,8 +2346,6 @@ void MainWindow::miniAnimation(bool visible, QWidget* targetWidget)
             delete miniLoadLabel;
             miniLoadLabel = nullptr;
         }
-
-        // Восстановление стандартного фона targetWidget
         if (targetWidget == ui->image_aur)
             targetWidget->setStyleSheet("background-color: #191919;");
         else
@@ -2864,9 +2355,7 @@ void MainWindow::miniAnimation(bool visible, QWidget* targetWidget)
 
 QIcon MainWindow::getPackageIcon(const QString& packageName) {
 
-    QString appName = packageName.split(' ')[0];
-
-    // Удаляем окончания
+    QString appName = packageName.split(' ').first();
     for (const QString& ending : endingsToRemove) {
         if (appName.endsWith(ending)) {
             appName.chop(ending.length());
@@ -2874,95 +2363,76 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
         }
     }
 
-    if (iconMap.isEmpty()) {
-        QStringList searchPaths = QStringList() << "/usr/share/applications/"
-                                                << QDir::homePath() + "/.local/share/applications"
-                                                << "/usr/local/share/applications"
-                                                << "/var/lib/snapd/desktop/applications";
+    QString additionalIconPath = "/usr/share/icons/Papirus/48x48/apps/" + appName + ".svg";
+    if (QFileInfo(additionalIconPath).isFile()) {
+        return QIcon(additionalIconPath);
+    }
 
-        // Ищем соответствующие файлы .desktop во всех указанных путях
+    static QMap<QString, QString> iconMap;
+    if (iconMap.isEmpty()) {
+        QStringList searchPaths = {"/usr/share/applications/",
+                                   QDir::homePath() + "/.local/share/applications",
+                                   "/usr/local/share/applications",
+                                   "/var/lib/snapd/desktop/applications"};
+
         for (const QString& searchPath : searchPaths) {
             QDir desktopFilesDir(searchPath);
-            QStringList desktopFiles = desktopFilesDir.entryList(QStringList() << "*.desktop", QDir::Files);
+            QStringList desktopFiles = desktopFilesDir.entryList({"*.desktop"}, QDir::Files);
 
             for (const QString& desktopFileName : desktopFiles) {
                 QFile desktopFile(desktopFilesDir.filePath(desktopFileName));
                 if (desktopFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
                     QTextStream stream(&desktopFile);
 
-                    // Парсим содержимое файла .desktop и получаем имя иконки и команду запуска
                     QString iconName;
                     while (!stream.atEnd()) {
                         QString line = stream.readLine().trimmed();
                         if (line.startsWith("Icon=")) {
                             iconName = line.mid(5).trimmed();
                         }
-
-                        // Прерываем цикл, если мы уже получили оба значения
                         if (!iconName.isEmpty()) {
                             break;
                         }
                     }
-
                     desktopFile.close();
 
-                    // Если удалось получить имя иконки и команду запуска, сохраняем информацию в словарях
                     if (!iconName.isEmpty()) {
-                        QString desktopAppName = desktopFileName.split('.').first();
-                        iconMap[desktopAppName] = iconName;
+                        iconMap[desktopFileName.split('.').first()] = iconName;
                     }
                 }
             }
         }
     }
 
-    // Проверяем, есть ли информация об иконке для данного приложения в словарях
     if (iconMap.contains(appName)) {
         QString iconName = iconMap[appName];
 
-        // Попытаемся получить иконку из темы
         QIcon themeIcon = QIcon::fromTheme(iconName);
-
         if (!themeIcon.isNull()) {
-            // Иконка найдена в теме
             return themeIcon;
         } else {
-            QStringList searchPaths = QStringList() << "/usr/share/icons"
-                                                    << mainDir + "/share/icons";
-
-            QString iconPath; // Объявляем переменную iconPath
+            QStringList searchPaths = {"/usr/share/icons", mainDir + "/share/icons"};
 
             for (const QString& searchPath : searchPaths) {
                 QDirIterator it(searchPath, QDirIterator::Subdirectories);
                 while (it.hasNext()) {
                     QString filePath = it.next();
-                    if (QFileInfo(filePath).isFile()) {
-                        QString fileName = QFileInfo(filePath).fileName();
-                        if (fileName.startsWith(iconName) && fileName.endsWith(".png")) {
-                            iconPath = filePath;
-                            break;
-                        }
+                    if (QFileInfo(filePath).isFile() && filePath.endsWith(iconName + ".png")) {
+                        return QIcon(filePath);
                     }
-                }
-
-                if (!iconPath.isEmpty()) {
-                    return QIcon(iconPath);
                 }
             }
         }
     }
 
-    // Если не удалось получить иконку из файла .desktop, возвращаем стандартную иконку
     return QIcon(":/img/pacman.png");
 }
 
+//not
 void MainWindow::loadContent(int value, bool valuepage)
 {
     miniAnimation(true,ui->list_aur);
-
-    // Очищаем таблицу
     ui->list_aur->clear();
-
     QString sourceFilePath;
     QString targetFilePath;
 
@@ -3346,7 +2816,6 @@ void MainWindow::loadContent(int value, bool valuepage)
         }
     }
 
-
     QFileInfo fileInfo(targetFilePath);
     if (!fileInfo.exists())
     {
@@ -3387,8 +2856,7 @@ void MainWindow::loadContent(int value, bool valuepage)
             }
         }
     }
-
-    file.close(); // Закрываем файл после использования
+    file.close();
 
     for (int i = 0; i < programs.size(); i++) {
         QString packageName = programs[i];
@@ -3408,20 +2876,17 @@ void MainWindow::loadContent(int value, bool valuepage)
 
             if (match.hasMatch()) {
                 QString repoName = match.captured(1);
-
                 iconPath = "/usr/share/icons/Papirus/48x48/apps/" + repoName + ".svg";
 
                 QFileInfo fileInfo(iconPath);
-                if (!fileInfo.exists()) {
+                if (!fileInfo.exists())
                     iconPath = ":/img/" + repoName + ".png";
-                }
 
                 prefixToRemove = repoName + "/";
             }
 
             if (!prefixToRemove.isEmpty())
                 packageName.remove(0, prefixToRemove.length());
-
         }
         else
         {
@@ -3456,23 +2921,15 @@ void MainWindow::loadContent(int value, bool valuepage)
             appIcons[packageName] = iconPath;
     }
     miniAnimation(false,ui->list_aur);
-
 }
 
 QString packageVersion(const QString& packageName) {
-    static QRegularExpression regex(R"-(\d+\.\d+(?:\.\d+)*)-");
-    QRegularExpressionMatch match = regex.match(packageName);
-
-    if (match.hasMatch()) {
-        return match.captured(0);
-    } else {
-        // Обработка случая, когда версия не найдена
-        return "";
-    }
+    static const QRegularExpression regex(R"-(\d+\.\d+(?:\.\d+)*)-");
+    return regex.match(packageName).captured(0);
 }
 
+//not
 void MainWindow::onListDowngradeItemDoubleClicked(QListWidgetItem *currentItem) {
-
     QString packageName;
 
     if (currentItem != nullptr) {
@@ -3485,7 +2942,6 @@ void MainWindow::onListDowngradeItemDoubleClicked(QListWidgetItem *currentItem) 
     Terminal terminal = getTerminal();
 
     QString installUrl = "https://archive.archlinux.org/packages/" + QString(packagesArchiveAUR.at(0)) + "/" + packagesArchiveAUR +  "/" + packageName;
-
 
     if (nvidia == 1)
     {
@@ -3545,83 +3001,77 @@ void MainWindow::onListDowngradeItemDoubleClicked(QListWidgetItem *currentItem) 
         return;
     }
 
-    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-    process->setProgram(terminal.binary);
-    process->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("localinstall") << installUrl);
-    process->setProcessChannelMode(QProcess::MergedChannels);
-    process->start();
-    process->waitForFinished(-1);
+    currentProcess = QSharedPointer<QProcess>::create(this);
+    connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
+    connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
+        //ничего делать не надо
+    });
+    currentProcess->setProgram(terminal.binary);
+    currentProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("localinstall") << installUrl);
+    currentProcess->setProcessChannelMode(QProcess::MergedChannels);
+    currentProcess->start();
 }
 
 void MainWindow::checkForDowngrades(const QString& packagesArchiveAUR)
 {
-    if (!packagesArchiveAUR.isEmpty())
-    {
-        miniAnimation(true, ui->list_downgrade);
+    if (packagesArchiveAUR.isEmpty())
+        return;
+    miniAnimation(true, ui->list_downgrade);
+    addedLinks.clear();
+    ui->list_downgrade->clear();
+    QChar firstLetter = packagesArchiveAUR.at(0);
+    QUrl url("https://archive.archlinux.org/packages/" + QString(firstLetter) + "/" + packagesArchiveAUR);
+    QNetworkRequest request(url);
+    manager->get(request);
+    QSharedPointer<QProcess> currentProcess = QSharedPointer<QProcess>::create();
+    connectProcessSignals(currentProcess, ui->details_downgrade);
+    ui->details_downgrade->clear();
+    QStringList command = packageCommands.value(pkg).value("info");
+    currentProcess->start(command[0], QStringList() << command[1] << packagesArchiveAUR);
+}
 
-        // Очистка списка добавленных ссылок
-        addedLinks.clear();
+void MainWindow::connectProcessSignals(QSharedPointer<QProcess>& process, QTextBrowser* outputWidget)
+{
+    connect(process.data(), &QProcess::readyReadStandardOutput, this, [=]() {
+        QByteArray output = process->readAllStandardOutput();
+        QString packageInfo = QString::fromUtf8(output);
+        process->waitForFinished();
 
-        // Очищаем таблицу
-        ui->list_downgrade->clear();
+        QString processedInfo = processPackageInfo(packageInfo);
+        outputWidget->append(processedInfo);
 
-        // Получение первой буквы пакета
-        QChar firstLetter = packagesArchiveAUR.at(0);
+        outputWidget->moveCursor(QTextCursor::Start);
+    });
 
-        // Формирование URL с добавлением первой буквы
-        QUrl url("https://archive.archlinux.org/packages/" + QString(firstLetter) + "/" + packagesArchiveAUR);
-        QNetworkRequest request(url);
-        manager->get(request);
+    connect(process.data(), &QProcess::readyReadStandardError, this, [=]() {
+        QByteArray errorOutput = process->readAllStandardError();
+        QString errorMessage = QString::fromUtf8(errorOutput);
+        process->waitForFinished();
 
-        QSharedPointer<QProcess> currentProcess = QSharedPointer<QProcess>::create();
+        if (!errorMessage.trimmed().isEmpty()) {
+            outputWidget->setText(errorMessage);
+        }
+    });
+}
 
-        connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, [=]() {
-            QByteArray output = currentProcess->readAllStandardOutput();
-            QString packageInfo = QString::fromUtf8(output);
-            currentProcess->waitForFinished();
+QString MainWindow::processPackageInfo(const QString& packageInfo)
+{
+    QStringList lines = packageInfo.split("\n");
+    QString processedInfo;
 
-            QStringList lines = packageInfo.split("\n");
-            QString processedInfo;
+    for (const QString& line : lines) {
+        if (!line.isEmpty()) {
+            int colonIndex = line.indexOf(':');
+            if (colonIndex != -1) {
+                QString header = line.left(colonIndex).trimmed();
+                QString content = line.mid(colonIndex + 1).trimmed();
 
-            for (const QString& line : lines) {
-                if (!line.isEmpty()) {
-                    int colonIndex = line.indexOf(':');
-                    if (colonIndex != -1) {
-                        QString header = line.left(colonIndex).trimmed();
-                        QString content = line.mid(colonIndex + 1).trimmed();
-
-                        header = "<b>" + header + ":</b> ";
-
-                        processedInfo += "<p><span>" + header + "</span>" + content + "</p>";
-                    }
-                }
+                header = "<b>" + header + ":</b> ";
+                processedInfo += "<p><span>" + header + "</span>" + content + "</p>";
             }
-
-            // Устанавливаем информацию после обработки всей строки
-            ui->details_downgrade->append(processedInfo);
-
-            // Восстанавливаем позицию прокрутки
-            ui->details_downgrade->moveCursor(QTextCursor::Start);
-        });
-
-        connect(currentProcess.data(), &QProcess::readyReadStandardError, this, [=]() {
-            QByteArray errorOutput = currentProcess->readAllStandardError();
-            QString errorMessage = QString::fromUtf8(errorOutput);
-            currentProcess->waitForFinished();  // Добавлено для уверенности, что процесс завершен
-
-            // Если есть сообщение об ошибке, выводим его
-            if (!errorMessage.trimmed().isEmpty()) {
-                ui->details_downgrade->setText(errorMessage);
-            }
-        });
-
-        // Очищаем текстовый виджет перед началом нового запроса
-        ui->details_downgrade->clear();
-
-        QStringList command;
-        command = packageCommands.value(pkg).value("info");
-        currentProcess->start(command[0], QStringList() << command[1] << packagesArchiveAUR);
+        }
     }
+    return processedInfo;
 }
 
 void MainWindow::onReplyFinished(QNetworkReply *reply)
@@ -3631,10 +3081,7 @@ void MainWindow::onReplyFinished(QNetworkReply *reply)
         if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 404)
             return;
 
-        // Чтение содержимого ответа
         QByteArray htmlData = reply->readAll();
-
-        // Извлечение текста ссылок с помощью регулярного выражения
         QString htmlContent(htmlData);
         static QRegularExpression linkRegex("<a [^>]*href=\"([^\"]*)\"[^>]*>.*</a>");  // Статический объект
 
@@ -3658,154 +3105,103 @@ void MainWindow::onReplyFinished(QNetworkReply *reply)
 
 void MainWindow::addLinkToList(const QString &link)
 {
-    // Замена относительных путей "../" на пустую строку
     QString cleanedLink = link;
-    static QRegularExpression dotDotExp("\\.\\./");  // Статический объект
+    static const QRegularExpression dotDotExp("\\.\\./");
     cleanedLink.replace(dotDotExp, "");
 
-    // Удаление пустых строк
-    static QRegularExpression newlineExp("^\n");  // Статический объект
+    static const QRegularExpression newlineExp("^\n");
     cleanedLink.replace(newlineExp, "");
 
     miniAnimation(false, ui->list_downgrade);
 
-    if (!cleanedLink.isEmpty() && !cleanedLink.contains(".sig") && !addedLinks.contains(cleanedLink))
+    if (cleanedLink.isEmpty() || cleanedLink.contains(".sig") || addedLinks.contains(cleanedLink))
+        return;
+
+    QListWidgetItem *item = new QListWidgetItem(QIcon("/usr/share/icons/Papirus/48x48/mimetypes/application-x-xz-pkg.svg"), cleanedLink);
+    item->setForeground(generateRandomColor());
+
+    if (nvidia == 1 || nvidia < 1 || packageVersion(link) == nvidiaVersion)
     {
-        QListWidgetItem *item = new QListWidgetItem(QIcon("/usr/share/icons/Papirus/48x48/mimetypes/application-x-xz-pkg.svg"), cleanedLink);
-        item->setForeground(generateRandomColor());
+        ui->list_downgrade->insertItem(0, item);
+        addedLinks.insert(cleanedLink);
 
         if (nvidia == 1)
         {
-            // Добавление нового элемента вверх списка
-            ui->list_downgrade->insertItem(0, item);
-
-            // Удаляем лишние элементы, оставляя только последние 5
             while (ui->list_downgrade->count() > 5)
             {
                 delete ui->list_downgrade->takeItem(ui->list_downgrade->count() - 1);
             }
-
-            addedLinks.insert(cleanedLink);
-        }
-        else if (nvidia < 1 || packageVersion(link) == nvidiaVersion)
-        {
-            ui->list_downgrade->insertItem(0, item);
-            addedLinks.insert(cleanedLink);
         }
     }
 }
 
 void MainWindow::loadContentInstall()
 {
-    QStringList allPackages;
-
-    QSharedPointer<QProcess> processHelper = QSharedPointer<QProcess>::create();
-    // Выполняем команду и получаем вывод
-
-    processHelper->start(packageCommands.value(pkg).value("query_explicit").at(0), QStringList() << packageCommands.value(pkg).value("query_explicit").at(1));
-    processHelper->waitForFinished(-1);
-    QString outputHelper = processHelper->readAllStandardOutput();
-
-    // Разбиваем вывод на строки и добавляем каждую строку в allPackages
-    allPackages = outputHelper.split("\n", Qt::SkipEmptyParts);
+    QStringList allPackages = executeCommand(packageCommands.value(pkg).value("query_explicit"));
 
     QStringList packagesSnap;
-    if (container == 2) {
-        QSharedPointer<QProcess> processSnap = QSharedPointer<QProcess>::create();
-        // Выполняем команду snap list и получаем вывод
-        processSnap->start(packageCommands.value(container).value("snap_list").at(0), QStringList() << packageCommands.value(container).value("snap_list").at(1));
-        processSnap->waitForFinished(-1);
-        QString outputSnap = processSnap->readAllStandardOutput();
-
-        // Разбиваем вывод на строки и добавляем каждую строку в packagesSnap
-        packagesSnap = outputSnap.split("\n", Qt::SkipEmptyParts);
-
-        // Пропускаем первую строку (заголовок "Name")
-        packagesSnap.removeFirst();
+    if (container == 2 && page == 4) {
+        packagesSnap = executeCommand(packageCommands.value(container).value("snap_list"));
+        packagesSnap.removeFirst(); // Пропускаем первую строку (заголовок "Name")
     }
 
-    QStringList allPackagesCombined;
-    if (container == 2  && page == 4) {
-        allPackagesCombined = packagesSnap;
-    } else {
-        allPackagesCombined = allPackages;
-    }
+    const QStringList& allPackagesCombined = (container == 2 && page == 4) ? packagesSnap : allPackages;
 
     numPackages = allPackagesCombined.size();
     ui->list_app->clear();
 
-    for (int i = 0; i < numPackages; ++i) {
-        const QString& package = allPackagesCombined.at(i);
+    for (const QString& package : allPackagesCombined) {
         QStringList packageParts = package.split(' ');
-        QString packageName = packageParts.at(0); // Берем только первую часть
+        QString packageName = packageParts.at(0);
+        QIcon packageIcon = (container == 2 && page == 4) ? QIcon(":/img/snap.png") : getPackageIcon(packageName);
 
-        // Получаем иконку пакета
-        QIcon packageIcon;
-        if (container == 2  && page == 4) {
-            packageIcon = QIcon(":/img/snap.png");
-        } else {
-            packageIcon = getPackageIcon(packageName);
-        }
-
-        // Создаем ячейку таблицы с иконкой и текстом
         QListWidgetItem* item = new QListWidgetItem(packageName);
         item->setIcon(packageIcon);
-
-        // Раскрашиваем
-        QColor color = generateRandomColor();
-        item->setForeground(color);
-
-        // Добавляем ячейку в таблицу
+        item->setForeground(generateRandomColor());
         ui->list_app->addItem(item);
     }
 }
 
 void MainWindow::setCursorAndScrollToItem(const QString& itemName)
 {
-    // Найти элемент в списке по имени
-    QListWidgetItem *item = nullptr;
     for (int row = 0; row < ui->list_aur->count(); ++row) {
-        QListWidgetItem *currentItem = ui->list_aur->item(row);
+        QListWidgetItem* currentItem = ui->list_aur->item(row);
         if (currentItem && currentItem->text() == itemName) {
-            item = currentItem;
-            // Вызвать функцию onListAurItemClicked с текущим элементом
-            onListAurItemClicked(item);
+            onListAurItemClicked(currentItem);
+            ui->list_aur->setCurrentItem(currentItem);
+            ui->list_aur->selectionModel()->select(ui->list_aur->model()->index(ui->list_aur->row(currentItem), 0),
+                                                   QItemSelectionModel::Select);
+            ui->list_aur->scrollToItem(currentItem);
             break;
         }
     }
+}
 
-    if (item) {
-        // Установить текущий элемент и выделить его
-        ui->list_aur->setCurrentItem(item);
-        QItemSelectionModel *selectionModel = ui->list_aur->selectionModel();
-        selectionModel->select(ui->list_aur->model()->index(ui->list_aur->row(item), 0), QItemSelectionModel::Select);
-
-        // Прокрутить к текущему элементу
-        ui->list_aur->scrollToItem(item);
-    }
+QStringList MainWindow::executeCommand(const QStringList& command)
+{
+    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+    process->start(command.at(0), command.mid(1));
+    process->waitForFinished(-1);
+    return QString::fromUtf8(process->readAllStandardOutput()).split("\n", Qt::SkipEmptyParts);
 }
 
 void MainWindow::handleServerResponse(const QString& reply)
 {
-    ui->list_aur->clear();  // Очищаем содержимое QListWidget
-
+    ui->list_aur->clear();
     miniAnimation(true, ui->list_aur);
-
     helperPackageNames.clear();
 
-    QString searchCommand = packageCommands.value(pkg).value("search").at(0);
-    QString searchArg = packageCommands.value(pkg).value("search").at(1);
+    const QStringList& searchCommand = packageCommands.value(pkg).value("search");
 
     currentProcess = QSharedPointer<QProcess>::create(this);
     connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
-
     connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
         miniAnimation(false, ui->list_aur);
     });
-
-    currentProcess->start(searchCommand, QStringList() << searchArg << reply);
+    currentProcess->start(searchCommand.at(0), QStringList() << searchCommand.at(1) << reply);
 }
 
+//not
 void MainWindow::onCurrentProcessReadyRead()
 {
     ui->list_aur->clear();
@@ -3829,26 +3225,20 @@ void MainWindow::onCurrentProcessReadyRead()
             if (match.hasMatch()) {
                 QString repoName = match.captured(1);
 
-                // Проверяем наличие изображения repoName.png в ресурсах
-                if (QFile::exists(":/img/" + repoName + ".png")) {
+                if (QFile::exists(":/img/" + repoName + ".png"))
                     iconPath = ":/img/" + repoName + ".png";
-                } else {
-                    // Если изображение repoName.png не найдено, используем pacman.png
+                else
                     iconPath = ":/img/pacman.png";
-                }
 
                 prefixToRemove = repoName + "/";
             }
 
-            // Удаление префикса, если применимо
-            if (!prefixToRemove.isEmpty()) {
+            if (!prefixToRemove.isEmpty())
                 packageName.remove(0, prefixToRemove.length());
-            }
 
             QListWidgetItem *item = new QListWidgetItem(QIcon(iconPath), packageName);
             QColor color = generateRandomColor();
             item->setForeground(color);
-
             ui->list_aur->addItem(item);
         }
     }
@@ -3857,46 +3247,16 @@ void MainWindow::onCurrentProcessReadyRead()
 
     QString searchText = searchLineEdit->text();
     setCursorAndScrollToItem(searchText);
-
-    // Запуск таймера с тайм-аутом
     QTimer::singleShot(timeout.msecsSinceStartOfDay() / 1000, this, &MainWindow::onSearchTimeout);
 }
 
 void MainWindow::onSearchTimeout()
 {
-    currentProcess->kill();
-    miniAnimation(false,ui->list_aur);
-}
-
-void MainWindow::onSnapProcessFinished()
-{
-    QByteArray snapOutput = snapProcess->readAllStandardOutput();
-    QString snapOutputString = QString::fromUtf8(snapOutput).trimmed();
-
-    // Обработка вывода команды snap find
-    QStringList snapLines = snapOutputString.split('\n');
-
-    // Пропускаем первую строку (заголовок "Name")
-    snapLines.removeFirst();
-
-    ui->list_aur->clear();
-
-    for (const QString& snapLine : snapLines) {
-        if (!snapLine.isEmpty()) {
-            QString snapPackageName = snapLine.section(' ', 0, 0);
-            QColor color = generateRandomColor();
-
-            QListWidgetItem *item = new QListWidgetItem();
-            item->setIcon(QIcon(":/img/snap.png"));
-            item->setText(snapPackageName);
-            item->setForeground(color);
-
-            ui->list_aur->addItem(item);
-        }
-    }
+    currentProcess->terminate();
     miniAnimation(false, ui->list_aur);
 }
 
+//not
 void MainWindow::loadingListWidget()
 {
     saveScripts(shResourcePaths, mainDir + "sh/");
@@ -3923,7 +3283,6 @@ void MainWindow::loadingListWidget()
     cacheButtonPacman->setForeground(generateRandomColor());
     orphanButton->setForeground(generateRandomColor());
 
-
     QDir().mkpath(mainDir + "other/");
 
     QFile::copy(":/other/notify.png", mainDir + "other/notify.png");
@@ -3934,26 +3293,18 @@ void MainWindow::loadingListWidget()
 
 void MainWindow::loadScripts(const QString& baseDir, QListWidget* listWidget)
 {
-    // Очистка списка
     listWidget->clear();
-
-    // Загрузка скриптов из папки
     QDir dir(baseDir);
     QStringList filter;
-    filter << "*.sh"; // Фильтр для выбора только файлов со скриптами
+    filter << "*.sh";
     QFileInfoList fileList = dir.entryInfoList(filter);
-
-    QList<QListWidgetItem*> otherScripts;
 
     for (const QFileInfo& fileInfo : fileList)
     {
-        QString filePath = fileInfo.filePath();
-        QString fileName = fileInfo.fileName();
+        QString itemName;
+        QString iconPath;
 
-        QString itemName = fileName;
-        QString iconPath = "";
-
-        QFile scriptFile(filePath);
+        QFile scriptFile(fileInfo.filePath());
         if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             QTextStream scriptStream(&scriptFile);
@@ -3967,20 +3318,13 @@ void MainWindow::loadScripts(const QString& baseDir, QListWidget* listWidget)
                 else if (line.startsWith("#icon"))
                 {
                     QString iconNumber = line.mid(6).trimmed();
-
-                    iconPath = QString("/usr/share/icons/Papirus/48x48/apps/%1.svg").arg(iconNumber);
-
-                    QFileInfo fileInfo(iconPath);
-                    if (!fileInfo.exists()) {
-                        iconPath = QString(":/img/%1.png").arg(iconNumber);
-                    }
-
+                    iconPath = findIconPath(iconNumber);
                 }
             }
             scriptFile.close();
         }
 
-        QListWidgetItem* item = new QListWidgetItem(itemName);
+        QListWidgetItem* item = new QListWidgetItem(itemName.isEmpty() ? fileInfo.fileName() : itemName);
         item->setForeground(generateRandomColor());
 
         if (!iconPath.isEmpty())
@@ -3988,153 +3332,109 @@ void MainWindow::loadScripts(const QString& baseDir, QListWidget* listWidget)
             QIcon icon(iconPath);
             item->setIcon(icon);
         }
-
-        otherScripts.append(item);
-    }
-
-    // Сортировка по названию
-    std::sort(otherScripts.begin(), otherScripts.end(), [](const QListWidgetItem* a, const QListWidgetItem* b) {
-        return a->text().localeAwareCompare(b->text()) < 0;
-    });
-
-    // Добавление отсортированных элементов в QListWidget
-    for (QListWidgetItem* item : otherScripts)
-    {
         listWidget->addItem(item);
     }
+    listWidget->sortItems(Qt::AscendingOrder);
+}
+
+QString MainWindow::findIconPath(const QString &iconNumber)
+{
+    QString iconPath = QString("/usr/share/icons/Papirus/48x48/apps/%1.svg").arg(iconNumber);
+    QFileInfo fileInfo(iconPath);
+    return fileInfo.exists() ? iconPath : QString(":/img/%1.png").arg(iconNumber);
 }
 
 void MainWindow::sendNotification(const QString& title, const QString& message)
 {
-    QStringList arguments;
-    arguments << title << message << "-i" << mainDir + "other/notify.png" << "-a" << "kLaus" << "-t" << "10000";
-    QSharedPointer<QProcess>(new QProcess)->startDetached("notify-send", arguments);
+    QStringList arguments{
+        title,
+        message,
+        "-i", mainDir + "other/notify.png",
+        "-a", "kLaus",
+        "-t", "10000"
+    };
+
+    QProcess::startDetached("notify-send", arguments);
     loadSound(1);
 }
 
 void MainWindow::createArchive(const QString& folderPath, const QString& folderName)
 {
-    if (repair == 0) {
-        QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), tr("Вы уверены, что хотите удалить каталог \"%1\" с конфигурацией?").arg(folderPath + folderName), QMessageBox::Yes | QMessageBox::No);
-        if (reply == QMessageBox::No) return;
-
-        QDir folderDir(folderPath);
-        // Переходим в папку перед запуском процесса архивации
-        if (!folderDir.cd(folderPath)) {
-            sendNotification(tr("Ошибка"), tr("Не удалось перейти в каталог конфигурации!"));
-            return;
-        }
-
-        // Удаляем папку и ее содержимое
-        QDir folder2(folderPath + folderName);
-        folder2.removeRecursively();
-        loadFolders();
-        sendNotification(tr("Конфигурация"), tr("Конфигурация успешно удалена!"));
-        return;
-    }
-
-    QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), tr("Вы уверены, что хотите удалить каталог \"%1\" и создать резервную копию?\n\nВажно: Архивы начинающиеся с точки - это конфигурации из домашней директории (они скрыты по умолчанию/включите видимость скрытых файлов)").arg(folderPath + folderName), QMessageBox::Yes | QMessageBox::No);
+    QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), tr("Вы уверены, что хотите удалить каталог \"%1\" %2?").arg(folderPath + folderName, (repair == 0) ? tr("с конфигурацией") : tr("и создать резервную копию")), QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::No) return;
 
-    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-    process->start("zenity", QStringList() << "--file-selection" << "--directory" << tr("--title=Выберите путь сохранения архива"));
-    process->waitForFinished();
+    if (repair == 0) {
+        removeDirectory(folderPath + folderName);
+        loadFolders();
+        sendNotification(tr("Конфигурация"), tr("Конфигурация успешно удалена!"));
+    } else {
+        QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+        process->start("zenity", QStringList() << "--file-selection" << "--directory" << tr("--title=Выберите путь сохранения архива"));
+        process->waitForFinished();
 
-    if (process->exitCode() != 0) return;
-    QString selectedPath = process->readAllStandardOutput().trimmed();
+        if (process->exitCode() == 0) {
+            QString selectedPath = process->readAllStandardOutput().trimmed();
+            if (!selectedPath.isEmpty()) {
+                QDir folderDir(folderPath);
+                if (folderDir.exists() && folderDir.cd(folderPath)) {
+                    QString archivePath = selectedPath + "/" + folderName + ".zip";
+                    QSharedPointer<QProcess> zipProcess = QSharedPointer<QProcess>::create();
+                    zipProcess->setWorkingDirectory(folderDir.absolutePath());
+                    zipProcess->start("zip", QStringList() << "-r" << archivePath << folderName);
+                    zipProcess->waitForFinished();
 
-    if (selectedPath.isEmpty()) return;
-    QDir folderDir(folderPath);
-
-    // Проверяем, существует ли папка
-    if (!folderDir.exists()) {
-        sendNotification(tr("Ошибка"), tr("Каталог конфигурации не существует!"));
-        return;
+                    if (zipProcess->exitCode() == 0) {
+                        removeDirectory(folderPath + folderName);
+                        loadFolders();
+                        sendNotification(tr("Конфигурация"), tr("Резервная копия %1 успешно создана! Конфигурация удалена!").arg(archivePath));
+                        return;
+                    }
+                }
+            }
+        }
+        sendNotification(tr("Ошибка"), tr("Резервная копия не создана или отменена"));
     }
-
-    QString archivePath = selectedPath + "/" + folderName + ".zip";
-
-    // Переходим в папку перед запуском процесса архивации
-    if (!folderDir.cd(folderPath)) {
-        sendNotification(tr("Ошибка"), tr("Не удалось перейти в каталог конфигурации!"));
-        return;
-    }
-
-    QSharedPointer<QProcess> zipProcess = QSharedPointer<QProcess>::create();
-    zipProcess->setWorkingDirectory(folderDir.absolutePath());
-    zipProcess->start("zip", QStringList() << "-r" << archivePath << folderName);
-    zipProcess->waitForFinished();
-
-    if (zipProcess->exitCode() != 0) {
-        sendNotification(tr("Ошибка"), tr("Резервная копия %1 не создана!").arg(archivePath));
-        return;
-    }
-
-    // Удаляем папку и ее содержимое
-    QDir folder2(folderPath + folderName);
-    folder2.removeRecursively();
-    loadFolders();
-    sendNotification(tr("Конфигурация"), tr("Резервная копия %1 успешно создана! Конфигурация удалена!").arg(archivePath));
 }
 
 void MainWindow::loadFolders()
 {
-    QString homeDirectory = QDir::homePath();
-    QString configDirectory = homeDirectory + "/.config/";
-    QDir configDir(configDirectory);
-    QDir homeDir(homeDirectory);
-
-    if (!homeDir.exists() || !configDir.exists())
-        return; // Каталоги не существуют
-
     ui->list_repair->clear();
     int itemCount = 0;
 
-    // Загрузка папок из папки .config
-    QStringList configFolderList = configDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-
-    for (const QString& folderName : configFolderList) {
-        QString iconPath = QString("/usr/share/icons/Papirus/48x48/apps/") + folderName + ".svg";
-        if (!QFileInfo::exists(iconPath)) {
-            iconPath = "/usr/share/icons/Papirus/48x48/apps/gnome-do.svg";
-        }
-        ui->list_repair->addItem(new QListWidgetItem(QIcon(iconPath), folderName));
-        itemCount++;
-    }
-
-    // Загрузка папок из домашнего каталога
-    QFileInfoList homeFolderList = homeDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden);
-
-    for (const QFileInfo& fileInfo : homeFolderList) {
-        QString folderName = fileInfo.fileName();
-        // Проверяем, начинается ли имя папки с точки
-        // и не соответствует ли она заданным исключениям
-        if (!folderName.startsWith('.') ||
-            folderName == ".config" ||
-            folderName == ".local" ||
-            folderName == ".themes" ||
-            folderName == ".var" ||
-            folderName == ".icons" ||
-            folderName == ".cache")
-            continue; // Пропускаем папки без точек или исключения
-
+    auto addFolderItem = [&](const QString& folderName) {
         QString iconName = folderName;
-        QString iconPath;
-
         if (iconName.startsWith('.') && iconName.length() > 1) {
             iconName = iconName.mid(1); // Убираем точку из начала названия
-            iconPath = QString("/usr/share/icons/Papirus/48x48/apps/") + iconName + ".svg";
-        } else {
-            iconPath = QString("/usr/share/icons/Papirus/48x48/apps/") + iconName + ".svg";
         }
 
+        QString iconPath = QString("/usr/share/icons/Papirus/48x48/apps/") + iconName + ".svg";
         if (!QFileInfo::exists(iconPath)) {
-            // Если иконка с названием ".svg" не существует, используем "gnome-do.svg"
             iconPath = "/usr/share/icons/Papirus/48x48/apps/gnome-do.svg";
         }
 
         ui->list_repair->addItem(new QListWidgetItem(QIcon(iconPath), folderName));
         itemCount++;
+    };
+
+    QDir homeDir(QDir::homePath());
+    QDir configDir(homeDir.absoluteFilePath(".config"));
+
+    QStringList configFolderList = configDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    for (const QString& folderName : configFolderList)
+        addFolderItem(folderName);
+
+    QFileInfoList homeFolderList = homeDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden);
+    for (const QFileInfo& fileInfo : homeFolderList) {
+        QString folderName = fileInfo.fileName();
+        if (folderName.startsWith('.') &&
+            folderName != ".config" &&
+            folderName != ".local" &&
+            folderName != ".themes" &&
+            folderName != ".var" &&
+            folderName != ".icons" &&
+            folderName != ".cache") {
+            addFolderItem(folderName);
+        }
     }
 
     ui->label_repair->setText(tr("Очистка конфигураций: %1").arg(itemCount));
@@ -4142,36 +3442,22 @@ void MainWindow::loadFolders()
 
 void MainWindow::restoreArchive(const QString& archivePath)
 {
-    // Получаем имя архива без расширения
-    QFileInfo fileInfo(archivePath);
-    QString archiveName = fileInfo.fileName();
-
-    // Определяем целевую директорию в зависимости от имени архива
-    QString targetDir; // Путь к целевой директории
-
-    if (!archiveName.isEmpty() && archiveName.startsWith("."))
-        targetDir = QDir::homePath(); // Если имя архива начинается с ".", размещаем в домашней директории
-    else
-        targetDir = QDir::homePath() + "/.config"; // Иначе размещаем в папке ".config"
-
-    // Запускаем процесс распаковки архива в целевую директорию
+    QString archiveName = QFileInfo(archivePath).fileName();
+    QString targetDir = archiveName.startsWith(".") ? QDir::homePath() : QDir::homePath() + "/.config";
     QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
     process->setWorkingDirectory(targetDir);
     process->start("unzip", QStringList() << "-q" << archivePath);
     process->waitForFinished();
 
     if (process->exitCode() == 0) {
-        // Успешно распаковано
         sendNotification(tr("Резервная копия"), tr("Резервная копия успешно восстановлена в папку: ") + targetDir);
         loadFolders();
     } else
         sendNotification(tr("Ошибка"), tr("Не удалось восстановить конфигурацию через архив"));
 }
-
 //---#####################################################################################################################################################
 //--################################################################## СОБЫТИЯ ФУНКЦИЙ ##################################################################
 //-#####################################################################################################################################################
-
 void MainWindow::on_combo_mainpage_currentIndexChanged(int index)
 {
     mainpage = index;
@@ -4182,7 +3468,6 @@ void MainWindow::on_combo_helper_currentIndexChanged(int index)
 {
     pkg = index;
     settings.setValue("PackageManager", pkg);
-
     cacheButtonHelper->setText((pkg == 0) ? tr("Кэш пакетов Yay") : tr("Кэш пакетов Paru"));
 }
 
@@ -4194,65 +3479,46 @@ void MainWindow::on_combo_animload_currentIndexChanged(int index)
 
 void MainWindow::on_combo_lang_currentIndexChanged(int index)
 {
-    if (index == 0)
-        *lang = "ru_RU";
-    else if (index == 1)
-        *lang = "en_US";
-
-    QString currentLang = settings.value("Language").toString();
-
-    // Проверка, совпадает ли выбранный язык с текущим языком
-    if (currentLang != *lang) {
-        settings.setValue("Language", *lang);
-
+    const QString newLang = (index == 0) ? "ru_RU" : "en_US";
+    if (settings.value("Language").toString() != newLang) {
+        settings.setValue("Language", newLang);
         sendNotification(tr("Смена языка"), tr("Приложение будет перезагружено для смены языка"));
 
         QTranslator translator;
-        if (*lang == "ru_RU") {
-            if (translator.load(":/lang/kLaus_ru.qm")) {
-                qApp->installTranslator(&translator);
-            }
-        } else if (*lang == "en_US") {
-            if (translator.load(":/lang/kLaus_en.qm")) {
-                qApp->installTranslator(&translator);
-            }
-        }
+        if (translator.load(":/lang/kLaus_" + newLang + ".qm"))
+            qApp->installTranslator(&translator);
 
         qApp->quit();
         QSharedPointer<QProcess>(new QProcess)->startDetached(qApp->arguments()[0], qApp->arguments());
     }
 }
 
-bool MainWindow::isSnapInstalled()
+bool isSnapInstalled()
 {
-    QSharedPointer<QProcess> processSnap = QSharedPointer<QProcess>::create();
-    processSnap->start(packageCommands.value(2).value("snap_version").at(0), QStringList() << packageCommands.value(2).value("snap_version").at(1));
-    processSnap->waitForFinished(-1);
-
-    return processSnap->exitCode() == 0;
+    QProcess processSnap;
+    processSnap.start(packageCommands.value(2).value("snap_version").at(0), QStringList() << packageCommands.value(2).value("snap_version").at(1));
+    processSnap.waitForFinished(-1);
+    return processSnap.exitCode() == 0;
 }
 
 void MainWindow::on_combo_repo_currentIndexChanged(int index)
 {
     if (index == 1) {
-        bool snapInstalled = isSnapInstalled();
-        if (!snapInstalled) {
+        if (!isSnapInstalled()) {
             ui->combo_repo->setCurrentIndex(0);
             sendNotification(tr("Ошибка"), tr("У вас не установлен Snap!"));
             return;
         }
         container = 2;
     }
-
     on_action_7_triggered();
     loadContentInstall();
 }
 
+//not
 void MainWindow::on_combo_bench_currentIndexChanged(int index)
 {
     benchlist = index;
-
-    // Очистка списка
     ui->list_bench->clear();
 
     if (index == 0)
@@ -4261,10 +3527,9 @@ void MainWindow::on_combo_bench_currentIndexChanged(int index)
         return;
     }
 
-    // Загрузка скриптов из папки
     QDir dir(mainDir + "/bench");
     QStringList filter;
-    filter << "*.sh"; // Фильтр для выбора только файлов со скриптами
+    filter << "*.sh";
     QFileInfoList fileList = dir.entryInfoList(filter);
 
     QList<QListWidgetItem*> comboBenchScripts;
@@ -4302,7 +3567,6 @@ void MainWindow::on_combo_bench_currentIndexChanged(int index)
             }
             scriptFile.close();
         }
-
         QListWidgetItem* item = new QListWidgetItem(itemName);
         item->setForeground(generateRandomColor());
 
@@ -4320,7 +3584,6 @@ void MainWindow::on_combo_bench_currentIndexChanged(int index)
         }
     }
 
-    // Добавляем элементы с иконкой ":/img/53.png" в начало списка
     for (QListWidgetItem* item : comboBenchScripts)
     {
         ui->list_bench->addItem(item);
@@ -4421,7 +3684,6 @@ void MainWindow::on_check_autostart_stateChanged(int arg1)
         }
     } else {
         if (!QFile::exists(autostartFilePath)) {
-            // Создаем символьную ссылку
             QString sourceFilePath = "/usr/share/applications/klaus.desktop";
             QFile::link(sourceFilePath, autostartFilePath);
         }
@@ -4450,6 +3712,12 @@ void MainWindow::on_check_updateinstall_stateChanged(int arg1)
 {
     updinst = arg1;
     settings.setValue("UpdateInstall", arg1);
+}
+
+void MainWindow::on_check_clearinstall_stateChanged(int arg1)
+{
+    clearinstall = arg1;
+    settings.setValue("ClearInstall", arg1);
 }
 
 void MainWindow::on_dial_volnotify_valueChanged(int value)
@@ -4493,7 +3761,6 @@ void MainWindow::handleListItemClicked(QListWidgetItem *item, const QString& scr
         if (scriptPath.isEmpty())
             scriptPath = scriptDir + itemName;
 
-
         if (scriptDir == mainDir + "cfg/" || scriptDir == mainDir + "journals/")
             ui->details_journal->setText(msg);
         else if (scriptDir == mainDir + "sh/")
@@ -4509,13 +3776,9 @@ void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString&
     if (item == orphanButton) {
         QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), tr("Обычно, когда пакет становится сиротой, это означает, что он был установлен в качестве зависимости другого пакета, но этот пакет был удален, и больше нет других пакетов, которые бы зависели от данного. Удаление сирот из системы помогает поддерживать систему более чистой и оптимизированной. Вы действительно хотите удалить пакеты сироты?"), QMessageBox::Yes | QMessageBox::No);
         if (reply == QMessageBox::Yes) {
-
-            // Формируем команду для удаления сиротских пакетов
             QString remove = packageCommands.value(pkg).value("remove_explicit").join(" ");
             QString removelist = packageCommands.value(pkg).value("query_depends").join(" ");
             QString command = remove + " $(" + removelist + ")";
-
-            // Запускаем процесс с помощью sh -c и полной командой
             QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "sh" << "-c" << command);
         }
         return;
@@ -4523,7 +3786,7 @@ void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString&
 
     if (item == cacheButtonHelper || item == cacheButtonPacman) {
         QString command;
-        QMessageBox::StandardButton replymod = QMessageBox::No; // Инициализация значением по умолчанию
+        QMessageBox::StandardButton replymod = QMessageBox::No;
         switch (helpercache) {
             case 0: {
                 replymod = QMessageBox::question(this, tr("Вопрос"), tr("При обновлении пакетов старые версии пакетов сохраняются в кэше, чтобы вы могли откатиться к предыдущим версиям, если это необходимо. Однако, если вы не планируете откатываться к предыдущим версиям пакетов, удаление кэша может помочь вам освободить дополнительное место на диске. Вы действительно хотите удалить кэш только неустановленных пакетов (можно изменить в настройках)?"), QMessageBox::Yes | QMessageBox::No);
@@ -4649,34 +3912,6 @@ void MainWindow::on_list_bench_itemClicked(QListWidgetItem *item)
     handleListItemClicked(item, scriptDir);
 }
 
-void MainWindow::openUrl(const QString& url)
-{
-    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-
-    process->start("xdg-open", QStringList() << url);
-    process->waitForFinished();
-
-    // Проверяем код возврата
-    if (process->exitCode() != 0) {
-        // Проверяем наличие Firefox
-        QString firefoxPath = QStandardPaths::findExecutable("firefox");
-        if (!firefoxPath.isEmpty()) {
-            QSharedPointer<QProcess> processSettings = QSharedPointer<QProcess>::create();
-
-            processSettings->start("xdg-settings", QStringList() << "set default-web-browser firefox.desktop");
-            processSettings->waitForFinished();
-
-            QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-
-            process->start("xdg-open", QStringList() << url);
-            process->waitForFinished();
-        }
-        else
-            sendNotification(tr("Ошибка"), tr("Установите Firefox или выберите рабочий браузер в качестве основного в настройках системы!"));
-    }
-}
-
-// Функция для запроса аутентификации с помощью pkexec
 bool runPkexecCommand(const QString& command)
 {
     QProcess process;
@@ -4684,13 +3919,9 @@ bool runPkexecCommand(const QString& command)
     process.waitForFinished();
 
     if (process.exitCode() == 0)
-        return true; // Успешно выполнена аутентификация
-
+        return true;
     else
-    {
-        qWarning() << "Failed to run pkexec command:" << process.readAllStandardError();
-        return false; // Ошибка аутентификации
-    }
+        return false;
 }
 
 void MainWindow::on_push_pacman_clicked()
@@ -4738,7 +3969,6 @@ void MainWindow::on_push_pacman_clicked()
 
     editor->setParent(dialog);
     layout->setParent(dialog);
-
     dialog->show();
 }
 
@@ -4755,7 +3985,6 @@ void MainWindow::on_reload_aur_clicked()
 {
     miniAnimation(true, ui->list_aur);
 
-    // Очищаем QListWidget
     ui->list_aur->clear();
     ui->img_aur->setChecked(false);
     ui->img_aur->setDisabled(true);
@@ -4771,8 +4000,6 @@ void MainWindow::on_reload_aur_clicked()
 void MainWindow::on_reload_aurpkg_clicked()
 {
     miniAnimation(true, ui->list_app);
-
-    // Очищаем QListWidget
     ui->list_app->clear();
 
     QTimer::singleShot(500, this, [=]() {
@@ -4784,16 +4011,7 @@ void MainWindow::on_reload_aurpkg_clicked()
 
 void MainWindow::on_img_aur_toggled(bool checked)
 {
-    if (checked)
-    {
-        ui->image_aur->setVisible(true);
-        ui->back_slider->setVisible(true);
-        ui->next_slider->setVisible(true);
-    }
-    else
-    {
-        ui->image_aur->setVisible(false);
-        ui->back_slider->setVisible(false);
-        ui->next_slider->setVisible(false);
-    }
+    ui->image_aur->setVisible(checked);
+    ui->back_slider->setVisible(checked);
+    ui->next_slider->setVisible(checked);
 }

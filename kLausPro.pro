@@ -28,5 +28,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += klausres.qrc
 
-TRANSLATIONS += lang/kLaus_ru.ts \
-               lang/kLaus_en.ts
+TRANSLATIONS += lang/kLaus_ru_RU.ts \
+               lang/kLaus_en_US.ts

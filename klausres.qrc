@@ -80,8 +80,6 @@
         <file>journals/top-pkg.sh</file>
         <file>journals/xorg-log.sh</file>
         <file>kLausPro.pro</file>
-        <file>lang/kLaus_en.qm</file>
-        <file>lang/kLaus_ru.qm</file>
         <file>loading.browser.js</file>
         <file>media/message.wav</file>
         <file>other/main.sh</file>
@@ -227,5 +225,11 @@
         <file>sh/amd.sh</file>
         <file>sh/intel.sh</file>
         <file>sh/nvidia.sh</file>
+        <file>img/sony.png</file>
+        <file>img/samsung.png</file>
+        <file>lang/kLaus_ru_RU.qm</file>
+        <file>lang/kLaus_en_US.qm</file>
+        <file>lang/kLaus_ru_RU.ts</file>
+        <file>lang/kLaus_en_US.ts</file>
     </qresource>
 </RCC>
