@@ -4,8 +4,10 @@
 bool isPackageInstalled(const QString& packageName)
 {
     QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
+
     process->start("pacman", QStringList() << "-Q" << packageName);
     process->waitForFinished();
+
     QString output = process->readAllStandardOutput();
     return !output.isEmpty();
 }
@@ -13,25 +15,15 @@ bool isPackageInstalled(const QString& packageName)
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
 
-
-    QString uniqueKey = "KlausKey";
-    QSharedMemory sharedMemory(uniqueKey);
-    if (!sharedMemory.create(1)) {
-        w.sendNotification(QObject::tr("Ошибка"), QObject::tr("Приложение уже запущено!"));
-        return 1;
-    }
-    QSystemSemaphore systemSemaphore("KlausSemaphore", 1);
-    systemSemaphore.acquire();
-
-
+    //костыль wayland icon
     #if QT_VERSION > QT_VERSION_CHECK(5, 7, 0)
         QGuiApplication::setDesktopFileName("klaus");
     #endif
 
-
-    QString filePath = QDir::homePath() + "/.config/kLaus/" + "settings.ini";
+    QString mainDir = QDir::homePath() + "/.config/kLaus/";
+    // Создаем объект QSettings для чтения из файла INI
+    QString filePath = mainDir + "settings.ini";
     QSettings settings(filePath, QSettings::IniFormat);
 
     QString locale = "ru_RU";
@@ -44,9 +36,10 @@ int main(int argc, char *argv[])
 
         if (savedLanguage == "ru_RU" || savedLanguage == "en_US")
             locale = savedLanguage;
-        else
+        else {
+            QMessageBox::critical(nullptr, "Error", "Invalid language value in INI file");
             return 1;
-
+        }
     } else {
         // Выводим диалоговое окно с выбором языка и менеджера пакетов
         QDialog dialog;
@@ -88,19 +81,25 @@ int main(int argc, char *argv[])
 
             packageManagerIndex = packageManagerComboBox->currentIndex();
             settings.setValue("PackageManager", packageManagerIndex);
-            settings.sync();
+            settings.sync(); // Сохраняем изменения в файл INI
 
         } else
-            return 0;
+            return 0; // Пользователь нажал отмену, выходим из приложения
+
 
         locale = settings.value("Language").toString();
     }
 
+    // Загружаем и устанавливаем файл перевода
     QTranslator translator;
     if (translator.load("kLaus_" + locale, ":/lang"))
         a.installTranslator(&translator);
-    else
+    else {
+        QMessageBox::critical(nullptr, "Error", "Translation not available for selected language");
         return 1;
+    }
+
+    MainWindow w;
 
     a.setWindowIcon(QIcon(":/img/2.png"));
 
@@ -128,7 +127,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+
     w.show();
-    systemSemaphore.release();
     return a.exec();
 }
