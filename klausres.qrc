@@ -227,5 +227,7 @@
         <file>sh/amd.sh</file>
         <file>sh/intel.sh</file>
         <file>sh/nvidia.sh</file>
+        <file>img/sony.png</file>
+        <file>img/samsung.png</file>
     </qresource>
 </RCC>

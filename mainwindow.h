@@ -180,7 +180,6 @@ protected:
     bool eventFilter(QObject *obj, QEvent *event) override;
 
 public slots:
-    void on_action_1_triggered();
     void on_action_2_triggered();
     void on_action_3_triggered();
     void on_action_4_triggered();

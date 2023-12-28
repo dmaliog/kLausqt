@@ -15,7 +15,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "10.1";
+QString currentVersion = "10.2";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 int container = 2; //контейнеры: 2-snap
@@ -113,11 +113,6 @@ Terminal getTerminal()
 //---#####################################################################################################################################################
 //--################################################################# ОСНОВНЫЕ ФУНКЦИИ ##################################################################
 //-#####################################################################################################################################################
-
-void MainWindow::on_action_1_triggered()
-{
-//свободно
-}
 
 void MainWindow::on_action_2_triggered()
 {
@@ -2359,12 +2354,18 @@ void MainWindow::miniAnimation(bool visible, QWidget* targetWidget)
 }
 
 QIcon MainWindow::getPackageIcon(const QString& packageName) {
+
     QString appName = packageName.split(' ').first();
     for (const QString& ending : endingsToRemove) {
         if (appName.endsWith(ending)) {
             appName.chop(ending.length());
             break;
         }
+    }
+
+    QString additionalIconPath = "/usr/share/icons/Papirus/48x48/apps/" + appName + ".svg";
+    if (QFileInfo(additionalIconPath).isFile()) {
+        return QIcon(additionalIconPath);
     }
 
     static QMap<QString, QString> iconMap;
@@ -2423,6 +2424,7 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
             }
         }
     }
+
     return QIcon(":/img/pacman.png");
 }
 

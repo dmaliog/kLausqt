@@ -367,7 +367,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>7</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab_auradd">
      <attribute name="title">
@@ -854,7 +854,7 @@ color:#5752e7;</string>
      </widget>
      <widget class="QComboBox" name="combo_repo">
       <property name="enabled">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="geometry">
        <rect>
