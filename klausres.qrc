@@ -231,5 +231,7 @@
         <file>lang/kLaus_en_US.qm</file>
         <file>lang/kLaus_ru_RU.ts</file>
         <file>lang/kLaus_en_US.ts</file>
+        <file>img/like.png</file>
+        <file>img/dislike.png</file>
     </qresource>
 </RCC>

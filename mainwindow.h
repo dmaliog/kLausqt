@@ -327,6 +327,8 @@ private slots:
     void on_push_vk_clicked();
     void on_reload_aur_clicked();
     void on_reload_aurpkg_clicked();
+    void on_like_aur_clicked();
+    void on_dislike_aur_clicked();
 };
 
 #endif // MAINWINDOW_H

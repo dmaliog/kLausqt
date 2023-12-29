@@ -15,7 +15,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "10.3";
+QString currentVersion = "10.4";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 int container = 2; //контейнеры: 2-snap
@@ -36,6 +36,7 @@ int benchlist = 0; // бенчлист
 int numPackages = 0;
 int list = 0;
 int cacheremove = 0; // удаление кэша при выходе
+int auth = 0;
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -58,7 +59,9 @@ QMap<int, QMap<QString, QStringList>> packageCommands = {
             {"query_depends", {"yay", "-Qdtq"}},
             {"clean_cache", {"yay", "-Sc"}},
             {"clean_all_cache", {"yay", "-Scc"}},
-            {"localinstall", {"yay", "-Udd"}}
+            {"localinstall", {"yay", "-Udd"}},
+            {"like", {"yay", "-Wv"}},
+            {"dislike", {"yay", "-Wu"}}
         }
     },
     {1,
@@ -568,7 +571,7 @@ void MainWindow::on_action_34_triggered()
             showLoadingAnimation(true);
             webEngineView2->setUrl(QUrl(url));
     } else
-            sendNotification(tr("Внимание"), tr("URL отсутствует!"));
+            sendNotification(tr("Внимание"), tr("URL недоступен!"));
 }
 
 void MainWindow::on_action_35_triggered()
@@ -1242,9 +1245,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     loadingListWidget();
     loadSystemInfo();
 
-    ui->image_aur->setVisible(false);
-    ui->back_slider->setVisible(false);
-    ui->next_slider->setVisible(false);
     ui->img_aur->setDisabled(true);
 
     detailsAURdefault = ui->details_aur->toHtml();
@@ -2209,7 +2209,7 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
                 }
 
                 if (imageUrls.isEmpty()){
-                    ui->image_aur->setVisible(false);
+                    ui->tabWidget_details->setCurrentIndex(0);
                     ui->img_aur->setDisabled(true);
                     ui->img_aur->setChecked(false);
 
@@ -2219,7 +2219,7 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
                 }
 
             } else {
-                ui->image_aur->setVisible(false);
+                ui->tabWidget_details->setCurrentIndex(0);
                 ui->img_aur->setDisabled(true);
                 ui->img_aur->setChecked(false);
             }
@@ -2252,6 +2252,10 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
         detailsWidget->append(processedInfo);
         detailsWidget->verticalScrollBar()->setValue(scrollBarValue);
+
+        ui->like_aur->setDisabled(false);
+        ui->dislike_aur->setDisabled(false);
+
         miniAnimation(false,detailsWidget);
     });
 
@@ -2269,6 +2273,10 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
             QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
             QCoreApplication::postEvent(searchLineEdit.data(), event);
+
+            ui->like_aur->setDisabled(true);
+            ui->dislike_aur->setDisabled(true);
+
             miniAnimation(false,detailsWidget);
         }
     });
@@ -3039,7 +3047,6 @@ void MainWindow::connectProcessSignals(QSharedPointer<QProcess>& process, QTextB
 
         QString processedInfo = processPackageInfo(packageInfo);
         outputWidget->append(processedInfo);
-
         outputWidget->moveCursor(QTextCursor::Start);
     });
 
@@ -3992,7 +3999,13 @@ void MainWindow::on_reload_aur_clicked()
     QTimer::singleShot(500, this, [=]() {
         list = 0;
         loadContent(0, true);
+
+        ui->img_aur->setDisabled(true);
+        ui->like_aur->setDisabled(true);
+        ui->dislike_aur->setDisabled(true);
+
         ui->details_aur->setHtml(detailsAURdefault);
+
         miniAnimation(false, ui->list_aur);
     });
 }
@@ -4011,7 +4024,28 @@ void MainWindow::on_reload_aurpkg_clicked()
 
 void MainWindow::on_img_aur_toggled(bool checked)
 {
-    ui->image_aur->setVisible(checked);
-    ui->back_slider->setVisible(checked);
-    ui->next_slider->setVisible(checked);
+    if (checked)
+        ui->tabWidget_details->setCurrentIndex(1);
+    else
+        ui->tabWidget_details->setCurrentIndex(0);
 }
+
+void MainWindow::on_like_aur_clicked()
+{
+    if (auth == 0)
+    {
+        sendNotification(tr("Ошибка"), tr("Для участия в голосовании пройдите авторизацию в настройках!"));
+        return;
+    }
+}
+
+
+void MainWindow::on_dislike_aur_clicked()
+{
+    if (auth == 0)
+    {
+        sendNotification(tr("Ошибка"), tr("Для участия в голосовании пройдите авторизацию в настройках!"));
+        return;
+    }
+}
+

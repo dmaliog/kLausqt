@@ -367,7 +367,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_auradd">
      <attribute name="title">
@@ -378,56 +378,6 @@ QTabWidget#tabWidget QTabBar::tab:selected {
      <attribute name="title">
       <string>tab_aur</string>
      </attribute>
-     <widget class="QTextBrowser" name="details_aur">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>660</x>
-        <y>50</y>
-        <width>721</width>
-        <height>531</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QTextEdit {
-	background:#272727;
-}</string>
-      </property>
-      <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAsNeeded</enum>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-      <property name="html">
-       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/aur_mini.png&quot; /&gt;  &lt;span style=&quot; font-size:28pt; font-style:italic;&quot;&gt;aur&lt;/span&gt; содержит наиболее важное и популярное программное обеспечение, которое можно легко получить и установить при помощи &lt;a href=&quot;https://wiki.archlinux.org/title/Pacman_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;pacman&lt;/span&gt;&lt;/a&gt;. Эти репозитории поддерживают &lt;a href=&quot;https://wiki.archlinux.org/title/Arch_terminology#Package_maintainer&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;мейнтейнеры пакетов&lt;/span&gt;&lt;/a&gt;. &lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/core_mini.png&quot; /&gt;  &lt;span style=&quot; font-size:28pt; font-style:italic;&quot;&gt;core&lt;/span&gt; имеет достаточно строгие требования к качеству. Разработчики/пользователи должны подтвердить (в ответ на &lt;span style=&quot; font-style:italic;&quot;&gt;signoff&lt;/span&gt;-запрос в почтовой рассылке) работоспособность обновлений, прежде чем они будут приняты. &lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/extra_mini.png&quot; /&gt; &lt;span style=&quot; font-size:28pt; font-style:italic;&quot;&gt;extra&lt;/span&gt; содержит все пакеты, которые не подходят для &lt;span style=&quot; font-style:italic;&quot;&gt;core&lt;/span&gt;. Этот репозиторий совместно сопровождается &lt;a href=&quot;https://wiki.archlinux.org/title/Trusted_Users&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;доверенными пользователями&lt;/span&gt;&lt;/a&gt; и разработчиками Arch. Примеры: Xorg, оконные менеджеры, веб-браузеры, медиаплееры, инструменты для работы с языками, такими как Python и Ruby, и многое другое. &lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/multilib_mini.png&quot; /&gt; &lt;span style=&quot; font-size:28pt; font-style:italic;&quot;&gt;multilib&lt;/span&gt; содержит 32-битное программное обеспечение и библиотеки, которые можно использовать для запуска и сборки 32-битных приложений на 64-битных системах (например, &lt;a href=&quot;https://archlinux.org/packages/?name=wine&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;wine&lt;/span&gt;&lt;/a&gt;, &lt;a href=&quot;https://archlinux.org/packages/?name=steam&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;steam&lt;/span&gt;&lt;/a&gt; и т.д.). &lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/snap_mini.png&quot; /&gt; &lt;span style=&quot; font-size:28pt; font-style:italic;&quot;&gt;snap&lt;/span&gt; содержит пакеты разработанные компанией Canonical, которая является создателем и основным разработчиком дистрибутива Ubuntu.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-      <property name="openLinks">
-       <bool>false</bool>
-      </property>
-     </widget>
      <widget class="QPushButton" name="reload_aur">
       <property name="geometry">
        <rect>
@@ -446,8 +396,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
       </property>
       <property name="iconSize">
        <size>
-        <width>20</width>
-        <height>20</height>
+        <width>18</width>
+        <height>18</height>
        </size>
       </property>
      </widget>
@@ -496,7 +446,7 @@ color:#5752e7;</string>
        <rect>
         <x>670</x>
         <y>9</y>
-        <width>281</width>
+        <width>311</width>
         <height>41</height>
        </rect>
       </property>
@@ -537,71 +487,29 @@ color:#5752e7;</string>
       </property>
       <property name="geometry">
        <rect>
-        <x>916</x>
+        <x>911</x>
         <y>15</y>
-        <width>30</width>
+        <width>33</width>
         <height>30</height>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true"/>
+       <string notr="true">border-top-left-radius:10px;
+border-top-right-radius: 0;
+border-bottom-right-radius: 0;
+border-bottom-left-radius: 10px;</string>
       </property>
       <property name="text">
        <string/>
       </property>
       <property name="icon">
        <iconset resource="klausres.qrc">
-        <normaloff>:/img/6.png</normaloff>:/img/6.png</iconset>
+        <normaloff>:/img/like.png</normaloff>:/img/like.png</iconset>
       </property>
       <property name="iconSize">
        <size>
-        <width>16</width>
-        <height>16</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QGraphicsView" name="image_aur">
-      <property name="geometry">
-       <rect>
-        <x>660</x>
-        <y>50</y>
-        <width>721</width>
-        <height>531</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: #191919;</string>
-      </property>
-      <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOff</enum>
-      </property>
-      <property name="horizontalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOff</enum>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="back_slider">
-      <property name="geometry">
-       <rect>
-        <x>650</x>
-        <y>280</y>
-        <width>51</width>
-        <height>51</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: #191919;</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="klausres.qrc">
-        <normaloff>:/img/35.png</normaloff>:/img/35.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>40</width>
-        <height>40</height>
+        <width>18</width>
+        <height>18</height>
        </size>
       </property>
      </widget>
@@ -611,7 +519,7 @@ color:#5752e7;</string>
       </property>
       <property name="geometry">
        <rect>
-        <x>882</x>
+        <x>878</x>
         <y>15</y>
         <width>30</width>
         <height>30</height>
@@ -630,8 +538,8 @@ color:#5752e7;</string>
       </property>
       <property name="iconSize">
        <size>
-        <width>16</width>
-        <height>16</height>
+        <width>18</width>
+        <height>18</height>
        </size>
       </property>
       <property name="checkable">
@@ -639,32 +547,6 @@ color:#5752e7;</string>
       </property>
       <property name="checked">
        <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="next_slider">
-      <property name="geometry">
-       <rect>
-        <x>1340</x>
-        <y>270</y>
-        <width>51</width>
-        <height>51</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: #191919;</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="klausres.qrc">
-        <normaloff>:/img/57.png</normaloff>:/img/57.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>40</width>
-        <height>40</height>
-       </size>
       </property>
      </widget>
      <widget class="QListWidget" name="list_aur">
@@ -692,16 +574,190 @@ color:#5752e7;</string>
        <enum>Qt::ScrollBarAlwaysOff</enum>
       </property>
      </widget>
-     <zorder>details_aur</zorder>
+     <widget class="QTabWidget" name="tabWidget_details">
+      <property name="geometry">
+       <rect>
+        <x>660</x>
+        <y>50</y>
+        <width>721</width>
+        <height>531</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <widget class="QWidget" name="tab_details">
+       <attribute name="title">
+        <string>Tab 1</string>
+       </attribute>
+       <widget class="QTextBrowser" name="details_aur">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>721</width>
+          <height>531</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QTextEdit {
+	background:#272727;
+}</string>
+        </property>
+        <property name="verticalScrollBarPolicy">
+         <enum>Qt::ScrollBarAsNeeded</enum>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="html">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/aur_mini.png&quot; /&gt;  &lt;span style=&quot; font-size:28pt; font-style:italic;&quot;&gt;aur&lt;/span&gt; содержит наиболее важное и популярное программное обеспечение, которое можно легко получить и установить при помощи &lt;a href=&quot;https://wiki.archlinux.org/title/Pacman_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;pacman&lt;/span&gt;&lt;/a&gt;. Эти репозитории поддерживают &lt;a href=&quot;https://wiki.archlinux.org/title/Arch_terminology#Package_maintainer&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;мейнтейнеры пакетов&lt;/span&gt;&lt;/a&gt;. &lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/core_mini.png&quot; /&gt;  &lt;span style=&quot; font-size:28pt; font-style:italic;&quot;&gt;core&lt;/span&gt; имеет достаточно строгие требования к качеству. Разработчики/пользователи должны подтвердить (в ответ на &lt;span style=&quot; font-style:italic;&quot;&gt;signoff&lt;/span&gt;-запрос в почтовой рассылке) работоспособность обновлений, прежде чем они будут приняты. &lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/extra_mini.png&quot; /&gt; &lt;span style=&quot; font-size:28pt; font-style:italic;&quot;&gt;extra&lt;/span&gt; содержит все пакеты, которые не подходят для &lt;span style=&quot; font-style:italic;&quot;&gt;core&lt;/span&gt;. Этот репозиторий совместно сопровождается &lt;a href=&quot;https://wiki.archlinux.org/title/Trusted_Users&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;доверенными пользователями&lt;/span&gt;&lt;/a&gt; и разработчиками Arch. Примеры: Xorg, оконные менеджеры, веб-браузеры, медиаплееры, инструменты для работы с языками, такими как Python и Ruby, и многое другое. &lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/multilib_mini.png&quot; /&gt; &lt;span style=&quot; font-size:28pt; font-style:italic;&quot;&gt;multilib&lt;/span&gt; содержит 32-битное программное обеспечение и библиотеки, которые можно использовать для запуска и сборки 32-битных приложений на 64-битных системах (например, &lt;a href=&quot;https://archlinux.org/packages/?name=wine&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;wine&lt;/span&gt;&lt;/a&gt;, &lt;a href=&quot;https://archlinux.org/packages/?name=steam&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;steam&lt;/span&gt;&lt;/a&gt; и т.д.). &lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/snap_mini.png&quot; /&gt; &lt;span style=&quot; font-size:28pt; font-style:italic;&quot;&gt;snap&lt;/span&gt; содержит пакеты разработанные компанией Canonical, которая является создателем и основным разработчиком дистрибутива Ubuntu.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="openLinks">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_slider">
+       <attribute name="title">
+        <string>Tab 2</string>
+       </attribute>
+       <widget class="QGraphicsView" name="image_aur">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>721</width>
+          <height>531</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: #191919;</string>
+        </property>
+        <property name="verticalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
+        </property>
+        <property name="horizontalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="back_slider">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>250</y>
+          <width>51</width>
+          <height>51</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: #191919;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="klausres.qrc">
+          <normaloff>:/img/35.png</normaloff>:/img/35.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>40</width>
+          <height>40</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="next_slider">
+        <property name="geometry">
+         <rect>
+          <x>660</x>
+          <y>230</y>
+          <width>51</width>
+          <height>51</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: #191919;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="klausres.qrc">
+          <normaloff>:/img/57.png</normaloff>:/img/57.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>40</width>
+          <height>40</height>
+         </size>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+     <widget class="QPushButton" name="dislike_aur">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>943</x>
+        <y>15</y>
+        <width>33</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-top-left-radius:0;
+border-top-right-radius:10px;
+border-bottom-right-radius:10px;
+border-bottom-left-radius:0;</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="klausres.qrc">
+        <normaloff>:/img/dislike.png</normaloff>:/img/dislike.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>18</width>
+        <height>18</height>
+       </size>
+      </property>
+     </widget>
      <zorder>label_name_aur</zorder>
      <zorder>label_details_aur</zorder>
      <zorder>reload_aur</zorder>
      <zorder>like_aur</zorder>
-     <zorder>image_aur</zorder>
-     <zorder>back_slider</zorder>
      <zorder>img_aur</zorder>
-     <zorder>next_slider</zorder>
      <zorder>list_aur</zorder>
+     <zorder>tabWidget_details</zorder>
+     <zorder>dislike_aur</zorder>
     </widget>
     <widget class="QWidget" name="tab_aurpkg">
      <attribute name="title">
@@ -710,7 +766,7 @@ color:#5752e7;</string>
      <widget class="QPushButton" name="reload_aurpkg">
       <property name="geometry">
        <rect>
-        <x>485</x>
+        <x>296</x>
         <y>15</y>
         <width>30</width>
         <height>30</height>
@@ -725,8 +781,8 @@ color:#5752e7;</string>
       </property>
       <property name="iconSize">
        <size>
-        <width>20</width>
-        <height>20</height>
+        <width>18</width>
+        <height>18</height>
        </size>
       </property>
      </widget>
@@ -777,7 +833,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
        <rect>
         <x>20</x>
         <y>9</y>
-        <width>501</width>
+        <width>311</width>
         <height>41</height>
        </rect>
       </property>
@@ -858,10 +914,10 @@ color:#5752e7;</string>
       </property>
       <property name="geometry">
        <rect>
-        <x>267</x>
+        <x>222</x>
         <y>15</y>
-        <width>211</width>
-        <height>31</height>
+        <width>71</width>
+        <height>30</height>
        </rect>
       </property>
       <property name="contextMenuPolicy">
@@ -877,8 +933,8 @@ color:#5752e7;</string>
       </property>
       <property name="iconSize">
        <size>
-        <width>20</width>
-        <height>20</height>
+        <width>18</width>
+        <height>18</height>
        </size>
       </property>
       <property name="duplicatesEnabled">
@@ -889,12 +945,20 @@ color:#5752e7;</string>
       </property>
       <item>
        <property name="text">
-        <string>Репозитории Pacman</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="klausres.qrc">
+         <normaloff>:/img/aur.png</normaloff>:/img/aur.png</iconset>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Репозитории Snap</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="klausres.qrc">
+         <normaloff>:/img/snap.png</normaloff>:/img/snap.png</iconset>
        </property>
       </item>
      </widget>
@@ -1452,7 +1516,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <x>10</x>
         <y>9</y>
         <width>631</width>
-        <height>681</height>
+        <height>691</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -1467,7 +1531,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
          <x>0</x>
          <y>0</y>
          <width>619</width>
-         <height>669</height>
+         <height>679</height>
         </rect>
        </property>
        <property name="maximumSize">
@@ -1477,6 +1541,304 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </size>
        </property>
        <layout class="QGridLayout" name="gridLayout">
+        <item row="18" column="0" colspan="2">
+         <widget class="QCheckBox" name="check_repair">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="tabletTracking">
+           <bool>false</bool>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>Создать резервную копию при удалении конфигураций</string>
+          </property>
+          <property name="autoRepeat">
+           <bool>false</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+          <property name="tristate">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="20" column="0" colspan="2">
+         <widget class="QCheckBox" name="check_updateinstall">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Проверить актуальность системы перед установкой новых пакетов</string>
+          </property>
+         </widget>
+        </item>
+        <item row="12" column="0">
+         <widget class="QScrollArea" name="scroll_auth">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>150</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color:#252525;</string>
+          </property>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="scrollArea_auth">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>383</width>
+             <height>138</height>
+            </rect>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="1" column="2">
+             <widget class="QLineEdit" name="line_user"/>
+            </item>
+            <item row="1" column="1" rowspan="2">
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Minimum</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>10</width>
+                <height>10</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="2" column="2">
+             <widget class="QLineEdit" name="line_pass">
+              <property name="echoMode">
+               <enum>QLineEdit::Password</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_user">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Имя пользователя</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_pass">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Пароль</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="2">
+             <widget class="QPushButton" name="push_save">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>130</width>
+                <height>31</height>
+               </size>
+              </property>
+              <property name="text">
+               <string> Сохранить</string>
+              </property>
+              <property name="icon">
+               <iconset resource="klausres.qrc">
+                <normaloff>:/img/16.png</normaloff>:/img/16.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>18</width>
+                <height>18</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+        <item row="16" column="0" colspan="2">
+         <widget class="QCheckBox" name="check_trayon">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>Закрыть без сворачивания в трей</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QComboBox" name="combo_animload">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>Химический процесс</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Косатки</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="10" column="0">
+         <widget class="QLabel" name="label_mainpage_2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background:#2e2b79;
+padding:0 15px;
+border-top-left-radius: 15px;
+border-top-right-radius: 15px;
+color:#5752e7;
+margin-left:10px;
+margin-right:35px;</string>
+          </property>
+          <property name="text">
+           <string>Авторизация (aur.archlinux.org)</string>
+          </property>
+         </widget>
+        </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_mainpage">
           <property name="sizePolicy">
@@ -1507,8 +1869,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </property>
          </widget>
         </item>
-        <item row="16" column="0" colspan="2">
-         <widget class="QCheckBox" name="check_updateinstall">
+        <item row="17" column="0" colspan="2">
+         <widget class="QCheckBox" name="check_clearinstall">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -1520,38 +1882,27 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <pointsize>10</pointsize>
            </font>
           </property>
-          <property name="text">
-           <string>Проверить актуальность системы перед установкой новых пакетов</string>
+          <property name="tabletTracking">
+           <bool>false</bool>
           </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QComboBox" name="combo_lang">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
           </property>
           <property name="styleSheet">
            <string notr="true"/>
           </property>
-          <item>
-           <property name="text">
-            <string>Русский</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>English</string>
-           </property>
-          </item>
+          <property name="text">
+           <string>Очистить каталог пакета перед началом установки</string>
+          </property>
+          <property name="autoRepeat">
+           <bool>false</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+          <property name="tristate">
+           <bool>false</bool>
+          </property>
          </widget>
         </item>
         <item row="2" column="1">
@@ -1603,8 +1954,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </item>
          </widget>
         </item>
-        <item row="4" column="1">
-         <widget class="QComboBox" name="combo_animload">
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_lang">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -1613,20 +1964,105 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </property>
           <property name="maximumSize">
            <size>
+            <width>16777215</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Язык</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0" colspan="2">
+         <widget class="QCheckBox" name="check_cacheremove">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>Очистить кэш скриншотов при выходе</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QComboBox" name="combo_lang">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
             <width>200</width>
             <height>16777215</height>
            </size>
           </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
           <item>
            <property name="text">
-            <string>Химический процесс</string>
+            <string>Русский</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>Косатки</string>
+            <string>English</string>
            </property>
           </item>
+         </widget>
+        </item>
+        <item row="9" column="0" colspan="2">
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Minimum</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>5</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="8" column="0" colspan="2">
+         <widget class="QCheckBox" name="check_autostart">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>Запустить при старте системы</string>
+          </property>
          </widget>
         </item>
         <item row="4" column="0">
@@ -1665,177 +2101,21 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_lang">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Язык</string>
-          </property>
-         </widget>
-        </item>
-        <item row="12" column="0" colspan="2">
-         <widget class="QCheckBox" name="check_trayon">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="text">
-           <string>Закрыть без сворачивания в трей</string>
-          </property>
-         </widget>
-        </item>
         <item row="14" column="0" colspan="2">
-         <widget class="QCheckBox" name="check_repair">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="tabletTracking">
-           <bool>false</bool>
-          </property>
-          <property name="layoutDirection">
-           <enum>Qt::LeftToRight</enum>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="text">
-           <string>Создать резервную копию при удалении конфигураций</string>
-          </property>
-          <property name="autoRepeat">
-           <bool>false</bool>
-          </property>
-          <property name="autoExclusive">
-           <bool>false</bool>
-          </property>
-          <property name="tristate">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="8" column="0" colspan="2">
-         <widget class="QCheckBox" name="check_autostart">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="text">
-           <string>Запустить при старте системы</string>
-          </property>
-         </widget>
-        </item>
-        <item row="10" column="0" colspan="2">
          <spacer name="verticalSpacer_3">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Minimum</enum>
+          </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>20</width>
-            <height>40</height>
+            <width>5</width>
+            <height>20</height>
            </size>
           </property>
          </spacer>
-        </item>
-        <item row="5" column="0" colspan="2">
-         <widget class="QCheckBox" name="check_cacheremove">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="text">
-           <string>Очистить кэш скриншотов при выходе</string>
-          </property>
-         </widget>
-        </item>
-        <item row="13" column="0" colspan="2">
-         <widget class="QCheckBox" name="check_clearinstall">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="tabletTracking">
-           <bool>false</bool>
-          </property>
-          <property name="layoutDirection">
-           <enum>Qt::LeftToRight</enum>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="text">
-           <string>Очистить каталог пакета перед началом установки</string>
-          </property>
-          <property name="autoRepeat">
-           <bool>false</bool>
-          </property>
-          <property name="autoExclusive">
-           <bool>false</bool>
-          </property>
-          <property name="tristate">
-           <bool>false</bool>
-          </property>
-         </widget>
         </item>
        </layout>
       </widget>
@@ -2445,6 +2725,12 @@ color:#5752e7;</string>
        <iconset resource="klausres.qrc">
         <normaloff>:/img/16.png</normaloff>:/img/16.png</iconset>
       </property>
+      <property name="iconSize">
+       <size>
+        <width>18</width>
+        <height>18</height>
+       </size>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_timer">
@@ -2815,7 +3101,7 @@ color:#5752e7;</string>
         <x>234</x>
         <y>15</y>
         <width>161</width>
-        <height>31</height>
+        <height>30</height>
        </rect>
       </property>
       <property name="contextMenuPolicy">
@@ -3090,8 +3376,8 @@ color:#5752e7;</string>
       </property>
       <property name="iconSize">
        <size>
-        <width>20</width>
-        <height>20</height>
+        <width>18</width>
+        <height>18</height>
        </size>
       </property>
      </widget>
@@ -3265,6 +3551,12 @@ color:#5752e7;</string>
      <iconset resource="klausres.qrc">
       <normaloff>:/img/27.png</normaloff>:/img/27.png</iconset>
     </property>
+    <property name="iconSize">
+     <size>
+      <width>18</width>
+      <height>18</height>
+     </size>
+    </property>
    </widget>
    <widget class="QPushButton" name="push_kde">
     <property name="enabled">
@@ -3287,6 +3579,12 @@ color:#5752e7;</string>
     <property name="icon">
      <iconset resource="klausres.qrc">
       <normaloff>:/img/work.png</normaloff>:/img/work.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>18</width>
+      <height>18</height>
+     </size>
     </property>
    </widget>
   </widget>
