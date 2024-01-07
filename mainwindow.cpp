@@ -15,7 +15,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "10.5";
+QString currentVersion = "10.6";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 int nvidia = 0; // nvidia
@@ -175,7 +175,6 @@ void MainWindow::on_action_3_triggered()
         ui->webEngineView->setUrl(QUrl("https://wiki.archlinux.org/title/General_recommendations"));
     else
         ui->webEngineView->setUrl(QUrl("https://wiki.archlinux.org/title/General_recommendations_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)"));
-    ui->tabWidget->setCurrentIndex(3);
 }
 
 void MainWindow::on_push_vk_clicked()
@@ -189,7 +188,6 @@ void MainWindow::on_push_vk_clicked()
     ui->action_33->setVisible(true);
     ui->action_35->setVisible(true);
     ui->webEngineView->setUrl(QUrl("https://vk.com/linux2"));
-    ui->tabWidget->setCurrentIndex(3);
 }
 
 void MainWindow::on_action_8_triggered()
@@ -241,7 +239,6 @@ void MainWindow::on_action_8_triggered()
         sendNotification(tr("Ошибка"), tr("Для вашего окружения тем не найдено!"));
         return;
     }
-    ui->tabWidget->setCurrentIndex(3);
     showLoadingAnimationMini(false);
 }
 
@@ -303,7 +300,6 @@ void MainWindow::on_action_game_triggered()
     ui->searchLineEdit->setPlaceholderText(tr("Введите URL адрес..."));
     ui->searchLineEdit->setVisible(true);
     ui->webEngineView->setUrl(QUrl("https://www.protondb.com/explore"));
-    ui->tabWidget->setCurrentIndex(3);
 }
 
 //12-13 заняты
