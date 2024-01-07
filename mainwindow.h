@@ -56,7 +56,6 @@ private:
     QString lib32OpenclNvidiaName;
 
     // Умные указатели
-    QSharedPointer<QLineEdit> searchLineEdit;
     QCompleter* completer;
     QStandardItemModel* completerModel;
     QSharedPointer<QProcess> snapProcess;
@@ -84,7 +83,6 @@ private:
     QStringList helperPackageNames;
 
     // Статические переменные
-    QWebEngineView *webEngineView2;
     QStringList imageUrls;
     QList<QPixmap> pixmaps;
     int currentIndex;
@@ -237,7 +235,6 @@ private slots:
     void loadSettings();
     void loadContentInstall();
     void loadContent(int value, bool valuepage);
-    void loadSystemInfo();
     void loadingListWidget();
     void loadFolders();
     void loadScripts(const QString& basedDir, QListWidget* listWidget);
@@ -265,7 +262,6 @@ private slots:
     void on_combo_animload_currentIndexChanged(int index);
     void on_combo_cache_currentIndexChanged(int index);
     void on_combo_lang_currentIndexChanged(int index);
-    void on_combo_repo_currentIndexChanged(int index);
     void on_combo_helper_currentIndexChanged(int index);
     void on_combo_bench_currentIndexChanged(int index);
     void on_check_repair_stateChanged(int arg1);
@@ -293,7 +289,6 @@ private slots:
     void on_action_system_triggered();
     void on_action_repair_triggered();
     void on_action_timer_triggered();
-    void on_action_19_triggered();
     void on_action_addsh_triggered();
     void on_action_rmsh_triggered();
     void on_action_editsh_triggered();
@@ -302,17 +297,14 @@ private slots:
     void on_action_33_triggered();
     void on_action_34_triggered();
     void on_action_35_triggered();
-    void on_action_13_triggered();
     void on_action_host_triggered();
     void on_action_restart_triggered();
     void on_action_stop_triggered();
     void on_action_catalog_triggered();
     void on_action_downgrade_triggered();
-    void on_action_snap_triggered();
     void on_action_game_triggered();
     void on_action_nvidia_triggered();
     void on_back_slider_clicked();
-    void on_img_aur_toggled(bool checked);
     void on_list_bench_itemClicked(QListWidgetItem *item);
     void on_list_cfg_itemClicked(QListWidgetItem *item);
     void on_list_journal_itemClicked(QListWidgetItem *item);
@@ -325,10 +317,9 @@ private slots:
     void on_push_pacman_clicked();
     void on_push_repair_clicked();
     void on_push_vk_clicked();
-    void on_reload_aur_clicked();
-    void on_reload_aurpkg_clicked();
-    void on_like_aur_clicked();
-    void on_dislike_aur_clicked();
+    void on_action_like_triggered();
+    void on_action_imgpkg_triggered(bool checked);
+    void on_action_updatelist_triggered();
 };
 
 #endif // MAINWINDOW_H
