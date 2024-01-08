@@ -2,6 +2,7 @@
 //--############################################################## ПОДКЛЮЧЕННЫЕ ИНКЛУДЫ #################################################################
 //-#####################################################################################################################################################
 #include "mainwindow.h"
+#include "qmediaplayer.h"
 #include "ui_mainwindow.h"
 #include <QtWebEngineWidgets>
 #include <QSoundEffect>
@@ -9,13 +10,16 @@
 #include <sys/utsname.h>
 #include <QRegularExpression>
 #include <QCompleter>
+#include <QVideoWidget>
+#include <QMediaPlayer>
+#include <QGraphicsVideoItem>
 
 //---#####################################################################################################################################################
 //--############################################################## ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ################################################################
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "10.6";
+QString currentVersion = "10.7";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 int nvidia = 0; // nvidia
@@ -36,6 +40,7 @@ int numPackages = 0;
 int list = 0;
 int cacheremove = 0; // удаление кэша при выходе
 int auth = 0;
+int animation = 0;
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -556,6 +561,12 @@ void MainWindow::on_action_35_triggered()
     {
             ui->webEngineView->back();
             return;
+    }
+
+    if (animation >= 1)
+    {
+        opacityEffect->setOpacity(0.8);
+        ui->centralwidget->setGraphicsEffect(opacityEffect);
     }
 
     ui->action_34->setVisible(true);
@@ -1125,6 +1136,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     //-##################################################################################
     setupListContextMenu();
     createSearchBar();
+
+    AnimationBackground();
     loadSettings();
 
     checkVersionAndClear();
@@ -1148,6 +1161,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->combo_mainpage->setCurrentIndex(mainpage);
     ui->combo_helper->setCurrentIndex(pkg);
     ui->combo_animload->setCurrentIndex(animloadpage);
+    ui->combo_theme->setCurrentIndex(animation);
     ui->check_cacheremove->setChecked(cacheremove);
 
     ui->time_update->setTime(timeupdate);
@@ -1235,6 +1249,14 @@ MainWindow::~MainWindow()
         removeDirectory(mainDir + "cache/");
 
     iconMap.clear();
+
+    //delete videoItem;
+    //delete graphicsView;
+    //delete player;
+    //delete videoWidget;
+    delete scene;
+    delete opacityEffect;
+
     delete previousAction;
     //delete actionLoad;
     delete orphanButton;
@@ -1279,6 +1301,8 @@ void MainWindow::loadSound(int soundIndex)
 //not
 void MainWindow::loadSettings()
 {
+    // Создание эффекта прозрачности
+    opacityEffect = new QGraphicsOpacityEffect;
     //-##################################################################################
     //-########################## НАСТРОЕННЫЕ ПЕРЕМЕННЫЕ ################################
     //-##################################################################################
@@ -1300,9 +1324,11 @@ void MainWindow::loadSettings()
     clearinstall = settings.value("ClearInstall", 2).toInt();
     cacheremove = settings.value("CacheRemove", 2).toInt();
     volumenotify = settings.value("VolumeNotify", 30).toInt();
+    animation = settings.value("Animation", 0).toInt();
     lang = QSharedPointer<QString>::create(settings.value("Language").toString());
     teatext = QSharedPointer<QString>::create(settings.value("TeaText").toString());
     worktext = QSharedPointer<QString>::create(settings.value("WorkText").toString());
+    animationname = QSharedPointer<QString>::create(settings.value("AnimationName").toString());
 
     timeupdate = QTime::fromString(settings.value("TimeUpdate").toString(), "HH:mm");
     timeout = QTime::fromString(settings.value("TimeOut", "00:00:10").toString(), "HH:mm:ss");
@@ -1410,10 +1436,17 @@ void MainWindow::loadSettings()
     });
     connect(ui->webEngineView->page(), &QWebEnginePage::loadFinished, this, [=](bool success) mutable{
         if (success) {
+            if (animation >= 1)
+            {
+                opacityEffect->setOpacity(1.0);
+                ui->centralwidget->setGraphicsEffect(opacityEffect);
+            }
+
             if (page == 6 || page == 7 || page == 10 || page == 11)
                 ui->tabWidget->setCurrentIndex(3);
 
             else if (page == 2 || page == 4) {
+
                 ui->action_35->setVisible(true);
                 ui->action_11->setVisible(false);
                 ui->action_34->setVisible(false);
@@ -1609,6 +1642,55 @@ void MainWindow::loadSettings()
     loadingLabel->setStyleSheet("margin-left:4px;padding-left:2px;border:0;");
 }
 
+void MainWindow::AnimationBackground()
+{
+    ui->centralwidget->setStyleSheet("");
+    videoItem = new QGraphicsVideoItem;
+
+    player = new QMediaPlayer(this);
+    player->setVideoOutput(videoItem);
+    player->setLoops(QMediaPlayer::Infinite);
+
+    scene = new QGraphicsScene(this);
+    scene->addItem(videoItem);
+
+    // Создаем виджет для сцены
+    graphicsView = new QGraphicsView(scene, this);
+    graphicsView->setGeometry(0, 0, width(), height());
+
+    graphicsView->setFrameShape(QFrame::NoFrame);
+    graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    videoItem->setSize(graphicsView->size());
+    videoItem->setAspectRatioMode(Qt::IgnoreAspectRatio);
+
+    ui->centralwidget->raise();
+    ui->toolBar->raise();
+    ui->toolBar_2->raise();
+    ui->statusBar->raise();
+
+    if (animation >= 1) {
+        player->setSource(QUrl("qrc:/theme/" + *animationname + ".mp4"));
+        videoItem->show();
+        player->play();
+        ui->centralwidget->setStyleSheet("");
+
+    } else {
+        videoItem->hide();
+        player->stop();
+        ui->centralwidget->setStyleSheet("#centralwidget{background: url(:/img/bg.png) no-repeat bottom right;background-color:#322F85;}");
+    }
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    if (animation >= 1) {
+        QMainWindow::resizeEvent(event);
+        graphicsView->setGeometry(0, 0, width(), height());
+        videoItem->setSize(graphicsView->size());
+    }
+}
 
 void MainWindow::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
@@ -1626,6 +1708,12 @@ void MainWindow::removeToolButtonTooltips(QToolBar* toolbar) {
 }
 
 void MainWindow::mrpropper(int value) {
+    if (animation >= 1 && !(value == 6 || value == 7 || value == 10 || value == 11))
+    {
+        opacityEffect->setOpacity(0.8);
+        ui->centralwidget->setGraphicsEffect(opacityEffect);
+    }
+
     miniAnimation(false, ui->details_aur);
     miniAnimation(false, ui->list_aur);
     showLoadingAnimationMini(true);
@@ -3206,6 +3294,34 @@ void MainWindow::on_combo_lang_currentIndexChanged(int index)
         QSharedPointer<QProcess>(new QProcess)->startDetached(qApp->arguments()[0], qApp->arguments());
     }
 }
+
+void MainWindow::on_combo_theme_currentIndexChanged(int index)
+{
+    settings.setValue("Animation", index);
+    animation = index;
+
+    QString animationName = ui->combo_theme->currentText();
+
+    *animationname = animationName.toLower();
+
+    if (animation == 0) {
+        settings.setValue("AnimationName", "");
+        videoItem->hide();
+        player->stop();
+        ui->centralwidget->setStyleSheet("#centralwidget{background: url(:/img/bg.png) no-repeat bottom right;background-color:#322F85;}");
+        opacityEffect->setOpacity(1.0);
+        ui->centralwidget->setGraphicsEffect(opacityEffect);
+    } else {
+        settings.setValue("AnimationName", animationName.toLower());
+        player->setSource(QUrl("qrc:/theme/" + animationName.toLower() + ".mp4"));
+        videoItem->show();
+        player->play();
+        ui->centralwidget->setStyleSheet("");
+        opacityEffect->setOpacity(0.8);
+        ui->centralwidget->setGraphicsEffect(opacityEffect);
+    }
+}
+
 
 //not
 void MainWindow::on_combo_bench_currentIndexChanged(int index)

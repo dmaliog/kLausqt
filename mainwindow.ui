@@ -65,11 +65,6 @@ QToolTip {
     padding: 5px;
 }
 
-#centralwidget {
-    background: url(:/img/bg.png) no-repeat bottom right;
-    background-color: #322F85;
-}
-
 QProgressBar {
     background-color: #636363;
     border-radius: 2px;
@@ -141,8 +136,7 @@ QSpinBox,
 QScrollArea,
 QLineEdit,
 QTextEdit,
-QListWidget,
-QGraphicsView {
+QListWidget {
     background-color: #272727;
     border-radius: 10px;
     border: 1px solid #222222;
@@ -444,7 +438,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>7</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_auradd">
        <attribute name="title">
@@ -650,7 +644,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;multilib&lt;/span&gt;&lt;span style=&quot; font-size:28pt; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;содержит 32-битное программное обеспечение и библиотеки, которые можно использовать для запуска и сборки 32-битных приложений на 64-битных системах (например, &lt;a href=&quot;https://archlinux.org/packages/?name=wine&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;wine&lt;/span&gt;&lt;/a&gt;, &lt;a href=&quot;https://archlinux.org/packages/?name=steam&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;steam&lt;/span&gt;&lt;/a&gt; и т.д.).&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt; &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Пакеты AUR представляют собой пользовательский контент. Любое использование предоставленных файлов осуществляется на ваш страх и риск. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="openLinks">
                <bool>false</bool>
@@ -686,7 +681,11 @@ li.checked::marker { content: &quot;\2612&quot;; }
              </rect>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: #191919;</string>
+             <string notr="true">	background-color: #191919;
+    border-radius: 10px;
+    border: 1px solid #222222;
+	color:#dbd7da;
+    padding: 5px;</string>
             </property>
             <property name="verticalScrollBarPolicy">
              <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -1687,187 +1686,37 @@ li.checked::marker { content: &quot;\2612&quot;; }
             </size>
            </property>
            <layout class="QGridLayout" name="gridLayout">
-            <item row="17" column="0" colspan="2">
-             <widget class="QCheckBox" name="check_repair">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
-              <property name="tabletTracking">
-               <bool>false</bool>
-              </property>
-              <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="text">
-               <string>Создать резервную копию при удалении конфигураций</string>
-              </property>
-              <property name="autoRepeat">
-               <bool>false</bool>
-              </property>
-              <property name="autoExclusive">
-               <bool>false</bool>
-              </property>
-              <property name="tristate">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
-             <widget class="QCheckBox" name="check_animload">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
-              <property name="tabletTracking">
-               <bool>false</bool>
-              </property>
-              <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="text">
-               <string>Показать анимацию загрузки</string>
-              </property>
-              <property name="autoRepeat">
-               <bool>false</bool>
-              </property>
-              <property name="autoExclusive">
-               <bool>false</bool>
-              </property>
-              <property name="tristate">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="0" colspan="2">
-             <spacer name="verticalSpacer">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Minimum</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>5</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="5" column="0" colspan="2">
-             <widget class="QCheckBox" name="check_cacheremove">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="text">
-               <string>Очистить кэш скриншотов при выходе</string>
-              </property>
-             </widget>
-            </item>
-            <item row="15" column="0" colspan="2">
-             <widget class="QCheckBox" name="check_trayon">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="text">
-               <string>Закрыть без сворачивания в трей</string>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="0" colspan="2">
-             <widget class="QCheckBox" name="check_autostart">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="text">
-               <string>Запустить при старте системы</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QComboBox" name="combo_lang">
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_mainpage">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="maximumSize">
+              <property name="minimumSize">
                <size>
-                <width>200</width>
-                <height>16777215</height>
+                <width>0</width>
+                <height>40</height>
                </size>
               </property>
-              <property name="styleSheet">
-               <string notr="true"/>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>30</height>
+               </size>
               </property>
-              <item>
-               <property name="text">
-                <string>Русский</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>English</string>
-               </property>
-              </item>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Стартовая страница</string>
+              </property>
              </widget>
             </item>
-            <item row="13" column="0" colspan="2">
+            <item row="14" column="0" colspan="2">
              <spacer name="verticalSpacer_3">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -1932,87 +1781,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
               </item>
              </widget>
             </item>
-            <item row="4" column="1">
-             <widget class="QComboBox" name="combo_animload">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>200</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <item>
-               <property name="text">
-                <string>Химический процесс</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Косатки</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_mainpage">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>30</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>12</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Стартовая страница</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_lang">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>12</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Язык</string>
-              </property>
-             </widget>
-            </item>
-            <item row="11" column="0">
+            <item row="12" column="0">
              <widget class="QScrollArea" name="scroll_volume">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -2038,7 +1807,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                  <x>0</x>
                  <y>0</y>
                  <width>272</width>
-                 <height>188</height>
+                 <height>142</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_5">
@@ -2059,7 +1828,52 @@ li.checked::marker { content: &quot;\2612&quot;; }
               </widget>
              </widget>
             </item>
-            <item row="10" column="0">
+            <item row="3" column="1">
+             <widget class="QComboBox" name="combo_lang">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <item>
+               <property name="text">
+                <string>Русский</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>English</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="10" column="0" colspan="2">
+             <spacer name="verticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Minimum</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>5</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="11" column="0">
              <widget class="QLabel" name="label_mainpage_5">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -2096,6 +1910,244 @@ margin-right:35px;</string>
               <property name="text">
                <string>Звук</string>
               </property>
+             </widget>
+            </item>
+            <item row="9" column="0" colspan="2">
+             <widget class="QCheckBox" name="check_autostart">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Запустить при старте системы</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="QComboBox" name="combo_animload">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <item>
+               <property name="text">
+                <string>Химический процесс</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Косатки</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="16" column="0" colspan="2">
+             <widget class="QCheckBox" name="check_trayon">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Закрыть без сворачивания в трей</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_lang">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Язык</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0">
+             <widget class="QCheckBox" name="check_animload">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="tabletTracking">
+               <bool>false</bool>
+              </property>
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Показать анимацию загрузки</string>
+              </property>
+              <property name="autoRepeat">
+               <bool>false</bool>
+              </property>
+              <property name="autoExclusive">
+               <bool>false</bool>
+              </property>
+              <property name="tristate">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="18" column="0" colspan="2">
+             <widget class="QCheckBox" name="check_repair">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="tabletTracking">
+               <bool>false</bool>
+              </property>
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Создать резервную копию при удалении конфигураций</string>
+              </property>
+              <property name="autoRepeat">
+               <bool>false</bool>
+              </property>
+              <property name="autoExclusive">
+               <bool>false</bool>
+              </property>
+              <property name="tristate">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0" colspan="2">
+             <widget class="QCheckBox" name="check_cacheremove">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Очистить кэш скриншотов при выходе</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="label_theme">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Тема</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QComboBox" name="combo_theme">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <item>
+               <property name="text">
+                <string>Стандартная</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Anime</string>
+               </property>
+              </item>
              </widget>
             </item>
            </layout>
@@ -4037,10 +4089,10 @@ margin-left:10px;</string>
           </property>
           <property name="styleSheet">
            <string notr="true">QWidget#widget_3{
-background:#2e2b79;
-margin-left:10px;
-border-top-left-radius: 15px;
-border-top-right-radius: 15px;
+	background:#2e2b79;
+	margin-left:10px;
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
 }</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_4">

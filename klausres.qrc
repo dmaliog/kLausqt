@@ -230,5 +230,6 @@
         <file>lang/kLaus_ru_RU.ts</file>
         <file>lang/kLaus_en_US.ts</file>
         <file>img/snap.png</file>
+        <file>theme/anime.mp4</file>
     </qresource>
 </RCC>

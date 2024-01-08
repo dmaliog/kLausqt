@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include "qcompleter.h"
+#include "qgraphicseffect.h"
+#include "qgraphicsvideoitem.h"
+#include "qmediaplayer.h"
 #include "qnetworkaccessmanager.h"
 #include "qstandarditemmodel.h"
 #include "qtextbrowser.h"
@@ -37,6 +40,13 @@ public:
     QColor generateRandomColor();
 
 private:
+    QGraphicsVideoItem *videoItem;
+    QGraphicsView *graphicsView;
+    QMediaPlayer *player;
+    QVideoWidget *videoWidget;
+    QGraphicsScene *scene;
+    QGraphicsOpacityEffect *opacityEffect;
+
     QString detailsAURdefault;
 
     QString nvidiaVersion;
@@ -69,6 +79,7 @@ private:
     QSharedPointer<QString> currentDesktop;
     QSharedPointer<QString> repo;
     QSharedPointer<QString> lang;
+    QSharedPointer<QString> animationname;
 
     QSharedPointer<QTimer> updateIconTimer;
     QSharedPointer<QTimer> teaTimer;
@@ -176,8 +187,9 @@ private:
 protected:
     void closeEvent(QCloseEvent *event) override; // объявление метода closeEvent()
     bool eventFilter(QObject *obj, QEvent *event) override;
-
+    void resizeEvent(QResizeEvent *event) override;
 public slots:
+
     void on_action_2_triggered();
     void on_action_3_triggered();
     void on_action_4_triggered();
@@ -195,6 +207,8 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
+    void AnimationBackground();
+
     void mrpropper(int value);
 
     void connectProcessSignals(QSharedPointer<QProcess>& process, QTextBrowser* outputWidget);
@@ -320,6 +334,7 @@ private slots:
     void on_action_like_triggered();
     void on_action_imgpkg_triggered(bool checked);
     void on_action_updatelist_triggered();
+    void on_combo_theme_currentIndexChanged(int index);
 };
 
 #endif // MAINWINDOW_H
