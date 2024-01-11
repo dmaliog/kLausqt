@@ -19,7 +19,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "10.8";
+QString currentVersion = "10.9";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 int nvidia = 0; // nvidia
@@ -2024,6 +2024,9 @@ void MainWindow::showLoadingAnimationMini(bool show)
             removeToolButtonTooltips(ui->toolBar_2);
         });
     }
+
+    removeToolButtonTooltips(ui->toolBar);
+    removeToolButtonTooltips(ui->toolBar_2);
 }
 
 void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
