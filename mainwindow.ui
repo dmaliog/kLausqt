@@ -372,6 +372,9 @@ QMenuBar::item:pressed {
            <height>30</height>
           </size>
          </property>
+         <property name="contextMenuPolicy">
+          <enum>Qt::NoContextMenu</enum>
+         </property>
          <property name="styleSheet">
           <string notr="true">padding-left:30px;background-image: url(:/img/m4.png);border:0;background-repeat: no-repeat;background-position: left center;background-color: #242424;</string>
          </property>
@@ -438,12 +441,41 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>11</number>
       </property>
-      <widget class="QWidget" name="tab_auradd">
+      <widget class="QWidget" name="tab_webgame">
        <attribute name="title">
         <string>tab_auradd</string>
        </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QWebEngineView" name="webEngineView_game">
+          <property name="url">
+           <url>
+            <string>about:blank</string>
+           </url>
+          </property>
+          <property name="zoomFactor">
+           <double>0.900000000000000</double>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="tab_aur">
        <attribute name="title">
@@ -668,6 +700,15 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </layout>
           </widget>
           <widget class="QWidget" name="tab_slider">
+           <property name="styleSheet">
+            <string notr="true">QGraphicsView{
+	background-color: #191919;
+    border-radius: 10px;
+    border: 1px solid #222222;
+	color:#dbd7da;
+    padding: 5px;
+}</string>
+           </property>
            <attribute name="title">
             <string>Tab 2</string>
            </attribute>
@@ -681,11 +722,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
              </rect>
             </property>
             <property name="styleSheet">
-             <string notr="true">	background-color: #191919;
-    border-radius: 10px;
-    border: 1px solid #222222;
-	color:#dbd7da;
-    padding: 5px;</string>
+             <string notr="true"/>
             </property>
             <property name="verticalScrollBarPolicy">
              <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -1027,6 +1064,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
            <url>
             <string>about:blank</string>
            </url>
+          </property>
+          <property name="zoomFactor">
+           <double>0.900000000000000</double>
           </property>
          </widget>
         </item>
@@ -1675,8 +1715,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>508</width>
-             <height>638</height>
+             <width>500</width>
+             <height>674</height>
             </rect>
            </property>
            <property name="maximumSize">
@@ -1686,14 +1726,29 @@ li.checked::marker { content: &quot;\2612&quot;; }
             </size>
            </property>
            <layout class="QGridLayout" name="gridLayout">
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_mainpage">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
+            <item row="6" column="0" colspan="2">
+             <widget class="QCheckBox" name="check_cacheremove">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
               </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Очистить кэш скриншотов при выходе</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="label_theme">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -1703,7 +1758,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
               <property name="maximumSize">
                <size>
                 <width>16777215</width>
-                <height>30</height>
+                <height>40</height>
                </size>
               </property>
               <property name="font">
@@ -1712,25 +1767,114 @@ li.checked::marker { content: &quot;\2612&quot;; }
                </font>
               </property>
               <property name="text">
-               <string>Стартовая страница</string>
+               <string>Тема</string>
               </property>
              </widget>
             </item>
-            <item row="14" column="0" colspan="2">
-             <spacer name="verticalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Minimum</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
+            <item row="5" column="1">
+             <widget class="QComboBox" name="combo_animload">
+              <property name="minimumSize">
                <size>
-                <width>5</width>
-                <height>20</height>
+                <width>0</width>
+                <height>40</height>
                </size>
               </property>
-             </spacer>
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <item>
+               <property name="text">
+                <string>Химический процесс</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Косатки</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QComboBox" name="combo_lang">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <item>
+               <property name="text">
+                <string>Русский</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>English</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="16" column="0" colspan="2">
+             <widget class="QCheckBox" name="check_trayon">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Закрыть без сворачивания в трей</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QComboBox" name="combo_theme">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <item>
+               <property name="text">
+                <string>Стандартная</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Anime</string>
+               </property>
+              </item>
+             </widget>
             </item>
             <item row="2" column="1">
              <widget class="QComboBox" name="combo_mainpage">
@@ -1781,7 +1925,23 @@ li.checked::marker { content: &quot;\2612&quot;; }
               </item>
              </widget>
             </item>
-            <item row="12" column="0">
+            <item row="11" column="0" colspan="2">
+             <spacer name="verticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Minimum</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>5</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="13" column="0">
              <widget class="QScrollArea" name="scroll_volume">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -1792,7 +1952,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>0</height>
+                <height>170</height>
                </size>
               </property>
               <property name="styleSheet">
@@ -1806,8 +1966,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>272</width>
-                 <height>142</height>
+                 <width>264</width>
+                 <height>158</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_5">
@@ -1828,90 +1988,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
               </widget>
              </widget>
             </item>
-            <item row="3" column="1">
-             <widget class="QComboBox" name="combo_lang">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>200</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <item>
-               <property name="text">
-                <string>Русский</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>English</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="10" column="0" colspan="2">
-             <spacer name="verticalSpacer">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Minimum</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>5</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="11" column="0">
-             <widget class="QLabel" name="label_mainpage_5">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>230</width>
-                <height>30</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>12</pointsize>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">background:#2e2b79;
-padding:0 15px;
-border-top-left-radius: 15px;
-border-top-right-radius: 15px;
-color:#5752e7;
-margin-left:10px;
-margin-right:35px;</string>
-              </property>
-              <property name="text">
-               <string>Звук</string>
-              </property>
-             </widget>
-            </item>
             <item row="9" column="0" colspan="2">
              <widget class="QCheckBox" name="check_autostart">
               <property name="minimumSize">
@@ -1930,77 +2006,6 @@ margin-right:35px;</string>
               </property>
               <property name="text">
                <string>Запустить при старте системы</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="1">
-             <widget class="QComboBox" name="combo_animload">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>200</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <item>
-               <property name="text">
-                <string>Химический процесс</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Косатки</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="16" column="0" colspan="2">
-             <widget class="QCheckBox" name="check_trayon">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="text">
-               <string>Закрыть без сворачивания в трей</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_lang">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>12</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Язык</string>
               </property>
              </widget>
             </item>
@@ -2040,6 +2045,69 @@ margin-right:35px;</string>
               </property>
              </widget>
             </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_lang">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Язык</string>
+              </property>
+             </widget>
+            </item>
+            <item row="12" column="0">
+             <widget class="QLabel" name="label_mainpage_5">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>230</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background:#2e2b79;
+padding:0 15px;
+border-top-left-radius: 15px;
+border-top-right-radius: 15px;
+color:#5752e7;
+margin-left:10px;
+margin-right:35px;</string>
+              </property>
+              <property name="text">
+               <string>Звук</string>
+              </property>
+             </widget>
+            </item>
             <item row="18" column="0" colspan="2">
              <widget class="QCheckBox" name="check_repair">
               <property name="minimumSize">
@@ -2076,8 +2144,38 @@ margin-right:35px;</string>
               </property>
              </widget>
             </item>
-            <item row="6" column="0" colspan="2">
-             <widget class="QCheckBox" name="check_cacheremove">
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_mainpage">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Стартовая страница</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="0" colspan="2">
+             <widget class="QCheckBox" name="check_saveurl">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -2093,61 +2191,8 @@ margin-right:35px;</string>
                <string notr="true"/>
               </property>
               <property name="text">
-               <string>Очистить кэш скриншотов при выходе</string>
+               <string>Сохранить веб-страницы при выходе</string>
               </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="label_theme">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>12</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Тема</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1">
-             <widget class="QComboBox" name="combo_theme">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>200</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <item>
-               <property name="text">
-                <string>Стандартная</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Anime</string>
-               </property>
-              </item>
              </widget>
             </item>
            </layout>
@@ -4391,6 +4436,108 @@ margin-left:10px;</string>
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab_webhost">
+       <attribute name="title">
+        <string>Страница</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QWebEngineView" name="webEngineView_host">
+          <property name="url">
+           <url>
+            <string>about:blank</string>
+           </url>
+          </property>
+          <property name="zoomFactor">
+           <double>0.900000000000000</double>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_webcustom">
+       <attribute name="title">
+        <string>Страница</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QWebEngineView" name="webEngineView_custom">
+          <property name="url">
+           <url>
+            <string>about:blank</string>
+           </url>
+          </property>
+          <property name="zoomFactor">
+           <double>0.900000000000000</double>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_webaur">
+       <attribute name="title">
+        <string>Страница</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_7">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QWebEngineView" name="webEngineView_aur">
+          <property name="url">
+           <url>
+            <string>about:blank</string>
+           </url>
+          </property>
+          <property name="zoomFactor">
+           <double>0.900000000000000</double>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -5189,6 +5336,9 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
   </action>
   <action name="action_like">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="klausres.qrc">
      <normaloff>:/img/6.png</normaloff>:/img/6.png</iconset>
@@ -5203,6 +5353,9 @@ QToolBar#toolBar_2 QToolButton:hover {
   <action name="action_imgpkg">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="klausres.qrc">

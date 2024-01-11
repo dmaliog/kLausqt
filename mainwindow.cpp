@@ -19,7 +19,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "10.7";
+QString currentVersion = "10.8";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 int nvidia = 0; // nvidia
@@ -41,6 +41,7 @@ int list = 0;
 int cacheremove = 0; // удаление кэша при выходе
 int auth = 0;
 int animation = 0;
+int saveurl = 2;
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -120,6 +121,8 @@ void MainWindow::on_action_2_triggered()
     ui->action_4->setVisible(true);
     ui->action_30->setVisible(true);
     ui->action_34->setVisible(true);
+    ui->action_imgpkg->setVisible(true);
+    ui->action_like->setVisible(true);
     showLoadingAnimationMini(false);
 }
 
@@ -166,9 +169,34 @@ void MainWindow::on_action_9_triggered()
 
 void MainWindow::on_action_3_triggered()
 {
+    if (page == 6) return;
     showLoadingAnimationMini(false);
     mrpropper(6);
-    showLoadingAnimation(true);
+
+    QString aurUrl = ui->webEngineView_aur->url().toString();
+    bool isBlankPage = aurUrl == "about:blank";
+
+    if (isBlankPage) {
+        showLoadingAnimation(true,ui->webEngineView_aur);
+
+        QString wikiUrl = (QUrl(*aururl).isValid() && saveurl) ?
+                              *aururl :
+                              ((*lang == "en_US") ?
+                                   "https://wiki.archlinux.org/title/General_recommendations" :
+                                   "https://wiki.archlinux.org/title/General_recommendations_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)");
+
+        ui->webEngineView_aur->setUrl(QUrl(wikiUrl));
+        ui->searchLineEdit->setText(wikiUrl);
+        *aururl = ui->webEngineView_aur->url().toString();
+        ui->action_35->setEnabled(false);
+    } else {
+        if (animation >= 1) {
+            opacityEffect->setOpacity(1.0);
+            ui->centralwidget->setGraphicsEffect(opacityEffect);
+        }
+        ui->searchLineEdit->setText(aurUrl);
+    }
+
     ui->label1->setText(tr("Arch Linux - Wiki"));
     ui->action_31->setVisible(true);
     ui->action_32->setVisible(true);
@@ -176,23 +204,7 @@ void MainWindow::on_action_3_triggered()
     ui->action_35->setVisible(true);
     ui->searchLineEdit->setPlaceholderText(tr("Введите URL адрес..."));
     ui->searchLineEdit->setVisible(true);
-    if (*lang == "en_US")
-        ui->webEngineView->setUrl(QUrl("https://wiki.archlinux.org/title/General_recommendations"));
-    else
-        ui->webEngineView->setUrl(QUrl("https://wiki.archlinux.org/title/General_recommendations_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)"));
-}
-
-void MainWindow::on_push_vk_clicked()
-{
-    showLoadingAnimationMini(false);
-    showLoadingAnimation(true);
-    mrpropper(6);
-    ui->label1->setText(tr("Наше сообщество"));
-    ui->action_31->setVisible(true);
-    ui->action_32->setVisible(true);
-    ui->action_33->setVisible(true);
-    ui->action_35->setVisible(true);
-    ui->webEngineView->setUrl(QUrl("https://vk.com/linux2"));
+    ui->tabWidget->setCurrentIndex(15);
 }
 
 void MainWindow::on_action_8_triggered()
@@ -216,7 +228,12 @@ void MainWindow::on_action_8_triggered()
     }
 
     mrpropper(7);
-    showLoadingAnimation(true);
+
+    bool isBlankPage = ui->webEngineView_custom->url().toString() == "about:blank";
+
+    if (isBlankPage)
+        showLoadingAnimation(true,ui->webEngineView_custom);
+
     ui->label1->setText(tr("Кастомизация"));
     ui->action_31->setVisible(true);
     ui->action_32->setVisible(true);
@@ -225,26 +242,60 @@ void MainWindow::on_action_8_triggered()
 
     ui->searchLineEdit->setPlaceholderText(tr("Введите URL адрес..."));
     ui->searchLineEdit->setVisible(true);
+    ui->tabWidget->setCurrentIndex(14);
 
-    if (*currentDesktop == "KDE")
-        ui->webEngineView->setUrl(QUrl("https://store.kde.org/browse/"));
-    else if (*currentDesktop == "GNOME")
-        ui->webEngineView->setUrl(QUrl("https://www.pling.com/s/Gnome/browse/"));
-    else if (*currentDesktop == "XFCE")
-        ui->webEngineView->setUrl(QUrl("https://www.pling.com/s/XFCE/browse/"));
-    else if (*currentDesktop == "LXQt")
-        ui->webEngineView->setUrl(QUrl("https://store.kde.org/browse?cat=446"));
-    else if (*currentDesktop == "Cinnamon")
-        ui->webEngineView->setUrl(QUrl("https://www.pling.com/s/Cinnamon/browse/"));
-    else if (*currentDesktop == "MATE")
-        ui->webEngineView->setUrl(QUrl("https://www.pling.com/s/Mate/browse/"));
-    else if (*currentDesktop == "Enlightenment")
-        ui->webEngineView->setUrl(QUrl("https://www.pling.com/s/Enlightenment/browse/"));
-    else {
-        sendNotification(tr("Ошибка"), tr("Для вашего окружения тем не найдено!"));
-        return;
+    if (isBlankPage) {
+
+        if (QUrl(*customurl).isValid() && saveurl)
+            ui->webEngineView_custom->setUrl(QUrl(*customurl));
+        else {
+            if (*currentDesktop == "KDE")
+                ui->webEngineView_custom->setUrl(QUrl("https://store.kde.org/browse/"));
+            else if (*currentDesktop == "GNOME")
+                ui->webEngineView_custom->setUrl(QUrl("https://www.pling.com/s/Gnome/browse/"));
+            else if (*currentDesktop == "XFCE")
+                ui->webEngineView_custom->setUrl(QUrl("https://www.pling.com/s/XFCE/browse/"));
+            else if (*currentDesktop == "LXQt")
+                ui->webEngineView_custom->setUrl(QUrl("https://store.kde.org/browse?cat=446"));
+            else if (*currentDesktop == "Cinnamon")
+                ui->webEngineView_custom->setUrl(QUrl("https://www.pling.com/s/Cinnamon/browse/"));
+            else if (*currentDesktop == "MATE")
+                ui->webEngineView_custom->setUrl(QUrl("https://www.pling.com/s/Mate/browse/"));
+            else if (*currentDesktop == "Enlightenment")
+                ui->webEngineView_custom->setUrl(QUrl("https://www.pling.com/s/Enlightenment/browse/"));
+            else {
+                sendNotification(tr("Ошибка"), tr("Для вашего окружения тем не найдено!"));
+                return;
+            }
+            *customurl = ui->webEngineView_custom->url().toString();
+            ui->action_35->setEnabled(false);
+        }
+    } else {
+        if (animation >= 1) {
+            opacityEffect->setOpacity(1.0);
+            ui->centralwidget->setGraphicsEffect(opacityEffect);
+        }
+        ui->searchLineEdit->setText(ui->webEngineView_custom->url().toString());
     }
     showLoadingAnimationMini(false);
+}
+
+void MainWindow::on_push_vk_clicked()
+{
+    showLoadingAnimationMini(false);
+    showLoadingAnimation(true,ui->webEngineView);
+    mrpropper(8);
+    ui->label1->setText(tr("Наше сообщество"));
+    ui->action_31->setVisible(true);
+    ui->action_32->setVisible(true);
+    ui->action_33->setVisible(true);
+    ui->action_35->setVisible(true);
+    if (animation >= 1) {
+        opacityEffect->setOpacity(1.0);
+        ui->centralwidget->setGraphicsEffect(opacityEffect);
+    }
+    ui->webEngineView->setUrl(QUrl("https://vk.com/linux2"));
+    ui->tabWidget->setCurrentIndex(3);
 }
 
 void MainWindow::on_action_12_triggered()
@@ -279,7 +330,13 @@ void MainWindow::on_action_host_triggered()
     }
     showLoadingAnimationMini(false);
     mrpropper(10);
-    showLoadingAnimation(true);
+
+    QString hostUrl = ui->webEngineView_host->url().toString();
+    bool isBlankPage = hostUrl == "about:blank";
+
+    if (isBlankPage)
+        showLoadingAnimation(true,ui->webEngineView_host);
+
     ui->label1->setText(tr("Веб-сервер"));
     ui->action_5->setVisible(true);
     ui->action_restart->setVisible(true);
@@ -287,8 +344,19 @@ void MainWindow::on_action_host_triggered()
     ui->action_catalog->setVisible(true);
     ui->searchLineEdit->setPlaceholderText(tr("Введите URL адрес..."));
     ui->searchLineEdit->setVisible(true);
-    ui->webEngineView->setUrl(QUrl("http://localhost"));
-    showLoadingAnimationMini(false);
+
+    ui->tabWidget->setCurrentIndex(13);
+
+    if (isBlankPage) {
+        ui->webEngineView_host->setUrl(QUrl("http://localhost"));
+        ui->searchLineEdit->setText("http://localhost");
+    } else {
+        if (animation >= 1) {
+            opacityEffect->setOpacity(1.0);
+            ui->centralwidget->setGraphicsEffect(opacityEffect);
+        }
+        ui->searchLineEdit->setText(ui->webEngineView_host->url().toString());
+    }
 }
 
 void MainWindow::on_action_game_triggered()
@@ -296,7 +364,13 @@ void MainWindow::on_action_game_triggered()
     if (page == 11) return;
     showLoadingAnimationMini(false);
     mrpropper(11);
-    showLoadingAnimation(true);
+
+    QString protonDBUrl = ui->webEngineView_game->url().toString();
+    bool isBlankPage = protonDBUrl == "about:blank";
+
+    if (isBlankPage)
+        showLoadingAnimation(true,ui->webEngineView_game);
+
     ui->label1->setText(tr("Игровая совместимость - ProtonDB"));
     ui->action_31->setVisible(true);
     ui->action_32->setVisible(true);
@@ -304,7 +378,25 @@ void MainWindow::on_action_game_triggered()
     ui->action_35->setVisible(true);
     ui->searchLineEdit->setPlaceholderText(tr("Введите URL адрес..."));
     ui->searchLineEdit->setVisible(true);
-    ui->webEngineView->setUrl(QUrl("https://www.protondb.com/explore"));
+    ui->tabWidget->setCurrentIndex(0);
+
+    if (isBlankPage) {
+        if (QUrl(*gameurl).isValid() && saveurl)
+            ui->webEngineView_game->setUrl(QUrl(*gameurl));
+        else
+        {
+            ui->webEngineView_game->setUrl(QUrl("https://www.protondb.com/explore"));
+            ui->searchLineEdit->setText("https://www.protondb.com/explore");
+            *gameurl = ui->webEngineView_game->url().toString();
+            ui->action_35->setEnabled(false);
+        }
+    } else {
+        if (animation >= 1) {
+            opacityEffect->setOpacity(1.0);
+            ui->centralwidget->setGraphicsEffect(opacityEffect);
+        }
+        ui->searchLineEdit->setText(ui->webEngineView_game->url().toString());
+    }
 }
 
 //12-13 заняты
@@ -362,16 +454,15 @@ void MainWindow::on_action_nvidia_triggered()
 void MainWindow::on_push_install_clicked()
 {
     Terminal terminal = getTerminal();
-    currentProcess = QSharedPointer<QProcess>::create(this);
-    connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
-    connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
+    currentTerminalProcess = QSharedPointer<QProcess>::create(this);
+    connect(currentTerminalProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
         sendNotification(tr("Внимание"), tr("После отката пакетов NVIDIA, рекомендуется перезагрузка!"));
         on_push_back_clicked();
     });
-    currentProcess->setProgram(terminal.binary);
-    currentProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("localinstall") << nvidiaDkms << nvidiaUtils << nvidiaSettings << libxnvctrl << openclNvidia << lib32NvidiaUtils << lib32OpenclNvidia);
-    currentProcess->setProcessChannelMode(QProcess::MergedChannels);
-    currentProcess->start();
+    currentTerminalProcess->setProgram(terminal.binary);
+    currentTerminalProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("localinstall") << nvidiaDkms << nvidiaUtils << nvidiaSettings << libxnvctrl << openclNvidia << lib32NvidiaUtils << lib32OpenclNvidia);
+    currentTerminalProcess->setProcessChannelMode(QProcess::MergedChannels);
+    currentTerminalProcess->start();
 }
 
 void MainWindow::on_push_back_clicked()
@@ -386,18 +477,28 @@ void MainWindow::on_push_back_clicked()
 //-#####################################################################################################################################################
 void MainWindow::on_action_restart_triggered()
 {
-    QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create(this);
-    httpProcess->startDetached("pkexec", QStringList() << "sudo" << "systemctl" << "restart" << "httpd");
-    httpProcess->closeWriteChannel();
-    httpProcess->waitForFinished();
+    currentProcess = QSharedPointer<QProcess>::create(this);
+    connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
+        sendNotification(tr("Веб-сервер"), tr("Веб-сервер перезапущен!"));
+        showLoadingAnimation(false,ui->webEngineView_host);
+    });
+    currentProcess->setProgram("pkexec");
+    currentProcess->setArguments(QStringList() << "sudo" << "systemctl" << "restart" << "httpd");
+    currentProcess->setProcessChannelMode(QProcess::MergedChannels);
+    currentProcess->start();
 }
 
 void MainWindow::on_action_stop_triggered()
 {
-    QSharedPointer<QProcess> httpProcess = QSharedPointer<QProcess>::create(this);
-    httpProcess->startDetached("pkexec", QStringList() << "sudo" << "systemctl" << "stop" << "httpd");
-    httpProcess->closeWriteChannel();
-    httpProcess->waitForFinished();
+    currentProcess = QSharedPointer<QProcess>::create(this);
+    connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
+        sendNotification(tr("Веб-сервер"), tr("Веб-сервер остановлен!"));
+        showLoadingAnimation(true,ui->webEngineView_host);
+    });
+    currentProcess->setProgram("pkexec");
+    currentProcess->setArguments(QStringList() << "sudo" << "systemctl" << "stop" << "httpd");
+    currentProcess->setProcessChannelMode(QProcess::MergedChannels);
+    currentProcess->start();
 }
 
 void MainWindow::on_action_catalog_triggered()
@@ -480,7 +581,7 @@ void MainWindow::on_action_31_triggered()
     switch (page)
     {
         case 6:
-            ui->webEngineView->setUrl(QUrl((*lang == "en_US") ? "https://wiki.archlinux.org/title/General_recommendations" :
+            ui->webEngineView_aur->setUrl(QUrl((*lang == "en_US") ? "https://wiki.archlinux.org/title/General_recommendations" :
                                             "https://wiki.archlinux.org/title/General_recommendations_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)"));
             break;
         case 7:
@@ -495,7 +596,7 @@ void MainWindow::on_action_31_triggered()
                                                      {"Enlightenment", "https://www.pling.com/s/Enlightenment/browse/"}};
 
             if (desktopUrls.contains(*currentDesktop))
-                ui->webEngineView->setUrl(QUrl(desktopUrls.value(*currentDesktop)));
+                ui->webEngineView_custom->setUrl(QUrl(desktopUrls.value(*currentDesktop)));
             else
             {
                 sendNotification(tr("Ошибка"), tr("Для вашего окружения тем не найдено!"));
@@ -504,7 +605,7 @@ void MainWindow::on_action_31_triggered()
             break;
         }
         case 11:
-            ui->webEngineView->setUrl(QUrl("https://www.protondb.com/explore"));
+            ui->webEngineView_game->setUrl(QUrl("https://www.protondb.com/explore"));
             break;
     }
 }
@@ -536,31 +637,41 @@ void MainWindow::on_action_34_triggered()
     process->waitForFinished();
 
     QString packageInfo = QString::fromUtf8(process->readAllStandardOutput());
+    QRegularExpression urlRegex("URL\\s+:\\s+(\\S+)");
+    QRegularExpressionMatch match = urlRegex.match(packageInfo);
 
-    QString url = "";
-    int urlIndex = packageInfo.indexOf("URL");
-
-    if (urlIndex != -1) {
-            int start = packageInfo.indexOf("https://", urlIndex);
-            int end = packageInfo.indexOf("\n", start);
-            if (start != -1 && end != -1) {
-                url = packageInfo.mid(start, end - start).trimmed();
-            }
-    }
-
-    if (!url.isEmpty()) {
-            showLoadingAnimation(true);
+    if (match.hasMatch()) {
+            ui->action_35->setEnabled(true);
+            ui->tabWidget->setCurrentIndex(3);
+            QString url = match.captured(1);
+            showLoadingAnimation(true,ui->webEngineView);
             ui->webEngineView->setUrl(QUrl(url));
-    } else
+    }
+    else
             sendNotification(tr("Внимание"), tr("URL недоступен!"));
 }
 
 void MainWindow::on_action_35_triggered()
 {
-    if (page == 6 || page == 7 || page == 11)
+    if (page == 6)
     {
-            ui->webEngineView->back();
-            return;
+        ui->webEngineView_aur->back();
+        return;
+    }
+    else if (page == 7)
+    {
+        ui->webEngineView_custom->back();
+        return;
+    }
+    else if (page == 11)
+    {
+        ui->webEngineView_game->back();
+        return;
+    }
+    else if (page == 8)
+    {
+        on_action_12_triggered();
+        return;
     }
 
     if (animation >= 1)
@@ -574,21 +685,38 @@ void MainWindow::on_action_35_triggered()
     ui->action_35->setVisible(false);
     ui->action_updatelist->setVisible(true);
 
-    if (page == 2)
-            ui->tabWidget->setCurrentIndex(1);
+    if (page == 2) {
+        ui->tabWidget->setCurrentIndex(1);
+        ui->action_imgpkg->setVisible(true);
+    }
     else if (page == 4)
         ui->tabWidget->setCurrentIndex(2);
+
+    removeToolButtonTooltips(ui->toolBar);
+    removeToolButtonTooltips(ui->toolBar_2);
 }
 
 void MainWindow::on_action_32_triggered()
 {
-    ui->webEngineView->reload();
+    if (page == 6)
+        ui->webEngineView_aur->reload();
+    else if (page == 7)
+        ui->webEngineView_custom->reload();
+    else if (page == 11)
+        ui->webEngineView_game->reload();
 }
 
 void MainWindow::on_action_33_triggered()
 {
     QClipboard *clipboard = QGuiApplication::clipboard();
-    clipboard->setText(ui->webEngineView->url().toDisplayString());
+
+    if (page == 6)
+        clipboard->setText(ui->webEngineView_aur->url().toDisplayString());
+    else if (page == 7)
+        clipboard->setText(ui->webEngineView_custom->url().toDisplayString());
+    else if (page == 11)
+        clipboard->setText(ui->webEngineView_game->url().toDisplayString());
+
     sendNotification(tr("Буфер обмена"), tr("Ссылка успешно скопирована в буфер обмена!"));
 }
 
@@ -597,25 +725,31 @@ void MainWindow::on_action_11_triggered()
     UpdateIcon();
     if (hasUpdates) {
         Terminal terminal = getTerminal();
-        currentProcess = QSharedPointer<QProcess>::create(this);
-        connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
-        connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
+        currentTerminalProcess = QSharedPointer<QProcess>::create(this);
+        connect(currentTerminalProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
             UpdateIcon();
         });
-        currentProcess->setProgram(terminal.binary);
-        currentProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("update"));
-        currentProcess->setProcessChannelMode(QProcess::MergedChannels);
-        currentProcess->start();
+        currentTerminalProcess->setProgram(terminal.binary);
+        currentTerminalProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("update"));
+        currentTerminalProcess->setProcessChannelMode(QProcess::MergedChannels);
+        currentTerminalProcess->start();
     } else
         sendNotification(tr("Обновление"), tr("Система в актуальном состоянии!"));
 }
 
 void MainWindow::on_action_5_triggered()
 {
-    if (page == 10)
-        QProcess::startDetached("pkexec", {"sudo", "systemctl", "start", "httpd"});
-    else
-    {
+    if (page == 10) {
+        currentProcess = QSharedPointer<QProcess>::create(this);
+        connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
+            sendNotification(tr("Веб-сервер"), tr("Веб-сервер запущен!"));
+            showLoadingAnimation(false,ui->webEngineView_host);
+        });
+        currentProcess->setProgram("pkexec");
+        currentProcess->setArguments(QStringList() << "sudo" << "systemctl" << "start" << "httpd");
+        currentProcess->setProcessChannelMode(QProcess::MergedChannels);
+        currentProcess->start();
+    } else {
         QListWidget* listWidget = ui->list_app;
 
         if (listWidget->currentItem() == nullptr) {
@@ -664,15 +798,14 @@ void MainWindow::on_action_6_triggered()
     QString packageName = listWidget->item(listWidget->currentRow())->text();
     Terminal terminal = getTerminal();
 
-    currentProcess = QSharedPointer<QProcess>::create(this);
-    connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
-    connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
+    currentTerminalProcess = QSharedPointer<QProcess>::create(this);
+    connect(currentTerminalProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
         loadContentInstall();
     });
-    currentProcess->setProgram(terminal.binary);
-    currentProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("remove") << packageName);
-    currentProcess->setProcessChannelMode(QProcess::MergedChannels);
-    currentProcess->start();
+    currentTerminalProcess->setProgram(terminal.binary);
+    currentTerminalProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("remove") << packageName);
+    currentTerminalProcess->setProcessChannelMode(QProcess::MergedChannels);
+    currentTerminalProcess->start();
 }
 
 void MainWindow::on_action_4_triggered()
@@ -700,15 +833,14 @@ void MainWindow::on_action_4_triggered()
     if (clearinstall && (pkg == 0 || pkg == 1))
         removeDirectory(QDir::homePath() + "/.cache/" + ((pkg == 0) ? "yay/" : "paru/clone/") + packageName);
 
-    currentProcess = QSharedPointer<QProcess>::create(this);
-    connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
-    connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
+    currentTerminalProcess = QSharedPointer<QProcess>::create(this);
+    connect(currentTerminalProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
         loadContentInstall();
     });
-    currentProcess->setProgram(terminal.binary);
-    currentProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("install") << packageName);
-    currentProcess->setProcessChannelMode(QProcess::MergedChannels);
-    currentProcess->start();
+    currentTerminalProcess->setProgram(terminal.binary);
+    currentTerminalProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("install") << packageName);
+    currentTerminalProcess->setProcessChannelMode(QProcess::MergedChannels);
+    currentTerminalProcess->start();
 }
 
 void MainWindow::on_action_30_triggered()
@@ -735,7 +867,6 @@ void MainWindow::on_push_grub_clicked()
     QString timeout = ui->spin_grub->value() > 0 ? QString::number(ui->spin_grub->value()) : "5";
 
     currentProcess = QSharedPointer<QProcess>::create(this);
-    connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
     connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
         sendNotification(tr("GRUB изменен"), tr("Изменения GRUB вступят в силу после перезагрузки."));
     });
@@ -1084,8 +1215,14 @@ void MainWindow::search(const QString& searchText)
 {
     if (page == 2)
         handleServerResponse(searchText);
-    else if (page == 6 || page == 7 || page == 10 || page == 11)
-        ui->webEngineView->setUrl(QUrl(searchText));
+    else if (page == 6)
+        ui->webEngineView_aur->setUrl(QUrl(searchText));
+    else if (page == 7)
+        ui->webEngineView_custom->setUrl(QUrl(searchText));
+    else if (page == 10)
+        ui->webEngineView_host->setUrl(QUrl(searchText));
+    else if (page == 11)
+        ui->webEngineView_game->setUrl(QUrl(searchText));
     else if (page == 14) {
         if (nvidia == 0)
             checkForDowngrades(searchText);
@@ -1163,6 +1300,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->combo_animload->setCurrentIndex(animloadpage);
     ui->combo_theme->setCurrentIndex(animation);
     ui->check_cacheremove->setChecked(cacheremove);
+    ui->check_saveurl->setChecked(saveurl);
 
     ui->time_update->setTime(timeupdate);
     ui->time_timeout->setTime(timeout);
@@ -1186,7 +1324,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     connect(manager, &QNetworkAccessManager::finished, this, &MainWindow::onReplyFinished);
 
     checkForDowngrades("steam");
-    showLoadingAnimation(false);
 }
 
 //not
@@ -1307,6 +1444,7 @@ void MainWindow::loadSettings()
     //-########################## НАСТРОЕННЫЕ ПЕРЕМЕННЫЕ ################################
     //-##################################################################################
     previousAction = ui->action_2; //[заглушка]
+
     removeToolButtonTooltips(ui->toolBar);
     removeToolButtonTooltips(ui->toolBar_2);
     //-##################################################################################
@@ -1325,10 +1463,16 @@ void MainWindow::loadSettings()
     cacheremove = settings.value("CacheRemove", 2).toInt();
     volumenotify = settings.value("VolumeNotify", 30).toInt();
     animation = settings.value("Animation", 0).toInt();
+    saveurl = settings.value("SaveURL", 2).toInt();
+
     lang = QSharedPointer<QString>::create(settings.value("Language").toString());
     teatext = QSharedPointer<QString>::create(settings.value("TeaText").toString());
     worktext = QSharedPointer<QString>::create(settings.value("WorkText").toString());
     animationname = QSharedPointer<QString>::create(settings.value("AnimationName").toString());
+
+    gameurl = QSharedPointer<QString>::create(settings.value("GameURL").toString());
+    customurl = QSharedPointer<QString>::create(settings.value("CustomURL").toString());
+    aururl = QSharedPointer<QString>::create(settings.value("AurURL").toString());
 
     timeupdate = QTime::fromString(settings.value("TimeUpdate").toString(), "HH:mm");
     timeout = QTime::fromString(settings.value("TimeOut", "00:00:10").toString(), "HH:mm:ss");
@@ -1338,7 +1482,6 @@ void MainWindow::loadSettings()
     QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
     currentDesktop = QSharedPointer<QString>::create(environment.value("XDG_CURRENT_DESKTOP"));
 
-    ui->webEngineView->setZoomFactor(0.9);
     ui->toolBar_2->setFixedWidth(50);
 
     ui->toolBar->setContextMenuPolicy(Qt::PreventContextMenu);
@@ -1383,10 +1526,46 @@ void MainWindow::loadSettings()
     connect(ui->list_aur, &QListWidget::itemClicked, this, &MainWindow::onListAurItemClicked);
     connect(ui->list_app, &QListWidget::itemClicked, this, &MainWindow::onListAurItemClicked);
     connect(ui->list_downgrade, &QListWidget::itemDoubleClicked, this, &MainWindow::onListDowngradeItemDoubleClicked);
+
     connect(ui->webEngineView, &QWebEngineView::urlChanged, this, [this](const QUrl &url) {
         QString urlString = url.toString();
         ui->searchLineEdit->setText(urlString);
     });
+    connect(ui->webEngineView_aur, &QWebEngineView::urlChanged, this, [this](const QUrl &url) {
+        if(ui->webEngineView_aur->url().toString() == *aururl)
+            ui->action_35->setEnabled(false);
+        else
+            ui->action_35->setEnabled(true);
+
+        QString urlString = url.toString();
+        ui->searchLineEdit->setText(urlString);
+        settings.setValue("AurURL", urlString);
+    });
+    connect(ui->webEngineView_custom, &QWebEngineView::urlChanged, this, [this](const QUrl &url) {
+        if(ui->webEngineView_custom->url().toString() == *customurl)
+            ui->action_35->setEnabled(false);
+        else
+            ui->action_35->setEnabled(true);
+
+        QString urlString = url.toString();
+        ui->searchLineEdit->setText(urlString);
+        settings.setValue("CustomURL", urlString);
+    });
+    connect(ui->webEngineView_game, &QWebEngineView::urlChanged, this, [this](const QUrl &url) {
+        if(ui->webEngineView_game->url().toString() == *gameurl)
+            ui->action_35->setEnabled(false);
+        else
+            ui->action_35->setEnabled(true);
+
+        QString urlString = url.toString();
+        ui->searchLineEdit->setText(urlString);
+        settings.setValue("GameURL", urlString);
+    });
+    connect(ui->webEngineView_host, &QWebEngineView::urlChanged, this, [this](const QUrl &url) {
+        QString urlString = url.toString();
+        ui->searchLineEdit->setText(urlString);
+    });
+
     //-##################################################################################
     //-############################### ЗАНЯТОЕ МЕСТО ####################################
     //-##################################################################################
@@ -1423,50 +1602,63 @@ void MainWindow::loadSettings()
     //-##################################################################################
     QWebEngineProfile* profile = QWebEngineProfile::defaultProfile();
     profile->setHttpCacheType(QWebEngineProfile::MemoryHttpCache);
-    connect(ui->webEngineView->page(), &QWebEnginePage::loadStarted, this, [=]() {
-        if (page == 2 || page == 4 || page == 6 || page == 7) {
 
-            QFile scriptFile(":/loading.browser.js");
-            if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-                QTextStream stream(&scriptFile);
-                QString script = stream.readAll();
-                ui->webEngineView->page()->runJavaScript(script);
-            }
+    connect(ui->webEngineView_custom->page(), &QWebEnginePage::loadStarted, this, [=]() {
+        QFile scriptFile(":/loading.browser.js");
+        if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QTextStream stream(&scriptFile);
+            QString script = stream.readAll();
+            ui->webEngineView_custom->page()->runJavaScript(script);
         }
     });
-    connect(ui->webEngineView->page(), &QWebEnginePage::loadFinished, this, [=](bool success) mutable{
-        if (success) {
-            if (animation >= 1)
-            {
-                opacityEffect->setOpacity(1.0);
-                ui->centralwidget->setGraphicsEffect(opacityEffect);
-            }
+    connect(ui->webEngineView_aur->page(), &QWebEnginePage::loadStarted, this, [=]() {
+        QFile scriptFile(":/loading.browser.js");
+        if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QTextStream stream(&scriptFile);
+            QString script = stream.readAll();
+            ui->webEngineView_aur->page()->runJavaScript(script);
+        }
+    });
 
-            if (page == 6 || page == 7 || page == 10 || page == 11)
-                ui->tabWidget->setCurrentIndex(3);
-
-            else if (page == 2 || page == 4) {
-
-                ui->action_35->setVisible(true);
-                ui->action_11->setVisible(false);
-                ui->action_34->setVisible(false);
-                ui->action_updatelist->setVisible(false);
-                ui->tabWidget->setCurrentIndex(3);
-            }
-        } else {
+    connect(ui->webEngineView_game->page(), &QWebEnginePage::loadFinished, this, [=](bool success) mutable{
+        if (success)
+            showLoadingAnimation(false,ui->webEngineView_game);
+    });
+    connect(ui->webEngineView_host->page(), &QWebEnginePage::loadFinished, this, [=](bool success) mutable{
+        if (success)
+            showLoadingAnimation(false,ui->webEngineView_host);
+        else {
             if (page == 10) {
-                ui->webEngineView->reload();
+                ui->webEngineView_host->reload();
                 errorShown = true;
                 return;
             }
-
-            else if ((!errorShown && page == 2) || (!errorShown && page == 4)) {
+        }
+    });
+    connect(ui->webEngineView_custom->page(), &QWebEnginePage::loadFinished, this, [=](bool success) mutable{
+        if (success)
+            showLoadingAnimation(false,ui->webEngineView_custom);
+    });
+    connect(ui->webEngineView_aur->page(), &QWebEnginePage::loadFinished, this, [=](bool success) mutable{
+        if (success)
+            showLoadingAnimation(false,ui->webEngineView_aur);
+    });
+    connect(ui->webEngineView->page(), &QWebEnginePage::loadFinished, this, [=](bool success) mutable{
+        if (isFirstLoad) {
+            isFirstLoad = false;
+            return;
+        }
+        if (success)
+            showLoadingAnimation(false,ui->webEngineView);
+        else {
+            if ((!errorShown && page == 2) || (!errorShown && page == 4)) {
                 sendNotification(tr("Ошибка"), tr("Страница не найдена (ошибка 404)"));
                 errorShown = true;  // Устанавливаем флаг, что уведомление было показано
+                showLoadingAnimation(false,ui->webEngineView);
             }
         }
-        showLoadingAnimation(false);
     });
+
     ui->list_aur->setSelectionBehavior(QAbstractItemView::SelectRows);
     //-##################################################################################
     //-########################### ГРОМКОСТЬ УВЕДОМЛЕНИЙ ################################
@@ -1719,7 +1911,6 @@ void MainWindow::mrpropper(int value) {
     showLoadingAnimationMini(true);
     page = value;
 
-    ui->webEngineView->page()->triggerAction(QWebEnginePage::Stop);
     errorShown = true;
 
     for (QAction* action : ui->toolBar_2->actions()) {
@@ -1835,7 +2026,7 @@ void MainWindow::showLoadingAnimationMini(bool show)
     }
 }
 
-void MainWindow::showLoadingAnimation(bool show)
+void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
 {
     if (animload == 0 || animloadpage > 1)
         return;
@@ -1844,10 +2035,16 @@ void MainWindow::showLoadingAnimation(bool show)
     static QLabel* loadingLabel = nullptr;
 
     if (show) {
+        if (animation >= 1)
+        {
+            opacityEffect->setOpacity(1.0);
+            ui->centralwidget->setGraphicsEffect(opacityEffect);
+        }
+
         int leftShift = -100;
 
         if (!overlayWidget) {
-            overlayWidget = new QWidget(ui->centralwidget);
+            overlayWidget = new QWidget(webView);
             overlayWidget->setObjectName("OverlayWidget");
             overlayWidget->setGeometry(0, 0, width(), height());
             overlayWidget->raise();
@@ -1863,18 +2060,26 @@ void MainWindow::showLoadingAnimation(bool show)
         QMovie* loadingMovie = nullptr;
         QString backgroundColor;
 
-        if (page == 10){
+        if (page == 10) {
             loadingMovie = new QMovie(":/img/server.gif");
             backgroundColor = "#0072ce";
         }
         else
         {
-            if (animloadpage == 0){
+            if (page == 2 || page == 4 || page == 8)
+            {
+                ui->action_35->setVisible(true);
+                ui->action_11->setVisible(false);
+                ui->action_34->setVisible(false);
+                ui->action_updatelist->setVisible(false);
+                ui->action_imgpkg->setVisible(false);
+            }
+
+            if (animloadpage == 0) {
                 loadingMovie = new QMovie(":/img/loading.gif");
                 backgroundColor = "#472e91";
             }
-            else if (animloadpage == 1)
-            {
+            else if (animloadpage == 1) {
                 loadingMovie = new QMovie(":/img/loading2.gif");
                 backgroundColor = "#2d2b79";
             }
@@ -1890,6 +2095,7 @@ void MainWindow::showLoadingAnimation(bool show)
         overlayWidget->show();
         loadingLabel->show();
     } else {
+
         if (overlayWidget) {
             overlayWidget->hide();
             overlayWidget->deleteLater();
@@ -2016,17 +2222,17 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
                 if (imageUrls.isEmpty()){
                     ui->tabWidget_details->setCurrentIndex(0);
-                    ui->action_imgpkg->setVisible(false);
+                    ui->action_imgpkg->setEnabled(false);
                     ui->action_imgpkg->setChecked(false);
 
                 } else {
                     downloadAndSaveImages(packageName, imageUrls, mainDir + "cache/");
-                    ui->action_imgpkg->setVisible(true);
+                    ui->action_imgpkg->setEnabled(true);
                 }
 
             } else {
                 ui->tabWidget_details->setCurrentIndex(0);
-                ui->action_imgpkg->setVisible(false);
+                ui->action_imgpkg->setEnabled(false);
                 ui->action_imgpkg->setChecked(false);
             }
 
@@ -2060,7 +2266,7 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
         detailsWidget->verticalScrollBar()->setValue(scrollBarValue);
 
         if (page == 2)
-            ui->action_like->setVisible(true);
+            ui->action_like->setEnabled(true);
 
         miniAnimation(false,detailsWidget);
     });
@@ -2081,7 +2287,7 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
             QCoreApplication::postEvent(ui->searchLineEdit, event);
 
             if (page == 2)
-                ui->action_like->setVisible(false);
+                ui->action_like->setEnabled(false);
 
             miniAnimation(false,detailsWidget);
         }
@@ -2159,6 +2365,9 @@ void MainWindow::miniAnimation(bool visible, QWidget* targetWidget)
             targetWidget->setStyleSheet("background-color: #191919;");
         else
             targetWidget->setStyleSheet("background-color: #272727;");
+
+        removeToolButtonTooltips(ui->toolBar);
+        removeToolButtonTooltips(ui->toolBar_2);
     }
 }
 
@@ -2810,15 +3019,14 @@ void MainWindow::onListDowngradeItemDoubleClicked(QListWidgetItem *currentItem) 
         return;
     }
 
-    currentProcess = QSharedPointer<QProcess>::create(this);
-    connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
-    connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
+    currentTerminalProcess = QSharedPointer<QProcess>::create(this);
+    connect(currentTerminalProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
         //ничего делать не надо
     });
-    currentProcess->setProgram(terminal.binary);
-    currentProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("localinstall") << installUrl);
-    currentProcess->setProcessChannelMode(QProcess::MergedChannels);
-    currentProcess->start();
+    currentTerminalProcess->setProgram(terminal.binary);
+    currentTerminalProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("localinstall") << installUrl);
+    currentTerminalProcess->setProcessChannelMode(QProcess::MergedChannels);
+    currentTerminalProcess->start();
 }
 
 void MainWindow::checkForDowngrades(const QString& packagesArchiveAUR)
@@ -3536,6 +3744,12 @@ void MainWindow::on_dial_volnotify_valueChanged(int value)
     ui->label_volnotify->setText(labelvolnotify);
 }
 
+void MainWindow::on_check_saveurl_stateChanged(int arg1)
+{
+    saveurl = arg1;
+    settings.setValue("SaveURL",arg1);
+}
+
 void MainWindow::handleListItemClicked(QListWidgetItem *item, const QString& scriptDir)
 {
     if (item) {
@@ -3814,17 +4028,17 @@ void MainWindow::on_action_updatelist_triggered()
         miniAnimation(true, ui->list_aur);
 
         ui->list_aur->clear();
-        ui->action_imgpkg->setVisible(false);
+        ui->action_imgpkg->setEnabled(false);
         ui->action_imgpkg->setChecked(false);
 
         QTimer::singleShot(500, this, [=]() {
             list = 0;
             loadContent(0, true);
 
-            ui->action_imgpkg->setVisible(false);
+            ui->action_imgpkg->setEnabled(false);
             ui->action_imgpkg->setChecked(false);
 
-            ui->action_like->setVisible(false);
+            ui->action_like->setEnabled(false);
             ui->details_aur->setHtml(detailsAURdefault);
 
             miniAnimation(false, ui->list_aur);
@@ -3843,4 +4057,3 @@ void MainWindow::on_action_updatelist_triggered()
         });
     }
 }
-

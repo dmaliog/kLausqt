@@ -69,6 +69,8 @@ private:
     QCompleter* completer;
     QStandardItemModel* completerModel;
     QSharedPointer<QProcess> snapProcess;
+
+    QSharedPointer<QProcess> currentTerminalProcess;
     QSharedPointer<QProcess> currentProcess;
     QScopedPointer<QLabel> loadingLabel;
     QSharedPointer<QLabel> loadingAnimationLabel;
@@ -80,6 +82,10 @@ private:
     QSharedPointer<QString> repo;
     QSharedPointer<QString> lang;
     QSharedPointer<QString> animationname;
+
+    QSharedPointer<QString> gameurl;
+    QSharedPointer<QString> customurl;
+    QSharedPointer<QString> aururl;
 
     QSharedPointer<QTimer> updateIconTimer;
     QSharedPointer<QTimer> teaTimer;
@@ -109,6 +115,7 @@ private:
     bool hasUpdates = false;
     bool hasUpdatesSnap = false;
     bool loadpage = true;
+    bool isFirstLoad = true;
 
     // QAction
     QAction* actionLoad = nullptr;
@@ -188,8 +195,8 @@ protected:
     void closeEvent(QCloseEvent *event) override; // объявление метода closeEvent()
     bool eventFilter(QObject *obj, QEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
-public slots:
 
+public slots:
     void on_action_2_triggered();
     void on_action_3_triggered();
     void on_action_4_triggered();
@@ -208,7 +215,6 @@ public slots:
 
 private slots:
     void AnimationBackground();
-
     void mrpropper(int value);
 
     void connectProcessSignals(QSharedPointer<QProcess>& process, QTextBrowser* outputWidget);
@@ -263,7 +269,7 @@ private slots:
     void UpdateSnap();
 
     void setHasUpdates(bool updates);
-    void showLoadingAnimation(bool show);
+    void showLoadingAnimation(bool show, QWebEngineView* webView);
     void showLoadingAnimationMini(bool show);
 
     void checkVersionAndClear();
@@ -335,6 +341,7 @@ private slots:
     void on_action_imgpkg_triggered(bool checked);
     void on_action_updatelist_triggered();
     void on_combo_theme_currentIndexChanged(int index);
+    void on_check_saveurl_stateChanged(int arg1);
 };
 
 #endif // MAINWINDOW_H
