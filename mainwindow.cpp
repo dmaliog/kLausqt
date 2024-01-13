@@ -19,7 +19,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "11.1";
+QString currentVersion = "11.2";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 int nvidia = 0; // nvidia
@@ -2104,12 +2104,14 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
             overlayWidget->hide();
             overlayWidget->setParent(nullptr);  // Отсоединение от родительского виджета
             overlayWidget = nullptr;
+            overlayWidget->deleteLater();
         }
 
         if (loadingLabel) {
             loadingLabel->hide();
             loadingLabel->setParent(nullptr);  // Отсоединение от родительского виджета
             loadingLabel = nullptr;
+            loadingLabel->deleteLater();
         }
     }
     removeToolButtonTooltips(ui->toolBar);
