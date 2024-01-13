@@ -19,7 +19,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "10.9";
+QString currentVersion = "11.0";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 int nvidia = 0; // nvidia
@@ -2034,8 +2034,8 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
     if (animload == 0 || animloadpage > 1)
         return;
 
-    static QWidget* overlayWidget = nullptr;
-    static QLabel* loadingLabel = nullptr;
+    QWidget* overlayWidget = webView->property("OverlayWidget").value<QWidget*>();
+    QLabel* loadingLabel = webView->property("LoadingLabel").value<QLabel*>();
 
     if (show) {
         if (animation >= 1)
@@ -2051,13 +2051,14 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
             overlayWidget->setObjectName("OverlayWidget");
             overlayWidget->setGeometry(0, 0, width(), height());
             overlayWidget->raise();
-        }
 
-        if (!loadingLabel) {
             loadingLabel = new QLabel(overlayWidget);
             loadingLabel->setObjectName("LoadingLabel");
             loadingLabel->setAlignment(Qt::AlignCenter);
             loadingLabel->setFixedSize(500, 500);
+
+            webView->setProperty("OverlayWidget", QVariant::fromValue(overlayWidget));
+            webView->setProperty("LoadingLabel", QVariant::fromValue(loadingLabel));
         }
 
         QMovie* loadingMovie = nullptr;
