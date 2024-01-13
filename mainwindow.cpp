@@ -19,7 +19,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "11.3";
+QString currentVersion = "11.4";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 int nvidia = 0; // nvidia
@@ -2055,7 +2055,7 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
             loadingLabel = new QLabel(overlayWidget);
             loadingLabel->setObjectName("LoadingLabel");
             loadingLabel->setAlignment(Qt::AlignCenter);
-            loadingLabel->setFixedSize(500, 500);
+            loadingLabel->setFixedSize(600, 500);
 
             webView->setProperty("OverlayWidget", QVariant::fromValue(overlayWidget));
             webView->setProperty("LoadingLabel", QVariant::fromValue(loadingLabel));
@@ -2115,7 +2115,6 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
     removeToolButtonTooltips(ui->toolBar);
     removeToolButtonTooltips(ui->toolBar_2);
 }
-
 
 //not
 void MainWindow::downloadAndSaveImages(const QString& packageName, const QStringList& urls, const QString& folder)
@@ -2385,7 +2384,7 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
         }
     }
 
-    QString additionalIconPath = "/usr/share/icons/Papirus/48x48/apps/" + appName + ".svg";
+    QString additionalIconPath = "/usr/share/icons/Papirus/48x48/apps/" + appName.toLower() + ".svg";
     if (QFileInfo(additionalIconPath).isFile()) {
         return QIcon(additionalIconPath);
     }
@@ -2898,7 +2897,7 @@ void MainWindow::loadContent(int value, bool valuepage)
 
             if (match.hasMatch()) {
                 QString repoName = match.captured(1);
-                iconPath = "/usr/share/icons/Papirus/48x48/apps/" + repoName + ".svg";
+                iconPath = "/usr/share/icons/Papirus/48x48/apps/" + repoName.toLower() + ".svg";
 
                 QFileInfo fileInfo(iconPath);
                 if (!fileInfo.exists())
@@ -2924,7 +2923,7 @@ void MainWindow::loadContent(int value, bool valuepage)
                     break;
                 }
             }
-            iconPath = "/usr/share/icons/Papirus/48x48/apps/" + packageNameIcon + ".svg";
+            iconPath = "/usr/share/icons/Papirus/48x48/apps/" + packageNameIcon.toLower() + ".svg";
 
             QFileInfo fileInfo(iconPath);
             if (!fileInfo.exists()) {
@@ -3353,9 +3352,9 @@ void MainWindow::loadScripts(const QString& baseDir, QListWidget* listWidget)
 
 QString MainWindow::findIconPath(const QString &iconNumber)
 {
-    QString iconPath = QString("/usr/share/icons/Papirus/48x48/apps/%1.svg").arg(iconNumber);
+    QString iconPath = QString("/usr/share/icons/Papirus/48x48/apps/%1.svg").arg(iconNumber.toLower());
     QFileInfo fileInfo(iconPath);
-    return fileInfo.exists() ? iconPath : QString(":/img/%1.png").arg(iconNumber);
+    return fileInfo.exists() ? iconPath : QString(":/img/%1.png").arg(iconNumber.toLower());
 }
 
 void MainWindow::sendNotification(const QString& title, const QString& message)
@@ -3421,7 +3420,7 @@ void MainWindow::loadFolders()
             iconName = iconName.mid(1); // Убираем точку из начала названия
         }
 
-        QString iconPath = QString("/usr/share/icons/Papirus/48x48/apps/") + iconName + ".svg";
+        QString iconPath = QString("/usr/share/icons/Papirus/48x48/apps/") + iconName.toLower() + ".svg";
         if (!QFileInfo::exists(iconPath)) {
             iconPath = "/usr/share/icons/Papirus/48x48/apps/gnome-do.svg";
         }
@@ -3577,11 +3576,11 @@ void MainWindow::on_combo_bench_currentIndexChanged(int index)
                 {
                     QString iconNumber = line.mid(6).trimmed();
 
-                    iconPath = QString("/usr/share/icons/Papirus/48x48/apps/%1.svg").arg(iconNumber);
+                    iconPath = QString("/usr/share/icons/Papirus/48x48/apps/%1.svg").arg(iconNumber.toLower());
 
                     QFileInfo fileInfo(iconPath);
                     if (!fileInfo.exists()) {
-                        iconPath = QString(":/img/%1.png").arg(iconNumber);
+                        iconPath = QString(":/img/%1.png").arg(iconNumber.toLower());
                     }
                 }
             }
