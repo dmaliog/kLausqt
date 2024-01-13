@@ -49,6 +49,8 @@ private:
 
     QString detailsAURdefault;
 
+    QString originalLabelText;
+
     QString nvidiaVersion;
     QString nvidiaDkms;
     QString nvidiaUtils;
@@ -214,8 +216,11 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
+    void setupConnections();
+    void handleActionHovered();
+
     void AnimationBackground();
-    void mrpropper(int value);
+    void mrpropper(int value, QAction *action);
 
     void connectProcessSignals(QSharedPointer<QProcess>& process, QTextBrowser* outputWidget);
     void onCurrentProcessReadyReadSearch();

@@ -19,7 +19,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "11.4";
+QString currentVersion = "11.5";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 int nvidia = 0; // nvidia
@@ -112,8 +112,8 @@ Terminal getTerminal()
 
 void MainWindow::on_action_2_triggered()
 {
-    mrpropper(2);
-    ui->label1->setText(tr("Каталог пакетов"));
+    mrpropper(2, ui->action_2);
+
     ui->searchLineEdit->setPlaceholderText(tr("Поиск по пакетам..."));
     ui->searchLineEdit->setVisible(true);
     ui->tabWidget->setCurrentIndex(1);
@@ -128,8 +128,8 @@ void MainWindow::on_action_2_triggered()
 
 void MainWindow::on_action_7_triggered()
 {
-    mrpropper(4);
-    ui->label1->setText(tr("Каталог установленных пакетов"));
+    mrpropper(4, ui->action_7);
+
     ui->searchLineEdit->setPlaceholderText(tr("Поиск установленных пакетов..."));
     ui->searchLineEdit->setVisible(true);
     ui->tabWidget->setCurrentIndex(2);
@@ -143,10 +143,9 @@ void MainWindow::on_action_7_triggered()
 
 void MainWindow::on_action_17_triggered()
 {
-    mrpropper(3);
+    mrpropper(3, ui->action_17);
     ui->searchLineEdit->setPlaceholderText(tr("Поиск скриптов..."));
     ui->searchLineEdit->setVisible(true);
-    ui->label1->setText(tr("Полезные скрипты"));
     ui->action_addsh->setVisible(true);
     ui->action_editsh->setVisible(true);
     ui->action_rmsh->setVisible(true);
@@ -156,7 +155,7 @@ void MainWindow::on_action_17_triggered()
 
 void MainWindow::on_action_9_triggered()
 {
-    mrpropper(5);
+    mrpropper(5, ui->action_9);
     ui->searchLineEdit->setPlaceholderText(tr("Поиск журналов и конфигураций..."));
     ui->searchLineEdit->setVisible(true);
     ui->action_27->setVisible(true);
@@ -171,7 +170,7 @@ void MainWindow::on_action_3_triggered()
 {
     if (page == 6) return;
     showLoadingAnimationMini(false);
-    mrpropper(6);
+    mrpropper(6, ui->action_3);
 
     QString aurUrl = ui->webEngineView_aur->url().toString();
     bool isBlankPage = aurUrl == "about:blank";
@@ -197,7 +196,6 @@ void MainWindow::on_action_3_triggered()
         ui->searchLineEdit->setText(aurUrl);
     }
 
-    ui->label1->setText(tr("Arch Linux - Wiki"));
     ui->action_31->setVisible(true);
     ui->action_32->setVisible(true);
     ui->action_33->setVisible(true);
@@ -227,14 +225,13 @@ void MainWindow::on_action_8_triggered()
         }
     }
 
-    mrpropper(7);
+    mrpropper(7, ui->action_8);
 
     bool isBlankPage = ui->webEngineView_custom->url().toString() == "about:blank";
 
     if (isBlankPage)
         showLoadingAnimation(true,ui->webEngineView_custom);
 
-    ui->label1->setText(tr("Кастомизация"));
     ui->action_31->setVisible(true);
     ui->action_32->setVisible(true);
     ui->action_33->setVisible(true);
@@ -284,8 +281,7 @@ void MainWindow::on_push_vk_clicked()
 {
     showLoadingAnimationMini(false);
     showLoadingAnimation(true,ui->webEngineView);
-    mrpropper(8);
-    ui->label1->setText(tr("Наше сообщество"));
+    mrpropper(8, ui->action_10);
     ui->action_31->setVisible(true);
     ui->action_32->setVisible(true);
     ui->action_33->setVisible(true);
@@ -300,8 +296,7 @@ void MainWindow::on_push_vk_clicked()
 
 void MainWindow::on_action_12_triggered()
 {
-    mrpropper(9);
-    ui->label1->setText(tr("Настройки приложения"));
+    mrpropper(9, ui->action_12);
     ui->action_28->setVisible(true);
     ui->action_timer->setVisible(true);
     ui->tabWidget->setCurrentIndex(7);
@@ -329,7 +324,7 @@ void MainWindow::on_action_host_triggered()
         }
     }
     showLoadingAnimationMini(false);
-    mrpropper(10);
+    mrpropper(10, ui->action_host);
 
     QString hostUrl = ui->webEngineView_host->url().toString();
     bool isBlankPage = hostUrl == "about:blank";
@@ -337,7 +332,6 @@ void MainWindow::on_action_host_triggered()
     if (isBlankPage)
         showLoadingAnimation(true,ui->webEngineView_host);
 
-    ui->label1->setText(tr("Веб-сервер"));
     ui->action_5->setVisible(true);
     ui->action_restart->setVisible(true);
     ui->action_stop->setVisible(true);
@@ -363,7 +357,7 @@ void MainWindow::on_action_game_triggered()
 {
     if (page == 11) return;
     showLoadingAnimationMini(false);
-    mrpropper(11);
+    mrpropper(11, ui->action_game);
 
     QString protonDBUrl = ui->webEngineView_game->url().toString();
     bool isBlankPage = protonDBUrl == "about:blank";
@@ -371,7 +365,6 @@ void MainWindow::on_action_game_triggered()
     if (isBlankPage)
         showLoadingAnimation(true,ui->webEngineView_game);
 
-    ui->label1->setText(tr("Игровая совместимость - ProtonDB"));
     ui->action_31->setVisible(true);
     ui->action_32->setVisible(true);
     ui->action_33->setVisible(true);
@@ -403,8 +396,7 @@ void MainWindow::on_action_game_triggered()
 
 void MainWindow::on_action_downgrade_triggered()
 {
-    mrpropper(14);
-    ui->label1->setText(tr("Откат пакетов"));
+    mrpropper(14, ui->action_downgrade);
     ui->action_nvidia->setVisible(true);
     ui->searchLineEdit->setPlaceholderText(tr("Поиск по архиву..."));
     ui->searchLineEdit->setVisible(true);
@@ -424,10 +416,13 @@ void MainWindow::on_action_nvidia_triggered()
     {
         checkForDowngrades(driverNames[driverIndex - 1]);
         ui->label1->setText(tr("Откат пакетов NVIDIA [%1/7]").arg(driverIndex));
+        originalLabelText = ui->label1->text();
     }
     else if (driverIndex == 8)
     {
         ui->label1->setText(tr("Откат пакетов NVIDIA"));
+        originalLabelText = ui->label1->text();
+
         ui->tabWidget->setCurrentIndex(6);
         ui->details_driver->setHtml(QString(tr("<b>Вы выбрали следующие пакеты:</b><br>"
                                                "- <b>%1</b><br>"
@@ -447,6 +442,8 @@ void MainWindow::on_action_nvidia_triggered()
     {
         checkForDowngrades(driverNames[0]);
         ui->label1->setText(tr("Откат пакетов NVIDIA [1/7]"));
+        originalLabelText = ui->label1->text();
+
         nvidia = 1;
     }
 }
@@ -470,6 +467,7 @@ void MainWindow::on_push_back_clicked()
     nvidia = 0;
     checkForDowngrades("steam");
     ui->label1->setText(tr("Откат пакетов"));
+    originalLabelText = ui->label1->text();
     ui->tabWidget->setCurrentIndex(12);
 }
 //---#####################################################################################################################################################
@@ -520,6 +518,7 @@ void MainWindow::on_action_27_triggered()
 {
     page = 111;
     ui->label1->setText(tr("Информация о системе"));
+    originalLabelText = ui->label1->text();
     ui->push_pacman->setVisible(false);
     ui->push_kde->setVisible(false);
     ui->searchLineEdit->setPlaceholderText(tr("Поиск журналов и конфигураций..."));
@@ -532,6 +531,7 @@ void MainWindow::on_action_bench_triggered()
 {
     page = 112;
     ui->label1->setText(tr("Бенчмарки"));
+    originalLabelText = ui->label1->text();
     ui->push_pacman->setVisible(false);
     ui->push_kde->setVisible(false);
     ui->searchLineEdit->setPlaceholderText(tr("Поиск бенчмарков..."));
@@ -543,6 +543,7 @@ void MainWindow::on_action_bench_triggered()
 void MainWindow::on_action_system_triggered()
 {
     ui->label1->setText(tr("Настройки системы"));
+    originalLabelText = ui->label1->text();
     ui->push_pacman->setVisible(true);
     ui->push_kde->setVisible(true);
     ui->searchLineEdit->setVisible(false);
@@ -556,6 +557,7 @@ void MainWindow::on_action_repair_triggered()
 {
     page = 113;
     ui->label1->setText(tr("Оптимизация"));
+    originalLabelText = ui->label1->text();
     ui->push_pacman->setVisible(false);
     ui->push_kde->setVisible(false);
     ui->searchLineEdit->setPlaceholderText(tr("Поиск конфигураций..."));
@@ -567,12 +569,14 @@ void MainWindow::on_action_repair_triggered()
 void MainWindow::on_action_28_triggered()
 {
     ui->label1->setText(tr("Настройки приложения"));
+    originalLabelText = ui->label1->text();
     ui->tabWidget->setCurrentIndex(7);
 }
 
 void MainWindow::on_action_timer_triggered()
 {
     ui->label1->setText(tr("Настройки таймеров"));
+    originalLabelText = ui->label1->text();
     ui->tabWidget->setCurrentIndex(9);
 }
 
@@ -637,7 +641,7 @@ void MainWindow::on_action_34_triggered()
     process->waitForFinished();
 
     QString packageInfo = QString::fromUtf8(process->readAllStandardOutput());
-    QRegularExpression urlRegex("URL\\s+:\\s+(\\S+)");
+    static QRegularExpression urlRegex("URL\\s+:\\s+(\\S+)");
     QRegularExpressionMatch match = urlRegex.match(packageInfo);
 
     if (match.hasMatch()) {
@@ -1145,18 +1149,6 @@ void MainWindow::createSearchBar()
     ui->searchLineEdit->installEventFilter(this);
  }
 
-bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
-    if ((page == 2 || page == 4) && obj == ui->searchLineEdit && event->type() == QEvent::KeyPress) {
-       QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
-       if (keyEvent->key() == Qt::Key_Tab) {
-            completerModel->clear();
-            handleServerResponseSearch(ui->searchLineEdit->text());
-            return true;
-       }
-    }
-    return QObject::eventFilter(obj, event);
-}
-
 void MainWindow::handleServerResponseSearch(const QString& reply)
 {
     if (currentProcess && currentProcess->state() == QProcess::Running) {
@@ -1286,6 +1278,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     loadContentInstall();
     loadFolders();
     loadingListWidget();
+    setupConnections();
 
     detailsAURdefault = ui->details_aur->toHtml();
 
@@ -1834,6 +1827,49 @@ void MainWindow::loadSettings()
     loadingLabel->setStyleSheet("margin-left:4px;padding-left:2px;border:0;");
 }
 
+void MainWindow::setupConnections()
+{
+    ui->toolBar->installEventFilter(this);
+    ui->toolBar_2->installEventFilter(this);
+
+    for (QAction *action : ui->toolBar->actions()) {
+        if (action) {
+            connect(action, &QAction::hovered, this, &MainWindow::handleActionHovered);
+            action->installEventFilter(this);
+        }
+    }
+    for (QAction *action : ui->toolBar_2->actions()) {
+        if (action) {
+            connect(action, &QAction::hovered, this, &MainWindow::handleActionHovered);
+            action->installEventFilter(this);
+        }
+    }
+}
+
+void MainWindow::handleActionHovered()
+{
+    QAction *action = qobject_cast<QAction*>(sender());
+    if (action)
+        ui->label1->setText(action->text());
+}
+
+bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
+    if (obj == ui->toolBar || obj == ui->toolBar_2) {
+        if (event->type() == QEvent::Leave)
+            ui->label1->setText(originalLabelText);
+    }
+
+    if ((page == 2 || page == 4) && obj == ui->searchLineEdit && event->type() == QEvent::KeyPress) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        if (keyEvent->key() == Qt::Key_Tab) {
+            completerModel->clear();
+            handleServerResponseSearch(ui->searchLineEdit->text());
+            return true;
+        }
+    }
+    return QObject::eventFilter(obj, event);
+}
+
 void MainWindow::AnimationBackground()
 {
     ui->centralwidget->setStyleSheet("");
@@ -1899,12 +1935,15 @@ void MainWindow::removeToolButtonTooltips(QToolBar* toolbar) {
     }
 }
 
-void MainWindow::mrpropper(int value) {
+void MainWindow::mrpropper(int value, QAction* action) {
     if (animation >= 1 && !(value == 6 || value == 7 || value == 10 || value == 11))
     {
         opacityEffect->setOpacity(0.8);
         ui->centralwidget->setGraphicsEffect(opacityEffect);
     }
+
+    ui->label1->setText(action->iconText());
+    originalLabelText = ui->label1->text();
 
     miniAnimation(false, ui->details_aur);
     miniAnimation(false, ui->list_aur);

@@ -441,7 +441,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>11</number>
+       <number>7</number>
       </property>
       <widget class="QWidget" name="tab_webgame">
        <attribute name="title">
@@ -4756,10 +4756,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <disabledoff>:/img/3.png</disabledoff>:/img/3.png</iconset>
    </property>
    <property name="text">
-    <string>Помощь по Arch</string>
+    <string>Arch Linux - Wiki</string>
    </property>
    <property name="toolTip">
-    <string>Помощь по Arch</string>
+    <string>Arch Linux - Wiki</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4778,10 +4778,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <disabledoff>:/img/5.png</disabledoff>:/img/5.png</iconset>
    </property>
    <property name="text">
-    <string>Установленные пакеты</string>
+    <string>Каталог установленных пакетов</string>
    </property>
    <property name="toolTip">
-    <string>Установленные пакеты</string>
+    <string>Каталог установленных пакетов</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4837,10 +4837,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <normaloff>:/img/8.png</normaloff>:/img/8.png</iconset>
    </property>
    <property name="text">
-    <string>Информация о приложении</string>
+    <string>Наше сообщество</string>
    </property>
    <property name="toolTip">
-    <string>Информация о приложении</string>
+    <string>Наше сообщество</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4862,10 +4862,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <disabledoff>:/img/9.png</disabledoff>:/img/9.png</iconset>
    </property>
    <property name="text">
-    <string>Настройки</string>
+    <string>Настройки приложения</string>
    </property>
    <property name="toolTip">
-    <string>Настройки</string>
+    <string>Настройки приложения</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4880,7 +4880,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Запустить</string>
    </property>
    <property name="toolTip">
-    <string notr="true">Запустить</string>
+    <string>Запустить</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4892,10 +4892,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <normaloff>:/img/14.png</normaloff>:/img/14.png</iconset>
    </property>
    <property name="text">
-    <string>Удалить</string>
+    <string>Удалить пакет</string>
    </property>
    <property name="toolTip">
-    <string notr="true">Удалить</string>
+    <string>Удалить пакет</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4907,10 +4907,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <normaloff>:/img/15.png</normaloff>:/img/15.png</iconset>
    </property>
    <property name="text">
-    <string>Установить</string>
+    <string>Установить пакет</string>
    </property>
    <property name="toolTip">
-    <string notr="true">Установить</string>
+    <string>Установить пакет</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4929,7 +4929,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Полезные скрипты</string>
    </property>
    <property name="toolTip">
-    <string>Автоматизация</string>
+    <string>Полезные скрипты</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4956,10 +4956,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <normaloff>:/img/29.png</normaloff>:/img/29.png</iconset>
    </property>
    <property name="text">
-    <string>Приложение</string>
+    <string>Настройки приложения</string>
    </property>
    <property name="toolTip">
-    <string notr="true">Приложение</string>
+    <string>Настройки приложения</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4971,10 +4971,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <normaloff>:/img/27.png</normaloff>:/img/27.png</iconset>
    </property>
    <property name="text">
-    <string>PKGBUILD</string>
+    <string>Установить пакет с PKGBUILD</string>
    </property>
    <property name="toolTip">
-    <string notr="true">PKGBUILD</string>
+    <string>Установить пакет с PKGBUILD</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -4986,10 +4986,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <normaloff>:/img/31.png</normaloff>:/img/31.png</iconset>
    </property>
    <property name="text">
-    <string>Домашняя</string>
+    <string>Домашняя страница</string>
    </property>
    <property name="toolTip">
-    <string notr="true">Домашняя</string>
+    <string>Домашняя страница</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -5001,10 +5001,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <normaloff>:/img/32.png</normaloff>:/img/32.png</iconset>
    </property>
    <property name="text">
-    <string>Обновить</string>
+    <string>Обновить страницу</string>
    </property>
    <property name="toolTip">
-    <string notr="true">Обновить</string>
+    <string>Обновить страницу</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -5016,10 +5016,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <normaloff>:/img/33.png</normaloff>:/img/33.png</iconset>
    </property>
    <property name="text">
-    <string>Скопировать</string>
+    <string>Скопировать URL</string>
    </property>
    <property name="toolTip">
-    <string notr="true">Скопировать</string>
+    <string>Скопировать URL</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -5046,10 +5046,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <normaloff>:/img/37.png</normaloff>:/img/37.png</iconset>
    </property>
    <property name="text">
-    <string>Добавить</string>
+    <string>Добавить скрипт</string>
    </property>
    <property name="toolTip">
-    <string notr="true">Добавить</string>
+    <string>Добавить скрипт</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -5061,10 +5061,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <normaloff>:/img/38.png</normaloff>:/img/38.png</iconset>
    </property>
    <property name="text">
-    <string>Удалить</string>
+    <string>Удалить скрипт</string>
    </property>
    <property name="toolTip">
-    <string notr="true">Удалить</string>
+    <string>Удалить скрипт</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -5076,10 +5076,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <normaloff>:/img/39.png</normaloff>:/img/39.png</iconset>
    </property>
    <property name="text">
-    <string>Изменить</string>
+    <string>Редактировать скрипт</string>
    </property>
    <property name="toolTip">
-    <string notr="true">Изменить</string>
+    <string>Редактировать скрипт</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -5091,10 +5091,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <normaloff>:/img/40.png</normaloff>:/img/40.png</iconset>
    </property>
    <property name="text">
-    <string>Таймеры</string>
+    <string>Настройки таймеров</string>
    </property>
    <property name="toolTip">
-    <string notr="true">Таймеры</string>
+    <string>Настройки таймеров</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -5134,7 +5134,7 @@ QToolBar#toolBar_2 QToolButton:hover {
      <disabledoff>:/img/11.png</disabledoff>:/img/11.png</iconset>
    </property>
    <property name="text">
-    <string>Настроить веб-сервер</string>
+    <string>Веб-сервер</string>
    </property>
    <property name="toolTip">
     <string>Веб-сервер</string>
@@ -5149,10 +5149,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <normaloff>:/img/7.png</normaloff>:/img/7.png</iconset>
    </property>
    <property name="text">
-    <string>Обновить</string>
+    <string>Обновить систему</string>
    </property>
    <property name="toolTip">
-    <string notr="true">Обновить</string>
+    <string>Обновить систему</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -5182,10 +5182,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <normaloff>:/img/44.png</normaloff>:/img/44.png</iconset>
    </property>
    <property name="text">
-    <string>Система</string>
+    <string>Настройки системы</string>
    </property>
    <property name="toolTip">
-    <string notr="true">Система</string>
+    <string>Настройки системы</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -5310,7 +5310,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <normaloff>:/img/nvidia.png</normaloff>:/img/nvidia.png</iconset>
    </property>
    <property name="text">
-    <string>NVIDIA</string>
+    <string>Изменить версию NVIDIA</string>
+   </property>
+   <property name="toolTip">
+    <string>Изменить версию NVIDIA</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -5329,7 +5332,10 @@ QToolBar#toolBar_2 QToolButton:hover {
      <disabledoff>:/img/45.png</disabledoff>:/img/45.png</iconset>
    </property>
    <property name="text">
-    <string>Игровая совместимость</string>
+    <string>Игровая совместимость - ProtonDB</string>
+   </property>
+   <property name="toolTip">
+    <string>Игровая совместимость - ProtonDB</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
