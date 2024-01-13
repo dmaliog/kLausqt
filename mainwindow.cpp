@@ -19,7 +19,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "11.0";
+QString currentVersion = "11.1";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 int nvidia = 0; // nvidia
@@ -2102,20 +2102,20 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
 
         if (overlayWidget) {
             overlayWidget->hide();
-            overlayWidget->deleteLater();
+            overlayWidget->setParent(nullptr);  // Отсоединение от родительского виджета
             overlayWidget = nullptr;
         }
 
         if (loadingLabel) {
             loadingLabel->hide();
-            loadingLabel->clear();
-            loadingLabel->deleteLater();
+            loadingLabel->setParent(nullptr);  // Отсоединение от родительского виджета
             loadingLabel = nullptr;
         }
     }
     removeToolButtonTooltips(ui->toolBar);
     removeToolButtonTooltips(ui->toolBar_2);
 }
+
 
 //not
 void MainWindow::downloadAndSaveImages(const QString& packageName, const QStringList& urls, const QString& folder)
