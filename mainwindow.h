@@ -137,7 +137,8 @@ private:
                                    ":/sh/snap.sh",
                                    ":/sh/amd.sh",
                                    ":/sh/nvidia.sh",
-                                   ":/sh/intel.sh"};
+                                   ":/sh/intel.sh",
+                                   ":/sh/pacman-lock.sh"};
 
     QStringList clearResourcePaths = {":/clear/clear_trash.sh"};
 

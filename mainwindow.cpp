@@ -19,9 +19,12 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "11.5";
+QString currentVersion = "11.6";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
+
+QString lockFilePath = "/var/lib/pacman/db.lck";
+
 int nvidia = 0; // nvidia
 int pkg = 0; //пакетный менеджер 0-yay / 1-paru
 int page = 0; // какая страница используется
@@ -450,12 +453,19 @@ void MainWindow::on_action_nvidia_triggered()
 
 void MainWindow::on_push_install_clicked()
 {
+    QFile lockFile(lockFilePath);
+    if (lockFile.exists()) {
+        sendNotification(tr("Внимание"), tr("Pacman уже используется! Завершите все операции в Pacman и попробуйте снова!"));
+        return;
+    }
+
     Terminal terminal = getTerminal();
     currentTerminalProcess = QSharedPointer<QProcess>::create(this);
     connect(currentTerminalProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
         sendNotification(tr("Внимание"), tr("После отката пакетов NVIDIA, рекомендуется перезагрузка!"));
         on_push_back_clicked();
     });
+
     currentTerminalProcess->setProgram(terminal.binary);
     currentTerminalProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("localinstall") << nvidiaDkms << nvidiaUtils << nvidiaSettings << libxnvctrl << openclNvidia << lib32NvidiaUtils << lib32OpenclNvidia);
     currentTerminalProcess->setProcessChannelMode(QProcess::MergedChannels);
@@ -728,6 +738,12 @@ void MainWindow::on_action_11_triggered()
 {
     UpdateIcon();
     if (hasUpdates) {
+        QFile lockFile(lockFilePath);
+        if (lockFile.exists()) {
+            sendNotification(tr("Внимание"), tr("Pacman уже используется! Завершите все операции в Pacman и попробуйте снова!"));
+            return;
+        }
+
         Terminal terminal = getTerminal();
         currentTerminalProcess = QSharedPointer<QProcess>::create(this);
         connect(currentTerminalProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
@@ -799,6 +815,12 @@ void MainWindow::on_action_6_triggered()
         return;
     }
 
+    QFile lockFile(lockFilePath);
+    if (lockFile.exists()) {
+        sendNotification(tr("Внимание"), tr("Pacman уже используется! Завершите все операции в Pacman и попробуйте снова!"));
+        return;
+    }
+
     QString packageName = listWidget->item(listWidget->currentRow())->text();
     Terminal terminal = getTerminal();
 
@@ -828,6 +850,12 @@ void MainWindow::on_action_4_triggered()
 
     if (listWidget->currentItem() == nullptr) {
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
+        return;
+    }
+
+    QFile lockFile(lockFilePath);
+    if (lockFile.exists()) {
+        sendNotification(tr("Внимание"), tr("Pacman уже используется! Завершите все операции в Pacman и попробуйте снова!"));
         return;
     }
 
@@ -2298,6 +2326,15 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
                 if (colonIndex != -1) {
                     QString header = line.left(colonIndex).trimmed();
                     QString content = line.mid(colonIndex + 1).trimmed();
+
+                    if (header == "Описание") {
+                        // Если заголовок "Описание", применяем команду trans к содержимому
+                        QProcess transProcess;
+                        transProcess.start("trans", QStringList() << "-brief" << ":ru" << content);
+                        transProcess.waitForFinished();
+                        content = QString::fromUtf8(transProcess.readAllStandardOutput()).trimmed();
+                    }
+
                     header = "<b>" + header + ":</b> ";
                     processedInfo += "<p><span>" + header + "</span>" + content + "</p>";
                 }
@@ -2310,7 +2347,7 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
         if (page == 2)
             ui->action_like->setEnabled(true);
 
-        miniAnimation(false,detailsWidget);
+        miniAnimation(false, detailsWidget);
     });
 
     connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
@@ -3058,6 +3095,12 @@ void MainWindow::onListDowngradeItemDoubleClicked(QListWidgetItem *currentItem) 
         lib32OpenclNvidiaName = packageName;
         nvidia = 8;
         on_action_nvidia_triggered();
+        return;
+    }
+
+    QFile lockFile(lockFilePath);
+    if (lockFile.exists()) {
+        sendNotification(tr("Внимание"), tr("Pacman уже используется! Завершите все операции в Pacman и попробуйте снова!"));
         return;
     }
 

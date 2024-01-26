@@ -231,5 +231,6 @@
         <file>lang/kLaus_en_US.ts</file>
         <file>img/snap.png</file>
         <file>theme/anime.mp4</file>
+        <file>sh/pacman-lock.sh</file>
     </qresource>
 </RCC>
