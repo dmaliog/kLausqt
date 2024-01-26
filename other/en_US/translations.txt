@@ -91,3 +91,6 @@ time_dev="Device speed:"
 new_tmp="Creating a temporary file for recording..."
 
 file_size="Enter the size of the temporary file in MB: "
+
+pacman="Pacman"
+pacman_nodb="Your Pacman instance is not blocked!"
