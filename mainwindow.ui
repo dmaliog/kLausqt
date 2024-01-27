@@ -441,7 +441,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>9</number>
+       <number>7</number>
       </property>
       <widget class="QWidget" name="tab_webgame">
        <attribute name="title">
@@ -2018,7 +2018,10 @@ color:#5752e7;</string>
                     <height>40</height>
                    </size>
                   </property>
-                  <property name="inputMask">
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="placeholderText">
                    <string>Имя пользователя</string>
                   </property>
                  </widget>
@@ -2044,11 +2047,8 @@ color:#5752e7;</string>
                     <height>40</height>
                    </size>
                   </property>
-                  <property name="inputMask">
+                  <property name="placeholderText">
                    <string>Пароль</string>
-                  </property>
-                  <property name="echoMode">
-                   <enum>QLineEdit::Normal</enum>
                   </property>
                  </widget>
                 </item>
@@ -2198,7 +2198,7 @@ color:#5752e7;</string>
                </font>
               </property>
               <property name="text">
-               <string>Таймаут поиска по пакетам</string>
+               <string>Таймаут поиска пакетов</string>
               </property>
              </widget>
             </item>

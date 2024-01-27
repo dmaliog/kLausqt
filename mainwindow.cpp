@@ -20,7 +20,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "11.7";
+QString currentVersion = "11.8";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
@@ -3606,17 +3606,21 @@ void MainWindow::on_combo_animload_currentIndexChanged(int index)
 
 void MainWindow::on_combo_lang_currentIndexChanged(int index)
 {
-    const QString newLang = (index == 0) ? "ru_RU" : "en_US";
-    if (settings.value("Language").toString() != newLang) {
+    QString newLang = (index == 0) ? "ru_RU" : (index == 1) ? "en_US" : "";
+
+    if (*lang != newLang) {
+        *lang = newLang;
         settings.setValue("Language", newLang);
         sendNotification(tr("Смена языка"), tr("Приложение будет перезагружено для смены языка"));
 
-        QTranslator translator;
-        if (translator.load(":/lang/kLaus_" + newLang + ".qm"))
-            qApp->installTranslator(&translator);
-
-        QCoreApplication::exit();
-        QSharedPointer<QProcess>(new QProcess)->startDetached(qApp->arguments()[0], qApp->arguments());
+        QTimer::singleShot(0, this, [=]() {
+            QTranslator translator;
+            if (translator.load(":/lang/kLaus_" + newLang + ".qm")) {
+                qApp->installTranslator(&translator);
+                QCoreApplication::exit();
+                QSharedPointer<QProcess>(new QProcess)->startDetached(qApp->arguments()[0], qApp->arguments());
+            }
+        });
     }
 }
 
