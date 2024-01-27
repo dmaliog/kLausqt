@@ -13,17 +13,19 @@
 #include <QVideoWidget>
 #include <QMediaPlayer>
 #include <QGraphicsVideoItem>
+#include <QtConcurrent/QtConcurrent>
 
 //---#####################################################################################################################################################
 //--############################################################## ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ################################################################
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "11.6";
+QString currentVersion = "11.7";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
 QString lockFilePath = "/var/lib/pacman/db.lck";
+QString description = "no";
 
 int nvidia = 0; // nvidia
 int pkg = 0; //пакетный менеджер 0-yay / 1-paru
@@ -45,6 +47,8 @@ int cacheremove = 0; // удаление кэша при выходе
 int auth = 0;
 int animation = 0;
 int saveurl = 2;
+int trans = 2; //перевод описания
+int colorlist = 2; //раскрашивать листы
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -1323,6 +1327,9 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->check_cacheremove->setChecked(cacheremove);
     ui->check_saveurl->setChecked(saveurl);
 
+    ui->check_trans->setChecked(trans);
+    ui->check_colorlist->setChecked(colorlist);
+
     ui->time_update->setTime(timeupdate);
     ui->time_timeout->setTime(timeout);
 
@@ -1435,7 +1442,7 @@ MainWindow::~MainWindow()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (trayon == 2) {
-        qApp->quit();
+        QCoreApplication::exit();
     } else {
         hide();
         event->ignore();
@@ -1485,6 +1492,8 @@ void MainWindow::loadSettings()
     volumenotify = settings.value("VolumeNotify", 30).toInt();
     animation = settings.value("Animation", 0).toInt();
     saveurl = settings.value("SaveURL", 2).toInt();
+    trans = settings.value("Trans", 2).toInt();
+    colorlist = settings.value("ColorList", 2).toInt();
 
     lang = QSharedPointer<QString>::create(settings.value("Language").toString());
     teatext = QSharedPointer<QString>::create(settings.value("TeaText").toString());
@@ -2031,13 +2040,20 @@ void MainWindow::UpdateSnap()
 
 QColor MainWindow::generateRandomColor()
 {
-    QColor color;
-    do {
-        color = QColor::fromHsv(QRandomGenerator::global()->bounded(360),
-                                QRandomGenerator::global()->bounded(200),
-                                QRandomGenerator::global()->bounded(150, 256));
-    } while (color.blue() > 200 || !color.isValid());
-    return color;
+    if (colorlist == 2)
+    {
+        QColor color;
+        do {
+            color = QColor::fromHsv(QRandomGenerator::global()->bounded(360),
+                                    QRandomGenerator::global()->bounded(200),
+                                    QRandomGenerator::global()->bounded(150, 256));
+        } while (color.blue() > 200 || !color.isValid());
+        return color;
+    }
+    else
+    {
+        return QColor(Qt::gray);
+    }
 }
 
 void MainWindow::onTimeChanged(const QTime& time)
@@ -2314,6 +2330,8 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
     QSharedPointer<QProcess> currentProcess = QSharedPointer<QProcess>::create();
     int scrollBarValue = detailsWidget->verticalScrollBar()->value();
 
+    QFutureWatcher<QByteArray>* watcher = new QFutureWatcher<QByteArray>(this);
+
     connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, [=]() {
         QByteArray output = currentProcess->readAllStandardOutput();
         QString packageInfo = QString::fromUtf8(output);
@@ -2327,13 +2345,8 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
                     QString header = line.left(colonIndex).trimmed();
                     QString content = line.mid(colonIndex + 1).trimmed();
 
-                    if (header == "Описание") {
-                        // Если заголовок "Описание", применяем команду trans к содержимому
-                        QProcess transProcess;
-                        transProcess.start("trans", QStringList() << "-brief" << ":ru" << content);
-                        transProcess.waitForFinished();
-                        content = QString::fromUtf8(transProcess.readAllStandardOutput()).trimmed();
-                    }
+                    if (header == tr("Описание") && trans == 2)
+                        description = content;
 
                     header = "<b>" + header + ":</b> ";
                     processedInfo += "<p><span>" + header + "</span>" + content + "</p>";
@@ -2344,10 +2357,29 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
         detailsWidget->append(processedInfo);
         detailsWidget->verticalScrollBar()->setValue(scrollBarValue);
 
-        if (page == 2)
+        if (page == 2) {
             ui->action_like->setEnabled(true);
+        }
 
         miniAnimation(false, detailsWidget);
+
+        if(trans == 2)
+        {
+            watcher->setFuture(QtConcurrent::run([=]() -> QByteArray {
+                QProcess transProcess;
+                transProcess.start("trans", QStringList() << "-brief" << ":" + (lang->contains('_') ? lang->left(lang->indexOf('_')) : *lang) << description);
+                transProcess.waitForFinished();
+                return transProcess.readAllStandardOutput().trimmed();
+            }));
+
+            connect(watcher, &QFutureWatcher<QByteArray>::finished, this, [=]() {
+                QByteArray translatedInfo = watcher->result();
+                QString modifiedHtml = detailsWidget->toHtml();
+                modifiedHtml.replace(description, QString::fromUtf8(translatedInfo));
+                detailsWidget->setHtml(modifiedHtml);
+            });
+        }
+
     });
 
     connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
@@ -3583,7 +3615,7 @@ void MainWindow::on_combo_lang_currentIndexChanged(int index)
         if (translator.load(":/lang/kLaus_" + newLang + ".qm"))
             qApp->installTranslator(&translator);
 
-        qApp->quit();
+        QCoreApplication::exit();
         QSharedPointer<QProcess>(new QProcess)->startDetached(qApp->arguments()[0], qApp->arguments());
     }
 }
@@ -3765,6 +3797,23 @@ void MainWindow::on_line_work_textChanged(const QString &arg1)
 {
     worktext.reset(new QString(arg1));
     settings.setValue("WorkText", arg1);
+}
+
+void MainWindow::on_check_trans_stateChanged(int arg1)
+{
+    trans = arg1;
+    settings.setValue("Trans", arg1);
+}
+
+void MainWindow::on_check_colorlist_stateChanged(int arg1)
+{
+    if (colorlist != arg1)
+    {
+        colorlist = arg1;
+        settings.setValue("ColorList", arg1);
+        QCoreApplication::exit();
+        QSharedPointer<QProcess>(new QProcess)->startDetached(qApp->arguments()[0], qApp->arguments());
+    }
 }
 
 void MainWindow::on_check_trayon_stateChanged(int arg1)

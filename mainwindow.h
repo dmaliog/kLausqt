@@ -297,6 +297,8 @@ private slots:
     void on_check_animload_stateChanged(int arg1);
     void on_check_autostart_stateChanged(int arg1);
     void on_check_cacheremove_stateChanged(int arg1);
+    void on_check_trans_stateChanged(int arg1);
+    void on_check_colorlist_stateChanged(int arg1);
     void onListAurItemClicked(QListWidgetItem *item);
     void on_dial_volnotify_valueChanged(int value);
     void on_list_repair_itemDoubleClicked(QListWidgetItem *item);
