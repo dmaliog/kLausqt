@@ -40,6 +40,8 @@ public:
     QColor generateRandomColor();
 
 private:
+    QProcessEnvironment env;
+
     QGraphicsVideoItem *videoItem;
     QGraphicsView *graphicsView;
     QMediaPlayer *player;

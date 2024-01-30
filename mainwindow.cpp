@@ -2,12 +2,9 @@
 //--############################################################## ПОДКЛЮЧЕННЫЕ ИНКЛУДЫ #################################################################
 //-#####################################################################################################################################################
 #include "mainwindow.h"
-#include "qmediaplayer.h"
 #include "ui_mainwindow.h"
 #include <QtWebEngineWidgets>
 #include <QSoundEffect>
-#include <unistd.h>
-#include <sys/utsname.h>
 #include <QRegularExpression>
 #include <QCompleter>
 #include <QVideoWidget>
@@ -20,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "11.8";
+QString currentVersion = "11.9";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
@@ -633,18 +630,17 @@ void MainWindow::on_action_34_triggered()
     QListWidget* listWidget = nullptr;
 
     if (page == 2)
-            listWidget = ui->list_aur;
+        listWidget = ui->list_aur;
     else if (page == 4)
-            listWidget = ui->list_app;
+        listWidget = ui->list_app;
 
     if (!listWidget || !listWidget->currentItem()) {
-            sendNotification(tr("Внимание"), tr("Выберите пакет из списка для просмотра информации!"));
-            return;
+        sendNotification(tr("Внимание"), tr("Выберите пакет из списка для просмотра информации!"));
+        return;
     }
 
     int currentRow = listWidget->currentRow();
     QString packageName = listWidget->item(currentRow)->text();
-
     QStringList command;
 
     command = packageCommands.value(pkg).value("show_info");
@@ -659,14 +655,14 @@ void MainWindow::on_action_34_triggered()
     QRegularExpressionMatch match = urlRegex.match(packageInfo);
 
     if (match.hasMatch()) {
-            ui->action_35->setEnabled(true);
-            ui->tabWidget->setCurrentIndex(3);
-            QString url = match.captured(1);
-            showLoadingAnimation(true,ui->webEngineView);
-            ui->webEngineView->setUrl(QUrl(url));
+        ui->action_35->setEnabled(true);
+        ui->tabWidget->setCurrentIndex(3);
+        QString url = match.captured(1);
+        showLoadingAnimation(true,ui->webEngineView);
+        ui->webEngineView->setUrl(QUrl(url));
     }
     else
-            sendNotification(tr("Внимание"), tr("URL недоступен!"));
+        sendNotification(tr("Внимание"), tr("URL недоступен!"));
 }
 
 void MainWindow::on_action_35_triggered()
@@ -1862,6 +1858,12 @@ void MainWindow::loadSettings()
     loadingLabel->setMovie(loadingAnimation);
     loadingAnimation->start();
     loadingLabel->setStyleSheet("margin-left:4px;padding-left:2px;border:0;");
+
+    //-##################################################################################
+    //-############################# ЯЗЫК В ТЕРМИНАЛЕ ###################################
+    //-##################################################################################
+    env = QProcessEnvironment::systemEnvironment();
+    env.insert("LANG", QString("%1.UTF-8").arg(*lang));
 }
 
 void MainWindow::setupConnections()
@@ -2277,7 +2279,6 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
     if (page == 2)
     {
         QString appName = packageName.split(' ')[0];
-
         for (const QString& ending : endingsToRemove) {
             if (appName.endsWith(ending)) {
                 appName.chop(ending.length());
@@ -2287,7 +2288,6 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
         QString snapcraftUrl = "https://snapcraft.io/" + packageName;
         QNetworkRequest request((QUrl(snapcraftUrl)));
-
         QNetworkReply* reply = networkManager.get(request);
 
         connect(reply, &QNetworkReply::finished, this, [=]() {
@@ -2326,7 +2326,6 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
         });
     }
 
-
     QSharedPointer<QProcess> currentProcess = QSharedPointer<QProcess>::create();
     int scrollBarValue = detailsWidget->verticalScrollBar()->value();
 
@@ -2337,29 +2336,66 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
         QString packageInfo = QString::fromUtf8(output);
         QStringList lines = packageInfo.split("\n");
         QString processedInfo;
+        static const QRegularExpression regex("\\b(\\S+)\\b");
 
         for (const QString& line : lines) {
-            if (!line.isEmpty()) {
-                int colonIndex = line.indexOf(':');
-                if (colonIndex != -1) {
-                    QString header = line.left(colonIndex).trimmed();
-                    QString content = line.mid(colonIndex + 1).trimmed();
+            if (line.isEmpty() || !line.contains(':'))
+                continue;
 
-                    if (header == tr("Описание") && trans == 2)
-                        description = content;
+            int colonIndex = line.indexOf(':');
+            QString header = line.left(colonIndex).trimmed();
+            QString content = line.mid(colonIndex + 1).trimmed();
+            QString linkedContent = "";
 
-                    header = "<b>" + header + ":</b> ";
-                    processedInfo += "<p><span>" + header + "</span>" + content + "</p>";
+            if (header == tr("Описание") && trans == 2)
+                description = content;
+            else if (QStringList{tr("Зависит от"), tr("Конфликтует с"), tr("Заменяет"), tr("Предоставляет"), tr("Обеспечивает"),
+                                    tr("Группы"), tr("Зависимости сборки"), tr("Требуется"), tr("Опционально для"),
+                                    tr("Ключевые слова"), tr("Зависимости проверки")}.contains(header)) {
+                if (content != tr("Нет"))
+                {
+                    linkedContent = content;
+                    linkedContent.replace(regex, "<a href=\"p:\\1\">\\1</a>");
+                    content = linkedContent;
+                }
+            } else if (QStringList{tr("Доп. зависимости"), tr("Факультативные зависимости")}.contains(header)) {
+                if (content != tr("Нет"))
+                {
+                    int spaceIndex = content.indexOf(' ');
+                    if (content.contains(':')) {
+                        QString firstDependency = content.left(spaceIndex);
+                        firstDependency.replace(regex, "<a href=\"p:\\1\">\\1</a>");
+                        content.replace(0, spaceIndex, firstDependency);
+                    } else {
+                        content.replace(regex, "<a href=\"p:\\1\">\\1</a>");
+                    }
                 }
             }
+
+            if (header.at(0).isUpper())
+                header = "<b>" + header + ":</b> ";
+            else {
+                header.replace(regex, "<a href=\"p:\\1\">\\1</a>");
+                header += ": ";
+            }
+
+            processedInfo += "<p><span>" + header + "</span>" + content + "</p>";
         }
+
+        connect(detailsWidget, &QTextBrowser::anchorClicked, this, [=](const QUrl& link) {
+            if (link.scheme() == "p") {
+                ui->action_2->trigger();
+                ui->searchLineEdit->setText(link.path());
+                QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
+                QCoreApplication::postEvent(ui->searchLineEdit, event);
+            }
+        });
 
         detailsWidget->append(processedInfo);
         detailsWidget->verticalScrollBar()->setValue(scrollBarValue);
 
-        if (page == 2) {
+        if (page == 2)
             ui->action_like->setEnabled(true);
-        }
 
         miniAnimation(false, detailsWidget);
 
@@ -2415,6 +2451,7 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
     else if (page == 4)
         command = packageCommands.value(pkg).value("info");
 
+    currentProcess->setProcessEnvironment(env);
     currentProcess->start(command[0], QStringList() << command[1] << packageName);
 }
 
