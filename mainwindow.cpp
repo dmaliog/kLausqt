@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "11.9";
+QString currentVersion = "12.0";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
@@ -2272,9 +2272,17 @@ void MainWindow::on_next_slider_clicked()
 }
 
 //not
-void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser* detailsWidget) {
-    QListWidgetItem* nameItem = listWidget->item(row);
-    QString packageName = nameItem->text();
+void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser* detailsWidget, QString package) {
+
+    QString packageName;
+
+    if (!package.isEmpty())
+        packageName = package;
+    else
+    {
+        QListWidgetItem* nameItem = listWidget->item(row);
+        packageName = nameItem->text();
+    }
 
     if (page == 2)
     {
@@ -2471,10 +2479,10 @@ void MainWindow::onListAurItemClicked(QListWidgetItem *item)
             }
         }
         if (!iconFound)
-            processListItem(row, ui->list_aur, ui->details_aur);
+            processListItem(row, ui->list_aur, ui->details_aur, "");
     } else if (page == 4) {
         int row = ui->list_app->row(item);
-        processListItem(row, ui->list_app, ui->details_aurpkg);
+        processListItem(row, ui->list_app, ui->details_aurpkg, "");
     }
 }
 
@@ -3194,11 +3202,10 @@ void MainWindow::checkForDowngrades(const QString& packagesArchiveAUR)
     QUrl url("https://archive.archlinux.org/packages/" + QString(firstLetter) + "/" + packagesArchiveAUR);
     QNetworkRequest request(url);
     manager->get(request);
-    QSharedPointer<QProcess> currentProcess = QSharedPointer<QProcess>::create();
-    connectProcessSignals(currentProcess, ui->details_downgrade);
+
     ui->details_downgrade->clear();
-    QStringList command = packageCommands.value(pkg).value("info");
-    currentProcess->start(command[0], QStringList() << command[1] << packagesArchiveAUR);
+
+    processListItem(0, ui->list_downgrade, ui->details_downgrade, packagesArchiveAUR);
 }
 
 void MainWindow::connectProcessSignals(QSharedPointer<QProcess>& process, QTextBrowser* outputWidget)

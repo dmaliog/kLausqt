@@ -241,7 +241,7 @@ private slots:
     void onListDowngradeItemDoubleClicked(QListWidgetItem *item);
     void addLinkToList(const QString &link);
     void handleListItemClicked(QListWidgetItem *item, const QString& scriptDir);
-    void processListItem(int row, QListWidget* listWidget, QTextBrowser* detailsWidget);
+    void processListItem(int row, QListWidget* listWidget, QTextBrowser* detailsWidget, QString package);
     void search(const QString& searchText);
     void searchAndScroll(QAbstractItemView* view, const QString& text);
 
