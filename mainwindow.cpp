@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "12.0";
+QString currentVersion = "12.1";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
@@ -1898,9 +1898,9 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
             ui->label1->setText(originalLabelText);
     }
 
-    if ((page == 2 || page == 4) && obj == ui->searchLineEdit && event->type() == QEvent::KeyPress) {
+    if (event->type() == QEvent::KeyPress) {
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
-        if (keyEvent->key() == Qt::Key_Tab) {
+        if (keyEvent->key() == Qt::Key_Tab && (page == 2 || page == 4)  && obj == ui->searchLineEdit && !ui->searchLineEdit->text().isEmpty()) {
             completerModel->clear();
             handleServerResponseSearch(ui->searchLineEdit->text());
             return true;
@@ -2272,8 +2272,8 @@ void MainWindow::on_next_slider_clicked()
 }
 
 //not
-void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser* detailsWidget, QString package) {
-
+void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser* detailsWidget, QString package)
+{
     QString packageName;
 
     if (!package.isEmpty())
@@ -2282,56 +2282,58 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
     {
         QListWidgetItem* nameItem = listWidget->item(row);
         packageName = nameItem->text();
-    }
 
-    if (page == 2)
-    {
-        QString appName = packageName.split(' ')[0];
-        for (const QString& ending : endingsToRemove) {
-            if (appName.endsWith(ending)) {
-                appName.chop(ending.length());
-                break;
-            }
-        }
+        if (page == 2)
+        {
+            ui->action_like->setEnabled(true);
 
-        QString snapcraftUrl = "https://snapcraft.io/" + packageName;
-        QNetworkRequest request((QUrl(snapcraftUrl)));
-        QNetworkReply* reply = networkManager.get(request);
-
-        connect(reply, &QNetworkReply::finished, this, [=]() {
-            if (reply->error() == QNetworkReply::NoError) {
-                QByteArray htmlData = reply->readAll();
-
-                static const QRegularExpression screenshotRegex("<img[^>]*data-original=\"([^\"]*)\"");
-                QRegularExpressionMatchIterator matchIterator = screenshotRegex.globalMatch(htmlData);
-
-                QStringList imageUrls;
-
-                while (matchIterator.hasNext()) {
-                    QRegularExpressionMatch match = matchIterator.next();
-                    QString imageUrl = match.captured(1);
-
-                    imageUrls.append(imageUrl);
+            QString appName = packageName.split(' ')[0];
+            for (const QString& ending : endingsToRemove) {
+                if (appName.endsWith(ending)) {
+                    appName.chop(ending.length());
+                    break;
                 }
+            }
 
-                if (imageUrls.isEmpty()){
+            QString snapcraftUrl = "https://snapcraft.io/" + packageName;
+            QNetworkRequest request((QUrl(snapcraftUrl)));
+            QNetworkReply* reply = networkManager.get(request);
+
+            connect(reply, &QNetworkReply::finished, this, [=]() {
+                if (reply->error() == QNetworkReply::NoError) {
+                    QByteArray htmlData = reply->readAll();
+
+                    static const QRegularExpression screenshotRegex("<img[^>]*data-original=\"([^\"]*)\"");
+                    QRegularExpressionMatchIterator matchIterator = screenshotRegex.globalMatch(htmlData);
+
+                    QStringList imageUrls;
+
+                    while (matchIterator.hasNext()) {
+                        QRegularExpressionMatch match = matchIterator.next();
+                        QString imageUrl = match.captured(1);
+
+                        imageUrls.append(imageUrl);
+                    }
+
+                    if (imageUrls.isEmpty()){
+                        ui->tabWidget_details->setCurrentIndex(0);
+                        ui->action_imgpkg->setEnabled(false);
+                        ui->action_imgpkg->setChecked(false);
+
+                    } else {
+                        downloadAndSaveImages(packageName, imageUrls, mainDir + "cache/");
+                        ui->action_imgpkg->setEnabled(true);
+                    }
+
+                } else {
                     ui->tabWidget_details->setCurrentIndex(0);
                     ui->action_imgpkg->setEnabled(false);
                     ui->action_imgpkg->setChecked(false);
-
-                } else {
-                    downloadAndSaveImages(packageName, imageUrls, mainDir + "cache/");
-                    ui->action_imgpkg->setEnabled(true);
                 }
 
-            } else {
-                ui->tabWidget_details->setCurrentIndex(0);
-                ui->action_imgpkg->setEnabled(false);
-                ui->action_imgpkg->setChecked(false);
-            }
-
-            reply->deleteLater();
-        });
+                reply->deleteLater();
+            });
+        }
     }
 
     QSharedPointer<QProcess> currentProcess = QSharedPointer<QProcess>::create();
@@ -2401,9 +2403,6 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
         detailsWidget->append(processedInfo);
         detailsWidget->verticalScrollBar()->setValue(scrollBarValue);
-
-        if (page == 2)
-            ui->action_like->setEnabled(true);
 
         miniAnimation(false, detailsWidget);
 
