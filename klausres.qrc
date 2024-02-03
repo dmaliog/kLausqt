@@ -232,6 +232,5 @@
         <file>img/old.png</file>
         <file>img/orphaned.png</file>
         <file>img/installed.png</file>
-        <file>img/grub.png</file>
     </qresource>
 </RCC>
