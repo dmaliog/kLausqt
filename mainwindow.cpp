@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "12.2";
+QString currentVersion = "12.3";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
@@ -162,7 +162,9 @@ void MainWindow::on_action_9_triggered()
     ui->action_27->setVisible(true);
     ui->action_bench->setVisible(true);
     ui->action_repair->setVisible(true);
-    ui->action_system->setVisible(true);
+    ui->action_grub->setVisible(true);
+    ui->action_pacman->setVisible(true);
+    ui->action_fstab->setVisible(true);
     on_action_27_triggered();
     showLoadingAnimationMini(false);
 }
@@ -527,8 +529,6 @@ void MainWindow::on_action_27_triggered()
     page = 111;
     ui->label1->setText(tr("Информация о системе"));
     originalLabelText = ui->label1->text();
-    ui->push_pacman->setVisible(false);
-    ui->push_kde->setVisible(false);
     ui->searchLineEdit->setPlaceholderText(tr("Поиск журналов и конфигураций..."));
     ui->searchLineEdit->setVisible(true);
     ui->combo_bench->setVisible(false);
@@ -540,25 +540,55 @@ void MainWindow::on_action_bench_triggered()
     page = 112;
     ui->label1->setText(tr("Бенчмарки"));
     originalLabelText = ui->label1->text();
-    ui->push_pacman->setVisible(false);
-    ui->push_kde->setVisible(false);
     ui->searchLineEdit->setPlaceholderText(tr("Поиск бенчмарков..."));
     ui->searchLineEdit->setVisible(true);
     ui->combo_bench->setVisible(true);
     ui->tabWidget->setCurrentIndex(10);
 }
 
-void MainWindow::on_action_system_triggered()
+void MainWindow::loadConfigFile(const QString &filePath, QTextEdit *targetTextEdit, int tabIndex)
 {
-    ui->label1->setText(tr("Настройки системы"));
-    originalLabelText = ui->label1->text();
-    ui->push_pacman->setVisible(true);
-    ui->push_kde->setVisible(true);
     ui->searchLineEdit->setVisible(false);
-    if (*currentDesktop == "KDE")
-        ui->push_kde->setDisabled(false);
 
-    ui->tabWidget->setCurrentIndex(8);
+    auto highlighter = new MySyntaxHighlighter(targetTextEdit->document());
+    highlighter->setParent(this);
+
+    QFile configFile(filePath);
+    if (configFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QTextStream in(&configFile);
+        QString configText = in.readAll();
+        targetTextEdit->setPlainText(configText);
+        configFile.close();
+    }
+    else
+        targetTextEdit->setPlainText(tr("Не удалось открыть файл: %1").arg(filePath));
+
+    ui->tabWidget->setCurrentIndex(tabIndex);
+}
+
+void MainWindow::on_action_grub_triggered()
+{
+    ui->label1->setText(tr("Настройки GRUB"));
+    originalLabelText = ui->label1->text();
+
+    loadConfigFile("/etc/default/grub", ui->text_grub, 8);
+}
+
+void MainWindow::on_action_pacman_triggered()
+{
+    ui->label1->setText(tr("Настройки Pacman"));
+    originalLabelText = ui->label1->text();
+
+    loadConfigFile("/etc/pacman.conf", ui->text_pacman, 16);
+}
+
+void MainWindow::on_action_fstab_triggered()
+{
+    ui->label1->setText(tr("Настройки файловой системы"));
+    originalLabelText = ui->label1->text();
+
+    loadConfigFile("/etc/fstab", ui->text_fstab, 17);
 }
 
 void MainWindow::on_action_repair_triggered()
@@ -566,8 +596,6 @@ void MainWindow::on_action_repair_triggered()
     page = 113;
     ui->label1->setText(tr("Оптимизация"));
     originalLabelText = ui->label1->text();
-    ui->push_pacman->setVisible(false);
-    ui->push_kde->setVisible(false);
     ui->searchLineEdit->setPlaceholderText(tr("Поиск конфигураций..."));
     ui->searchLineEdit->setVisible(true);
     ui->combo_bench->setVisible(false);
@@ -889,7 +917,7 @@ void MainWindow::on_action_30_triggered()
     QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "bash" << mainDir + "sh/PKGBUILD.sh" << *lang << helper << packageName);
 }
 
-void MainWindow::on_push_grub_clicked()
+void MainWindow::on_push_grub_fast_clicked()
 {
     QString filename = "/etc/default/grub";
     QString grubContent = ui->line_grub->text().trimmed();
@@ -1214,7 +1242,7 @@ void MainWindow::createAndAddListItemSearch(const QString& packageName)
 
     if (match.hasMatch()) {
         QString repoName = match.captured(1);
-        QString iconPath = QFile::exists(":/img/" + repoName + ".png") ? ":/img/" + repoName + ".png" : ":/img/pacman.png";
+        QString iconPath = QFile::exists(":/img/" + repoName + ".png") ? ":/img/" + repoName + ".png" : "/usr/share/icons/Papirus/48x48/apps/application-default-icon.svg";
 
         QString packageNameWithoutPrefix = packageName;
         QString prefixToRemove = repoName + "/";
@@ -1255,7 +1283,7 @@ void MainWindow::searchTextChanged(const QString& searchText)
         case 4: searchAndScroll(ui->list_app, searchText); break;
         case 3: searchAndScroll(ui->list_sh, searchText); break;
         case 14: searchAndScroll(ui->list_downgrade, searchText); break;
-        case 111: searchAndScroll(ui->list_journal, searchText); searchAndScroll(ui->list_cfg, searchText); break;
+        case 111: searchAndScroll(ui->list_journal, searchText); break;
         case 112: searchAndScroll(ui->list_bench, searchText); break;
         case 113: searchAndScroll(ui->list_repair, searchText); break;
         default: break;
@@ -1371,7 +1399,7 @@ void MainWindow::checkVersionAndClear() {
         settings.setValue("Language", storedLanguage);
         settings.sync();
 
-        QStringList excludedFolders = {"clear", "journals", "cfg", "bench", "other", "sh"};
+        QStringList excludedFolders = {"clear", "journals", "bench", "other", "sh"};
         QDir baseDir(mainDir);
 
         QStringList subDirs = baseDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
@@ -1384,7 +1412,6 @@ void MainWindow::checkVersionAndClear() {
         removeScripts(shResourcePaths, mainDir + "sh/");
         removeDirectory(mainDir + "clear/");
         removeDirectory(mainDir + "journals/");
-        removeDirectory(mainDir + "cfg/");
         removeDirectory(mainDir + "bench/");
         removeDirectory(mainDir + "other/");
         sendNotification(tr("Обновление kLaus"), tr("Версия kLaus поменялась, конфигурация сброшена!"));
@@ -1438,7 +1465,6 @@ MainWindow::~MainWindow()
     shResourcePaths.clear();
     clearResourcePaths.clear();
     journalsResourcePaths.clear();
-    cfgResourcePaths.clear();
     benchResourcePaths.clear();
     endingsToRemove.clear();
 
@@ -1796,7 +1822,7 @@ void MainWindow::loadSettings()
     QFile grub("/etc/default/grub");
 
     if (!grub.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        ui->push_grub->setDisabled(true);
+        ui->push_grub_fast->setDisabled(true);
         ui->line_grub->setDisabled(true);
         ui->spin_grub->setDisabled(true);
         ui->line_grub->setText(tr("GRUB не установлен"));
@@ -1880,7 +1906,6 @@ void MainWindow::loadSettings()
     loadingLabel->setMovie(loadingAnimation);
     loadingAnimation->start();
     loadingLabel->setStyleSheet("margin-left:4px;padding-left:2px;border:0;");
-
     //-##################################################################################
     //-############################# ЯЗЫК В ТЕРМИНАЛЕ ###################################
     //-##################################################################################
@@ -1889,6 +1914,12 @@ void MainWindow::loadSettings()
 
     enveng = QProcessEnvironment::systemEnvironment();
     enveng.insert("LANG", QString("en_US.UTF-8"));
+    //-##################################################################################
+    //-############################## ЗАГРУЗКА ИКОНОК ###################################
+    //-##################################################################################
+    ui->action_grub->setIcon(QIcon("/usr/share/icons/Papirus/48x48/apps/grub-customizer.svg"));
+    ui->action_pacman->setIcon(QIcon("/usr/share/icons/Papirus/48x48/apps/kapman.svg"));
+    ui->action_fstab->setIcon(QIcon("/usr/share/icons/Papirus/48x48/apps/org.gnome.DiskUtility.svg"));
 }
 
 void MainWindow::setupConnections()
@@ -2021,8 +2052,6 @@ void MainWindow::mrpropper(int value, QAction* action) {
     }
 
     ui->combo_bench->setVisible(false);
-    ui->push_pacman->setVisible(false);
-    ui->push_kde->setVisible(false);
     ui->searchLineEdit->setVisible(false);
     ui->searchLineEdit->clear();
 }
@@ -2474,28 +2503,23 @@ void MainWindow::onListItemClicked(const QString &packageName, int row, QListWid
     if(page == 2)
     {
         bool iconFound = false;
-        int roww = ui->list_aur->row(item);
+        row = ui->list_aur->row(item);
         if (list != 8) {
             for (auto it = appIcons.constBegin(); it != appIcons.constEnd(); ++it) {
                 if (appIcons.contains(item->text()) && appIcons[item->text()] == it.value()) {
-                    loadContent(roww + 1, loadpage);
+                    loadContent(row + 1, loadpage);
                     iconFound = true;
                     break;
                 }
             }
         }
         if (!iconFound)
-            processListItem(roww, ui->list_aur, ui->details_aur, packageName);
+            processListItem(row, ui->list_aur, ui->details_aur, packageName);
     }
     if (page == 4) {
-        int row = ui->list_app->row(item);
+        row = ui->list_app->row(item);
         processListItem(row, ui->list_app, ui->details_aurpkg, "");
     }
-}
-
-//not
-void MainWindow::onListAurItemClicked(QListWidgetItem *item)
-{
 }
 
 //not
@@ -2611,7 +2635,7 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
         }
     }
 
-    return QIcon(":/img/pacman.png");
+    return QIcon("/usr/share/icons/Papirus/48x48/apps/application-default-icon.svg");
 }
 
 //not
@@ -3051,7 +3075,7 @@ void MainWindow::loadContent(int value, bool valuepage)
 
         QString iconPath;
 
-        iconPath = ":/img/pacman.png";
+        iconPath = "/usr/share/icons/Papirus/48x48/apps/app-outlet.svg";
 
         QString prefixToRemove = "";
 
@@ -3092,7 +3116,7 @@ void MainWindow::loadContent(int value, bool valuepage)
 
             QFileInfo fileInfo(iconPath);
             if (!fileInfo.exists()) {
-                iconPath = ":/img/pacman.png";
+                iconPath = "/usr/share/icons/Papirus/48x48/apps/app-outlet.svg";
             }
         }
 
@@ -3395,7 +3419,7 @@ void MainWindow::onCurrentProcessReadyRead()
 {
     ui->list_aur->clear();
 
-    QString repo = "";
+    QString repoz = "";
     QString packageName = "";
     QString version = "";
     int installed = 0;
@@ -3405,17 +3429,17 @@ void MainWindow::onCurrentProcessReadyRead()
 //    double popularity = 0.00;
     int orphaned = 0;
     int old = 0;
-    bool isPackageInfo = true;  // Флаг для отслеживания информации о пакете
 
     while (currentProcess->canReadLine()) {
         QByteArray line = currentProcess->readLine();
+        QString lineString = QString::fromUtf8(line).trimmed();
 
-        // Проверяем, является ли текущая строка информацией о пакете
-        if (isPackageInfo) {
+        QRegularExpressionMatch match = QRegularExpression(*repo).match(lineString);
+        if (match.hasMatch()) {
             static const QRegularExpression repoRegex(R"(^([^/]+))");
             QRegularExpressionMatch repoMatch = repoRegex.match(line);
             if (repoMatch.hasMatch()) {
-                repo = repoMatch.captured(1);
+                repoz = repoMatch.captured(1);
                 // Обработка repo
             }
 
@@ -3461,7 +3485,7 @@ void MainWindow::onCurrentProcessReadyRead()
             // Обработка orphaned
 
             QColor color = generateRandomColor(colorlist);
-            CustomListItemWidget *itemWidget = new CustomListItemWidget(repo, packageName, installed, orphaned, old, rating, sizeInstallation, color, ui->list_aur);
+            CustomListItemWidget *itemWidget = new CustomListItemWidget(repoz, packageName, installed, orphaned, old, rating, sizeInstallation, color, ui->list_aur);
 
             QString styleSheet = QString("background: none;").arg(color.name());
             itemWidget->setStyleSheet(styleSheet);
@@ -3473,11 +3497,6 @@ void MainWindow::onCurrentProcessReadyRead()
 
             ui->list_aur->addItem(item);
             ui->list_aur->setItemWidget(item, itemWidget);
-
-            isPackageInfo = false;
-        } else {
-            // Если текущая строка не информация о пакете, значит, это описание, пропускаем ее
-            isPackageInfo = true;
         }
     }
 
@@ -3500,13 +3519,11 @@ void MainWindow::loadingListWidget()
     saveScripts(shResourcePaths, mainDir + "sh/");
     saveScripts(clearResourcePaths, mainDir + "clear/");
     saveScripts(journalsResourcePaths, mainDir + "journals/");
-    saveScripts(cfgResourcePaths, mainDir + "cfg/");
     saveScripts(benchResourcePaths, mainDir + "bench/");
 
     loadScripts(mainDir + "sh/", ui->list_sh);
     loadScripts(mainDir + "clear/", ui->list_clear);
     loadScripts(mainDir + "journals/", ui->list_journal);
-    loadScripts(mainDir + "cfg/", ui->list_cfg);
     loadScripts(mainDir + "bench/", ui->list_bench);
 
     cacheButtonHelper = new QListWidgetItem((pkg == 0) ? tr("Кэш пакетов Yay") : tr("Кэш пакетов Paru"), ui->list_clear);
@@ -4032,7 +4049,7 @@ void MainWindow::handleListItemClicked(QListWidgetItem *item, const QString& scr
         if (scriptPath.isEmpty())
             scriptPath = scriptDir + itemName;
 
-        if (scriptDir == mainDir + "cfg/" || scriptDir == mainDir + "journals/")
+        if (scriptDir == mainDir + "journals/")
             ui->details_journal->setText(msg);
         else if (scriptDir == mainDir + "sh/")
             ui->details_sh->setText(msg);
@@ -4131,11 +4148,6 @@ void MainWindow::on_list_journal_itemDoubleClicked(QListWidgetItem *item) {
     handleListItemDoubleClick(item, scriptDir);
 }
 
-void MainWindow::on_list_cfg_itemDoubleClicked(QListWidgetItem *item) {
-    QString scriptDir = mainDir + "cfg/";
-    handleListItemDoubleClick(item, scriptDir);
-}
-
 void MainWindow::on_list_bench_itemDoubleClicked(QListWidgetItem *item) {
     QString scriptDir = mainDir + "bench/";
     handleListItemDoubleClick(item, scriptDir);
@@ -4165,12 +4177,6 @@ void MainWindow::on_list_journal_itemClicked(QListWidgetItem *item)
     handleListItemClicked(item, scriptDir);
 }
 
-void MainWindow::on_list_cfg_itemClicked(QListWidgetItem *item)
-{
-    QString scriptDir = mainDir + "cfg/";
-    handleListItemClicked(item, scriptDir);
-}
-
 void MainWindow::on_list_sh_itemClicked(QListWidgetItem *item)
 {
     QString scriptDir = mainDir + "sh/";
@@ -4181,66 +4187,6 @@ void MainWindow::on_list_bench_itemClicked(QListWidgetItem *item)
 {
     QString scriptDir = mainDir + "bench/";
     handleListItemClicked(item, scriptDir);
-}
-
-bool runPkexecCommand(const QString& command)
-{
-    QProcess process;
-    process.start("pkexec", QStringList() << "--disable-internal-agent" << "sh" << "-c" << command);
-    process.waitForFinished();
-
-    if (process.exitCode() == 0)
-        return true;
-    else
-        return false;
-}
-
-void MainWindow::on_push_pacman_clicked()
-{
-    QDialog* dialog = new QDialog(this);
-    dialog->setWindowTitle(tr("Pacman Repository Editor"));
-    dialog->setFixedSize(500, 600);
-
-    QVBoxLayout* layout = new QVBoxLayout(dialog);
-
-    QPlainTextEdit* editor = new QPlainTextEdit(dialog);
-
-    QFile pacmanConfFile("/etc/pacman.conf");
-    if (pacmanConfFile.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        QTextStream in(&pacmanConfFile);
-        QString pacmanConfText = in.readAll();
-        editor->setPlainText(pacmanConfText);
-        pacmanConfFile.close();
-    }
-    else
-    {
-        sendNotification(tr("Ошибка"), tr("Не удалось открыть pacman.conf"));
-        delete dialog;
-        return;
-    }
-
-    layout->addWidget(editor);
-
-    dialog->setLayout(layout);
-    dialog->setStyleSheet("QWidget{background-color:#2d2b79;} QLineEdit,QTextEdit{background-color:#21205b;padding:10px;border-radius:10px;} QLabel{color:#fff;font-size:10pt;}QPushButton{border-radius:10px;padding:5px 20px;background-color:#916ee4;color:#fff;}");
-
-    QPushButton* saveButton = new QPushButton(tr("Сохранить"), dialog);
-    layout->addWidget(saveButton);
-
-    connect(saveButton, &QPushButton::clicked, this, [=]() {
-        QString command = "sh -c 'cat > /etc/pacman.conf << EOF\n" + editor->toPlainText() + "\nEOF\n'";
-
-        if (runPkexecCommand(command))
-            dialog->accept();
-        else
-            sendNotification(tr("Ошибка"), tr("Не удалось выполнить аутентификацию"));
-
-    });
-
-    editor->setParent(dialog);
-    layout->setParent(dialog);
-    dialog->show();
 }
 
 void MainWindow::on_push_kde_clicked()
@@ -4268,7 +4214,6 @@ void MainWindow::on_action_imgpkg_triggered(bool checked)
     else
         ui->tabWidget_details->setCurrentIndex(0);
 }
-
 
 void MainWindow::on_action_updatelist_triggered()
 {
@@ -4305,4 +4250,40 @@ void MainWindow::on_action_updatelist_triggered()
             loadContentInstall();
         });
     }
+}
+
+void MainWindow::writeToFile(const QString& filePath, const QString& content)
+{
+    QTemporaryFile tempFile;
+    tempFile.open();
+    tempFile.write(content.toUtf8());
+    tempFile.close();
+
+    QString command = "sh -c 'cat " + tempFile.fileName() + " > " + filePath + "'";
+
+    if (filePath == "/etc/default/grub")
+        command += " && sudo grub-mkconfig -o /boot/grub/grub.cfg";
+
+    if (runPkexecCommand(command))
+    {
+        tempFile.remove();
+        sendNotification(tr("Сохранение"), tr("Новые настройки успешно сохранены!"));
+    }
+    else
+        sendNotification(tr("Ошибка"), tr("Не удалось выполнить аутентификацию"));
+}
+
+void MainWindow::on_push_pacman_clicked()
+{
+    writeToFile("/etc/pacman.conf", ui->text_pacman->toPlainText());
+}
+
+void MainWindow::on_push_fstab_clicked()
+{
+    writeToFile("/etc/fstab", ui->text_fstab->toPlainText());
+}
+
+void MainWindow::on_push_grub_clicked()
+{
+    writeToFile("/etc/default/grub", ui->text_grub->toPlainText());
 }

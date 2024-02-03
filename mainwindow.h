@@ -8,6 +8,7 @@
 #include "qmediaplayer.h"
 #include "qnetworkaccessmanager.h"
 #include "qstandarditemmodel.h"
+#include "qsyntaxhighlighter.h"
 #include "qtextbrowser.h"
 #include <QLabel>
 #include <QWebEngineView>
@@ -39,6 +40,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private:
     QColor generateRandomColor(const int &colorlist)
     {
         if (colorlist == 2)
@@ -57,7 +59,15 @@ public:
         }
     }
 
-private:
+    bool runPkexecCommand(const QString& command)
+    {
+        QProcess process;
+        process.start("pkexec", {"--disable-internal-agent", "sh", "-c", command});
+        process.waitForFinished();
+
+        return process.exitCode() == 0;
+    }
+
     QProcessEnvironment env;
     QProcessEnvironment enveng;
 
@@ -175,10 +185,6 @@ private:
                                          ":/journals/foreign-pkg.sh",
                                          ":/journals/xorg-log.sh",
                                          ":/journals/top-pkg.sh"};
-
-    QStringList cfgResourcePaths = {":/cfg/grub-cfg.sh",
-                                         ":/cfg/fstab.sh",
-                                         ":/cfg/pacman.sh"};
 
     QStringList benchResourcePaths = {":/bench/unixbench.sh",
                                       ":/bench/interbench.sh",
@@ -322,13 +328,11 @@ private slots:
     void on_check_cacheremove_stateChanged(int arg1);
     void on_check_trans_stateChanged(int arg1);
     void on_check_colorlist_stateChanged(int arg1);
-    void onListAurItemClicked(QListWidgetItem *item);
     void on_dial_volnotify_valueChanged(int value);
     void on_list_repair_itemDoubleClicked(QListWidgetItem *item);
     void on_list_bench_itemDoubleClicked(QListWidgetItem *item);
     void on_list_sh_itemDoubleClicked(QListWidgetItem *item);
     void on_list_journal_itemDoubleClicked(QListWidgetItem *item);
-    void on_list_cfg_itemDoubleClicked(QListWidgetItem *item);
     void on_list_clear_itemDoubleClicked(QListWidgetItem *item);
     void on_line_tea_textChanged(const QString &arg1);
     void on_line_work_textChanged(const QString &arg1);
@@ -337,7 +341,8 @@ private slots:
     void on_time_update_timeChanged(const QTime &time);
     void on_time_timeout_timeChanged(const QTime &time);
     void on_action_bench_triggered();
-    void on_action_system_triggered();
+    void on_action_grub_triggered();
+    void on_action_pacman_triggered();
     void on_action_repair_triggered();
     void on_action_timer_triggered();
     void on_action_addsh_triggered();
@@ -357,15 +362,13 @@ private slots:
     void on_action_nvidia_triggered();
     void on_back_slider_clicked();
     void on_list_bench_itemClicked(QListWidgetItem *item);
-    void on_list_cfg_itemClicked(QListWidgetItem *item);
     void on_list_journal_itemClicked(QListWidgetItem *item);
     void on_list_sh_itemClicked(QListWidgetItem *item);
     void on_next_slider_clicked();
     void on_push_back_clicked();
-    void on_push_grub_clicked();
+    void on_push_grub_fast_clicked();
     void on_push_install_clicked();
     void on_push_kde_clicked();
-    void on_push_pacman_clicked();
     void on_push_repair_clicked();
     void on_push_vk_clicked();
     void on_action_like_triggered();
@@ -373,6 +376,84 @@ private slots:
     void on_action_updatelist_triggered();
     void on_combo_theme_currentIndexChanged(int index);
     void on_check_saveurl_stateChanged(int arg1);
+    void on_push_pacman_clicked();
+    void on_push_fstab_clicked();
+    void writeToFile(const QString& filePath, const QString& content);
+    void on_action_fstab_triggered();
+    void loadConfigFile(const QString &filePath, QTextEdit *targetTextEdit, int tabIndex);
+    void on_push_grub_clicked();
+};
+
+class MySyntaxHighlighter : public QSyntaxHighlighter {
+public:
+    MySyntaxHighlighter(QTextDocument* parent = nullptr) : QSyntaxHighlighter(parent) {
+        HighlightingRule rule;
+
+        // Ключевые слова
+        keywordFormat.setForeground(QColor(86, 156, 214)); // #569cd6
+        keywordFormat.setFontWeight(QFont::Bold);
+        QStringList keywordPatterns;
+        keywordPatterns << "\\bif\\b" << "\\belse\\b" << "\\bfor\\b" << "\\bwhile\\b";
+        foreach (const QString &pattern, keywordPatterns) {
+            rule.pattern = QRegularExpression(pattern);
+            rule.format = keywordFormat;
+            highlightingRules.append(rule);
+        }
+
+        // Комментарии
+        singleLineCommentFormat.setForeground(QColor(128, 128, 128)); // #808080
+        rule.pattern = QRegularExpression("#[^\n]*");
+        rule.format = singleLineCommentFormat;
+        highlightingRules.append(rule);
+
+        // Строки в одинарных кавычках
+        quotationFormat.setForeground(QColor(215, 186, 125)); // #d7ba7d
+        rule.pattern = QRegularExpression("\'([^\'\\n]*)\'");
+        rule.format = quotationFormat;
+        highlightingRules.append(rule);
+
+        // Строки в двойных кавычках
+        quotationFormat.setForeground(QColor(215, 186, 125)); // #d7ba7d
+        rule.pattern = QRegularExpression("\"([^\"]*)\"");
+        rule.format = quotationFormat;
+        highlightingRules.append(rule);
+
+        // Числа
+        numberFormat.setForeground(QColor(181, 206, 168)); // #b5cea8
+        rule.pattern = QRegularExpression("\\b\\d+\\b");
+        rule.format = numberFormat;
+        highlightingRules.append(rule);
+
+        // Квадратные скобки
+        bracketFormat.setForeground(QColor(0, 149, 200)); // #0095c8
+        rule.pattern = QRegularExpression("\\[([^\\]]+)\\]");
+        rule.format = bracketFormat;
+        highlightingRules.append(rule);
+    }
+
+protected:
+    void highlightBlock(const QString& text) override {
+        foreach (const HighlightingRule &rule, highlightingRules) {
+            QRegularExpressionMatchIterator matchIterator = rule.pattern.globalMatch(text);
+            while (matchIterator.hasNext()) {
+                QRegularExpressionMatch match = matchIterator.next();
+                setFormat(match.capturedStart(), match.capturedLength(), rule.format);
+            }
+        }
+    }
+
+private:
+    struct HighlightingRule {
+        QRegularExpression pattern;
+        QTextCharFormat format;
+    };
+
+    QVector<HighlightingRule> highlightingRules;
+    QTextCharFormat keywordFormat;
+    QTextCharFormat singleLineCommentFormat;
+    QTextCharFormat quotationFormat;
+    QTextCharFormat numberFormat;
+    QTextCharFormat bracketFormat;
 };
 
 class CustomListItemWidget : public QWidget

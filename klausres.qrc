@@ -142,9 +142,6 @@
         <file>img/reload.png</file>
         <file>img/pacman.png</file>
         <file>img/miniload.gif</file>
-        <file>cfg/pacman.sh</file>
-        <file>cfg/grub-cfg.sh</file>
-        <file>cfg/fstab.sh</file>
         <file>img/qr_linux2.png</file>
         <file>img/54.png</file>
         <file>img/55.png</file>
@@ -235,5 +232,6 @@
         <file>img/old.png</file>
         <file>img/orphaned.png</file>
         <file>img/installed.png</file>
+        <file>img/grub.png</file>
     </qresource>
 </RCC>
