@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "12.3";
+QString currentVersion = "12.4";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
@@ -2318,58 +2318,62 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
     {
         QListWidgetItem* nameItem = listWidget->item(row);
         packageName = nameItem->text();
+    }
 
-        if (page == 2)
-        {
-            ui->action_like->setEnabled(true);
+    if (page == 2)
+    {
+        ui->action_like->setEnabled(true);
 
-            QString appName = packageName.split(' ')[0];
-            for (const QString& ending : endingsToRemove) {
-                if (appName.endsWith(ending)) {
-                    appName.chop(ending.length());
-                    break;
-                }
+        QString appName = packageName.split(' ')[0];
+
+        for (const QString& ending : endingsToRemove) {
+            if (appName.endsWith(ending)) {
+                appName.chop(ending.length());
+                break;
+            }
+        }
+
+        QString snapcraftUrl = "https://snapcraft.io/" + packageName;
+        QNetworkRequest request = QNetworkRequest(QUrl(snapcraftUrl));
+        QNetworkReply* reply = networkManager.get(request);
+
+        connect(reply, &QNetworkReply::finished, this, [=]() {
+            if (page != 2) {
+                reply->deleteLater();
+                return;
             }
 
-            QString snapcraftUrl = "https://snapcraft.io/" + packageName;
-            QNetworkRequest request((QUrl(snapcraftUrl)));
-            QNetworkReply* reply = networkManager.get(request);
+            if (reply->error() == QNetworkReply::NoError) {
+                QByteArray htmlData = reply->readAll();
+                static const QRegularExpression screenshotRegex("<img[^>]*data-original=\"([^\"]*)\"");
+                QRegularExpressionMatchIterator matchIterator = screenshotRegex.globalMatch(htmlData);
 
-            connect(reply, &QNetworkReply::finished, this, [=]() {
-                if (reply->error() == QNetworkReply::NoError) {
-                    QByteArray htmlData = reply->readAll();
+                QStringList imageUrls;
+                while (matchIterator.hasNext()) {
+                    QRegularExpressionMatch match = matchIterator.next();
+                    QString imageUrl = match.captured(1);
+                    imageUrls.append(imageUrl);
+                }
 
-                    static const QRegularExpression screenshotRegex("<img[^>]*data-original=\"([^\"]*)\"");
-                    QRegularExpressionMatchIterator matchIterator = screenshotRegex.globalMatch(htmlData);
-
-                    QStringList imageUrls;
-
-                    while (matchIterator.hasNext()) {
-                        QRegularExpressionMatch match = matchIterator.next();
-                        QString imageUrl = match.captured(1);
-
-                        imageUrls.append(imageUrl);
-                    }
-
-                    if (imageUrls.isEmpty()){
-                        ui->tabWidget_details->setCurrentIndex(0);
-                        ui->action_imgpkg->setEnabled(false);
-                        ui->action_imgpkg->setChecked(false);
-
-                    } else {
-                        downloadAndSaveImages(packageName, imageUrls, mainDir + "cache/");
-                        ui->action_imgpkg->setEnabled(true);
-                    }
-
-                } else {
+                if (imageUrls.isEmpty()) {
                     ui->tabWidget_details->setCurrentIndex(0);
                     ui->action_imgpkg->setEnabled(false);
                     ui->action_imgpkg->setChecked(false);
+                } else {
+                    downloadAndSaveImages(packageName, imageUrls, mainDir + "cache/");
+                    ui->action_imgpkg->setEnabled(true);
                 }
+            } else {
+                ui->tabWidget_details->setCurrentIndex(0);
+                ui->action_imgpkg->setEnabled(false);
+                ui->action_imgpkg->setChecked(false);
+            }
 
-                reply->deleteLater();
-            });
-        }
+            removeToolButtonTooltips(ui->toolBar);
+            removeToolButtonTooltips(ui->toolBar_2);
+
+            reply->deleteLater();
+        });
     }
 
     QSharedPointer<QProcess> currentProcess = QSharedPointer<QProcess>::create();
@@ -4213,6 +4217,9 @@ void MainWindow::on_action_imgpkg_triggered(bool checked)
         ui->tabWidget_details->setCurrentIndex(1);
     else
         ui->tabWidget_details->setCurrentIndex(0);
+
+    removeToolButtonTooltips(ui->toolBar);
+    removeToolButtonTooltips(ui->toolBar_2);
 }
 
 void MainWindow::on_action_updatelist_triggered()
@@ -4250,6 +4257,9 @@ void MainWindow::on_action_updatelist_triggered()
             loadContentInstall();
         });
     }
+
+    removeToolButtonTooltips(ui->toolBar);
+    removeToolButtonTooltips(ui->toolBar_2);
 }
 
 void MainWindow::writeToFile(const QString& filePath, const QString& content)
