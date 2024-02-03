@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "12.4";
+QString currentVersion = "12.5";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
@@ -2269,10 +2269,17 @@ void MainWindow::downloadAndSaveImages(const QString& packageName, const QString
             if (imageReply->error() == QNetworkReply::NoError) {
                 QPixmap pixmap;
                 pixmap.loadFromData(imageReply->readAll());
-                int targetWidth = 680;
-                int targetHeight = pixmap.height() * targetWidth / pixmap.width();
-                QSize newSize(targetWidth, targetHeight);
-                pixmap = pixmap.scaled(newSize, Qt::KeepAspectRatio);
+
+                int maxWidth = 680;
+                int maxHeight = 500;
+
+                if (pixmap.width() > maxWidth) {
+                    pixmap = pixmap.scaledToWidth(maxWidth, Qt::SmoothTransformation);
+
+                    if (pixmap.height() > maxHeight) {
+                        pixmap = pixmap.scaledToHeight(maxHeight, Qt::SmoothTransformation);
+                    }
+                }
 
                 pixmaps.append(pixmap);
                 pixmap.save(cacheFilePath);
