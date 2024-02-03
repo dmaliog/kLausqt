@@ -232,5 +232,8 @@
         <file>img/snap.png</file>
         <file>theme/anime.mp4</file>
         <file>sh/pacman-lock.sh</file>
+        <file>img/old.png</file>
+        <file>img/orphaned.png</file>
+        <file>img/installed.png</file>
     </qresource>
 </RCC>

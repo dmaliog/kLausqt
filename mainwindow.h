@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "qboxlayout.h"
 #include "qcompleter.h"
 #include "qgraphicseffect.h"
 #include "qgraphicsvideoitem.h"
@@ -15,6 +16,7 @@
 #include <QListWidgetItem>
 #include <QProcess>
 #include <QGraphicsView>
+#include <QRandomGenerator>
 
 struct Terminal {
     QString binary;
@@ -37,10 +39,27 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    QColor generateRandomColor();
+    QColor generateRandomColor(const int &colorlist)
+    {
+        if (colorlist == 2)
+        {
+            QColor color;
+            do {
+                color = QColor::fromHsv(QRandomGenerator::global()->bounded(360),
+                                        QRandomGenerator::global()->bounded(200),
+                                        QRandomGenerator::global()->bounded(150, 256));
+            } while (color.blue() > 200 || !color.isValid());
+            return color;
+        }
+        else
+        {
+            return QColor(Qt::gray);
+        }
+    }
 
 private:
     QProcessEnvironment env;
+    QProcessEnvironment enveng;
 
     QGraphicsVideoItem *videoItem;
     QGraphicsView *graphicsView;
@@ -219,6 +238,8 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
+    void onListItemClicked(const QString &packageName, int row, QListWidgetItem *item);
+
     void setupConnections();
     void handleActionHovered();
 
@@ -352,6 +373,163 @@ private slots:
     void on_action_updatelist_triggered();
     void on_combo_theme_currentIndexChanged(int index);
     void on_check_saveurl_stateChanged(int arg1);
+};
+
+class CustomListItemWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    CustomListItemWidget(const QString &repo, const QString &text, const int &installed, const int &orphaned, const int &old, const int &rating, const QString &sizeInstallation, const QColor &color, QWidget *parent = nullptr)
+        : QWidget(parent), packageName(text)
+    {
+
+        QHBoxLayout *layout = new QHBoxLayout(this);
+
+
+        QLabel *repoLabel = createIconLabel(":/img/" + repo + ".png");
+        layout->addWidget(repoLabel);
+
+        QLabel *textLabel = new QLabel(text, this);
+        textLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        textLabel->setStyleSheet(QString("color:%1;font-size:12pt;").arg(color.name()));
+
+
+        layout->addWidget(textLabel);
+
+        if (orphaned == 1)
+        {
+            QLabel *orphanedLabel = createIconLabel(":/img/orphaned.png");
+            layout->addWidget(orphanedLabel);
+        }
+
+        if (old == 1)
+        {
+            QLabel *oldLabel = createIconLabel(":/img/old.png");
+            layout->addWidget(oldLabel);
+        }
+
+        if (installed == 1)
+        {
+            QLabel *installedLabel = createIconLabel(":/img/installed.png");
+            layout->addWidget(installedLabel);
+        }
+
+        if (repo == "aur")
+        {
+            QLabel *ratingLabel = createRatingLabel(rating);
+            layout->addWidget(ratingLabel);
+        }
+        else
+        {
+            QLabel *instLabel = new QLabel(sizeInstallation, this);
+            instLabel->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
+            instLabel->setFixedSize(80, 24);
+            instLabel->setStyleSheet("color:#474747;font-size:12pt;");
+            layout->addWidget(instLabel);
+        }
+
+        setLayout(layout);
+        layout->setContentsMargins(4, 0, 4, 0);
+
+        connect(this, &CustomListItemWidget::clicked, this, &CustomListItemWidget::handleClicked);
+    }
+    QString getPackageName() const {
+        return packageName;
+    }
+
+signals:
+    void clicked(const QString &packageName);
+
+private slots:
+    void handleClicked() {
+        emit clicked(packageName);
+    }
+
+private:
+    QString packageName;
+
+    QLabel *createIconLabel(const QString &iconPath)
+    {
+        QLabel *label = new QLabel(this);
+        label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        label->setFixedSize(26, 24);
+        label->setPixmap(QPixmap(iconPath).scaled(24, 24, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        return label;
+    }
+
+    QLabel *createRatingLabel(int rating)
+    {
+        QLabel *label = new QLabel(this);
+        label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        label->setFixedSize(50, 8);
+
+        QPixmap pixmap(50, 8);
+        pixmap.fill(Qt::transparent);
+
+        QPainter painter(&pixmap);
+        painter.setRenderHint(QPainter::Antialiasing, true);
+
+        painter.setPen(QPen(QColor(31, 31, 31)));
+        painter.setBrush(QColor(47, 47, 47));
+        painter.drawRoundedRect(0, 0, 50, 8, 4, 4);
+
+
+        if (rating > 100)
+            rating = 100;
+
+        int fillWidth = static_cast<int>(50 * static_cast<double>(rating) / 100.0);
+        painter.setBrush(QColor(137, 123, 170));
+        painter.drawRoundedRect(0, 0, fillWidth, 8, 4, 4);
+
+        label->setPixmap(pixmap);
+        return label;
+    }
+};
+
+class CustomProgressBar : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit CustomProgressBar(QWidget *parent = nullptr)
+        : QWidget(parent), value(0), maxValue(100)
+    {
+        setFixedSize(60, 8);
+    }
+
+    void setValue(int val)
+    {
+        value = val;
+        update();
+    }
+
+protected:
+    void paintEvent(QPaintEvent *event) override
+    {
+        Q_UNUSED(event);
+        QPixmap pixmap(size());
+        pixmap.fill(Qt::transparent);
+
+        QPainter painter(&pixmap);
+        painter.setRenderHint(QPainter::Antialiasing, true);
+
+        painter.setPen(QPen(QColor(31, 31, 31)));  // Устанавливаем цвет рамки
+        painter.setBrush(QColor(47, 47, 47)); // Прозрачный цвет
+        painter.drawRoundedRect(0, 0, width(), height(), 4, 4);
+
+        int fillWidth = static_cast<int>((static_cast<double>(value) / maxValue) * width());
+        painter.setBrush(QColor(137, 123, 170));
+        painter.drawRoundedRect(0, 0, fillWidth, height(), 4, 4);
+
+        painter.end();
+
+        QPainter widgetPainter(this);
+        widgetPainter.drawPixmap(0, 0, pixmap);
+    }
+
+private:
+    int value;
+    int maxValue;
 };
 
 #endif // MAINWINDOW_H

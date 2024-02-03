@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "12.1";
+QString currentVersion = "12.2";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
@@ -77,13 +77,10 @@ QMap<int, QMap<QString, QStringList>> packageCommands = {
         {
             {"install", {"paru", "-S", "--skipreview"}},
             {"remove", {"paru", "-R"}},
-            {"info", {"paru", "-Qi"}},
             {"update", {"paru", "-Syu", "--skipreview"}},
             {"list_files", {"paru", "-Ql"}},
             {"query", {"paru", "-Q"}},
-            {"show_info", {"paru", "-Si"}},
             {"query_explicit", {"paru", "-Qe"}},
-            {"search", {"paru", "-Ss"}},
             {"query_q", {"paru", "-Qq"}},
             {"remove_explicit", {"paru", "-Rs"}},
             {"query_depends", {"paru", "-Qdtq"}},
@@ -643,7 +640,7 @@ void MainWindow::on_action_34_triggered()
     QString packageName = listWidget->item(currentRow)->text();
     QStringList command;
 
-    command = packageCommands.value(pkg).value("show_info");
+    command = packageCommands.value(0).value("show_info");
     command << packageName;
 
     QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
@@ -1186,8 +1183,8 @@ void MainWindow::handleServerResponseSearch(const QString& reply)
     }
     completerModel->clear();
 
-    QString searchCommand = packageCommands.value(pkg).value("search").at(0);
-    QStringList arguments = {packageCommands.value(pkg).value("search").at(1), reply};
+    QString searchCommand = packageCommands.value(0).value("search").at(0);
+    QStringList arguments = {packageCommands.value(0).value("search").at(1), reply};
 
     currentProcess = QSharedPointer<QProcess>::create(this);
     connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyReadSearch);
@@ -1277,10 +1274,23 @@ void MainWindow::searchAndScroll(QAbstractItemView* view, const QString& text)
 {
     if (QListWidget* listWidget = qobject_cast<QListWidget*>(view))
     {
-        QList<QListWidgetItem*> matchingItems = listWidget->findItems(text, Qt::MatchContains);
-        if (!matchingItems.isEmpty()) {
-            listWidget->setCurrentItem(matchingItems.first());
-            listWidget->scrollToItem(matchingItems.first(), QAbstractItemView::PositionAtCenter);
+        for (int row = 0; row < listWidget->count(); ++row) {
+            QListWidgetItem *currentItem = listWidget->item(row);
+
+            // Поиск в обычных QListWidgetItem
+            if (currentItem->text().contains(text, Qt::CaseInsensitive)) {
+                listWidget->setCurrentItem(currentItem);
+                listWidget->scrollToItem(currentItem, QAbstractItemView::PositionAtCenter);
+                break;
+            }
+
+            // Поиск в дочерних виджетах CustomListItemWidget
+            CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(listWidget->itemWidget(currentItem));
+            if (itemWidget && itemWidget->getPackageName().contains(text, Qt::CaseInsensitive)) {
+                listWidget->setCurrentItem(currentItem);
+                listWidget->scrollToItem(currentItem, QAbstractItemView::PositionAtCenter);
+                break;
+            }
         }
     }
 }
@@ -1549,8 +1559,27 @@ void MainWindow::loadSettings()
     //-############################## СИГНАЛЫ И СЛОТЫ ###################################
     //-##################################################################################
     connect(ui->time_update, &QTimeEdit::timeChanged, this, &MainWindow::onTimeChanged);
-    connect(ui->list_aur, &QListWidget::itemClicked, this, &MainWindow::onListAurItemClicked);
-    connect(ui->list_app, &QListWidget::itemClicked, this, &MainWindow::onListAurItemClicked);
+
+    connect(ui->list_aur, &QListWidget::itemClicked, this, [=](QListWidgetItem *item) {
+        CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(ui->list_aur->itemWidget(item));
+        if (itemWidget) {
+            QString packageName = itemWidget->getPackageName();
+            int row = ui->list_aur->row(item);
+            onListItemClicked(packageName, row, item);
+        } else
+            onListItemClicked("", 0, item);
+    });
+
+    connect(ui->list_app, &QListWidget::itemClicked, this, [=](QListWidgetItem *item) {
+        CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(ui->list_app->itemWidget(item));
+        if (itemWidget) {
+            QString packageName = itemWidget->getPackageName();
+            int row = ui->list_app->row(item);
+            onListItemClicked(packageName, row, item);
+        } else
+            onListItemClicked("", 0, item);
+    });
+
     connect(ui->list_downgrade, &QListWidget::itemDoubleClicked, this, &MainWindow::onListDowngradeItemDoubleClicked);
 
     connect(ui->webEngineView, &QWebEngineView::urlChanged, this, [this](const QUrl &url) {
@@ -1595,33 +1624,26 @@ void MainWindow::loadSettings()
     //-##################################################################################
     //-############################### ЗАНЯТОЕ МЕСТО ####################################
     //-##################################################################################
-    QProgressBar* progressBar = new QProgressBar();
-    progressBar->setFixedSize(50, 30);
     QStorageInfo storageInfo = QStorageInfo::root();
     qint64 freeBytes = storageInfo.bytesAvailable();
     int usedPercentage = 100 - static_cast<int>((freeBytes * 100) / storageInfo.bytesTotal());
-    progressBar->setValue(usedPercentage);
-    progressBar->setFormat("");
+
     QLabel* label = new QLabel(tr("свободно %1 ГиБ").arg(QString::number(freeBytes / (1024.0 * 1024.0 * 1024.0), 'f', 2)));
+    label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+
+    CustomProgressBar* customProgressBar = new CustomProgressBar();
+    customProgressBar->setValue(usedPercentage);
 
     QWidget* containerWidget = new QWidget();
     QHBoxLayout* layout = new QHBoxLayout(containerWidget);
     layout->addStretch();
-    layout->addWidget(progressBar);
     layout->addWidget(label);
-    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(customProgressBar);
     ui->statusBar->addPermanentWidget(containerWidget, 1);
-
-    QColor customColor(42, 40, 112);
-    QPalette palette = progressBar->palette();
-    palette.setColor(QPalette::Highlight, customColor);
-    progressBar->setPalette(palette);
 
     QHBoxLayout* statusBarLayout = qobject_cast<QHBoxLayout*>(ui->statusBar->layout());
     if (statusBarLayout)
-        statusBarLayout->setAlignment(Qt::AlignRight);
-
-    label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+            statusBarLayout->setAlignment(Qt::AlignRight);
 
     //-##################################################################################
     //-############################# ВЕБ ЧАСТЬ / СКРИПТЫ ################################
@@ -1864,6 +1886,9 @@ void MainWindow::loadSettings()
     //-##################################################################################
     env = QProcessEnvironment::systemEnvironment();
     env.insert("LANG", QString("%1.UTF-8").arg(*lang));
+
+    enveng = QProcessEnvironment::systemEnvironment();
+    enveng.insert("LANG", QString("en_US.UTF-8"));
 }
 
 void MainWindow::setupConnections()
@@ -2038,24 +2063,6 @@ void MainWindow::UpdateSnap()
     process.start("sh", QStringList() << "-c" << "snap refresh --list | wc -l");
     process.waitForFinished();
     hasUpdatesSnap = (process.exitCode() == QProcess::NormalExit) && (process.readAll().trimmed().toInt() > 0);
-}
-
-QColor MainWindow::generateRandomColor()
-{
-    if (colorlist == 2)
-    {
-        QColor color;
-        do {
-            color = QColor::fromHsv(QRandomGenerator::global()->bounded(360),
-                                    QRandomGenerator::global()->bounded(200),
-                                    QRandomGenerator::global()->bounded(150, 256));
-        } while (color.blue() > 200 || !color.isValid());
-        return color;
-    }
-    else
-    {
-        return QColor(Qt::gray);
-    }
 }
 
 void MainWindow::onTimeChanged(const QTime& time)
@@ -2454,35 +2461,41 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
     QStringList command;
 
     if (page == 2)
-        command = packageCommands.value(pkg).value("show_info");
+        command = packageCommands.value(0).value("show_info");
     else if (page == 4)
-        command = packageCommands.value(pkg).value("info");
+        command = packageCommands.value(0).value("info");
 
     currentProcess->setProcessEnvironment(env);
     currentProcess->start(command[0], QStringList() << command[1] << packageName);
 }
 
-//not
-void MainWindow::onListAurItemClicked(QListWidgetItem *item)
+void MainWindow::onListItemClicked(const QString &packageName, int row, QListWidgetItem *item)
 {
-    if (page == 2) {
-        int row = ui->list_aur->row(item);
+    if(page == 2)
+    {
         bool iconFound = false;
+        int roww = ui->list_aur->row(item);
         if (list != 8) {
             for (auto it = appIcons.constBegin(); it != appIcons.constEnd(); ++it) {
                 if (appIcons.contains(item->text()) && appIcons[item->text()] == it.value()) {
-                    loadContent(row + 1, loadpage);
+                    loadContent(roww + 1, loadpage);
                     iconFound = true;
                     break;
                 }
             }
         }
         if (!iconFound)
-            processListItem(row, ui->list_aur, ui->details_aur, "");
-    } else if (page == 4) {
+            processListItem(roww, ui->list_aur, ui->details_aur, packageName);
+    }
+    if (page == 4) {
         int row = ui->list_app->row(item);
         processListItem(row, ui->list_app, ui->details_aurpkg, "");
     }
+}
+
+//not
+void MainWindow::onListAurItemClicked(QListWidgetItem *item)
+{
 }
 
 //not
@@ -3033,7 +3046,7 @@ void MainWindow::loadContent(int value, bool valuepage)
 
     for (int i = 0; i < programs.size(); i++) {
         QString packageName = programs[i];
-        QColor color = generateRandomColor();
+        QColor color = generateRandomColor(colorlist);
         QListWidgetItem *item = new QListWidgetItem();
 
         QString iconPath;
@@ -3294,7 +3307,7 @@ void MainWindow::addLinkToList(const QString &link)
         return;
 
     QListWidgetItem *item = new QListWidgetItem(QIcon("/usr/share/icons/Papirus/48x48/mimetypes/application-x-xz-pkg.svg"), cleanedLink);
-    item->setForeground(generateRandomColor());
+    item->setForeground(generateRandomColor(colorlist));
 
     if (nvidia == 1 || nvidia < 1 || packageVersion(link) == nvidiaVersion)
     {
@@ -3327,17 +3340,22 @@ void MainWindow::loadContentInstall()
 
         QListWidgetItem* item = new QListWidgetItem(packageName);
         item->setIcon(packageIcon);
-        item->setForeground(generateRandomColor());
+        item->setForeground(generateRandomColor(colorlist));
         ui->list_app->addItem(item);
     }
 }
 
-void MainWindow::setCursorAndScrollToItem(const QString& itemName)
+void MainWindow::setCursorAndScrollToItem(const QString &itemName)
 {
     for (int row = 0; row < ui->list_aur->count(); ++row) {
-        QListWidgetItem* currentItem = ui->list_aur->item(row);
-        if (currentItem && currentItem->text() == itemName) {
-            onListAurItemClicked(currentItem);
+        QListWidgetItem *currentItem = ui->list_aur->item(row);
+        CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(ui->list_aur->itemWidget(currentItem));
+
+        if (itemWidget && itemWidget->getPackageName() == itemName) {
+            // Вызываем слот напрямую, передавая нужные аргументы
+            onListItemClicked(itemName, row, currentItem);
+
+            // Выбираем и прокручиваем к элементу
             ui->list_aur->setCurrentItem(currentItem);
             ui->list_aur->selectionModel()->select(ui->list_aur->model()->index(ui->list_aur->row(currentItem), 0),
                                                    QItemSelectionModel::Select);
@@ -3361,55 +3379,105 @@ void MainWindow::handleServerResponse(const QString& reply)
     miniAnimation(true, ui->list_aur);
     helperPackageNames.clear();
 
-    const QStringList& searchCommand = packageCommands.value(pkg).value("search");
+    const QStringList& searchCommand = packageCommands.value(0).value("search");
 
     currentProcess = QSharedPointer<QProcess>::create(this);
     connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
     connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
         miniAnimation(false, ui->list_aur);
     });
+
+    currentProcess->setProcessEnvironment(enveng);
     currentProcess->start(searchCommand.at(0), QStringList() << searchCommand.at(1) << reply);
 }
 
-//not
 void MainWindow::onCurrentProcessReadyRead()
 {
     ui->list_aur->clear();
 
+    QString repo = "";
+    QString packageName = "";
+    QString version = "";
+    int installed = 0;
+    QString sizeDownload = "";
+    QString sizeInstallation = "";
+    int rating = 0;
+//    double popularity = 0.00;
+    int orphaned = 0;
+    int old = 0;
+    bool isPackageInfo = true;  // Флаг для отслеживания информации о пакете
+
     while (currentProcess->canReadLine()) {
         QByteArray line = currentProcess->readLine();
-        QString lineString = QString::fromUtf8(line).trimmed();
 
-        QRegularExpression regex(*repo); // Добавлено условие для extra
-        QRegularExpressionMatch match = regex.match(lineString);
-        if (match.hasMatch()) {
-            QString packageName = match.captured(1);
-            helperPackageNames.append(packageName);
-
-            QString iconPath = "";
-            QString prefixToRemove = "";
-
-            static const QRegularExpression regex("(\\w+)/\\S+");
-            QRegularExpressionMatch match = regex.match(packageName);
-
-            if (match.hasMatch()) {
-                QString repoName = match.captured(1);
-
-                if (QFile::exists(":/img/" + repoName + ".png"))
-                    iconPath = ":/img/" + repoName + ".png";
-                else
-                    iconPath = ":/img/pacman.png";
-
-                prefixToRemove = repoName + "/";
+        // Проверяем, является ли текущая строка информацией о пакете
+        if (isPackageInfo) {
+            static const QRegularExpression repoRegex(R"(^([^/]+))");
+            QRegularExpressionMatch repoMatch = repoRegex.match(line);
+            if (repoMatch.hasMatch()) {
+                repo = repoMatch.captured(1);
+                // Обработка repo
             }
 
-            if (!prefixToRemove.isEmpty())
-                packageName.remove(0, prefixToRemove.length());
+            static const QRegularExpression packageNameRegex(R"(/\s*([^\s]+)\s)");
+            QRegularExpressionMatch packageNameMatch = packageNameRegex.match(line);
+            if (packageNameMatch.hasMatch()) {
+                packageName = packageNameMatch.captured(1);
+                // Обработка packageName
+            }
 
-            QListWidgetItem *item = new QListWidgetItem(QIcon(iconPath), packageName);
-            QColor color = generateRandomColor();
-            item->setForeground(color);
+            static const QRegularExpression versionRegex(R"(\s([^\s]+)\s)");
+            QRegularExpressionMatch versionMatch = versionRegex.match(line);
+            if (versionMatch.hasMatch()) {
+                version = versionMatch.captured(1);
+                // Обработка version
+            }
+
+            static const QRegularExpression sizeRegex(R"(\(([\d.]+ [KMGT]iB) ([\d.]+ [KMGT]iB)\))");
+            QRegularExpressionMatch sizeMatch = sizeRegex.match(line);
+            if (sizeMatch.hasMatch()) {
+                sizeDownload = sizeMatch.captured(1);
+                sizeInstallation = sizeMatch.captured(2);
+                // Обработка sizeDownload и sizeInstallation
+            }
+
+            static const QRegularExpression installedRegex(R"(\(Installed\))");
+            installed = installedRegex.match(line).hasMatch() ? 1 : 0;
+            // Обработка installed
+
+            static const QRegularExpression ratingRegex(R"(\(\+(\d+) ([\d.]+)\))");
+            QRegularExpressionMatch ratingMatch = ratingRegex.match(line);
+            if (ratingMatch.hasMatch()) {
+                rating = ratingMatch.captured(1).toInt();
+                //popularity = ratingMatch.captured(2).toDouble();
+                // Обработка rating и popularity
+            }
+
+            static const QRegularExpression outOfDateRegex(R"(\(Out-of-date: (\d{4}-\d{2}-\d{2})\))");
+            old = outOfDateRegex.match(line).hasMatch() ? 1 : 0;
+
+            static const QRegularExpression orphanedRegex(R"(\(Orphaned\))");
+            orphaned = orphanedRegex.match(line).hasMatch() ? 1 : 0;
+            // Обработка orphaned
+
+            QColor color = generateRandomColor(colorlist);
+            CustomListItemWidget *itemWidget = new CustomListItemWidget(repo, packageName, installed, orphaned, old, rating, sizeInstallation, color, ui->list_aur);
+
+            QString styleSheet = QString("background: none;").arg(color.name());
+            itemWidget->setStyleSheet(styleSheet);
+
+            QListWidgetItem *item = new QListWidgetItem();
+
+            int itemHeight = 46;
+            item->setSizeHint(QSize(ui->list_aur->width()-30, itemHeight));
+
             ui->list_aur->addItem(item);
+            ui->list_aur->setItemWidget(item, itemWidget);
+
+            isPackageInfo = false;
+        } else {
+            // Если текущая строка не информация о пакете, значит, это описание, пропускаем ее
+            isPackageInfo = true;
         }
     }
 
@@ -3449,9 +3517,9 @@ void MainWindow::loadingListWidget()
     cacheButtonPacman->setIcon(QIcon("/usr/share/icons/Papirus/48x48/apps/pacman.svg"));
     orphanButton->setIcon(QIcon("/usr/share/icons/Papirus/48x48/apps/ark.svg"));
 
-    cacheButtonHelper->setForeground(generateRandomColor());
-    cacheButtonPacman->setForeground(generateRandomColor());
-    orphanButton->setForeground(generateRandomColor());
+    cacheButtonHelper->setForeground(generateRandomColor(colorlist));
+    cacheButtonPacman->setForeground(generateRandomColor(colorlist));
+    orphanButton->setForeground(generateRandomColor(colorlist));
 
     QDir().mkpath(mainDir + "other/");
 
@@ -3495,7 +3563,7 @@ void MainWindow::loadScripts(const QString& baseDir, QListWidget* listWidget)
         }
 
         QListWidgetItem* item = new QListWidgetItem(itemName.isEmpty() ? fileInfo.fileName() : itemName);
-        item->setForeground(generateRandomColor());
+        item->setForeground(generateRandomColor(colorlist));
 
         if (!iconPath.isEmpty())
         {
@@ -3748,7 +3816,7 @@ void MainWindow::on_combo_bench_currentIndexChanged(int index)
             scriptFile.close();
         }
         QListWidgetItem* item = new QListWidgetItem(itemName);
-        item->setForeground(generateRandomColor());
+        item->setForeground(generateRandomColor(colorlist));
 
         if (!iconPath.isEmpty())
         {
