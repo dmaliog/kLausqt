@@ -441,7 +441,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>12</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_webgame">
        <attribute name="title">

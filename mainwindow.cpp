@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "12.5";
+QString currentVersion = "12.6";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
@@ -1258,8 +1258,10 @@ void MainWindow::createAndAddListItemSearch(const QString& packageName)
 
 void MainWindow::search(const QString& searchText)
 {
-    if (page == 2)
+    if (page == 2){
+        ui->list_aur->clear();
         handleServerResponse(searchText);
+    }
     else if (page == 6)
         ui->webEngineView_aur->setUrl(QUrl(searchText));
     else if (page == 7)
@@ -2289,6 +2291,13 @@ void MainWindow::downloadAndSaveImages(const QString& packageName, const QString
         }
     }
     updateImageView();
+    if (pixmaps.size() == 1) {
+        ui->back_slider->hide();
+        ui->next_slider->hide();
+    } else {
+        ui->back_slider->show();
+        ui->next_slider->show();
+    }
     miniAnimation(false, ui->image_aur);
 }
 
@@ -3410,7 +3419,6 @@ QStringList MainWindow::executeCommand(const QStringList& command)
 
 void MainWindow::handleServerResponse(const QString& reply)
 {
-    ui->list_aur->clear();
     miniAnimation(true, ui->list_aur);
     helperPackageNames.clear();
 
@@ -3418,9 +3426,6 @@ void MainWindow::handleServerResponse(const QString& reply)
 
     currentProcess = QSharedPointer<QProcess>::create(this);
     connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
-    connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
-        miniAnimation(false, ui->list_aur);
-    });
 
     currentProcess->setProcessEnvironment(enveng);
     currentProcess->start(searchCommand.at(0), QStringList() << searchCommand.at(1) << reply);
@@ -3428,7 +3433,7 @@ void MainWindow::handleServerResponse(const QString& reply)
 
 void MainWindow::onCurrentProcessReadyRead()
 {
-    ui->list_aur->clear();
+    QTimer::singleShot(timeout.msecsSinceStartOfDay() / 1000, this, &MainWindow::onSearchTimeout);
 
     QString repoz = "";
     QString packageName = "";
@@ -3442,6 +3447,8 @@ void MainWindow::onCurrentProcessReadyRead()
     int old = 0;
 
     while (currentProcess->canReadLine()) {
+        QCoreApplication::processEvents();
+
         QByteArray line = currentProcess->readLine();
         QString lineString = QString::fromUtf8(line).trimmed();
 
@@ -3508,14 +3515,16 @@ void MainWindow::onCurrentProcessReadyRead()
 
             ui->list_aur->addItem(item);
             ui->list_aur->setItemWidget(item, itemWidget);
+
+            QScrollBar *scrollBar = ui->list_aur->verticalScrollBar();
+            scrollBar->setValue(scrollBar->maximum());
         }
     }
 
+    // Процесс завершился, можно выполнить завершающие действия
     miniAnimation(false, ui->list_aur);
-
     QString searchText = ui->searchLineEdit->text();
     setCursorAndScrollToItem(searchText);
-    QTimer::singleShot(timeout.msecsSinceStartOfDay() / 1000, this, &MainWindow::onSearchTimeout);
 }
 
 void MainWindow::onSearchTimeout()
