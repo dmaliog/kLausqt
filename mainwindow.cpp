@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "12.7";
+QString currentVersion = "12.8";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
@@ -664,8 +664,6 @@ void MainWindow::on_action_34_triggered()
         return;
     }
 
-    int currentRow = listWidget->currentRow();
-
     QListWidgetItem *currentItem = listWidget->currentItem();
     CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(listWidget->itemWidget(currentItem));
 
@@ -812,7 +810,15 @@ void MainWindow::on_action_5_triggered()
             return;
         }
 
-        QString packageName = listWidget->currentItem()->text().split(" ").first();
+        QListWidgetItem *currentItem = listWidget->currentItem();
+        CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(listWidget->itemWidget(currentItem));
+
+        QString packageName;
+
+        if (itemWidget)
+            packageName = itemWidget->getPackageName();
+        else
+            packageName = currentItem->text();
 
         QString desktopFilePath;
 
@@ -941,7 +947,16 @@ void MainWindow::on_action_30_triggered()
         return;
     }
 
-    QString packageName = ui->list_aur->item(ui->list_aur->currentRow())->text();
+    QListWidgetItem *currentItem = ui->list_aur->currentItem();
+    CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(ui->list_aur->itemWidget(currentItem));
+
+    QString packageName;
+
+    if (itemWidget)
+        packageName = itemWidget->getPackageName();
+    else
+        packageName = currentItem->text();
+
     Terminal terminal = getTerminal();
     QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "bash" << mainDir + "sh/PKGBUILD.sh" << *lang << helper << packageName);
 }
