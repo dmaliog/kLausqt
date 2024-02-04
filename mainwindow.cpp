@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "12.6";
+QString currentVersion = "12.7";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
@@ -665,7 +665,17 @@ void MainWindow::on_action_34_triggered()
     }
 
     int currentRow = listWidget->currentRow();
-    QString packageName = listWidget->item(currentRow)->text();
+
+    QListWidgetItem *currentItem = listWidget->currentItem();
+    CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(listWidget->itemWidget(currentItem));
+
+    QString packageName;
+
+    if (itemWidget)
+        packageName = itemWidget->getPackageName();
+    else
+        packageName = currentItem->text();
+
     QStringList command;
 
     command = packageCommands.value(0).value("show_info");
@@ -846,7 +856,16 @@ void MainWindow::on_action_6_triggered()
         return;
     }
 
-    QString packageName = listWidget->item(listWidget->currentRow())->text();
+    QListWidgetItem *currentItem = listWidget->currentItem();
+    CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(listWidget->itemWidget(currentItem));
+
+    QString packageName;
+
+    if (itemWidget)
+        packageName = itemWidget->getPackageName();
+    else
+        packageName = currentItem->text();
+
     Terminal terminal = getTerminal();
 
     currentTerminalProcess = QSharedPointer<QProcess>::create(this);
@@ -884,7 +903,16 @@ void MainWindow::on_action_4_triggered()
         return;
     }
 
-    QString packageName = listWidget->item(listWidget->currentRow())->text();
+    QListWidgetItem *currentItem = listWidget->currentItem();
+    CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(listWidget->itemWidget(currentItem));
+
+    QString packageName;
+
+    if (itemWidget)
+        packageName = itemWidget->getPackageName();
+    else
+        packageName = currentItem->text();
+
     Terminal terminal = getTerminal();
 
     if (clearinstall && (pkg == 0 || pkg == 1))
@@ -898,6 +926,7 @@ void MainWindow::on_action_4_triggered()
     currentTerminalProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("install") << packageName);
     currentTerminalProcess->setProcessChannelMode(QProcess::MergedChannels);
     currentTerminalProcess->start();
+
 }
 
 void MainWindow::on_action_30_triggered()
