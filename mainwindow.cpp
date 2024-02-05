@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "12.8";
+QString currentVersion = "12.9";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
@@ -1966,6 +1966,20 @@ void MainWindow::loadSettings()
     ui->action_grub->setIcon(QIcon("/usr/share/icons/Papirus/48x48/apps/grub-customizer.svg"));
     ui->action_pacman->setIcon(QIcon("/usr/share/icons/Papirus/48x48/apps/kapman.svg"));
     ui->action_fstab->setIcon(QIcon("/usr/share/icons/Papirus/48x48/apps/org.gnome.DiskUtility.svg"));
+
+
+    // Создание сцены для основной картинки
+    imageScene = new QGraphicsScene(this);
+    ui->image_aur->setScene(imageScene);
+
+    // Создание модели для миниатюр
+    thumbnailModel = new QStandardItemModel(this);
+    ui->list_screen->setModel(thumbnailModel);
+    ui->list_screen->setViewMode(QListView::IconMode);
+    ui->list_screen->setIconSize(QSize(100, 100));
+    ui->list_screen->setSpacing(5);
+
+    connect(ui->list_screen, &QListView::clicked, this, &MainWindow::onThumbnailClicked);
 }
 
 void MainWindow::setupConnections()
@@ -2283,29 +2297,25 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
     removeToolButtonTooltips(ui->toolBar_2);
 }
 
-//not
 void MainWindow::downloadAndSaveImages(const QString& packageName, const QStringList& urls, const QString& folder)
 {
     miniAnimation(true, ui->image_aur);
-    if (ui->image_aur->scene())
-        ui->image_aur->scene()->clear();
 
-    imageUrls = urls;
     pixmaps.clear();
     currentIndex = 0;
+    imageScene->clear();
+    thumbnailModel->clear();
 
     QString cacheFolder = folder + packageName + "/";
     QDir().mkpath(cacheFolder);
 
-    for (int i = 0; i < imageUrls.size(); ++i) {
-        const QString& imageUrl = imageUrls.at(i);
+    for (int i = 0; i < urls.size(); ++i) {
+        const QString& imageUrl = urls.at(i);
         QString fileName = QString("%1_%2.png").arg(packageName).arg(i);
         QString cacheFilePath = cacheFolder + fileName;
 
-        if (QFile::exists(cacheFilePath)) {
-            QPixmap pixmap(cacheFilePath);
-            pixmaps.append(pixmap);
-        } else {
+        QPixmap pixmap;
+        if (!QFile::exists(cacheFilePath)) {
             QNetworkRequest imageRequest((QUrl(imageUrl)));
             QNetworkReply* imageReply = networkManager.get(imageRequest);
             QEventLoop loop;
@@ -2313,57 +2323,40 @@ void MainWindow::downloadAndSaveImages(const QString& packageName, const QString
             loop.exec();
 
             if (imageReply->error() == QNetworkReply::NoError) {
-                QPixmap pixmap;
                 pixmap.loadFromData(imageReply->readAll());
 
                 int maxWidth = 680;
                 int maxHeight = 500;
 
-                if (pixmap.width() > maxWidth) {
-                    pixmap = pixmap.scaledToWidth(maxWidth, Qt::SmoothTransformation);
+                pixmap = (pixmap.width() > maxWidth) ? pixmap.scaledToWidth(maxWidth, Qt::SmoothTransformation) : pixmap;
+                pixmap = (pixmap.height() > maxHeight) ? pixmap.scaledToHeight(maxHeight, Qt::SmoothTransformation) : pixmap;
 
-                    if (pixmap.height() > maxHeight) {
-                        pixmap = pixmap.scaledToHeight(maxHeight, Qt::SmoothTransformation);
-                    }
-                }
-
-                pixmaps.append(pixmap);
                 pixmap.save(cacheFilePath);
             }
-
             imageReply->deleteLater();
-        }
+
+        } else
+            pixmap.load(cacheFilePath);
+
+        pixmaps.append(pixmap);
+        thumbnailModel->appendRow(new QStandardItem(QIcon(pixmap.scaledToWidth(100)), ""));
     }
+
     updateImageView();
-    if (pixmaps.size() == 1) {
-        ui->back_slider->hide();
-        ui->next_slider->hide();
-    } else {
-        ui->back_slider->show();
-        ui->next_slider->show();
-    }
     miniAnimation(false, ui->image_aur);
 }
 
-//not
 void MainWindow::updateImageView()
 {
     if (!pixmaps.isEmpty() && currentIndex >= 0 && currentIndex < pixmaps.size()) {
-        QGraphicsScene* scene = new QGraphicsScene(this);
-        scene->addPixmap(pixmaps[currentIndex]);
-        ui->image_aur->setScene(scene);
+        imageScene->clear();
+        imageScene->addPixmap(pixmaps[currentIndex]);
     }
 }
 
-void MainWindow::on_back_slider_clicked()
+void MainWindow::onThumbnailClicked(const QModelIndex& index)
 {
-    currentIndex = (currentIndex - 1 + pixmaps.size()) % pixmaps.size();
-    updateImageView();
-}
-
-void MainWindow::on_next_slider_clicked()
-{
-    currentIndex = (currentIndex + 1) % pixmaps.size();
+    currentIndex = index.row();
     updateImageView();
 }
 
@@ -2380,7 +2373,7 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
         packageName = nameItem->text();
     }
 
-    if (page == 2)
+    if (listWidget == ui->list_aur)
     {
         ui->action_like->setEnabled(true);
 
@@ -2617,9 +2610,6 @@ void MainWindow::miniAnimation(bool visible, QWidget* targetWidget)
             delete miniLoadLabel;
             miniLoadLabel = nullptr;
         }
-        if (targetWidget == ui->image_aur)
-            targetWidget->setStyleSheet("background-color: #191919;");
-        else
             targetWidget->setStyleSheet("background-color: #272727;");
 
         removeToolButtonTooltips(ui->toolBar);
@@ -4289,19 +4279,20 @@ void MainWindow::on_action_updatelist_triggered()
         miniAnimation(true, ui->list_aur);
 
         ui->list_aur->clear();
-        ui->action_imgpkg->setEnabled(false);
         ui->action_imgpkg->setChecked(false);
+        ui->action_imgpkg->setEnabled(false);
 
         QTimer::singleShot(500, this, [=]() {
             list = 0;
             loadContent(0, true);
 
-            ui->action_imgpkg->setEnabled(false);
             ui->action_imgpkg->setChecked(false);
+            ui->action_imgpkg->setEnabled(false);
 
             ui->action_like->setEnabled(false);
             ui->details_aur->setHtml(detailsAURdefault);
 
+            ui->tabWidget_details->setCurrentIndex(0);
             miniAnimation(false, ui->list_aur);
         });
     }

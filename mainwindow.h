@@ -68,6 +68,11 @@ private:
         return process.exitCode() == 0;
     }
 
+    QGraphicsScene* imageScene;
+    QStandardItemModel* thumbnailModel;
+    int currentIndex;
+    QList<QPixmap> pixmaps;
+
     QProcessEnvironment env;
     QProcessEnvironment enveng;
 
@@ -134,8 +139,6 @@ private:
 
     // Статические переменные
     QStringList imageUrls;
-    QList<QPixmap> pixmaps;
-    int currentIndex;
     QNetworkAccessManager *manager;
     QNetworkAccessManager networkManager;
     QSet<QString> addedLinks;
@@ -244,6 +247,7 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
+    void onThumbnailClicked(const QModelIndex& index);
     void onListItemClicked(const QString &packageName, int row, QListWidgetItem *item);
 
     void setupConnections();
@@ -360,11 +364,9 @@ private slots:
     void on_action_downgrade_triggered();
     void on_action_game_triggered();
     void on_action_nvidia_triggered();
-    void on_back_slider_clicked();
     void on_list_bench_itemClicked(QListWidgetItem *item);
     void on_list_journal_itemClicked(QListWidgetItem *item);
     void on_list_sh_itemClicked(QListWidgetItem *item);
-    void on_next_slider_clicked();
     void on_push_back_clicked();
     void on_push_grub_fast_clicked();
     void on_push_install_clicked();
@@ -383,6 +385,7 @@ private slots:
     void loadConfigFile(const QString &filePath, QTextEdit *targetTextEdit, int tabIndex);
     void on_push_grub_clicked();
 };
+
 
 class MySyntaxHighlighter : public QSyntaxHighlighter {
 public:
