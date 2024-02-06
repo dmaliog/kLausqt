@@ -3157,18 +3157,6 @@ QStringList MainWindow::executeCommand(const QStringList& command)
     return QString::fromUtf8(process->readAllStandardOutput()).split("\n", Qt::SkipEmptyParts);
 }
 
-void MainWindow::handleServerResponseAll(const QString& reply)
-{
-    miniAnimation(true, ui->list_aur);
-    helperPackageNames.clear();
-
-    currentProcess = QSharedPointer<QProcess>::create(this);
-    connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
-
-    currentProcess->setProcessEnvironment(enveng);
-    currentProcess->start("bash", QStringList() << "-c" << reply);
-}
-
 void MainWindow::handleServerResponse(const QString& reply)
 {
     miniAnimation(true, ui->list_aur);

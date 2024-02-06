@@ -748,7 +748,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                <bool>false</bool>
               </property>
               <property name="dragDropMode">
-               <enum>QAbstractItemView::DragDrop</enum>
+               <enum>QAbstractItemView::NoDragDrop</enum>
               </property>
               <property name="selectionMode">
                <enum>QAbstractItemView::NoSelection</enum>
