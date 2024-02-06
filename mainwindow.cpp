@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "13.0";
+QString currentVersion = "13.1";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
@@ -452,35 +452,6 @@ void MainWindow::on_action_nvidia_triggered()
     }
 }
 
-void MainWindow::on_push_install_clicked()
-{
-    QFile lockFile(lockFilePath);
-    if (lockFile.exists()) {
-        sendNotification(tr("Внимание"), tr("Pacman уже используется! Завершите все операции в Pacman и попробуйте снова!"));
-        return;
-    }
-
-    Terminal terminal = getTerminal();
-    currentTerminalProcess = QSharedPointer<QProcess>::create(this);
-    connect(currentTerminalProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
-        sendNotification(tr("Внимание"), tr("После отката пакетов NVIDIA, рекомендуется перезагрузка!"));
-        on_push_back_clicked();
-    });
-
-    currentTerminalProcess->setProgram(terminal.binary);
-    currentTerminalProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("localinstall") << nvidiaDkms << nvidiaUtils << nvidiaSettings << libxnvctrl << openclNvidia << lib32NvidiaUtils << lib32OpenclNvidia);
-    currentTerminalProcess->setProcessChannelMode(QProcess::MergedChannels);
-    currentTerminalProcess->start();
-}
-
-void MainWindow::on_push_back_clicked()
-{
-    nvidia = 0;
-    checkForDowngrades("steam");
-    ui->label1->setText(tr("Откат пакетов"));
-    originalLabelText = ui->label1->text();
-    ui->tabWidget->setCurrentIndex(12);
-}
 //---#####################################################################################################################################################
 //--################################################################## БЫСТРЫЕ ФУНКЦИИ ##################################################################
 //-#####################################################################################################################################################
@@ -1316,10 +1287,7 @@ void MainWindow::search(const QString& searchText)
     else if (page == 11)
         ui->webEngineView_game->setUrl(QUrl(searchText));
     else if (page == 14) {
-        if (nvidia == 0)
             checkForDowngrades(searchText);
-        else
-            sendNotification(tr("Ошибка"), tr("При установке драйверов, поиск не доступен!"));
     }
 }
 
@@ -2361,7 +2329,7 @@ void MainWindow::onThumbnailClicked(const QModelIndex& index)
 }
 
 //not
-void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser* detailsWidget, QString package)
+void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser* detailsWidget, const QString& package)
 {
     QString packageName;
 
@@ -2517,28 +2485,30 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
         }
 
     });
+    if (listWidget == ui->list_aur)
+    {
+        connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
+            if (exitCode != 0 || exitStatus == QProcess::CrashExit) {
+                QByteArray errorOutput = currentProcess->readAllStandardError();
+                QString errorMessage = QString::fromUtf8(errorOutput);
 
-    connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
-        if (exitCode != 0 || exitStatus == QProcess::CrashExit) {
-            QByteArray errorOutput = currentProcess->readAllStandardError();
-            QString errorMessage = QString::fromUtf8(errorOutput);
+                if (!errorMessage.trimmed().isEmpty())
+                    detailsWidget->setText(errorMessage);
+                else
+                    detailsWidget->setText(tr("Пакет не найден!\nВозможно, он поменял свое название..."));
 
-            if (!errorMessage.trimmed().isEmpty())
-                detailsWidget->setText(errorMessage);
-            else
-                detailsWidget->setText(tr("Пакет не найден!\nВозможно, он поменял свое название..."));
+                ui->searchLineEdit->setText(packageName);
 
-            ui->searchLineEdit->setText(packageName);
+                QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
+                QCoreApplication::postEvent(ui->searchLineEdit, event);
 
-            QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
-            QCoreApplication::postEvent(ui->searchLineEdit, event);
+                if (page == 2)
+                    ui->action_like->setEnabled(false);
 
-            if (page == 2)
-                ui->action_like->setEnabled(false);
-
-            miniAnimation(false,detailsWidget);
-        }
-    });
+                miniAnimation(false,detailsWidget);
+            }
+        });
+    }
 
     detailsWidget->clear();
 
@@ -2548,7 +2518,7 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
     if (page == 2)
         command = packageCommands.value(0).value("show_info");
-    else if (page == 4)
+    else
         command = packageCommands.value(0).value("info");
 
     currentProcess->setProcessEnvironment(env);
@@ -2902,74 +2872,15 @@ QString packageVersion(const QString& packageName) {
 void MainWindow::onListDowngradeItemDoubleClicked(QListWidgetItem *currentItem) {
     QString packageName;
 
-    if (currentItem != nullptr) {
+    if (currentItem != nullptr)
         packageName = currentItem->text();
-    } else {
+    else {
         sendNotification(tr("Внимание"), tr("Выберите пакет для установки!"));
         return;
     }
 
     Terminal terminal = getTerminal();
-
     QString installUrl = "https://archive.archlinux.org/packages/" + QString(packagesArchiveAUR.at(0)) + "/" + packagesArchiveAUR +  "/" + packageName;
-
-    if (nvidia == 1)
-    {
-        nvidiaVersion = packageVersion(packageName); //узнаем версию пакета для сортировки по остальным пакетам
-        nvidiaDkms = installUrl;
-        nvidiaDkmsName = packageName;
-        nvidia = 2;
-        on_action_nvidia_triggered();
-        return;
-    }
-    else if (nvidia == 2)
-    {
-        nvidiaUtils = installUrl;
-        nvidiaUtilsName = packageName;
-        nvidia = 3;
-        on_action_nvidia_triggered();
-        return;
-    }
-    else if (nvidia == 3)
-    {
-        nvidiaSettings = installUrl;
-        nvidiaSettingsName = packageName;
-        nvidia = 4;
-        on_action_nvidia_triggered();
-        return;
-    }
-    else if (nvidia == 4)
-    {
-        libxnvctrl = installUrl;
-        libxnvctrlName = packageName;
-        nvidia = 5;
-        on_action_nvidia_triggered();
-        return;
-    }
-    else if (nvidia == 5)
-    {
-        openclNvidia = installUrl;
-        openclNvidiaName = packageName;
-        nvidia = 6;
-        on_action_nvidia_triggered();
-        return;
-    }
-    else if (nvidia == 6)
-    {
-        lib32NvidiaUtils = installUrl;
-        lib32NvidiaUtilsName = packageName;
-        nvidia = 7;
-        on_action_nvidia_triggered();
-        return;
-    }
-    else if (nvidia == 7)
-    {
-        lib32OpenclNvidia = installUrl;
-        lib32OpenclNvidiaName = packageName;
-        nvidia = 8;
-        on_action_nvidia_triggered();
-        return;
-    }
 
     QFile lockFile(lockFilePath);
     if (lockFile.exists()) {
@@ -2989,8 +2900,7 @@ void MainWindow::onListDowngradeItemDoubleClicked(QListWidgetItem *currentItem) 
 
 void MainWindow::checkForDowngrades(const QString& packagesArchiveAUR)
 {
-    if (packagesArchiveAUR.isEmpty())
-        return;
+    if (packagesArchiveAUR.isEmpty()) return;
     miniAnimation(true, ui->list_downgrade);
     addedLinks.clear();
     ui->list_downgrade->clear();
@@ -3001,7 +2911,7 @@ void MainWindow::checkForDowngrades(const QString& packagesArchiveAUR)
 
     ui->details_downgrade->clear();
 
-    processListItem(0, ui->list_downgrade, ui->details_downgrade, packagesArchiveAUR);
+    processListItem(-1, ui->list_downgrade, ui->details_downgrade, packagesArchiveAUR);
 }
 
 void MainWindow::connectProcessSignals(QSharedPointer<QProcess>& process, QTextBrowser* outputWidget)

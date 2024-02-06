@@ -247,6 +247,9 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
+    void writeToFile(const QString& filePath, const QString& content);
+    void loadConfigFile(const QString &filePath, QTextEdit *targetTextEdit, int tabIndex);
+
     bool prepareFile(const QString& source, const QString& target, QFile& file);
     void readProgramsFromFile(QFile& file, QVector<QString>& programs);
     void processPackageName(const QString& packageName, bool valuepage);
@@ -276,7 +279,7 @@ private slots:
     void onListDowngradeItemDoubleClicked(QListWidgetItem *item);
     void addLinkToList(const QString &link);
     void handleListItemClicked(QListWidgetItem *item, const QString& scriptDir);
-    void processListItem(int row, QListWidget* listWidget, QTextBrowser* detailsWidget, QString package);
+    void processListItem(int row, QListWidget *listWidget, QTextBrowser *detailsWidget, const QString &package);
     void search(const QString& searchText);
     void searchAndScroll(QAbstractItemView* view, const QString& text);
 
@@ -371,9 +374,7 @@ private slots:
     void on_list_bench_itemClicked(QListWidgetItem *item);
     void on_list_journal_itemClicked(QListWidgetItem *item);
     void on_list_sh_itemClicked(QListWidgetItem *item);
-    void on_push_back_clicked();
     void on_push_grub_fast_clicked();
-    void on_push_install_clicked();
     void on_push_kde_clicked();
     void on_push_repair_clicked();
     void on_push_vk_clicked();
@@ -384,9 +385,7 @@ private slots:
     void on_check_saveurl_stateChanged(int arg1);
     void on_push_pacman_clicked();
     void on_push_fstab_clicked();
-    void writeToFile(const QString& filePath, const QString& content);
     void on_action_fstab_triggered();
-    void loadConfigFile(const QString &filePath, QTextEdit *targetTextEdit, int tabIndex);
     void on_push_grub_clicked();
 };
 

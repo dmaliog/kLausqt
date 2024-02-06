@@ -443,7 +443,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>6</number>
       </property>
       <widget class="QWidget" name="tab_webgame">
        <attribute name="title">
@@ -1596,19 +1596,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
          <string>Установить</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="push_back">
-        <property name="geometry">
-         <rect>
-          <x>420</x>
-          <y>620</y>
-          <width>111</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Отмена</string>
-        </property>
-       </widget>
        <widget class="QLabel" name="label_driver_left">
         <property name="geometry">
          <rect>
@@ -1638,7 +1625,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
        <zorder>label_driver_left</zorder>
        <zorder>label_driver</zorder>
        <zorder>details_driver</zorder>
-       <zorder>push_back</zorder>
        <zorder>push_install</zorder>
        <zorder>label_logo</zorder>
       </widget>
