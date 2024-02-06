@@ -68,6 +68,14 @@ private:
         return process.exitCode() == 0;
     }
 
+    struct PageInfo {
+        QString sourceFilePath;
+        QString targetFilePath;
+        int listType;
+        bool valuePage;
+    };
+
+
     QGraphicsScene* imageScene;
     QStandardItemModel* thumbnailModel;
     int currentIndex;
@@ -102,6 +110,8 @@ private:
     QString openclNvidiaName;
     QString lib32NvidiaUtilsName;
     QString lib32OpenclNvidiaName;
+
+    QString command;
 
     // Умные указатели
     QCompleter* completer;
@@ -247,6 +257,12 @@ public slots:
     void sendNotification(const QString& title, const QString& message);
 
 private slots:
+    void handleServerResponseAll(const QString& reply);
+
+    bool prepareFile(const QString& source, const QString& target, QFile& file);
+    void readProgramsFromFile(QFile& file, QVector<QString>& programs);
+    void processPackageName(const QString& packageName, bool valuepage);
+
     void onThumbnailClicked(const QModelIndex& index);
     void onListItemClicked(const QString &packageName, int row, QListWidgetItem *item);
 

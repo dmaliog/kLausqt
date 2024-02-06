@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "12.9";
+QString currentVersion = "13.0";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
@@ -123,6 +123,7 @@ void MainWindow::on_action_2_triggered()
     ui->action_30->setVisible(true);
     ui->action_34->setVisible(true);
     ui->action_imgpkg->setVisible(true);
+    ui->action_infopkg->setVisible(true);
     ui->action_like->setVisible(true);
     showLoadingAnimationMini(false);
 }
@@ -1966,13 +1967,12 @@ void MainWindow::loadSettings()
     ui->action_grub->setIcon(QIcon("/usr/share/icons/Papirus/48x48/apps/grub-customizer.svg"));
     ui->action_pacman->setIcon(QIcon("/usr/share/icons/Papirus/48x48/apps/kapman.svg"));
     ui->action_fstab->setIcon(QIcon("/usr/share/icons/Papirus/48x48/apps/org.gnome.DiskUtility.svg"));
-
-
-    // Создание сцены для основной картинки
+    //-##################################################################################
+    //-########################### СЦЕНА ДЛЯ СКРИНШОТОВ #################################
+    //-##################################################################################
     imageScene = new QGraphicsScene(this);
     ui->image_aur->setScene(imageScene);
 
-    // Создание модели для миниатюр
     thumbnailModel = new QStandardItemModel(this);
     ui->list_screen->setModel(thumbnailModel);
     ui->list_screen->setViewMode(QListView::IconMode);
@@ -2692,499 +2692,205 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
     return QIcon("/usr/share/icons/Papirus/48x48/apps/application-default-icon.svg");
 }
 
-//not
-void MainWindow::loadContent(int value, bool valuepage)
-{
-    miniAnimation(true,ui->list_aur);
+void MainWindow::loadContent(int value, bool valuepage) {
+    miniAnimation(true, ui->list_aur);
     ui->list_aur->clear();
+
     QString sourceFilePath;
     QString targetFilePath;
 
-    // 0 - лист
+    struct FileData {
+        int value;
+        int list;
+        QString filePath;
+        bool valueup;
+    };
 
-    if (value == 0) {
-        sourceFilePath = ":/other/" + *lang + "/list.txt";
-        targetFilePath = mainDir + "other/" + *lang + "/list.txt";
-        valuepage = true;
-        list = 0;
-    }
-    else if (value == 1)
-    {
-        if (list == 0)
-        {
-            sourceFilePath = ":/other/populaty.txt";
-            targetFilePath = mainDir + "other/populaty.txt";
-            list = 1;
-            valuepage = false;
-        }
-        else if (list == 2)
-        {
-            sourceFilePath = ":/other/network.txt";
-            targetFilePath = mainDir + "other/network.txt";
-            valuepage = false;
-        }
-        else if (list == 3)
-        {
-            sourceFilePath = ":/other/codecs.txt";
-            targetFilePath = mainDir + "other/codecs.txt";
-            valuepage = false;
-        }
-        else if (list == 4)
-        {
-            sourceFilePath = ":/other/terminals.txt";
-            targetFilePath = mainDir + "other/terminals.txt";
-            valuepage = false;
-        }
-        else if (list == 5)
-        {
-            sourceFilePath = ":/other/texteditors.txt";
-            targetFilePath = mainDir + "other/texteditors.txt";
-            valuepage = false;
-        }
-        else if (list == 6)
-        {
-            sourceFilePath = ":/other/network-security.txt";
-            targetFilePath = mainDir + "other/network-security.txt";
-            valuepage = false;
-        }
-    }
-    else if (value == 2)
-    {
-        if (list == 0)
-        {
-            sourceFilePath = ":/other/" + *lang + "/net.txt";
-            targetFilePath = mainDir + "other/" + *lang + "/net.txt";
-            list = 2;
-            valuepage = true;
-        }
-        else if (list == 2)
-        {
-            sourceFilePath = ":/other/browsers.txt";
-            targetFilePath = mainDir + "other/browsers.txt";
-            valuepage = false;
-        }
-        else if (list == 3)
-        {
-            sourceFilePath = ":/other/images.txt";
-            targetFilePath = mainDir + "other/images.txt";
-            valuepage = false;
-        }
-        else if (list == 4)
-        {
-            sourceFilePath = ":/other/files.txt";
-            targetFilePath = mainDir + "other/files.txt";
-            valuepage = false;
-        }
-        else if (list == 5)
-        {
-            sourceFilePath = ":/other/office.txt";
-            targetFilePath = mainDir + "other/office.txt";
-            valuepage = false;
-        }
-        else if (list == 6)
-        {
-            sourceFilePath = ":/other/firewall-management.txt";
-            targetFilePath = mainDir + "other/firewall-management.txt";
-            valuepage = false;
-        }
-    }
-    else if (value == 3)
-    {
-        if (list == 0)
-        {
-            sourceFilePath = ":/other/" + *lang + "/multimedia.txt";
-            targetFilePath = mainDir + "other/" + *lang + "/multimedia.txt";
-            list = 3;
-            valuepage = true;
-        }
-        else if (list == 2)
-        {
-            sourceFilePath = ":/other/servers.txt";
-            targetFilePath = mainDir + "other/servers.txt";
-            valuepage = false;
-        }
-        else if (list == 3)
-        {
-            sourceFilePath = ":/other/audio.txt";
-            targetFilePath = mainDir + "other/audio.txt";
-            valuepage = false;
-        }
-        else if (list == 4)
-        {
-            sourceFilePath = ":/other/development.txt";
-            targetFilePath = mainDir + "other/development.txt";
-            valuepage = false;
-        }
-        else if (list == 5)
-        {
-            sourceFilePath = ":/other/markup-languages.txt";
-            targetFilePath = mainDir + "other/markup-languages.txt";
-            valuepage = false;
-        }
-        else if (list == 6)
-        {
-            sourceFilePath = ":/other/threat-and-vulnerability-detection.txt";
-            targetFilePath = mainDir + "other/threat-and-vulnerability-detection.txt";
-            valuepage = false;
-        }
-    }
-    else if (value == 4)
-    {
-        if (list == 0)
-        {
-            sourceFilePath = ":/other/" + *lang + "/utility.txt";
-            targetFilePath = mainDir + "other/" + *lang + "/utility.txt";
-            list = 4;
-            valuepage = true;
-        }
-        else if (list == 2)
-        {
-            sourceFilePath = ":/other/file-sharing.txt";
-            targetFilePath = mainDir + "other/file-sharing.txt";
-            valuepage = false;
-        }
-        else if (list == 3)
-        {
-            sourceFilePath = ":/other/video.txt";
-            targetFilePath = mainDir + "other/video.txt";
-            valuepage = false;
-        }
-        else if (list == 4)
-        {
-            sourceFilePath = ":/other/text-input.txt";
-            targetFilePath = mainDir + "other/text-input.txt";
-            valuepage = false;
-        }
-        else if (list == 5)
-        {
-            sourceFilePath = ":/other/document-converters.txt";
-            targetFilePath = mainDir + "other/document-converters.txt";
-            valuepage = false;
-        }
-        else if (list == 6)
-        {
-            sourceFilePath = ":/other/file-security.txt";
-            targetFilePath = mainDir + "other/file-security.txt";
-            valuepage = false;
-        }
-    }
-    else if (value == 5)
-    {
-        if (list == 0)
-        {
-            sourceFilePath = ":/other/" + *lang + "/office.txt";
-            targetFilePath = mainDir + "other/" + *lang + "/office.txt";
-            list = 5;
-            valuepage = true;
-        }
-        else if (list == 2)
-        {
-            sourceFilePath = ":/other/communication.txt";
-            targetFilePath = mainDir + "other/communication.txt";
-            valuepage = false;
-        }
-        else if (list == 3)
-        {
-            sourceFilePath = ":/other/coll-managers.txt";
-            targetFilePath = mainDir + "other/coll-managers.txt";
-            valuepage = false;
-        }
-        else if (list == 4)
-        {
-            sourceFilePath = ":/other/disks.txt";
-            targetFilePath = mainDir + "other/disks.txt";
-            valuepage = false;
-        }
-        else if (list == 5)
-        {
-            sourceFilePath = ":/other/bibliographic-reference-manager.txt";
-            targetFilePath = mainDir + "other/bibliographic-reference-manager.txt";
-            valuepage = false;
-        }
-        else if (list == 6)
-        {
-            sourceFilePath = ":/other/anti-malware.txt";
-            targetFilePath = mainDir + "other/anti-malware.txt";
-            valuepage = false;
-        }
-    }
-    else if (value == 6)
-    {
-        if (list == 0)
-        {
-            sourceFilePath = ":/other/" + *lang + "/security.txt";
-            targetFilePath = mainDir + "other/" + *lang + "/security.txt";
-            list = 6;
-            valuepage = true;
-        }
-        else if (list == 2)
-        {
-            sourceFilePath = ":/other/news-and-rss.txt";
-            targetFilePath = mainDir + "other/news-and-rss.txt";
-            valuepage = false;
-        }
-        else if (list == 3)
-        {
-            sourceFilePath = ":/other/media-servers.txt";
-            targetFilePath = mainDir + "other/media-servers.txt";
-            valuepage = false;
-        }
-        else if (list == 4)
-        {
-            sourceFilePath = ":/other/system.txt";
-            targetFilePath = mainDir + "other/system.txt";
-            valuepage = false;
-        }
-        else if (list == 5)
-        {
-            sourceFilePath = ":/other/reader-sand-viewers.txt";
-            targetFilePath = mainDir + "other/reader-sand-viewers.txt";
-            valuepage = false;
-        }
-        else if (list == 6)
-        {
-            sourceFilePath = ":/other/screen-lockers.txt";
-            targetFilePath = mainDir + "other/screen-lockers.txt";
-            valuepage = false;
-        }
-    }
-    else if (value == 7)
-    {
-        if (list == 0)
-        {
-            sourceFilePath = ":/other/game.txt";
-            targetFilePath = mainDir + "other/game.txt";
-            list = 7;
-            valuepage = false;
-        }
-        else if (list == 2)
-        {
-            sourceFilePath = ":/other/remote-desktop.txt";
-            targetFilePath = mainDir + "other/remote-desktop.txt";
-            valuepage = false;
-        }
-        else if (list == 3)
-        {
-            sourceFilePath = ":/other/metadata.txt";
-            targetFilePath = mainDir + "other/metadata.txt";
-            valuepage = false;
-        }
-        else if (list == 5)
-        {
-            sourceFilePath = ":/other/document-managers.txt";
-            targetFilePath = mainDir + "other/document-managers.txt";
-            valuepage = false;
-        }
-        else if (list == 6)
-        {
-            sourceFilePath = ":/other/password-auditing.txt";
-            targetFilePath = mainDir + "other/password-auditing.txt";
-            valuepage = false;
-        }
-    }
-    else if (value == 8)
-    {
-        if (list == 0)
-        {
-            sourceFilePath = ":/other/phone.txt";
-            targetFilePath = mainDir + "other/phone.txt";
-            list = 8;
-            valuepage = true;
-        }
-        else if (list == 3)
-        {
-            sourceFilePath = ":/other/mobile-device-managers.txt";
-            targetFilePath = mainDir + "other/mobile-device-managers.txt";
-            valuepage = false;
-        }
-        else if (list == 5)
-        {
-            sourceFilePath = ":/other/scanning-software.txt";
-            targetFilePath = mainDir + "other/scanning-software.txt";
-            valuepage = false;
-        }
-        else if (list == 6)
-        {
-            sourceFilePath = ":/other/password-managers.txt";
-            targetFilePath = mainDir + "other/password-managers.txt";
-            valuepage = false;
-        }
-    }
-    else if (value == 9)
-    {
-        if (list == 3)
-        {
-            sourceFilePath = ":/other/optical-disc-burning.txt";
-            targetFilePath = mainDir + "other/optical-disc-burning.txt";
-            valuepage = false;
-        }
-        else if (list == 5)
-        {
-            sourceFilePath = ":/other/osr-software.txt";
-            targetFilePath = mainDir + "other/osr-software.txt";
-            valuepage = false;
-        }
-        else if (list == 6)
-        {
-            sourceFilePath = ":/other/cryptography.txt";
-            targetFilePath = mainDir + "other/cryptography.txt";
-            valuepage = false;
-        }
-    }
-    else if (value == 10)
-    {
-        if (list == 3)
-        {
-            sourceFilePath = ":/other/personal-video-recorders.txt";
-            targetFilePath = mainDir + "other/personal-video-recorders.txt";
-            valuepage = false;
-        }
-        else if (list == 5)
-        {
-            sourceFilePath = ":/other/notes.txt";
-            targetFilePath = mainDir + "other/notes.txt";
-            valuepage = false;
-        }
-        else if (list == 6)
-        {
-            sourceFilePath = ":/other/privilege-elevation.txt";
-            targetFilePath = mainDir + "other/privilege-elevation.txt";
-            valuepage = false;
-        }
-    }
-    else if (value == 11)
-    {
-        if (list == 5)
-        {
-            sourceFilePath = ":/other/special-writing-environments.txt";
-            targetFilePath = mainDir + "other/special-writing-environments.txt";
-            valuepage = false;
-        }
-    }
-    else if (value == 12)
-    {
-        if (list == 5)
-        {
-            sourceFilePath = ":/other/language.txt";
-            targetFilePath = mainDir + "other/language.txt";
-            valuepage = false;
-        }
-    }
-    else if (value == 13)
-    {
-        if (list == 5)
-        {
-            sourceFilePath = ":/other/barcode-generators-and-readers.txt";
-            targetFilePath = mainDir + "other/barcode-generators-and-readers.txt";
-            valuepage = false;
+    const FileData data[] = {
+        {0, 0, "other/" + *lang + "/list.txt", true},
+
+        {1, 0, "other/populaty.txt", false},
+
+        {1, 2, "other/network.txt", false},
+        {1, 3, "other/codecs.txt", false},
+        {1, 4, "other/terminals.txt", false},
+        {1, 5, "other/texteditors.txt", false},
+        {1, 6, "other/network-security.txt", false},
+
+        {2, 0, "other/" + *lang + "/net.txt", true},
+        {2, 2, "other/browsers.txt", false},
+        {2, 3, "other/images.txt", false},
+        {2, 4, "other/files.txt", false},
+        {2, 5, "other/office.txt", false},
+        {2, 6, "other/firewall-management.txt", false},
+
+        {3, 0, "other/" + *lang + "/multimedia.txt", true},
+        {3, 2, "other/servers.txt", false},
+        {3, 3, "other/audio.txt", false},
+        {3, 4, "other/development.txt", false},
+        {3, 5, "other/markup-languages.txt", false},
+        {3, 6, "other/threat-and-vulnerability-detection.txt", false},
+
+        {4, 0, "other/" + *lang + "/utility.txt", true},
+        {4, 2, "other/file-sharing.txt", false},
+        {4, 3, "other/video.txt", false},
+        {4, 4, "other/text-input.txt", false},
+        {4, 5, "other/document-converters.txt", false},
+        {4, 6, "other/file-security.txt", false},
+
+        {5, 0, "other/" + *lang + "/office.txt", true},
+        {5, 2, "other/communication.txt", false},
+        {5, 3, "other/coll-managers.txt", false},
+        {5, 4, "other/disks.txt", false},
+        {5, 5, "other/bibliographic-reference-manager.txt", false},
+        {5, 6, "other/anti-malware.txt", false},
+
+        {6, 0, "other/" + *lang + "/security.txt", true},
+        {6, 2, "other/news-and-rss.txt", false},
+        {6, 3, "other/media-servers.txt", false},
+        {6, 4, "other/system.txt", false},
+        {6, 5, "other/reader-sand-viewers.txt", false},
+        {6, 6, "other/screen-lockers.txt", false},
+
+        {7, 0, "other/game.txt", false},
+        {7, 2, "other/remote-desktop.txt", false},
+        {7, 3, "other/metadata.txt", false},
+        {7, 5, "other/document-managers.txt", false,},
+        {7, 6, "other/password-auditing.txt", false},
+
+        {8, 0, "other/phone.txt", true},
+        {8, 3, "other/mobile-device-managers.txt", false},
+        {8, 5, "other/scanning-software.txt", false},
+        {8, 6, "other/password-managers.txt", false},
+
+        {9, 3, "other/optical-disc-burning.txt", false},
+        {9, 5, "other/osr-software.txt", false},
+        {9, 6, "other/cryptography.txt", false},
+
+        {10, 3, "other/personal-video-recorders.txt", false},
+        {10, 5, "other/notes.txt", false},
+        {10, 6, "other/privilege-elevation.txt", false},
+
+        {11, 5, "other/special-writing-environments.txt", false},
+        {12, 5, "other/language.txt", false},
+        {13, 5, "other/barcode-generators-and-readers.txt", false},
+    };
+
+    for (const FileData& item : data) {
+        if (value == item.value && list == item.list) {
+            sourceFilePath = ":/" + item.filePath;
+            targetFilePath = mainDir + item.filePath;
+            valuepage = item.valueup;
+            list = item.value;
+            break;
         }
     }
 
-    QFileInfo fileInfo(targetFilePath);
-    if (!fileInfo.exists())
-    {
-        if (!QDir().mkpath(fileInfo.absoluteDir().path()))
-        {
-            sendNotification(tr("Ошибка"), tr("Не удалось создать каталог: ") + fileInfo.absoluteDir().path());
-            return;
-        }
-        if (!QFile::copy(sourceFilePath, targetFilePath))
-        {
-            sendNotification(tr("Ошибка"), tr("Не удалось скопировать файл из ") + sourceFilePath + tr(" в ") + targetFilePath);
-            return;
-        }
-    }
+    QFile file(sourceFilePath);
 
-    QFile file(targetFilePath);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        sendNotification(tr("Ошибка"), tr("Не удалось открыть файл ресурсов"));
+    if (!prepareFile(sourceFilePath, targetFilePath, file)) {
         return;
     }
 
-    QTextStream in(&file);
     QVector<QString> programs;
+    readProgramsFromFile(file, programs);
+    file.close();
 
-    while (!in.atEnd())
-    {
+    for (const QString& packageName : programs) {
+        processPackageName(packageName, valuepage);
+    }
+
+    miniAnimation(false, ui->list_aur);
+}
+
+bool MainWindow::prepareFile(const QString& source, const QString& target, QFile& file) {
+    QFileInfo fileInfo(target);
+    if (!fileInfo.exists()) {
+        if (!QDir().mkpath(fileInfo.absoluteDir().path())) {
+            sendNotification(tr("Ошибка"), tr("Не удалось создать каталог: ") + fileInfo.absoluteDir().path());
+            return false;
+        }
+
+        if (!QFile::copy(source, target)) {
+            sendNotification(tr("Ошибка"), tr("Не удалось скопировать файл из ") + source + tr(" в ") + target);
+            return false;
+        }
+    }
+
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        sendNotification(tr("Ошибка"), tr("Не удалось открыть файл ресурсов"));
+        return false;
+    }
+    return true;
+}
+
+void MainWindow::readProgramsFromFile(QFile& file, QVector<QString>& programs) {
+    QTextStream in(&file);
+    while (!in.atEnd()) {
         QString line = in.readLine().trimmed();
-
-        if (!line.isEmpty())
-        {
+        if (!line.isEmpty()) {
             int index = line.indexOf('}');
-
-            if (index != -1)
-            {
+            if (index != -1) {
                 QString program = line.mid(2, index - 3);
                 programs.append(program);
             }
         }
     }
-    file.close();
+}
 
-    for (int i = 0; i < programs.size(); i++) {
-        QString packageName = programs[i];
-        QColor color = generateRandomColor(colorlist);
-        QListWidgetItem *item = new QListWidgetItem();
+void MainWindow::processPackageName(const QString& packageName, bool valuepage) {
+    QString iconPath;
+    QString packageNameOrig;
 
-        QString iconPath;
-
-        iconPath = "/usr/share/icons/Papirus/48x48/apps/app-outlet.svg";
-
-        QString prefixToRemove = "";
-
-        if(valuepage)
-        {
-            static const QRegularExpression regex("(\\S+)/\\S+");
-            QRegularExpressionMatch match = regex.match(packageName);
-
-            if (match.hasMatch()) {
-                QString repoName = match.captured(1);
-                iconPath = "/usr/share/icons/Papirus/48x48/apps/" + repoName.toLower() + ".svg";
-
-                QFileInfo fileInfo(iconPath);
-                if (!fileInfo.exists())
-                    iconPath = ":/img/" + repoName + ".png";
-
-                prefixToRemove = repoName + "/";
-            }
-
-            if (!prefixToRemove.isEmpty())
-                packageName.remove(0, prefixToRemove.length());
-        }
-        else
-        {
-            static const QRegularExpression regex("\\S+");
-            QRegularExpressionMatch match = regex.match(packageName);
-
-            QString packageNameIcon;
-            packageNameIcon = packageName;
-
-            for (const QString& ending : endingsToRemove) {
-                if (packageNameIcon.endsWith(ending)) {
-                    packageNameIcon.chop(ending.length());
-                    break;
-                }
-            }
-            iconPath = "/usr/share/icons/Papirus/48x48/apps/" + packageNameIcon.toLower() + ".svg";
+    if (valuepage) {
+        static const QRegularExpression repoRegex(R"(^([^/]+))");
+        QRegularExpressionMatch repoMatch = repoRegex.match(packageName);
+        if (repoMatch.hasMatch()) {
+            QString repoName = repoMatch.captured(1);
+            iconPath = "/usr/share/icons/Papirus/48x48/apps/" + repoName + ".svg";
 
             QFileInfo fileInfo(iconPath);
-            if (!fileInfo.exists()) {
-                iconPath = "/usr/share/icons/Papirus/48x48/apps/app-outlet.svg";
-            }
+            if (!fileInfo.exists())
+                iconPath = ":/img/" + repoName + ".png";
         }
 
-        item->setIcon(QIcon(iconPath));
 
-        item->setText(packageName);
-        item->setForeground(color);
+        static const QRegularExpression packageNameRegex(R"(/(.+)$)");
+        QRegularExpressionMatch packageNameMatch = packageNameRegex.match(packageName);
+        if (packageNameMatch.hasMatch()) {
+            packageNameOrig = packageNameMatch.captured(1);
+        }
 
-        ui->list_aur->addItem(item);
+         appIcons[packageNameOrig] = iconPath;
 
-        if(valuepage)
-            appIcons[packageName] = iconPath;
+    } else {
+        static const QRegularExpression regex("\\S+");
+        QRegularExpressionMatch match = regex.match(packageName);
+
+        QString packageNameIcon;
+        packageNameIcon = packageName;
+
+        for (const QString& ending : endingsToRemove) {
+            if (packageNameIcon.endsWith(ending)) {
+                packageNameIcon.chop(ending.length());
+                break;
+            }
+        }
+        iconPath = "/usr/share/icons/Papirus/48x48/apps/" + packageNameIcon.toLower() + ".svg";
+
+        QFileInfo fileInfo(iconPath);
+
+        if (!fileInfo.exists())
+            iconPath = "/usr/share/icons/Papirus/48x48/apps/app-outlet.svg";
     }
-    miniAnimation(false,ui->list_aur);
+
+    QColor color = generateRandomColor(colorlist);
+    QListWidgetItem *item = new QListWidgetItem(valuepage ? packageNameOrig : packageName);
+
+    item->setIcon(QIcon(iconPath));
+
+    item->setForeground(color);
+    ui->list_aur->addItem(item);
 }
 
 QString packageVersion(const QString& packageName) {
@@ -3449,6 +3155,18 @@ QStringList MainWindow::executeCommand(const QStringList& command)
     process->start(command.at(0), command.mid(1));
     process->waitForFinished(-1);
     return QString::fromUtf8(process->readAllStandardOutput()).split("\n", Qt::SkipEmptyParts);
+}
+
+void MainWindow::handleServerResponseAll(const QString& reply)
+{
+    miniAnimation(true, ui->list_aur);
+    helperPackageNames.clear();
+
+    currentProcess = QSharedPointer<QProcess>::create(this);
+    connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
+
+    currentProcess->setProcessEnvironment(enveng);
+    currentProcess->start("bash", QStringList() << "-c" << reply);
 }
 
 void MainWindow::handleServerResponse(const QString& reply)
