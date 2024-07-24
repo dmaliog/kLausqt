@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "14.0";
+QString currentVersion = "14.2";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
@@ -1814,19 +1814,6 @@ void MainWindow::loadSettings()
     ui->action_grub->setIcon(QIcon("/usr/share/icons/Papirus/48x48/apps/grub-customizer.svg"));
     ui->action_pacman->setIcon(QIcon("/usr/share/icons/Papirus/48x48/apps/kapman.svg"));
     ui->action_fstab->setIcon(QIcon("/usr/share/icons/Papirus/48x48/apps/org.gnome.DiskUtility.svg"));
-    //-##################################################################################
-    //-########################### СЦЕНА ДЛЯ СКРИНШОТОВ #################################
-    //-##################################################################################
-    imageScene = new QGraphicsScene(this);
-    ui->image_aur->setScene(imageScene);
-
-    thumbnailModel = new QStandardItemModel(this);
-    ui->list_screen->setModel(thumbnailModel);
-    ui->list_screen->setViewMode(QListView::IconMode);
-    ui->list_screen->setIconSize(QSize(100, 100));
-    ui->list_screen->setSpacing(5);
-
-    connect(ui->list_screen, &QListView::clicked, this, &MainWindow::onThumbnailClicked);
 }
 
 void MainWindow::setupConnections()
@@ -2040,69 +2027,6 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
     }
     removeToolButtonTooltips(ui->toolBar);
     removeToolButtonTooltips(ui->toolBar_2);
-}
-
-void MainWindow::downloadAndSaveImages(const QString& packageName, const QStringList& urls, const QString& folder)
-{
-    miniAnimation(true, ui->image_aur);
-
-    pixmaps.clear();
-    currentIndex = 0;
-    imageScene->clear();
-    thumbnailModel->clear();
-
-    QString cacheFolder = folder + packageName + "/";
-    QDir().mkpath(cacheFolder);
-
-    for (int i = 0; i < urls.size(); ++i) {
-        const QString& imageUrl = urls.at(i);
-        QString fileName = QString("%1_%2.png").arg(packageName).arg(i);
-        QString cacheFilePath = cacheFolder + fileName;
-
-        QPixmap pixmap;
-        if (!QFile::exists(cacheFilePath)) {
-            QNetworkRequest imageRequest((QUrl(imageUrl)));
-            QNetworkReply* imageReply = networkManager.get(imageRequest);
-            QEventLoop loop;
-            connect(imageReply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-            loop.exec();
-
-            if (imageReply->error() == QNetworkReply::NoError) {
-                pixmap.loadFromData(imageReply->readAll());
-
-                int maxWidth = 680;
-                int maxHeight = 500;
-
-                pixmap = (pixmap.width() > maxWidth) ? pixmap.scaledToWidth(maxWidth, Qt::SmoothTransformation) : pixmap;
-                pixmap = (pixmap.height() > maxHeight) ? pixmap.scaledToHeight(maxHeight, Qt::SmoothTransformation) : pixmap;
-
-                pixmap.save(cacheFilePath);
-            }
-            imageReply->deleteLater();
-
-        } else
-            pixmap.load(cacheFilePath);
-
-        pixmaps.append(pixmap);
-        thumbnailModel->appendRow(new QStandardItem(QIcon(pixmap.scaledToWidth(100)), ""));
-    }
-
-    updateImageView();
-    miniAnimation(false, ui->image_aur);
-}
-
-void MainWindow::updateImageView()
-{
-    if (!pixmaps.isEmpty() && currentIndex >= 0 && currentIndex < pixmaps.size()) {
-        imageScene->clear();
-        imageScene->addPixmap(pixmaps[currentIndex]);
-    }
-}
-
-void MainWindow::onThumbnailClicked(const QModelIndex& index)
-{
-    currentIndex = index.row();
-    updateImageView();
 }
 
 //not

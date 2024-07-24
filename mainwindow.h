@@ -234,7 +234,6 @@ private slots:
     void readProgramsFromFile(QFile& file, QVector<QString>& programs);
     void processPackageName(const QString& packageName, bool valuepage);
 
-    void onThumbnailClicked(const QModelIndex& index);
     void onListItemClicked(const QString &packageName, int row, QListWidgetItem *item);
 
     void setupConnections();
@@ -252,8 +251,6 @@ private slots:
     void createAndAddListItemSearch(const QString& packageName);
     void updateCompleterModel();
     void setCursorAndScrollToItem(const QString& itemName);
-    void downloadAndSaveImages(const QString& packageName, const QStringList& imageUrls, const QString& folder);
-    void updateImageView();
     void checkForDowngrades(const QString& packagesArchiveAUR);
     void onListDowngradeItemDoubleClicked(QListWidgetItem *item);
     void addLinkToList(const QString &link);

@@ -61,6 +61,10 @@
     border: 0;
 }
 
+QMainWindow{
+	background:#202020;
+}
+
 QToolTip {
 	background-color: rgba(0, 0, 0, 0.0);
 	color: rgba(0, 0, 0, 0);
@@ -282,8 +286,7 @@ QMenuBar::item:pressed {
    </property>
    <property name="styleSheet">
     <string notr="true">#centralwidget{
-	background: url(:/img/bg.png) no-repeat bottom right;
-	background-color:#322F85;
+	background:#322F85 url(:/img/bg.png) no-repeat bottom right;
 }</string>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -490,7 +493,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>7</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_webgame">
        <attribute name="title">
@@ -770,47 +773,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <property name="spacing">
              <number>5</number>
             </property>
-            <item row="0" column="0">
-             <widget class="QGraphicsView" name="image_aur">
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="verticalScrollBarPolicy">
-               <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
-              </property>
-              <property name="horizontalScrollBarPolicy">
-               <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
-              </property>
-              <property name="renderHints">
-               <set>QPainter::RenderHint::SmoothPixmapTransform</set>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QListView" name="list_screen">
-              <property name="editTriggers">
-               <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
-              </property>
-              <property name="showDropIndicator" stdset="0">
-               <bool>false</bool>
-              </property>
-              <property name="dragDropMode">
-               <enum>QAbstractItemView::DragDropMode::DragDrop</enum>
-              </property>
-              <property name="selectionMode">
-               <enum>QAbstractItemView::SelectionMode::NoSelection</enum>
-              </property>
-              <property name="textElideMode">
-               <enum>Qt::TextElideMode::ElideNone</enum>
-              </property>
-              <property name="viewMode">
-               <enum>QListView::ViewMode::IconMode</enum>
-              </property>
-              <property name="selectionRectVisible">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
            </layout>
           </widget>
          </widget>
