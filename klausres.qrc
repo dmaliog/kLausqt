@@ -3,50 +3,34 @@
         <file>bench/unixbench.sh</file>
         <file>clear/clear_trash.sh</file>
         <file>img/1.png</file>
-        <file>img/10.png</file>
         <file>img/11.png</file>
-        <file>img/12.png</file>
         <file>img/13.png</file>
         <file>img/14.png</file>
         <file>img/15.png</file>
         <file>img/16.png</file>
-        <file>img/17.png</file>
         <file>img/18.png</file>
         <file>img/19.png</file>
         <file>img/2.png</file>
-        <file>img/20.png</file>
-        <file>img/21.png</file>
-        <file>img/22.png</file>
-        <file>img/23.png</file>
-        <file>img/24.png</file>
         <file>img/25.png</file>
-        <file>img/26.png</file>
         <file>img/27.png</file>
         <file>img/28.png</file>
-        <file>img/29.png</file>
         <file>img/3.png</file>
-        <file>img/30.png</file>
         <file>img/31.png</file>
         <file>img/32.png</file>
         <file>img/33.png</file>
         <file>img/34.png</file>
         <file>img/35.png</file>
-        <file>img/36.png</file>
         <file>img/37.png</file>
         <file>img/38.png</file>
         <file>img/39.png</file>
         <file>img/4.png</file>
-        <file>img/40.png</file>
-        <file>img/41.png</file>
         <file>img/42.png</file>
-        <file>img/43.png</file>
         <file>img/44.png</file>
         <file>img/45.png</file>
         <file>img/46.png</file>
         <file>img/47.png</file>
         <file>img/48.png</file>
         <file>img/5.png</file>
-        <file>img/6.png</file>
         <file>img/7.png</file>
         <file>img/8.png</file>
         <file>img/9.png</file>
@@ -62,12 +46,9 @@
         <file>img/m7.png</file>
         <file>img/m8.png</file>
         <file>img/m9.png</file>
-        <file>img/notifypic.png</file>
         <file>img/p_1.png</file>
         <file>img/page.png</file>
-        <file>img/tea.png</file>
         <file>img/tray.png</file>
-        <file>img/work.png</file>
         <file>journals/fdisk.sh</file>
         <file>journals/foreign-pkg.sh</file>
         <file>journals/hwinfo.sh</file>
@@ -102,8 +83,6 @@
         <file>bench/kdiskmark.sh</file>
         <file>bench/systemd-analyze.sh</file>
         <file>bench/dd.sh</file>
-        <file>img/51.png</file>
-        <file>img/53.png</file>
         <file>bench/7z.sh</file>
         <file>bench/peakperf.sh</file>
         <file>bench/basemark.sh</file>
@@ -119,13 +98,11 @@
         <file>bench/unigine-superposition.sh</file>
         <file>bench/unigine-heaven.sh</file>
         <file>bench/vkmark.sh</file>
-        <file>img/49.png</file>
         <file>bench/bonnie.sh</file>
         <file>bench/s-tui.sh</file>
         <file>bench/phoronix-test-suite.sh</file>
         <file>bench/hardinfo.sh</file>
         <file>bench/iozone.sh</file>
-        <file>img/50.png</file>
         <file>img/aur.png</file>
         <file>img/multilib.png</file>
         <file>img/core.png</file>
@@ -140,9 +117,7 @@
         <file>img/load.gif</file>
         <file>sh/snap.sh</file>
         <file>img/reload.png</file>
-        <file>img/miniload.gif</file>
         <file>img/qr_linux2.png</file>
-        <file>img/54.png</file>
         <file>img/55.png</file>
         <file>img/nvidia.png</file>
         <file>img/amd.png</file>
@@ -213,9 +188,6 @@
         <file>other/cryptography.txt</file>
         <file>other/anti-malware.txt</file>
         <file>other/threat-and-vulnerability-detection.txt</file>
-        <file>img/56.png</file>
-        <file>img/57.png</file>
-        <file>img/driver.png</file>
         <file>sh/amd.sh</file>
         <file>sh/intel.sh</file>
         <file>sh/nvidia.sh</file>
@@ -226,10 +198,10 @@
         <file>lang/kLaus_ru_RU.ts</file>
         <file>lang/kLaus_en_US.ts</file>
         <file>img/snap.png</file>
-        <file>theme/anime.mp4</file>
         <file>sh/pacman-lock.sh</file>
         <file>img/old.png</file>
         <file>img/orphaned.png</file>
         <file>img/installed.png</file>
+        <file>img/splash.jpeg</file>
     </qresource>
 </RCC>

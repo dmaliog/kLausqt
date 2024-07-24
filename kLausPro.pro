@@ -1,6 +1,7 @@
 QT += webenginewidgets
 QT += multimedia
 QT += multimediawidgets
+QT += concurrent
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

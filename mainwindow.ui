@@ -37,10 +37,13 @@
    </font>
   </property>
   <property name="focusPolicy">
-   <enum>Qt::NoFocus</enum>
+   <enum>Qt::FocusPolicy::NoFocus</enum>
   </property>
   <property name="contextMenuPolicy">
-   <enum>Qt::DefaultContextMenu</enum>
+   <enum>Qt::ContextMenuPolicy::DefaultContextMenu</enum>
+  </property>
+  <property name="acceptDrops">
+   <bool>true</bool>
   </property>
   <property name="windowTitle">
    <string>kLaus - Arch Manager</string>
@@ -59,10 +62,11 @@
 }
 
 QToolTip {
-    background-color: #333333;
-    color: #ffffff;
-    border: 1px solid #ffffff;
-    padding: 5px;
+	background-color: rgba(0, 0, 0, 0.0);
+	color: rgba(0, 0, 0, 0);
+	border: 0;
+	font-size: 1;
+	box-shadow: 0 0 0 rgba(0, 0, 0, 0.0);
 }
 
 QProgressBar {
@@ -151,8 +155,8 @@ QCheckBox {
 }
 
 QCheckBox::indicator {
-    width: 24px;
-    height: 24px;
+    width: 44px;
+    height: 44px;
     image: url(:/img/m2.png);
 }
 
@@ -164,9 +168,13 @@ QComboBox,
 QPushButton {
     padding: 0 10px;
     background-color: #252525;
-    border-radius: 10px;
+    border-radius: 8px;
     border: 1px solid #3d3d3d;
     color: #fff;
+}
+
+QPushButton:hover {
+	background-color: #232323;
 }
 
 QComboBox::drop-down {
@@ -256,12 +264,6 @@ QMenuBar::item:pressed {
     background-color: #916ee4;
 }</string>
   </property>
-  <property name="toolButtonStyle">
-   <enum>Qt::ToolButtonIconOnly</enum>
-  </property>
-  <property name="animated">
-   <bool>true</bool>
-  </property>
   <property name="documentMode">
    <bool>false</bool>
   </property>
@@ -269,7 +271,7 @@ QMenuBar::item:pressed {
    <bool>false</bool>
   </property>
   <property name="dockOptions">
-   <set>QMainWindow::AnimatedDocks</set>
+   <set>QMainWindow::DockOption::AnimatedDocks</set>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="sizePolicy">
@@ -277,6 +279,12 @@ QMenuBar::item:pressed {
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#centralwidget{
+	background: url(:/img/bg.png) no-repeat bottom right;
+	background-color:#322F85;
+}</string>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <property name="spacing">
@@ -356,10 +364,10 @@ QMenuBar::item:pressed {
           <string>Добро пожаловать в kLaus - Arch Manager!</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::AutoText</enum>
+          <enum>Qt::TextFormat::AutoText</enum>
          </property>
          <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
          </property>
          <property name="margin">
           <number>0</number>
@@ -375,20 +383,59 @@ QMenuBar::item:pressed {
           </size>
          </property>
          <property name="contextMenuPolicy">
-          <enum>Qt::NoContextMenu</enum>
+          <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LayoutDirection::LeftToRight</enum>
          </property>
          <property name="styleSheet">
-          <string notr="true">padding-left:30px;background-image: url(:/img/m4.png);border:0;background-repeat: no-repeat;background-position: left center;background-color: #242424;</string>
+          <string notr="true">padding-left:30px;background-image: url(:/img/m4.png);border:2px solid #4f1ffd;background-repeat: no-repeat;background-position: left center;background-color: #242424;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_warning">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>34</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>10</pointsize>
+           <italic>true</italic>
+           <bold>true</bold>
+           <underline>false</underline>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border:1px solid #474b62;background-color: #242424;border-radius: 10px;padding:5px;</string>
+         </property>
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;☠ &lt;span style=&quot; font-weight:400;&quot;&gt;Установка может нанести вред вашей системе из-за конфликта зависимостей!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
        <item>
         <spacer name="horizontalSpacer_2">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Minimum</enum>
+          <enum>QSizePolicy::Policy::Minimum</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -443,7 +490,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>6</number>
+       <number>7</number>
       </property>
       <widget class="QWidget" name="tab_webgame">
        <attribute name="title">
@@ -530,10 +577,10 @@ margin-left:10px;</string>
            <string>Описание пакета</string>
           </property>
           <property name="textFormat">
-           <enum>Qt::AutoText</enum>
+           <enum>Qt::TextFormat::AutoText</enum>
           </property>
           <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -577,10 +624,10 @@ margin-left:10px;</string>
            <string>Названия пакетов</string>
           </property>
           <property name="textFormat">
-           <enum>Qt::AutoText</enum>
+           <enum>Qt::TextFormat::AutoText</enum>
           </property>
           <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -634,7 +681,7 @@ margin-left:10px;</string>
 }</string>
               </property>
               <property name="verticalScrollBarPolicy">
-               <enum>Qt::ScrollBarAsNeeded</enum>
+               <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
               </property>
               <property name="readOnly">
                <bool>true</bool>
@@ -646,46 +693,46 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Пакеты в поиске обозначаются специальными иконками, это репозитории в которых хранится пакет.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Они бывают разные, но вот основные из них:&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;Пакеты в поиске обозначаются специальными иконками, это репозитории в которых хранится пакет.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;Они бывают разные, но вот основные из них:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;table border=&quot;0&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;&quot; cellspacing=&quot;2&quot; cellpadding=&quot;0&quot;&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/aur_mini.png&quot; /&gt; &lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/aur_mini.png&quot; /&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;aur&lt;/span&gt;&lt;span style=&quot; font-size:28pt; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;aur&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:28pt; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;содержит наиболее важное и популярное программное обеспечение, которое можно легко получить и установить при помощи &lt;a href=&quot;https://wiki.archlinux.org/title/Pacman_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;pacman&lt;/span&gt;&lt;/a&gt;. Эти репозитории поддерживают &lt;a href=&quot;https://wiki.archlinux.org/title/Arch_terminology#Package_maintainer&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;мейнтейнеры пакетов&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;содержит наиболее важное и популярное программное обеспечение, которое можно легко получить и установить при помощи &lt;/span&gt;&lt;a href=&quot;https://wiki.archlinux.org/title/Pacman_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; text-decoration: underline; color:#926ee4;&quot;&gt;pacman&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;. Эти репозитории поддерживают &lt;/span&gt;&lt;a href=&quot;https://wiki.archlinux.org/title/Arch_terminology#Package_maintainer&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; text-decoration: underline; color:#926ee4;&quot;&gt;мейнтейнеры пакетов&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/core_mini.png&quot; /&gt; &lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/core_mini.png&quot; /&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;core&lt;/span&gt;&lt;span style=&quot; font-size:28pt; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;core&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:28pt; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;имеет достаточно строгие требования к качеству. Разработчики/пользователи должны подтвердить (в ответ на &lt;span style=&quot; font-style:italic;&quot;&gt;signoff&lt;/span&gt;-запрос в почтовой рассылке) работоспособность обновлений, прежде чем они будут приняты.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;имеет достаточно строгие требования к качеству. Разработчики/пользователи должны подтвердить (в ответ на &lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-style:italic;&quot;&gt;signoff&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;-запрос в почтовой рассылке) работоспособность обновлений, прежде чем они будут приняты.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/extra_mini.png&quot; /&gt; &lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/extra_mini.png&quot; /&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;extra&lt;/span&gt;&lt;span style=&quot; font-size:28pt; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;extra&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:28pt; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;содержит все пакеты, которые не подходят для &lt;span style=&quot; font-style:italic;&quot;&gt;core&lt;/span&gt;. Этот репозиторий совместно сопровождается &lt;a href=&quot;https://wiki.archlinux.org/title/Trusted_Users&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;доверенными пользователями&lt;/span&gt;&lt;/a&gt; и разработчиками Arch. Примеры: Xorg, оконные менеджеры, веб-браузеры, медиаплееры, инструменты для работы с языками, такими как Python и Ruby, и многое другое.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;содержит все пакеты, которые не подходят для &lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-style:italic;&quot;&gt;core&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;. Этот репозиторий совместно сопровождается &lt;/span&gt;&lt;a href=&quot;https://wiki.archlinux.org/title/Trusted_Users&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; text-decoration: underline; color:#926ee4;&quot;&gt;доверенными пользователями&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt; и разработчиками Arch. Примеры: Xorg, оконные менеджеры, веб-браузеры, медиаплееры, инструменты для работы с языками, такими как Python и Ruby, и многое другое.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/multilib_mini.png&quot; /&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;multilib&lt;/span&gt;&lt;span style=&quot; font-size:28pt; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;multilib&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:28pt; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;содержит 32-битное программное обеспечение и библиотеки, которые можно использовать для запуска и сборки 32-битных приложений на 64-битных системах (например, &lt;a href=&quot;https://archlinux.org/packages/?name=wine&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;wine&lt;/span&gt;&lt;/a&gt;, &lt;a href=&quot;https://archlinux.org/packages/?name=steam&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#926ee4;&quot;&gt;steam&lt;/span&gt;&lt;/a&gt; и т.д.).&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Пакеты AUR представляют собой пользовательский контент. Любое использование предоставленных файлов осуществляется на ваш страх и риск. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;содержит 32-битное программное обеспечение и библиотеки, которые можно использовать для запуска и сборки 32-битных приложений на 64-битных системах (например, &lt;/span&gt;&lt;a href=&quot;https://archlinux.org/packages/?name=wine&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; text-decoration: underline; color:#926ee4;&quot;&gt;wine&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;, &lt;/span&gt;&lt;a href=&quot;https://archlinux.org/packages/?name=steam&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; text-decoration: underline; color:#926ee4;&quot;&gt;steam&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt; и т.д.).&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;Пакеты AUR представляют собой пользовательский контент. Любое использование предоставленных файлов осуществляется на ваш страх и риск. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="openLinks">
                <bool>false</bool>
@@ -729,35 +776,35 @@ li.checked::marker { content: &quot;\2612&quot;; }
                <string notr="true"/>
               </property>
               <property name="verticalScrollBarPolicy">
-               <enum>Qt::ScrollBarAlwaysOff</enum>
+               <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
               </property>
               <property name="horizontalScrollBarPolicy">
-               <enum>Qt::ScrollBarAlwaysOff</enum>
+               <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
               </property>
               <property name="renderHints">
-               <set>QPainter::SmoothPixmapTransform</set>
+               <set>QPainter::RenderHint::SmoothPixmapTransform</set>
               </property>
              </widget>
             </item>
             <item row="1" column="0">
              <widget class="QListView" name="list_screen">
               <property name="editTriggers">
-               <set>QAbstractItemView::NoEditTriggers</set>
+               <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
               </property>
               <property name="showDropIndicator" stdset="0">
                <bool>false</bool>
               </property>
               <property name="dragDropMode">
-               <enum>QAbstractItemView::NoDragDrop</enum>
+               <enum>QAbstractItemView::DragDropMode::DragDrop</enum>
               </property>
               <property name="selectionMode">
-               <enum>QAbstractItemView::NoSelection</enum>
+               <enum>QAbstractItemView::SelectionMode::NoSelection</enum>
               </property>
               <property name="textElideMode">
-               <enum>Qt::ElideNone</enum>
+               <enum>Qt::TextElideMode::ElideNone</enum>
               </property>
               <property name="viewMode">
-               <enum>QListView::IconMode</enum>
+               <enum>QListView::ViewMode::IconMode</enum>
               </property>
               <property name="selectionRectVisible">
                <bool>false</bool>
@@ -771,7 +818,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <item row="1" column="2">
          <spacer name="horizontalSpacer_3">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -784,10 +831,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <item row="2" column="1">
          <spacer name="verticalSpacer_4">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
+           <enum>QSizePolicy::Policy::Minimum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -813,18 +860,18 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </property>
           <property name="font">
            <font>
-            <pointsize>12</pointsize>
+            <pointsize>13</pointsize>
             <bold>false</bold>
            </font>
           </property>
           <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
+           <enum>Qt::FocusPolicy::NoFocus</enum>
           </property>
           <property name="contextMenuPolicy">
-           <enum>Qt::CustomContextMenu</enum>
+           <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
           </property>
           <property name="horizontalScrollBarPolicy">
-           <enum>Qt::ScrollBarAlwaysOff</enum>
+           <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
           </property>
          </widget>
         </item>
@@ -863,18 +910,18 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </property>
           <property name="font">
            <font>
-            <pointsize>12</pointsize>
+            <pointsize>13</pointsize>
             <bold>false</bold>
            </font>
           </property>
           <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
+           <enum>Qt::FocusPolicy::NoFocus</enum>
           </property>
           <property name="contextMenuPolicy">
-           <enum>Qt::CustomContextMenu</enum>
+           <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
           </property>
           <property name="horizontalScrollBarPolicy">
-           <enum>Qt::ScrollBarAlwaysOff</enum>
+           <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
           </property>
          </widget>
         </item>
@@ -915,10 +962,10 @@ margin-left:10px;</string>
            <string>Названия пакетов</string>
           </property>
           <property name="textFormat">
-           <enum>Qt::AutoText</enum>
+           <enum>Qt::TextFormat::AutoText</enum>
           </property>
           <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -947,7 +994,7 @@ margin-left:10px;</string>
 }</string>
           </property>
           <property name="verticalScrollBarPolicy">
-           <enum>Qt::ScrollBarAsNeeded</enum>
+           <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
           </property>
           <property name="readOnly">
            <bool>true</bool>
@@ -959,8 +1006,8 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Ничего не выбрано&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;Ничего не выбрано&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openLinks">
            <bool>false</bool>
@@ -970,10 +1017,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <item row="4" column="1">
          <spacer name="verticalSpacer_5">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
+           <enum>QSizePolicy::Policy::Minimum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1020,10 +1067,10 @@ margin-left:10px;</string>
            <string>Описание пакета</string>
           </property>
           <property name="textFormat">
-           <enum>Qt::AutoText</enum>
+           <enum>Qt::TextFormat::AutoText</enum>
           </property>
           <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -1033,7 +1080,7 @@ margin-left:10px;</string>
         <item row="1" column="2">
          <spacer name="horizontalSpacer_4">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1119,7 +1166,7 @@ margin-left:10px;</string>
 }</string>
           </property>
           <property name="verticalScrollBarPolicy">
-           <enum>Qt::ScrollBarAsNeeded</enum>
+           <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
           </property>
           <property name="readOnly">
            <bool>true</bool>
@@ -1131,8 +1178,8 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Ничего не выбрано&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;Ничего не выбрано&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openLinks">
            <bool>false</bool>
@@ -1176,10 +1223,10 @@ margin-left:10px;</string>
            <string>Скрипты</string>
           </property>
           <property name="textFormat">
-           <enum>Qt::AutoText</enum>
+           <enum>Qt::TextFormat::AutoText</enum>
           </property>
           <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -1189,7 +1236,7 @@ margin-left:10px;</string>
         <item row="1" column="2">
          <spacer name="horizontalSpacer_7">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1236,10 +1283,10 @@ margin-left:10px;</string>
            <string>Описание скрипта</string>
           </property>
           <property name="textFormat">
-           <enum>Qt::AutoText</enum>
+           <enum>Qt::TextFormat::AutoText</enum>
           </property>
           <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -1249,10 +1296,10 @@ margin-left:10px;</string>
         <item row="2" column="1">
          <spacer name="verticalSpacer_8">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
+           <enum>QSizePolicy::Policy::Minimum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1278,14 +1325,14 @@ margin-left:10px;</string>
           </property>
           <property name="font">
            <font>
-            <pointsize>12</pointsize>
+            <pointsize>13</pointsize>
            </font>
           </property>
           <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
+           <enum>Qt::FocusPolicy::NoFocus</enum>
           </property>
           <property name="horizontalScrollBarPolicy">
-           <enum>Qt::ScrollBarAlwaysOff</enum>
+           <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
           </property>
          </widget>
         </item>
@@ -1342,10 +1389,10 @@ margin-left:10px;</string>
            <string>Описание</string>
           </property>
           <property name="textFormat">
-           <enum>Qt::AutoText</enum>
+           <enum>Qt::TextFormat::AutoText</enum>
           </property>
           <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -1374,7 +1421,7 @@ margin-left:10px;</string>
 }</string>
           </property>
           <property name="verticalScrollBarPolicy">
-           <enum>Qt::ScrollBarAsNeeded</enum>
+           <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
           </property>
           <property name="readOnly">
            <bool>true</bool>
@@ -1386,8 +1433,8 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Ничего не выбрано&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;Ничего не выбрано&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openLinks">
            <bool>false</bool>
@@ -1410,15 +1457,15 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </property>
           <property name="font">
            <font>
-            <pointsize>12</pointsize>
+            <pointsize>13</pointsize>
             <bold>false</bold>
            </font>
           </property>
           <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
+           <enum>Qt::FocusPolicy::NoFocus</enum>
           </property>
           <property name="horizontalScrollBarPolicy">
-           <enum>Qt::ScrollBarAlwaysOff</enum>
+           <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
           </property>
          </widget>
         </item>
@@ -1459,10 +1506,10 @@ margin-left:10px;</string>
            <string>Журналы</string>
           </property>
           <property name="textFormat">
-           <enum>Qt::AutoText</enum>
+           <enum>Qt::TextFormat::AutoText</enum>
           </property>
           <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -1472,7 +1519,7 @@ margin-left:10px;</string>
         <item row="1" column="2" rowspan="2">
          <spacer name="horizontalSpacer_6">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1485,7 +1532,7 @@ margin-left:10px;</string>
         <item row="2" column="1">
          <spacer name="verticalSpacer_7">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1501,132 +1548,6 @@ margin-left:10px;</string>
        <attribute name="title">
         <string>tab_custom</string>
        </attribute>
-       <widget class="QLabel" name="label_driver">
-        <property name="geometry">
-         <rect>
-          <x>300</x>
-          <y>9</y>
-          <width>191</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background:#2e2b79;
-padding:0 15px;
-border-top-left-radius: 15px;
-border-top-right-radius: 15px;
-color:#5752e7;</string>
-        </property>
-        <property name="text">
-         <string>Подготовка</string>
-        </property>
-        <property name="textFormat">
-         <enum>Qt::AutoText</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-        <property name="margin">
-         <number>0</number>
-        </property>
-       </widget>
-       <widget class="QTextBrowser" name="details_driver">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="geometry">
-         <rect>
-          <x>290</x>
-          <y>50</y>
-          <width>721</width>
-          <height>621</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>11</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QTextEdit {
-	background:#272727;
-}</string>
-        </property>
-        <property name="verticalScrollBarPolicy">
-         <enum>Qt::ScrollBarAsNeeded</enum>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-        <property name="html">
-         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Информация неизвестна&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="openLinks">
-         <bool>false</bool>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="push_install">
-        <property name="geometry">
-         <rect>
-          <x>300</x>
-          <y>620</y>
-          <width>111</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Установить</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_driver_left">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>60</y>
-          <width>271</width>
-          <height>621</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/img/driver.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_logo">
-        <property name="geometry">
-         <rect>
-          <x>50</x>
-          <y>180</y>
-          <width>151</width>
-          <height>141</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/img/nvidia.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-       </widget>
-       <zorder>label_driver_left</zorder>
-       <zorder>label_driver</zorder>
-       <zorder>details_driver</zorder>
-       <zorder>push_install</zorder>
-       <zorder>label_logo</zorder>
       </widget>
       <widget class="QWidget" name="tab_settings">
        <property name="styleSheet">
@@ -1648,7 +1569,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <item row="5" column="0" colspan="2">
          <spacer name="verticalSpacer_16">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1700,7 +1621,7 @@ margin-right:35px;</string>
         <item row="2" column="4">
          <spacer name="horizontalSpacer_12">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1828,203 +1749,111 @@ background:none;</string>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_3">
-            <item row="6" column="1">
-             <widget class="QComboBox" name="combo_helper">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
+            <item row="3" column="1">
+             <widget class="QTimeEdit" name="time_timeout">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="maximumSize">
-               <size>
-                <width>200</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <item>
-               <property name="text">
-                <string>Yay</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Paru</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="2" column="0" colspan="2">
-             <widget class="QScrollArea" name="scroll_auth">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>205</height>
+                <height>40</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
                 <width>16777215</width>
-                <height>200</height>
+                <height>16777215</height>
                </size>
               </property>
-              <property name="styleSheet">
-               <string notr="true">background:#252525;
-padding-top:0;</string>
+              <property name="contextMenuPolicy">
+               <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
               </property>
-              <property name="verticalScrollBarPolicy">
-               <enum>Qt::ScrollBarAlwaysOff</enum>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
               </property>
-              <property name="horizontalScrollBarPolicy">
-               <enum>Qt::ScrollBarAlwaysOff</enum>
+              <property name="currentSection">
+               <enum>QDateTimeEdit::Section::HourSection</enum>
               </property>
-              <property name="widgetResizable">
-               <bool>true</bool>
+              <property name="displayFormat">
+               <string>HH:mm:ss</string>
               </property>
-              <widget class="QWidget" name="scrollArea_auth">
-               <property name="geometry">
-                <rect>
-                 <x>0</x>
-                 <y>0</y>
-                 <width>488</width>
-                 <height>203</height>
-                </rect>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_2">
-                <item row="6" column="1">
-                 <widget class="QPushButton" name="push_save">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>31</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>130</width>
-                    <height>31</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string> Сохранить</string>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="klausres.qrc">
-                    <normaloff>:/img/16.png</normaloff>:/img/16.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>18</width>
-                    <height>18</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="label_auth">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">background:#2e2b79;
-padding:0 15px;
-border-radius: 15px;
-color:#5752e7;</string>
-                  </property>
-                  <property name="text">
-                   <string>Авторизация (aur.archlinux.org)</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0" colspan="3">
-                 <widget class="QLineEdit" name="line_user">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="placeholderText">
-                   <string>Имя пользователя</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="0">
-                 <spacer name="horizontalSpacer">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="4" column="0" colspan="3">
-                 <widget class="QLineEdit" name="line_pass">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="placeholderText">
-                   <string>Пароль</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0" colspan="2">
-                 <spacer name="verticalSpacer">
-                  <property name="orientation">
-                   <enum>Qt::Vertical</enum>
-                  </property>
-                  <property name="sizeType">
-                   <enum>QSizePolicy::Minimum</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>20</width>
-                    <height>10</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </widget>
+              <property name="calendarPopup">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="0" colspan="2">
+             <widget class="QCheckBox" name="check_updateinstall">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Проверить актуальность системы перед установкой новых пакетов</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0">
+             <widget class="QLabel" name="label_cache">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Удаление кэша</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QTimeEdit" name="time_update">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
              </widget>
             </item>
             <item row="9" column="0" colspan="2">
@@ -2044,7 +1873,7 @@ color:#5752e7;</string>
                <bool>false</bool>
               </property>
               <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
+               <enum>Qt::LayoutDirection::LeftToRight</enum>
               </property>
               <property name="styleSheet">
                <string notr="true"/>
@@ -2063,7 +1892,7 @@ color:#5752e7;</string>
               </property>
              </widget>
             </item>
-            <item row="5" column="0">
+            <item row="4" column="0">
              <widget class="QLabel" name="label_update">
               <property name="minimumSize">
                <size>
@@ -2087,53 +1916,7 @@ color:#5752e7;</string>
               </property>
              </widget>
             </item>
-            <item row="5" column="1">
-             <widget class="QTimeEdit" name="time_update">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="contextMenuPolicy">
-               <enum>Qt::NoContextMenu</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="10" column="0" colspan="2">
-             <widget class="QCheckBox" name="check_updateinstall">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Проверить актуальность системы перед установкой новых пакетов</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
+            <item row="3" column="0">
              <widget class="QLabel" name="label_timeout">
               <property name="minimumSize">
                <size>
@@ -2157,37 +1940,7 @@ color:#5752e7;</string>
               </property>
              </widget>
             </item>
-            <item row="6" column="0">
-             <widget class="QLabel" name="label_pacman">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>30</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>12</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Пакетный менеджер</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="1">
+            <item row="6" column="1">
              <widget class="QComboBox" name="combo_cache">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -2207,6 +1960,11 @@ color:#5752e7;</string>
                 <height>16777215</height>
                </size>
               </property>
+              <property name="font">
+               <font>
+                <pointsize>9</pointsize>
+               </font>
+              </property>
               <property name="styleSheet">
                <string notr="true"/>
               </property>
@@ -2218,7 +1976,7 @@ color:#5752e7;</string>
               </property>
               <item>
                <property name="text">
-                <string>Неустановленных пакетов</string>
+                <string>Неустановленных</string>
                </property>
               </item>
               <item>
@@ -2228,12 +1986,42 @@ color:#5752e7;</string>
               </item>
               <item>
                <property name="text">
-                <string>Всех кроме 3 последних версий каждого пакета</string>
+                <string>Кроме 3-х последних</string>
                </property>
               </item>
              </widget>
             </item>
-            <item row="3" column="0" colspan="2">
+            <item row="5" column="0">
+             <widget class="QLabel" name="label_pacman">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Пакетный менеджер</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0" colspan="2">
              <widget class="QCheckBox" name="check_trans">
               <property name="minimumSize">
                <size>
@@ -2250,7 +2038,7 @@ color:#5752e7;</string>
                <bool>false</bool>
               </property>
               <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
+               <enum>Qt::LayoutDirection::LeftToRight</enum>
               </property>
               <property name="styleSheet">
                <string notr="true"/>
@@ -2269,65 +2057,41 @@ color:#5752e7;</string>
               </property>
              </widget>
             </item>
-            <item row="7" column="0">
-             <widget class="QLabel" name="label_cache">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>30</height>
-               </size>
+            <item row="5" column="1">
+             <widget class="QComboBox" name="combo_helper">
+              <property name="enabled">
+               <bool>true</bool>
               </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>12</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Удаление кэша</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1">
-             <widget class="QTimeEdit" name="time_timeout">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
               <property name="maximumSize">
                <size>
-                <width>16777215</width>
+                <width>200</width>
                 <height>16777215</height>
                </size>
               </property>
-              <property name="contextMenuPolicy">
-               <enum>Qt::NoContextMenu</enum>
+              <property name="font">
+               <font>
+                <pointsize>9</pointsize>
+               </font>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
+              <property name="styleSheet">
+               <string notr="true"/>
               </property>
-              <property name="currentSection">
-               <enum>QDateTimeEdit::HourSection</enum>
-              </property>
-              <property name="displayFormat">
-               <string>HH:mm:ss</string>
-              </property>
-              <property name="calendarPopup">
-               <bool>false</bool>
-              </property>
+              <item>
+               <property name="text">
+                <string>Yay</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Paru</string>
+               </property>
+              </item>
              </widget>
             </item>
             <item row="8" column="0" colspan="2">
@@ -2347,7 +2111,7 @@ color:#5752e7;</string>
                <bool>false</bool>
               </property>
               <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
+               <enum>Qt::LayoutDirection::LeftToRight</enum>
               </property>
               <property name="styleSheet">
                <string notr="true"/>
@@ -2365,6 +2129,19 @@ color:#5752e7;</string>
                <bool>false</bool>
               </property>
              </widget>
+            </item>
+            <item row="7" column="0">
+             <spacer name="verticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Orientation::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
             </item>
            </layout>
           </widget>
@@ -2406,7 +2183,109 @@ color:#5752e7;</string>
             </size>
            </property>
            <layout class="QGridLayout" name="gridLayout">
-            <item row="21" column="0" colspan="2">
+            <item row="12" column="0">
+             <widget class="QScrollArea" name="scroll_volume">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>170</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background:#252525;
+padding-top:0;</string>
+              </property>
+              <property name="widgetResizable">
+               <bool>true</bool>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+              </property>
+              <widget class="QWidget" name="scrollArea_volume">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>2</y>
+                 <width>272</width>
+                 <height>266</height>
+                </rect>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_5">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_volnotify">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>250</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background:#2e2b79;
+padding:0 15px;
+border-radius: 8px;
+color:#5752e7;
+</string>
+                  </property>
+                  <property name="text">
+                   <string>Звук уведомлений: 0/100</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignmentFlag::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QDial" name="dial_volnotify"/>
+                </item>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+            <item row="18" column="0" colspan="2">
+             <widget class="QCheckBox" name="check_trayon">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Закрыть приложение без сворачивания в трей</string>
+              </property>
+             </widget>
+            </item>
+            <item row="19" column="0" colspan="2">
              <widget class="QCheckBox" name="check_autostart">
               <property name="minimumSize">
                <size>
@@ -2427,8 +2306,14 @@ color:#5752e7;</string>
               </property>
              </widget>
             </item>
-            <item row="5" column="1">
-             <widget class="QComboBox" name="combo_animload">
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_mainpage">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -2437,23 +2322,21 @@ color:#5752e7;</string>
               </property>
               <property name="maximumSize">
                <size>
-                <width>200</width>
-                <height>16777215</height>
+                <width>16777215</width>
+                <height>30</height>
                </size>
               </property>
-              <item>
-               <property name="text">
-                <string>Химический процесс</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Косатки</string>
-               </property>
-              </item>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Стартовая страница</string>
+              </property>
              </widget>
             </item>
-            <item row="5" column="0">
+            <item row="4" column="0">
              <widget class="QCheckBox" name="check_animload">
               <property name="minimumSize">
                <size>
@@ -2470,7 +2353,7 @@ color:#5752e7;</string>
                <bool>false</bool>
               </property>
               <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
+               <enum>Qt::LayoutDirection::LeftToRight</enum>
               </property>
               <property name="styleSheet">
                <string notr="true"/>
@@ -2489,6 +2372,137 @@ color:#5752e7;</string>
               </property>
              </widget>
             </item>
+            <item row="5" column="0" colspan="2">
+             <widget class="QCheckBox" name="check_colorlist">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Раскрашивать список для лучшей читаемости</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_lang">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Язык</string>
+              </property>
+             </widget>
+            </item>
+            <item row="17" column="0" colspan="2">
+             <widget class="QCheckBox" name="check_saveurl">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Сохранить веб-страницы при выходе из приложения</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QComboBox" name="combo_lang">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>9</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <item>
+               <property name="text">
+                <string>Русский</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>English</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QComboBox" name="combo_animload">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>9</pointsize>
+               </font>
+              </property>
+              <item>
+               <property name="text">
+                <string>Химический процесс</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Косатки</string>
+               </property>
+              </item>
+             </widget>
+            </item>
             <item row="2" column="1">
              <widget class="QComboBox" name="combo_mainpage">
               <property name="sizePolicy">
@@ -2502,6 +2516,11 @@ color:#5752e7;</string>
                 <width>200</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>9</pointsize>
+               </font>
               </property>
               <property name="styleSheet">
                <string notr="true"/>
@@ -2536,304 +2555,6 @@ color:#5752e7;</string>
                 <string>Настройки</string>
                </property>
               </item>
-             </widget>
-            </item>
-            <item row="19" column="0" colspan="2">
-             <widget class="QCheckBox" name="check_cacheremove">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="text">
-               <string>Очистить кэш скриншотов при выходе из приложения</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1">
-             <widget class="QComboBox" name="combo_theme">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>200</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <item>
-               <property name="text">
-                <string>Стандартная</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Anime</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="6" column="0" colspan="2">
-             <widget class="QCheckBox" name="check_colorlist">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="text">
-               <string>Раскрашивать список для лучшей читаемости</string>
-              </property>
-             </widget>
-            </item>
-            <item row="18" column="0" colspan="2">
-             <widget class="QCheckBox" name="check_saveurl">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="text">
-               <string>Сохранить веб-страницы при выходе из приложения</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_lang">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>12</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Язык</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_mainpage">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>30</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>12</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Стартовая страница</string>
-              </property>
-             </widget>
-            </item>
-            <item row="13" column="0">
-             <widget class="QScrollArea" name="scroll_volume">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>170</height>
-               </size>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">background:#252525;
-padding-top:0;</string>
-              </property>
-              <property name="widgetResizable">
-               <bool>true</bool>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-              </property>
-              <widget class="QWidget" name="scrollArea_volume">
-               <property name="geometry">
-                <rect>
-                 <x>0</x>
-                 <y>2</y>
-                 <width>272</width>
-                 <height>194</height>
-                </rect>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_5">
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_volnotify">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>230</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">background:#2e2b79;
-padding:0 15px;
-border-radius: 15px;
-color:#5752e7;
-</string>
-                  </property>
-                  <property name="text">
-                   <string>Звук уведомлений: 0/100</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QDial" name="dial_volnotify"/>
-                </item>
-               </layout>
-              </widget>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QComboBox" name="combo_lang">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>200</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <item>
-               <property name="text">
-                <string>Русский</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>English</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="label_theme">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>12</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Тема</string>
-              </property>
-             </widget>
-            </item>
-            <item row="20" column="0" colspan="2">
-             <widget class="QCheckBox" name="check_trayon">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="text">
-               <string>Закрыть приложение без сворачивания в трей</string>
-              </property>
              </widget>
             </item>
            </layout>
@@ -2893,10 +2614,10 @@ margin-left:10px;</string>
            <string>Описание</string>
           </property>
           <property name="textFormat">
-           <enum>Qt::AutoText</enum>
+           <enum>Qt::TextFormat::AutoText</enum>
           </property>
           <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -2974,10 +2695,10 @@ color:#5752e7;</string>
               <string>Быстрая настройка</string>
              </property>
              <property name="textFormat">
-              <enum>Qt::AutoText</enum>
+              <enum>Qt::TextFormat::AutoText</enum>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
              </property>
              <property name="margin">
               <number>0</number>
@@ -3035,7 +2756,7 @@ color:#5752e7;</string>
 }</string>
           </property>
           <property name="verticalScrollBarPolicy">
-           <enum>Qt::ScrollBarAsNeeded</enum>
+           <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
           </property>
           <property name="readOnly">
            <bool>true</bool>
@@ -3047,10 +2768,10 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;/etc/default/grub&lt;/span&gt; — Конфигурационный файл для загрузчика GRUB.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Он содержит различные параметры и настройки, которые влияют на поведение загрузчика GRUB при загрузке операционной системы. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-weight:700;&quot;&gt;/etc/default/grub&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt; — Конфигурационный файл для загрузчика GRUB.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;Он содержит различные параметры и настройки, которые влияют на поведение загрузчика GRUB при загрузке операционной системы. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openLinks">
            <bool>false</bool>
@@ -3083,7 +2804,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <x>0</x>
              <y>0</y>
              <width>658</width>
-             <height>713</height>
+             <height>712</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_24">
@@ -3165,10 +2886,10 @@ color:#5752e7;</string>
               <string>Настройка GRUB</string>
              </property>
              <property name="textFormat">
-              <enum>Qt::AutoText</enum>
+              <enum>Qt::TextFormat::AutoText</enum>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
              </property>
              <property name="margin">
               <number>0</number>
@@ -3207,7 +2928,7 @@ color:#5752e7;</string>
         <item row="0" column="3" rowspan="7">
          <spacer name="horizontalSpacer_11">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -3220,7 +2941,7 @@ color:#5752e7;</string>
         <item row="4" column="2">
          <spacer name="verticalSpacer_15">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -3287,7 +3008,7 @@ color:#5752e7;</string>
                </size>
               </property>
               <property name="contextMenuPolicy">
-               <enum>Qt::NoContextMenu</enum>
+               <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
               </property>
               <property name="styleSheet">
                <string notr="true">padding: 0 10px 0 30px;
@@ -3296,10 +3017,10 @@ background-repeat: no-repeat;
 background-position: left center;</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignCenter</set>
+               <set>Qt::AlignmentFlag::AlignCenter</set>
               </property>
               <property name="correctionMode">
-               <enum>QAbstractSpinBox::CorrectToPreviousValue</enum>
+               <enum>QAbstractSpinBox::CorrectionMode::CorrectToPreviousValue</enum>
               </property>
              </widget>
             </item>
@@ -3320,10 +3041,10 @@ background-position: left center;</string>
                <string>Модули ядра при старте системы</string>
               </property>
               <property name="textFormat">
-               <enum>Qt::AutoText</enum>
+               <enum>Qt::TextFormat::AutoText</enum>
               </property>
               <property name="alignment">
-               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
               <property name="margin">
                <number>4</number>
@@ -3339,7 +3060,7 @@ background-position: left center;</string>
                </size>
               </property>
               <property name="contextMenuPolicy">
-               <enum>Qt::NoContextMenu</enum>
+               <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
               </property>
               <property name="styleSheet">
                <string notr="true">border-radius:13px;
@@ -3376,10 +3097,10 @@ background-position: left center;</string>
                <string>Ожидание загрузочного меню (секунды)</string>
               </property>
               <property name="textFormat">
-               <enum>Qt::AutoText</enum>
+               <enum>Qt::TextFormat::AutoText</enum>
               </property>
               <property name="alignment">
-               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
               <property name="margin">
                <number>10</number>
@@ -3409,344 +3130,6 @@ background-position: left center;</string>
         <property name="verticalSpacing">
          <number>0</number>
         </property>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_tea">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>230</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background:#2e2b79;
-padding:0 15px;
-border-top-left-radius: 15px;
-border-top-right-radius: 15px;
-color:#5752e7;
-margin-left:10px;</string>
-          </property>
-          <property name="text">
-           <string>Заваривание чая</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::AutoText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-          </property>
-          <property name="margin">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="0">
-         <spacer name="verticalSpacer_9">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="4" column="0">
-         <widget class="QScrollArea" name="scroll_work">
-          <property name="maximumSize">
-           <size>
-            <width>451</width>
-            <height>171</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background:#272727;</string>
-          </property>
-          <property name="widgetResizable">
-           <bool>true</bool>
-          </property>
-          <widget class="QWidget" name="scrollArea_work">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>439</width>
-             <height>159</height>
-            </rect>
-           </property>
-           <widget class="QLineEdit" name="line_work">
-            <property name="geometry">
-             <rect>
-              <x>100</x>
-              <y>10</y>
-              <width>331</width>
-              <height>91</height>
-             </rect>
-            </property>
-            <property name="contextMenuPolicy">
-             <enum>Qt::NoContextMenu</enum>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">background: #313131 url(:/img/notifypic.png);
-padding-right:55px;</string>
-            </property>
-            <property name="maxLength">
-             <number>100</number>
-            </property>
-            <property name="placeholderText">
-             <string>Например: Пора сделать зарядку!</string>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_worktext">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>20</y>
-              <width>71</width>
-              <height>21</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Текст</string>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_worktime">
-            <property name="geometry">
-             <rect>
-              <x>170</x>
-              <y>120</y>
-              <width>171</width>
-              <height>21</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Время напоминания</string>
-            </property>
-           </widget>
-           <widget class="QTimeEdit" name="time_work">
-            <property name="geometry">
-             <rect>
-              <x>356</x>
-              <y>110</y>
-              <width>75</width>
-              <height>41</height>
-             </rect>
-            </property>
-            <property name="contextMenuPolicy">
-             <enum>Qt::NoContextMenu</enum>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </widget>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_work">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>230</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background:#2e2b79;
-padding:0 15px;
-border-top-left-radius: 15px;
-border-top-right-radius: 15px;
-color:#5752e7;
-margin-left:10px;</string>
-          </property>
-          <property name="text">
-           <string>Сделай зарядку</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::AutoText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-          </property>
-          <property name="margin">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <spacer name="horizontalSpacer_8">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="1" column="0">
-         <widget class="QScrollArea" name="scroll_tea">
-          <property name="maximumSize">
-           <size>
-            <width>451</width>
-            <height>171</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background:#272727;</string>
-          </property>
-          <property name="widgetResizable">
-           <bool>true</bool>
-          </property>
-          <widget class="QWidget" name="scrollArea_tea">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>439</width>
-             <height>159</height>
-            </rect>
-           </property>
-           <widget class="QLineEdit" name="line_tea">
-            <property name="geometry">
-             <rect>
-              <x>100</x>
-              <y>10</y>
-              <width>331</width>
-              <height>91</height>
-             </rect>
-            </property>
-            <property name="contextMenuPolicy">
-             <enum>Qt::NoContextMenu</enum>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">background: #313131 url(:/img/notifypic.png);
-padding-right:55px;</string>
-            </property>
-            <property name="maxLength">
-             <number>100</number>
-            </property>
-            <property name="placeholderText">
-             <string>Например: Пора пить чай!</string>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_teatext">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>20</y>
-              <width>71</width>
-              <height>21</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Текст</string>
-            </property>
-           </widget>
-           <widget class="QTimeEdit" name="time_tea">
-            <property name="geometry">
-             <rect>
-              <x>356</x>
-              <y>110</y>
-              <width>75</width>
-              <height>41</height>
-             </rect>
-            </property>
-            <property name="contextMenuPolicy">
-             <enum>Qt::NoContextMenu</enum>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_teatime">
-            <property name="geometry">
-             <rect>
-              <x>170</x>
-              <y>120</y>
-              <width>171</width>
-              <height>21</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Время напоминания</string>
-            </property>
-           </widget>
-          </widget>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <spacer name="verticalSpacer_10">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Maximum</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="tab_bench">
@@ -3785,7 +3168,7 @@ padding-right:55px;</string>
 }</string>
           </property>
           <property name="verticalScrollBarPolicy">
-           <enum>Qt::ScrollBarAsNeeded</enum>
+           <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
           </property>
           <property name="readOnly">
            <bool>true</bool>
@@ -3797,8 +3180,8 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Ничего не выбрано&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;Ничего не выбрано&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openLinks">
            <bool>false</bool>
@@ -3808,7 +3191,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <item row="2" column="2">
          <spacer name="horizontalSpacer_9">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -3889,10 +3272,10 @@ padding:0 25px;</string>
               <string>Бенчмарки</string>
              </property>
              <property name="textFormat">
-              <enum>Qt::AutoText</enum>
+              <enum>Qt::TextFormat::AutoText</enum>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
              </property>
              <property name="margin">
               <number>0</number>
@@ -3911,7 +3294,7 @@ padding:0 25px;</string>
               </size>
              </property>
              <property name="contextMenuPolicy">
-              <enum>Qt::PreventContextMenu</enum>
+              <enum>Qt::ContextMenuPolicy::PreventContextMenu</enum>
              </property>
              <property name="styleSheet">
               <string notr="true"/>
@@ -3990,10 +3373,10 @@ margin-left:10px;</string>
            <string>Описание</string>
           </property>
           <property name="textFormat">
-           <enum>Qt::AutoText</enum>
+           <enum>Qt::TextFormat::AutoText</enum>
           </property>
           <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -4019,22 +3402,22 @@ margin-left:10px;</string>
           </property>
           <property name="font">
            <font>
-            <pointsize>12</pointsize>
+            <pointsize>13</pointsize>
             <bold>false</bold>
            </font>
           </property>
           <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
+           <enum>Qt::FocusPolicy::NoFocus</enum>
           </property>
           <property name="horizontalScrollBarPolicy">
-           <enum>Qt::ScrollBarAlwaysOff</enum>
+           <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
           </property>
          </widget>
         </item>
         <item row="3" column="1">
          <spacer name="verticalSpacer_11">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -4063,10 +3446,10 @@ margin-left:10px;</string>
         <item row="3" column="1">
          <spacer name="verticalSpacer_12">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
+           <enum>QSizePolicy::Policy::Minimum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -4079,7 +3462,7 @@ margin-left:10px;</string>
         <item row="2" column="2">
          <spacer name="horizontalSpacer_10">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -4105,11 +3488,11 @@ margin-left:10px;</string>
           </property>
           <property name="font">
            <font>
-            <pointsize>12</pointsize>
+            <pointsize>13</pointsize>
            </font>
           </property>
           <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
+           <enum>Qt::FocusPolicy::NoFocus</enum>
           </property>
           <property name="styleSheet">
            <string notr="true"/>
@@ -4153,10 +3536,10 @@ margin-left:10px;</string>
            <string>Очистка системы</string>
           </property>
           <property name="textFormat">
-           <enum>Qt::AutoText</enum>
+           <enum>Qt::TextFormat::AutoText</enum>
           </property>
           <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -4177,7 +3560,7 @@ margin-left:10px;</string>
            </font>
           </property>
           <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
+           <enum>Qt::FocusPolicy::NoFocus</enum>
           </property>
           <property name="styleSheet">
            <string notr="true"/>
@@ -4255,10 +3638,10 @@ color:#5752e7;</string>
               <string>Очистка конфигураций</string>
              </property>
              <property name="textFormat">
-              <enum>Qt::AutoText</enum>
+              <enum>Qt::TextFormat::AutoText</enum>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
              </property>
              <property name="margin">
               <number>0</number>
@@ -4341,7 +3724,7 @@ color:#5752e7;</string>
 }</string>
           </property>
           <property name="verticalScrollBarPolicy">
-           <enum>Qt::ScrollBarAsNeeded</enum>
+           <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
           </property>
           <property name="readOnly">
            <bool>true</bool>
@@ -4353,8 +3736,8 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Текущая версия неизвестна&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;Текущая версия неизвестна&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openLinks">
            <bool>false</bool>
@@ -4398,10 +3781,10 @@ margin-left:10px;</string>
            <string>Текущая версия</string>
           </property>
           <property name="textFormat">
-           <enum>Qt::AutoText</enum>
+           <enum>Qt::TextFormat::AutoText</enum>
           </property>
           <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -4424,15 +3807,15 @@ margin-left:10px;</string>
           </property>
           <property name="font">
            <font>
-            <pointsize>12</pointsize>
+            <pointsize>13</pointsize>
             <bold>false</bold>
            </font>
           </property>
           <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
+           <enum>Qt::FocusPolicy::NoFocus</enum>
           </property>
           <property name="horizontalScrollBarPolicy">
-           <enum>Qt::ScrollBarAlwaysOff</enum>
+           <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
           </property>
          </widget>
         </item>
@@ -4473,10 +3856,10 @@ margin-left:10px;</string>
            <string>Выбор версии</string>
           </property>
           <property name="textFormat">
-           <enum>Qt::AutoText</enum>
+           <enum>Qt::TextFormat::AutoText</enum>
           </property>
           <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -4486,10 +3869,10 @@ margin-left:10px;</string>
         <item row="4" column="1">
          <spacer name="verticalSpacer_6">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
+           <enum>QSizePolicy::Policy::Minimum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -4502,7 +3885,7 @@ margin-left:10px;</string>
         <item row="2" column="2">
          <spacer name="horizontalSpacer_5">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -4511,105 +3894,6 @@ margin-left:10px;</string>
            </size>
           </property>
          </spacer>
-        </item>
-        <item row="0" column="0" colspan="2">
-         <widget class="QWidget" name="widget_warning" native="true">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>50</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>700</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background:#272727;
-border-radius: 15px;
-margin-bottom:10px;</string>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_7">
-           <property name="spacing">
-            <number>0</number>
-           </property>
-           <property name="leftMargin">
-            <number>5</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QPushButton" name="push_warning">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>30</width>
-               <height>30</height>
-              </size>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">border:0;
-padding:0;
-margin:0;</string>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="klausres.qrc">
-               <normaloff>:/img/8.png</normaloff>:/img/8.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>20</width>
-               <height>20</height>
-              </size>
-             </property>
-             <property name="autoDefault">
-              <bool>false</bool>
-             </property>
-             <property name="default">
-              <bool>false</bool>
-             </property>
-             <property name="flat">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_warning">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-               <italic>true</italic>
-               <bold>true</bold>
-               <underline>false</underline>
-              </font>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">padding-top:10px;</string>
-             </property>
-             <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Установка из архива может нанести вред вашей системе из-за конфликта зависимостей!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
         </item>
        </layout>
       </widget>
@@ -4755,7 +4039,7 @@ margin:0;</string>
              <x>0</x>
              <y>0</y>
              <width>658</width>
-             <height>713</height>
+             <height>712</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_18">
@@ -4837,10 +4121,10 @@ color:#5752e7;</string>
               <string>Настройка Pacman</string>
              </property>
              <property name="textFormat">
-              <enum>Qt::AutoText</enum>
+              <enum>Qt::TextFormat::AutoText</enum>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
              </property>
              <property name="margin">
               <number>0</number>
@@ -4913,10 +4197,10 @@ margin-left:10px;</string>
            <string>Описание</string>
           </property>
           <property name="textFormat">
-           <enum>Qt::AutoText</enum>
+           <enum>Qt::TextFormat::AutoText</enum>
           </property>
           <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -4926,7 +4210,7 @@ margin-left:10px;</string>
         <item row="1" column="2">
          <spacer name="horizontalSpacer_13">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -4939,7 +4223,7 @@ margin-left:10px;</string>
         <item row="2" column="1">
          <spacer name="verticalSpacer_2">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -4971,7 +4255,7 @@ margin-left:10px;</string>
 }</string>
           </property>
           <property name="verticalScrollBarPolicy">
-           <enum>Qt::ScrollBarAsNeeded</enum>
+           <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
           </property>
           <property name="readOnly">
            <bool>true</bool>
@@ -4983,10 +4267,10 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;/etc/pacman.conf&lt;/span&gt; — Основной файл конфигурации для менеджера пакетов Pacman.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;В этом файле определяются настройки pacman, такие, как репозитории пакетов, зеркала, параметры поиска, обновления и многое другое.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-weight:700;&quot;&gt;/etc/pacman.conf&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt; — Основной файл конфигурации для менеджера пакетов Pacman.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;В этом файле определяются настройки pacman, такие, как репозитории пакетов, зеркала, параметры поиска, обновления и многое другое.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openLinks">
            <bool>false</bool>
@@ -5080,10 +4364,10 @@ color:#5752e7;</string>
               <string>Настройка fstab</string>
              </property>
              <property name="textFormat">
-              <enum>Qt::AutoText</enum>
+              <enum>Qt::TextFormat::AutoText</enum>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
              </property>
              <property name="margin">
               <number>0</number>
@@ -5156,10 +4440,10 @@ margin-left:10px;</string>
            <string>Описание</string>
           </property>
           <property name="textFormat">
-           <enum>Qt::AutoText</enum>
+           <enum>Qt::TextFormat::AutoText</enum>
           </property>
           <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -5192,7 +4476,7 @@ margin-left:10px;</string>
              <x>0</x>
              <y>0</y>
              <width>658</width>
-             <height>713</height>
+             <height>712</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_21">
@@ -5225,7 +4509,7 @@ margin-left:10px;</string>
 }</string>
           </property>
           <property name="verticalScrollBarPolicy">
-           <enum>Qt::ScrollBarAsNeeded</enum>
+           <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
           </property>
           <property name="readOnly">
            <bool>true</bool>
@@ -5237,10 +4521,10 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;/etc/fstab&lt;/span&gt; — Конфигурационный файл для монтирования файловых систем.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Он содержит информацию о том, какие файловые системы автоматически монтируются при загрузке системы, а также опции монтирования, такие как параметры безопасности и права доступа.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-weight:700;&quot;&gt;/etc/fstab&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt; — Конфигурационный файл для монтирования файловых систем.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;Он содержит информацию о том, какие файловые системы автоматически монтируются при загрузке системы, а также опции монтирования, такие как параметры безопасности и права доступа.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openLinks">
            <bool>false</bool>
@@ -5250,7 +4534,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <item row="1" column="2">
          <spacer name="horizontalSpacer_14">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -5263,7 +4547,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <item row="2" column="1">
          <spacer name="verticalSpacer_14">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -5296,10 +4580,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </font>
    </property>
    <property name="focusPolicy">
-    <enum>Qt::NoFocus</enum>
+    <enum>Qt::FocusPolicy::NoFocus</enum>
    </property>
    <property name="contextMenuPolicy">
-    <enum>Qt::NoContextMenu</enum>
+    <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
    </property>
    <property name="windowTitle">
     <string>toolBar</string>
@@ -5308,41 +4592,52 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <number>0</number>
    </property>
    <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
+    <enum>Qt::LayoutDirection::LeftToRight</enum>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
    </property>
    <property name="styleSheet">
     <string notr="true">QToolBar#toolBar {
-background-color:#1f1f1f;
-border:0;
+	background-color:#000;
+	border-radius:10px;
+	border:0;
+	margin:4px;
 }
+
 QToolBar#toolBar QToolButton {
-border:0;
-width:60px;
-padding: 10px 0;
-border-radius:10px;
+	border:0;
+	width:32px;
+	margin:5px;
+	padding:5px 0;
+	border-radius:5px;
 }
-QToolBar#toolBar QToolButton:hover,
+
+QToolBar#toolBar QToolButton:hover{
+	background-color:#474c63;
+}
+
 QToolBar#toolBar QToolButton:checked {
-background-color:#1a1a1a;
+	background-color:#5020fe;
  }</string>
    </property>
    <property name="movable">
     <bool>false</bool>
    </property>
    <property name="allowedAreas">
-    <set>Qt::NoToolBarArea</set>
+    <set>Qt::ToolBarArea::NoToolBarArea</set>
    </property>
    <property name="orientation">
-    <enum>Qt::Vertical</enum>
+    <enum>Qt::Orientation::Vertical</enum>
    </property>
    <property name="iconSize">
     <size>
-     <width>30</width>
-     <height>30</height>
+     <width>23</width>
+     <height>23</height>
     </size>
    </property>
    <property name="toolButtonStyle">
-    <enum>Qt::ToolButtonIconOnly</enum>
+    <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
    </property>
    <property name="floatable">
     <bool>true</bool>
@@ -5384,7 +4679,7 @@ background-color:#1a1a1a;
     <bool>false</bool>
    </property>
    <property name="contextMenuPolicy">
-    <enum>Qt::NoContextMenu</enum>
+    <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
    </property>
    <property name="acceptDrops">
     <bool>false</bool>
@@ -5408,18 +4703,19 @@ QToolBar#toolBar_2 QToolButton {
 	padding: 10px 0;
 	border-radius:10px;
 }
-QToolBar#toolBar_2 QToolButton:hover {
-	background-color:#1a1a1a;
+
+QToolBar#toolBar_2 QToolButton:hover{
+background-color:#474c63;
 }</string>
    </property>
    <property name="movable">
     <bool>false</bool>
    </property>
    <property name="allowedAreas">
-    <set>Qt::NoToolBarArea</set>
+    <set>Qt::ToolBarArea::NoToolBarArea</set>
    </property>
    <property name="orientation">
-    <enum>Qt::Vertical</enum>
+    <enum>Qt::Orientation::Vertical</enum>
    </property>
    <property name="iconSize">
     <size>
@@ -5428,7 +4724,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     </size>
    </property>
    <property name="toolButtonStyle">
-    <enum>Qt::ToolButtonIconOnly</enum>
+    <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
    </property>
    <property name="floatable">
     <bool>true</bool>
@@ -5447,19 +4743,15 @@ QToolBar#toolBar_2 QToolButton:hover {
    <addaction name="action_4"/>
    <addaction name="action_5"/>
    <addaction name="action_6"/>
-   <addaction name="action_28"/>
    <addaction name="action_27"/>
    <addaction name="action_30"/>
    <addaction name="action_31"/>
    <addaction name="action_32"/>
    <addaction name="action_33"/>
-   <addaction name="action_timer"/>
    <addaction name="action_restart"/>
-   <addaction name="action_imgpkg"/>
    <addaction name="action_infopkg"/>
    <addaction name="action_stop"/>
    <addaction name="action_catalog"/>
-   <addaction name="action_like"/>
    <addaction name="action_bench"/>
    <addaction name="action_grub"/>
    <addaction name="action_fstab"/>
@@ -5467,7 +4759,6 @@ QToolBar#toolBar_2 QToolButton:hover {
    <addaction name="action_repair"/>
    <addaction name="action_34"/>
    <addaction name="action_updatelist"/>
-   <addaction name="action_nvidia"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="action_2">
@@ -5483,7 +4774,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Каталог пакетов</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_3">
@@ -5502,7 +4793,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Arch Linux - Wiki</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_7">
@@ -5524,7 +4815,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Каталог установленных пакетов</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_8">
@@ -5546,7 +4837,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Кастомизация</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_9">
@@ -5568,22 +4859,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Информация о системе</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_10">
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/8.png</normaloff>:/img/8.png</iconset>
-   </property>
-   <property name="text">
-    <string>Наше сообщество</string>
-   </property>
-   <property name="toolTip">
-    <string>Наше сообщество</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_12">
@@ -5608,7 +4884,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Настройки приложения</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_5">
@@ -5623,7 +4899,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Запустить</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_6">
@@ -5638,7 +4914,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Удалить пакет</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_4">
@@ -5653,7 +4929,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Установить пакет</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_17">
@@ -5672,7 +4948,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Полезные скрипты</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_27">
@@ -5687,22 +4963,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string notr="true">Журналы</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_28">
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/29.png</normaloff>:/img/29.png</iconset>
-   </property>
-   <property name="text">
-    <string>Настройки приложения</string>
-   </property>
-   <property name="toolTip">
-    <string>Настройки приложения</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_30">
@@ -5717,7 +4978,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Установить пакет с PKGBUILD</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_31">
@@ -5732,7 +4993,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Домашняя страница</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_32">
@@ -5747,7 +5008,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Обновить страницу</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_33">
@@ -5762,7 +5023,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Скопировать URL</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_35">
@@ -5777,7 +5038,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string notr="true">Назад</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_addsh">
@@ -5792,7 +5053,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Добавить скрипт</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_rmsh">
@@ -5807,7 +5068,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Удалить скрипт</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_editsh">
@@ -5822,43 +5083,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Редактировать скрипт</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_timer">
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/40.png</normaloff>:/img/40.png</iconset>
-   </property>
-   <property name="text">
-    <string>Настройки таймеров</string>
-   </property>
-   <property name="toolTip">
-    <string>Настройки таймеров</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_tea">
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/tea.png</normaloff>:/img/tea.png</iconset>
-   </property>
-   <property name="text">
-    <string>Заваривание чая (выкл.)</string>
-   </property>
-  </action>
-  <action name="action_work">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/work.png</normaloff>:/img/work.png</iconset>
-   </property>
-   <property name="text">
-    <string>Зарядка (выкл.)</string>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_host">
@@ -5880,7 +5105,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Веб-сервер</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_11">
@@ -5895,7 +5120,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Обновить систему</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_bench">
@@ -5913,7 +5138,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string notr="true">Бенчмарки</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_grub">
@@ -5928,7 +5153,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Настройки GRUB</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_26">
@@ -5940,7 +5165,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Применить</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_repair">
@@ -5955,7 +5180,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Оптимизация</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_34">
@@ -5970,7 +5195,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string notr="true">О пакете</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_catalog">
@@ -5985,7 +5210,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string notr="true">Каталог</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_stop">
@@ -6000,7 +5225,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string notr="true">Остановить</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_restart">
@@ -6015,7 +5240,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string notr="true">Рестарт</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_downgrade">
@@ -6038,25 +5263,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Откат пакетов</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_nvidia">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/nvidia.png</normaloff>:/img/nvidia.png</iconset>
-   </property>
-   <property name="text">
-    <string>Изменить версию NVIDIA</string>
-   </property>
-   <property name="toolTip">
-    <string>Изменить версию NVIDIA</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_game">
@@ -6078,40 +5285,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Игровая совместимость - ProtonDB</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_like">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/6.png</normaloff>:/img/6.png</iconset>
-   </property>
-   <property name="text">
-    <string>Проголосовать за пакет</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_imgpkg">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="klausres.qrc">
-     <normaloff>:/img/21.png</normaloff>:/img/21.png</iconset>
-   </property>
-   <property name="text">
-    <string>Изображение пакета</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_updatelist">
@@ -6123,7 +5297,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Обновить список</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_pacman">
@@ -6135,7 +5309,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Настройки Pacman</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_fstab">
@@ -6150,7 +5324,7 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Настройки файловой системы</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="action_infopkg">
@@ -6162,8 +5336,8 @@ QToolBar#toolBar_2 QToolButton:hover {
    </property>
    <property name="icon">
     <iconset resource="klausres.qrc">
-     <normaloff>:/img/30.png</normaloff>
-     <normalon>:/img/31.png</normalon>:/img/30.png</iconset>
+     <normaloff>:/img/48.png</normaloff>
+     <normalon>:/img/31.png</normalon>:/img/48.png</iconset>
    </property>
    <property name="text">
     <string>Файлы пакета</string>
@@ -6172,7 +5346,22 @@ QToolBar#toolBar_2 QToolButton:hover {
     <string>Файлы пакета</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_10">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/8.png</normaloff>:/img/8.png</iconset>
+   </property>
+   <property name="text">
+    <string>Наше сообщество</string>
+   </property>
+   <property name="toolTip">
+    <string>Наше сообщество</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
  </widget>

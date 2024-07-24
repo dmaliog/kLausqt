@@ -14,6 +14,13 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+    QPixmap pixmap(":/img/splash.jpeg");
+    QPixmap scaledPixmap = pixmap.scaled(pixmap.width() / 2, pixmap.height() / 2, Qt::KeepAspectRatio);
+    QSplashScreen splash(scaledPixmap);
+    splash.show();
+
+    splash.showMessage(QObject::tr("Вылавливаем молюсков..."), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+
 
     #if QT_VERSION > QT_VERSION_CHECK(5, 7, 0)
         QGuiApplication::setDesktopFileName("klaus");
@@ -26,7 +33,7 @@ int main(int argc, char *argv[])
     QString locale = "ru_RU";
     int packageManagerIndex;
 
-    // Проверяем, есть ли уже сохраненные значения в файле INI
+    splash.showMessage(QObject::tr("Проверяем сохраненный язык..."), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
     if (settings.contains("Language") && settings.contains("PackageManager")) {
         QString savedLanguage = settings.value("Language").toString();
         packageManagerIndex = settings.value("PackageManager").toInt();
@@ -96,6 +103,7 @@ int main(int argc, char *argv[])
     QString uniqueKey = "KlausKey";
     QSharedMemory sharedMemory(uniqueKey);
     if (!sharedMemory.create(1)) {
+
         w.sendNotification(QObject::tr("Ошибка"), QObject::tr("Приложение уже запущено!"));
         return 1;
     }
@@ -104,31 +112,49 @@ int main(int argc, char *argv[])
 
     a.setWindowIcon(QIcon(":/img/2.png"));
 
+    splash.showMessage(QObject::tr("Проверяем наличие Pacman..."), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
     bool pacmanInstalled = isPackageInstalled("pacman");
 
     if (!pacmanInstalled) {
-        w.sendNotification(QObject::tr("Ошибка"), QObject::tr("Требуется Pacman!"));
-        return 1;
+        splash.showMessage(QObject::tr("Внимание! Требуется Pacman!"), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+
+        QTimer::singleShot(10000, [&splash]() {
+            splash.close();
+            QApplication::quit();
+        });
     }
 
     QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-
+    splash.showMessage(QObject::tr("Проверяем наличие notify-send..."), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
     process->start("which", QStringList() << "notify-send");
     process->waitForFinished();
 
     if (process->exitCode() != 0) {
-        w.sendNotification(QObject::tr("Ошибка"), QObject::tr("Требуется notify-send!"));
-        return 1;
+        splash.showMessage(QObject::tr("Внимание! Требуется notify-send!"), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+
+        QTimer::singleShot(10000, [&splash]() {
+            splash.close();
+            QApplication::quit();
+        });
     }
 
     Terminal terminal = getTerminal();
-
+    splash.showMessage(QObject::tr("Проверяем наличие терминалов..."), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
     if (terminal.binary.isEmpty()) {
-        w.sendNotification(QObject::tr("Ошибка"), QObject::tr("Требуется любой из терминалов: konsole, gnome-terminal, xfce4-terminal, lxterminal, xterm, alacritty!"));
-        return 1;
+        splash.showMessage(QObject::tr("Внимание! Требуется любой из терминалов: konsole, gnome-terminal, xfce4-terminal, lxterminal, xterm, alacritty!"), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+
+        QTimer::singleShot(10000, [&splash]() {
+            splash.close();
+            QApplication::quit();
+        });
     }
 
-    w.show();
-    systemSemaphore.release();
+    splash.showMessage(QObject::tr("Запускаем kLaus..."), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+    QTimer::singleShot(10000, [&splash, &w, &systemSemaphore]() {
+        splash.close();
+        w.show();
+        systemSemaphore.release();
+    });
+
     return a.exec();
 }

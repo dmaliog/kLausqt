@@ -10,21 +10,20 @@
 #include <QVideoWidget>
 #include <QMediaPlayer>
 #include <QGraphicsVideoItem>
-#include <QtConcurrent/QtConcurrent>
+#include <QtConcurrent>
 
 //---#####################################################################################################################################################
 //--############################################################## ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ################################################################
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "13.1";
+QString currentVersion = "14.0";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
 QString lockFilePath = "/var/lib/pacman/db.lck";
 QString description = "no";
 
-int nvidia = 0; // nvidia
 int pkg = 0; //пакетный менеджер 0-yay / 1-paru
 int page = 0; // какая страница используется
 int animloadpage = 0;
@@ -40,9 +39,7 @@ int helpercache = 0; // кэш
 int benchlist = 0; // бенчлист
 int numPackages = 0;
 int list = 0;
-int cacheremove = 0; // удаление кэша при выходе
 int auth = 0;
-int animation = 0;
 int saveurl = 2;
 int trans = 2; //перевод описания
 int colorlist = 2; //раскрашивать листы
@@ -122,10 +119,7 @@ void MainWindow::on_action_2_triggered()
     ui->action_4->setVisible(true);
     ui->action_30->setVisible(true);
     ui->action_34->setVisible(true);
-    ui->action_imgpkg->setVisible(true);
     ui->action_infopkg->setVisible(true);
-    ui->action_like->setVisible(true);
-    showLoadingAnimationMini(false);
 }
 
 void MainWindow::on_action_7_triggered()
@@ -140,7 +134,6 @@ void MainWindow::on_action_7_triggered()
     ui->action_5->setVisible(true);
     ui->action_6->setVisible(true);
     ui->action_34->setVisible(true);
-    showLoadingAnimationMini(false);
 }
 
 void MainWindow::on_action_17_triggered()
@@ -152,7 +145,6 @@ void MainWindow::on_action_17_triggered()
     ui->action_editsh->setVisible(true);
     ui->action_rmsh->setVisible(true);
     ui->tabWidget->setCurrentIndex(4);
-    showLoadingAnimationMini(false);
 }
 
 void MainWindow::on_action_9_triggered()
@@ -167,13 +159,11 @@ void MainWindow::on_action_9_triggered()
     ui->action_pacman->setVisible(true);
     ui->action_fstab->setVisible(true);
     on_action_27_triggered();
-    showLoadingAnimationMini(false);
 }
 
 void MainWindow::on_action_3_triggered()
 {
     if (page == 6) return;
-    showLoadingAnimationMini(false);
     mrpropper(6, ui->action_3);
 
     QString aurUrl = ui->webEngineView_aur->url().toString();
@@ -193,10 +183,6 @@ void MainWindow::on_action_3_triggered()
         *aururl = ui->webEngineView_aur->url().toString();
         ui->action_35->setEnabled(false);
     } else {
-        if (animation >= 1) {
-            opacityEffect->setOpacity(1.0);
-            ui->centralwidget->setGraphicsEffect(opacityEffect);
-        }
         ui->searchLineEdit->setText(aurUrl);
     }
 
@@ -272,28 +258,17 @@ void MainWindow::on_action_8_triggered()
             ui->action_35->setEnabled(false);
         }
     } else {
-        if (animation >= 1) {
-            opacityEffect->setOpacity(1.0);
-            ui->centralwidget->setGraphicsEffect(opacityEffect);
-        }
         ui->searchLineEdit->setText(ui->webEngineView_custom->url().toString());
     }
-    showLoadingAnimationMini(false);
 }
 
 void MainWindow::on_push_vk_clicked()
 {
-    showLoadingAnimationMini(false);
-    showLoadingAnimation(true,ui->webEngineView);
     mrpropper(8, ui->action_10);
     ui->action_31->setVisible(true);
     ui->action_32->setVisible(true);
     ui->action_33->setVisible(true);
     ui->action_35->setVisible(true);
-    if (animation >= 1) {
-        opacityEffect->setOpacity(1.0);
-        ui->centralwidget->setGraphicsEffect(opacityEffect);
-    }
     ui->webEngineView->setUrl(QUrl("https://vk.com/linux2"));
     ui->tabWidget->setCurrentIndex(3);
 }
@@ -301,10 +276,7 @@ void MainWindow::on_push_vk_clicked()
 void MainWindow::on_action_12_triggered()
 {
     mrpropper(9, ui->action_12);
-    ui->action_28->setVisible(true);
-    ui->action_timer->setVisible(true);
     ui->tabWidget->setCurrentIndex(7);
-    showLoadingAnimationMini(false);
 }
 
 void MainWindow::on_action_host_triggered()
@@ -327,7 +299,6 @@ void MainWindow::on_action_host_triggered()
             return;
         }
     }
-    showLoadingAnimationMini(false);
     mrpropper(10, ui->action_host);
 
     QString hostUrl = ui->webEngineView_host->url().toString();
@@ -349,10 +320,6 @@ void MainWindow::on_action_host_triggered()
         ui->webEngineView_host->setUrl(QUrl("http://localhost"));
         ui->searchLineEdit->setText("http://localhost");
     } else {
-        if (animation >= 1) {
-            opacityEffect->setOpacity(1.0);
-            ui->centralwidget->setGraphicsEffect(opacityEffect);
-        }
         ui->searchLineEdit->setText(ui->webEngineView_host->url().toString());
     }
 }
@@ -360,7 +327,6 @@ void MainWindow::on_action_host_triggered()
 void MainWindow::on_action_game_triggered()
 {
     if (page == 11) return;
-    showLoadingAnimationMini(false);
     mrpropper(11, ui->action_game);
 
     QString protonDBUrl = ui->webEngineView_game->url().toString();
@@ -388,10 +354,6 @@ void MainWindow::on_action_game_triggered()
             ui->action_35->setEnabled(false);
         }
     } else {
-        if (animation >= 1) {
-            opacityEffect->setOpacity(1.0);
-            ui->centralwidget->setGraphicsEffect(opacityEffect);
-        }
         ui->searchLineEdit->setText(ui->webEngineView_game->url().toString());
     }
 }
@@ -401,56 +363,11 @@ void MainWindow::on_action_game_triggered()
 void MainWindow::on_action_downgrade_triggered()
 {
     mrpropper(14, ui->action_downgrade);
-    ui->action_nvidia->setVisible(true);
     ui->searchLineEdit->setPlaceholderText(tr("Поиск по архиву..."));
     ui->searchLineEdit->setVisible(true);
-    if (nvidia >= 1)
-        sendNotification(tr("Внимание"), tr("Откат NVIDIA пакетов отменен!"));
-    nvidia = 0;
     ui->tabWidget->setCurrentIndex(12);
-    showLoadingAnimationMini(false);
 }
 
-void MainWindow::on_action_nvidia_triggered()
-{
-    QString driverNames[] = {"nvidia-dkms", "nvidia-utils", "nvidia-settings", "libxnvctrl", "opencl-nvidia", "lib32-nvidia-utils", "lib32-opencl-nvidia"};
-    int driverIndex = nvidia;
-
-    if (driverIndex >= 1 && driverIndex <= 7)
-    {
-        checkForDowngrades(driverNames[driverIndex - 1]);
-        ui->label1->setText(tr("Откат пакетов NVIDIA [%1/7]").arg(driverIndex));
-        originalLabelText = ui->label1->text();
-    }
-    else if (driverIndex == 8)
-    {
-        ui->label1->setText(tr("Откат пакетов NVIDIA"));
-        originalLabelText = ui->label1->text();
-
-        ui->tabWidget->setCurrentIndex(6);
-        ui->details_driver->setHtml(QString(tr("<b>Вы выбрали следующие пакеты:</b><br>"
-                                               "- <b>%1</b><br>"
-                                               "- <b>%2</b><br>"
-                                               "- <b>%3</b><br>"
-                                               "- <b>%4</b><br>"
-                                               "- <b>%5</b><br>"
-                                               "- <b>%6</b><br>"
-                                               "- <b>%7</b><br>"
-                                               "<br><span style=\"font-weight:700; color:#ad2429;\">Все версии должны совпадать, для избежания конфликтов зависимостей!</span><br><br>"
-                                               "<b>Внимание! Если у вас не загрузится компьютер после этих манипуляций:</b><br>"
-                                               "- Войдите в tty (CTRL+ALT+F2)<br>"
-                                               "- Запустите консольную утилиту downgrade и установите свои предыдущие версии драйверов<br>"
-                                               "- Перезагрузитесь")).arg(nvidiaDkmsName, nvidiaUtilsName, nvidiaSettingsName, libxnvctrlName, openclNvidiaName, lib32NvidiaUtilsName, lib32OpenclNvidiaName));
-    }
-    else
-    {
-        checkForDowngrades(driverNames[0]);
-        ui->label1->setText(tr("Откат пакетов NVIDIA [1/7]"));
-        originalLabelText = ui->label1->text();
-
-        nvidia = 1;
-    }
-}
 
 //---#####################################################################################################################################################
 //--################################################################## БЫСТРЫЕ ФУНКЦИИ ##################################################################
@@ -574,20 +491,6 @@ void MainWindow::on_action_repair_triggered()
     ui->tabWidget->setCurrentIndex(11);
 }
 
-void MainWindow::on_action_28_triggered()
-{
-    ui->label1->setText(tr("Настройки приложения"));
-    originalLabelText = ui->label1->text();
-    ui->tabWidget->setCurrentIndex(7);
-}
-
-void MainWindow::on_action_timer_triggered()
-{
-    ui->label1->setText(tr("Настройки таймеров"));
-    originalLabelText = ui->label1->text();
-    ui->tabWidget->setCurrentIndex(9);
-}
-
 void MainWindow::on_action_31_triggered()
 {
     switch (page)
@@ -693,12 +596,6 @@ void MainWindow::on_action_35_triggered()
         return;
     }
 
-    if (animation >= 1)
-    {
-        opacityEffect->setOpacity(0.8);
-        ui->centralwidget->setGraphicsEffect(opacityEffect);
-    }
-
     ui->action_34->setVisible(true);
     ui->action_11->setVisible(page == 4);
     ui->action_35->setVisible(false);
@@ -706,7 +603,6 @@ void MainWindow::on_action_35_triggered()
 
     if (page == 2) {
         ui->tabWidget->setCurrentIndex(1);
-        ui->action_imgpkg->setVisible(true);
     }
     else if (page == 4)
         ui->tabWidget->setCurrentIndex(2);
@@ -799,7 +695,10 @@ void MainWindow::on_action_5_triggered()
         process.waitForFinished(-1);
 
         QString output = process.readAllStandardOutput();
-        for (const QString& line : output.split('\n')) {
+        const QStringList lines = output.split('\n');
+
+        for (auto it = lines.cbegin(); it != lines.cend(); ++it) {
+            const QString& line = *it;
             if (line.contains(packageName) && line.contains(".desktop")) {
                 desktopFilePath = line.split(' ').last();
                 break;
@@ -1018,19 +917,17 @@ void MainWindow::on_action_rmsh_triggered()
     QDir dir(mainDir + "sh/");
     QStringList filter;
     filter << "*.sh";
-    QFileInfoList fileList = dir.entryInfoList(filter);
-    for (const QFileInfo& fileInfo : fileList)
-    {
+
+    const QFileInfoList fileList = dir.entryInfoList(filter);
+    for (auto it = fileList.cbegin(); it != fileList.cend(); ++it) {
+        const QFileInfo& fileInfo = *it;
         QString filePath = fileInfo.filePath();
         QFile scriptFile(filePath);
-        if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text))
-        {
+        if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
             QTextStream scriptStream(&scriptFile);
-            while (!scriptStream.atEnd())
-            {
+            while (!scriptStream.atEnd()) {
                 QString line = scriptStream.readLine();
-                if (line.startsWith("#name_" + *lang))
-                {
+                if (line.startsWith("#name_" + *lang)) {
                     QString itemName = line.mid(12).trimmed();
                     scriptMap[itemName] = filePath;
                     break;
@@ -1072,33 +969,42 @@ void MainWindow::on_action_editsh_triggered()
     QDir dir(mainDir + "sh/");
     QStringList filter;
     filter << "*.sh";
-    QFileInfoList fileList = dir.entryInfoList(filter);
-    for (const QFileInfo& fileInfo : fileList)
-    {
+
+    const QFileInfoList fileList = dir.entryInfoList(filter);
+
+    for (const QFileInfo& fileInfo : fileList) {
         QString filePath = fileInfo.filePath();
         QString fileName = fileInfo.fileName();
         QFile scriptFile(filePath);
-        if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text))
-        {
+
+        if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
             QTextStream scriptStream(&scriptFile);
-            while (!scriptStream.atEnd())
-            {
+
+            while (!scriptStream.atEnd()) {
                 QString line = scriptStream.readLine();
-                if (line.startsWith("#name_" + *lang))
-                {
+
+                if (line.startsWith("#name_" + *lang)) {
                     QString itemName = line.mid(12).trimmed();
-                    if (itemName == itemContent)
-                    {
+
+                    if (itemName == itemContent) {
                         scriptFile.close();
+
+                        // Создание диалогового окна для редактирования
                         QDialog* editDialog = new QDialog(this);
                         editDialog->setWindowTitle(tr("Редактировать скрипт"));
                         editDialog->resize(500, 300);
+
+                        // Создание виджетов
                         QLabel* nameLabel = new QLabel(tr("Имя файла:"));
                         QLineEdit* nameEdit = new QLineEdit(fileName);
                         QLabel* scriptLabel = new QLabel(tr("Тело скрипта:"));
                         QTextEdit* scriptEdit = new QTextEdit();
                         QPushButton* saveButton = new QPushButton(tr("Сохранить"));
+
+                        // Настройка виджетов
                         scriptEdit->setPlainText(getScriptContent(filePath));
+
+                        // Создание компоновки
                         QVBoxLayout* layout = new QVBoxLayout(editDialog);
                         editDialog->setStyleSheet("QWidget{background-color:#2d2b79;} QLineEdit,QTextEdit{background-color:#21205b;padding:10px;border-radius:10px;} QLabel{color:#fff;font-size:10pt;}QPushButton{border-radius:10px;padding:5px 20px;background-color:#916ee4;color:#fff;}");
                         layout->addWidget(nameLabel);
@@ -1107,28 +1013,34 @@ void MainWindow::on_action_editsh_triggered()
                         layout->addWidget(scriptEdit);
                         layout->addWidget(saveButton);
                         editDialog->setLayout(layout);
+
+                        // Подключение кнопки сохранения
                         connect(saveButton, &QPushButton::clicked, this, [=]() mutable {
                             QString newFileName = nameEdit->text();
                             QString newScriptContent = scriptEdit->toPlainText();
                             QString newFilePath = mainDir + "sh/" + newFileName;
                             QFile newScriptFile(newFilePath);
-                            if (newScriptFile.open(QIODevice::WriteOnly | QIODevice::Text))
-                            {
+
+                            if (newScriptFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
                                 QTextStream newScriptStream(&newScriptFile);
                                 newScriptStream << newScriptContent;
                                 newScriptFile.close();
                             }
+
                             selectedItem->setText(newFileName);
                             editDialog->close();
                             loadScripts(mainDir + "sh/", ui->list_sh);
                             sendNotification(tr("Сохранение"), tr("Скрипт успешно изменен!"));
                         });
+
+                        // Отображение диалогового окна
                         editDialog->exec();
                         return;
                     }
                     break;
                 }
             }
+
             scriptFile.close();
         }
     }
@@ -1258,7 +1170,8 @@ void MainWindow::createAndAddListItemSearch(const QString& packageName)
 
     if (match.hasMatch()) {
         QString repoName = match.captured(1);
-        QString iconPath = QFile::exists(":/img/" + repoName + ".png") ? ":/img/" + repoName + ".png" : "/usr/share/icons/Papirus/48x48/apps/application-default-icon.svg";
+
+        QString iconPath = QFile::exists(":/img/" + repoName + ".png") ? ":/img/" + repoName + ".png" : ":/img/community.png";
 
         QString packageNameWithoutPrefix = packageName;
         QString prefixToRemove = repoName + "/";
@@ -1266,7 +1179,6 @@ void MainWindow::createAndAddListItemSearch(const QString& packageName)
         if (!prefixToRemove.isEmpty() && packageNameWithoutPrefix.startsWith(prefixToRemove)) {
             packageNameWithoutPrefix.remove(0, prefixToRemove.length());
         }
-
         QStandardItem* item = new QStandardItem(QIcon(iconPath), packageNameWithoutPrefix);
         completerModel->appendRow(item);
     }
@@ -1347,7 +1259,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     setupListContextMenu();
     createSearchBar();
 
-    AnimationBackground();
     loadSettings();
 
     checkVersionAndClear();
@@ -1372,8 +1283,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->combo_mainpage->setCurrentIndex(mainpage);
     ui->combo_helper->setCurrentIndex(pkg);
     ui->combo_animload->setCurrentIndex(animloadpage);
-    ui->combo_theme->setCurrentIndex(animation);
-    ui->check_cacheremove->setChecked(cacheremove);
     ui->check_saveurl->setChecked(saveurl);
 
     ui->check_trans->setChecked(trans);
@@ -1381,11 +1290,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     ui->time_update->setTime(timeupdate);
     ui->time_timeout->setTime(timeout);
-
-    ui->time_tea->setTime(timetea);
-    ui->time_work->setTime(timework);
-    ui->line_tea->setText(*teatext);
-    ui->line_work->setText(*worktext);
 
     ui->dial_volnotify->setValue(volumenotify);
 
@@ -1417,7 +1321,7 @@ void MainWindow::checkVersionAndClear() {
         QStringList excludedFolders = {"clear", "journals", "bench", "other", "sh"};
         QDir baseDir(mainDir);
 
-        QStringList subDirs = baseDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+        const QStringList subDirs = baseDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
         for (const QString& subDir : subDirs) {
             if (!excludedFolders.contains(subDir)) {
                 removeDirectory(baseDir.absoluteFilePath(subDir));
@@ -1458,9 +1362,6 @@ void MainWindow::saveScripts(const QStringList& resourcePaths, const QString& ba
 
 MainWindow::~MainWindow()
 {
-    if (cacheremove == 2)
-        removeDirectory(mainDir + "cache/");
-
     iconMap.clear();
 
     //delete videoItem;
@@ -1535,9 +1436,7 @@ void MainWindow::loadSettings()
     animload = settings.value("AnimLoad", 2).toInt();
     updinst = settings.value("UpdateInstall", 2).toInt();
     clearinstall = settings.value("ClearInstall", 2).toInt();
-    cacheremove = settings.value("CacheRemove", 2).toInt();
     volumenotify = settings.value("VolumeNotify", 30).toInt();
-    animation = settings.value("Animation", 0).toInt();
     saveurl = settings.value("SaveURL", 2).toInt();
     trans = settings.value("Trans", 2).toInt();
     colorlist = settings.value("ColorList", 2).toInt();
@@ -1763,13 +1662,6 @@ void MainWindow::loadSettings()
     connect(updateIconTimer.data(), &QTimer::timeout, this, &MainWindow::UpdateIcon);
     updateIconTimer->start();
     //-##################################################################################
-    //-############################## ТАЙМЕР COFFETIME ##################################
-    //-##################################################################################
-    teaTimer = QSharedPointer<QTimer>::create(this);
-    connect(teaTimer.data(), &QTimer::timeout, this, &MainWindow::TeaTimer);
-    workTimer = QSharedPointer<QTimer>::create(this);
-    connect(workTimer.data(), &QTimer::timeout, this, &MainWindow::WorkTimer);
-    //-##################################################################################
     //-################################# ИКОНКИ ТРЕЯ ####################################
     //-##################################################################################
     trayIcon.setIcon(QIcon(":/img/2.png"));
@@ -1777,10 +1669,6 @@ void MainWindow::loadSettings()
     trayIcon.show();
 
     QMenu *trayMenu = new QMenu();
-
-    QAction *action_11 = new QAction(tr("Обновить систему"), trayMenu);
-    action_11->setIcon(QIcon(":/img/16.png"));
-    trayMenu->addAction(action_11);
 
     QAction *action_2 = new QAction(tr("Каталог пакетов"), trayMenu);
     action_2->setIcon(QIcon(":/img/2.png"));
@@ -1811,7 +1699,6 @@ void MainWindow::loadSettings()
     trayMenu->addAction(exitAction);
 
     trayIcon.setContextMenu(trayMenu);
-    connect(action_11, &QAction::triggered, this, &MainWindow::on_action_11_triggered);
     connect(action_2, &QAction::triggered, this, &MainWindow::on_action_2_triggered);
     connect(action_7, &QAction::triggered, this, &MainWindow::on_action_7_triggered);
     connect(action_downgrade, &QAction::triggered, this, &MainWindow::on_action_downgrade_triggered);
@@ -1913,14 +1800,6 @@ void MainWindow::loadSettings()
     //-##################################################################################
     loadingLabel.reset(new QLabel(this));
     loadingLabel->setVisible(false);
-    loadingLabel->setFixedSize(58, 53);
-
-    QMovie* loadingAnimation = new QMovie(":/img/miniload.gif");
-    loadingAnimation->setScaledSize(QSize(50, 50));
-
-    loadingLabel->setMovie(loadingAnimation);
-    loadingAnimation->start();
-    loadingLabel->setStyleSheet("margin-left:4px;padding-left:2px;border:0;");
     //-##################################################################################
     //-############################# ЯЗЫК В ТЕРМИНАЛЕ ###################################
     //-##################################################################################
@@ -1955,13 +1834,18 @@ void MainWindow::setupConnections()
     ui->toolBar->installEventFilter(this);
     ui->toolBar_2->installEventFilter(this);
 
-    for (QAction *action : ui->toolBar->actions()) {
+    const auto toolBarActions = ui->toolBar->actions();
+    for (auto it = toolBarActions.cbegin(); it != toolBarActions.cend(); ++it) {
+        QAction *action = *it;
         if (action) {
             connect(action, &QAction::hovered, this, &MainWindow::handleActionHovered);
             action->installEventFilter(this);
         }
     }
-    for (QAction *action : ui->toolBar_2->actions()) {
+
+    const auto toolBar2Actions = ui->toolBar_2->actions();
+    for (auto it = toolBar2Actions.cbegin(); it != toolBar2Actions.cend(); ++it) {
+        QAction *action = *it;
         if (action) {
             connect(action, &QAction::hovered, this, &MainWindow::handleActionHovered);
             action->installEventFilter(this);
@@ -1993,56 +1877,6 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
     return QObject::eventFilter(obj, event);
 }
 
-void MainWindow::AnimationBackground()
-{
-    ui->centralwidget->setStyleSheet("");
-    videoItem = new QGraphicsVideoItem;
-
-    player = new QMediaPlayer(this);
-    player->setVideoOutput(videoItem);
-    player->setLoops(QMediaPlayer::Infinite);
-
-    scene = new QGraphicsScene(this);
-    scene->addItem(videoItem);
-
-    // Создаем виджет для сцены
-    graphicsView = new QGraphicsView(scene, this);
-    graphicsView->setGeometry(0, 0, width(), height());
-
-    graphicsView->setFrameShape(QFrame::NoFrame);
-    graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-    videoItem->setSize(graphicsView->size());
-    videoItem->setAspectRatioMode(Qt::IgnoreAspectRatio);
-
-    ui->centralwidget->raise();
-    ui->toolBar->raise();
-    ui->toolBar_2->raise();
-    ui->statusBar->raise();
-
-    if (animation >= 1) {
-        player->setSource(QUrl("qrc:/theme/" + *animationname + ".mp4"));
-        videoItem->show();
-        player->play();
-        ui->centralwidget->setStyleSheet("");
-
-    } else {
-        videoItem->hide();
-        player->stop();
-        ui->centralwidget->setStyleSheet("#centralwidget{background: url(:/img/bg.png) no-repeat bottom right;background-color:#322F85;}");
-    }
-}
-
-void MainWindow::resizeEvent(QResizeEvent *event)
-{
-    if (animation >= 1) {
-        QMainWindow::resizeEvent(event);
-        graphicsView->setGeometry(0, 0, width(), height());
-        videoItem->setSize(graphicsView->size());
-    }
-}
-
 void MainWindow::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
     if (reason == QSystemTrayIcon::Trigger)
@@ -2050,7 +1884,9 @@ void MainWindow::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
 }
 
 void MainWindow::removeToolButtonTooltips(QToolBar* toolbar) {
-    for (QAction* action : toolbar->actions()) {
+    const auto actions = toolbar->actions();
+    for (auto it = actions.cbegin(); it != actions.cend(); ++it) {
+        QAction* action = *it;
         if (QWidget* widget = toolbar->widgetForAction(action)) {
             widget->setToolTip("");
             widget->setToolTipDuration(0);
@@ -2059,39 +1895,29 @@ void MainWindow::removeToolButtonTooltips(QToolBar* toolbar) {
 }
 
 void MainWindow::mrpropper(int value, QAction* action) {
-    if (animation >= 1 && !(value == 6 || value == 7 || value == 10 || value == 11))
-    {
-        opacityEffect->setOpacity(0.8);
-        ui->centralwidget->setGraphicsEffect(opacityEffect);
-    }
 
     ui->label1->setText(action->iconText());
     originalLabelText = ui->label1->text();
 
     miniAnimation(false, ui->details_aur);
     miniAnimation(false, ui->list_aur);
-    showLoadingAnimationMini(true);
     page = value;
 
     errorShown = true;
 
-    for (QAction* action : ui->toolBar_2->actions()) {
-        action->setVisible(false);
+    const auto actions = ui->toolBar_2->actions();
+    for (auto it = actions.cbegin(); it != actions.cend(); ++it) {
+        QAction* toolBarAction = *it;
+        if (toolBarAction) {
+            toolBarAction->setVisible(false);
+        }
     }
+
+    ui->label_warning->setVisible(page == 14);
 
     ui->combo_bench->setVisible(false);
     ui->searchLineEdit->setVisible(false);
     ui->searchLineEdit->clear();
-}
-
-void MainWindow::TeaTimer()
-{
-    sendNotification(tr("Отдохни!"), teatext->isEmpty() ? tr("Пора пить чай!") : *teatext);
-}
-
-void MainWindow::WorkTimer()
-{
-    sendNotification(tr("Отдохни!"), teatext->isEmpty() ? tr("Пора сделать зарядку!") : *worktext);
 }
 
 void MainWindow::setHasUpdates(bool updates)
@@ -2140,44 +1966,6 @@ void MainWindow::onTimeChanged(const QTime& time)
     timer->start(24 * 60 * 60 * 1000);
 }
 
-void MainWindow::showLoadingAnimationMini(bool show)
-{
-    if (show)
-    {
-        for (QAction* action : ui->toolBar->actions())
-        {
-            if (action->isCheckable() && action->isChecked())
-            {
-                loadingLabel->setVisible(true);
-                ui->toolBar->insertWidget(action, loadingLabel.data());
-                action->setVisible(false);
-                actionLoad = action;
-                ui->toolBar->setEnabled(!show);
-                break;
-            }
-        }
-    }
-    else
-    {
-        QTimer::singleShot(500, this, [=]() {
-            loadingLabel->setVisible(false);
-            if (QLayout *toolBarLayout = ui->toolBar->layout()) {
-                toolBarLayout->removeWidget(loadingLabel.data());
-            }
-
-            if (actionLoad)
-                actionLoad->setVisible(true);
-
-            ui->toolBar->setEnabled(true);
-            removeToolButtonTooltips(ui->toolBar);
-            removeToolButtonTooltips(ui->toolBar_2);
-        });
-    }
-
-    removeToolButtonTooltips(ui->toolBar);
-    removeToolButtonTooltips(ui->toolBar_2);
-}
-
 void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
 {
     if (animload == 0 || animloadpage > 1)
@@ -2187,12 +1975,6 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
     QLabel* loadingLabel = webView->property("LoadingLabel").value<QLabel*>();
 
     if (show) {
-        if (animation >= 1)
-        {
-            opacityEffect->setOpacity(1.0);
-            ui->centralwidget->setGraphicsEffect(opacityEffect);
-        }
-
         int leftShift = -100;
 
         if (!overlayWidget) {
@@ -2225,7 +2007,6 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
                 ui->action_11->setVisible(false);
                 ui->action_34->setVisible(false);
                 ui->action_updatelist->setVisible(false);
-                ui->action_imgpkg->setVisible(false);
             }
 
             if (animloadpage == 0) {
@@ -2251,14 +2032,10 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
 
         if (overlayWidget) {
             overlayWidget->hide();
-            overlayWidget = nullptr;
-            overlayWidget->deleteLater();
         }
 
         if (loadingLabel) {
             loadingLabel->hide();
-            loadingLabel = nullptr;
-            loadingLabel->deleteLater();
         }
     }
     removeToolButtonTooltips(ui->toolBar);
@@ -2343,59 +2120,16 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
     if (listWidget == ui->list_aur)
     {
-        ui->action_like->setEnabled(true);
-
         QString appName = packageName.split(' ')[0];
 
-        for (const QString& ending : endingsToRemove) {
-            if (appName.endsWith(ending)) {
+        for (auto it = endingsToRemove.cbegin(); it != endingsToRemove.cend(); ++it) {
+            const QString& ending = *it;
+            if (appName.endsWith(ending, Qt::CaseInsensitive)) {
                 appName.chop(ending.length());
-                break;
+                break; // Предполагается, что нужно удалить только первый найденный суффикс
             }
         }
-
-        QString snapcraftUrl = "https://snapcraft.io/" + packageName;
-        QNetworkRequest request = QNetworkRequest(QUrl(snapcraftUrl));
-        QNetworkReply* reply = networkManager.get(request);
-
-        connect(reply, &QNetworkReply::finished, this, [=]() {
-            if (page != 2) {
-                reply->deleteLater();
-                return;
-            }
-
-            if (reply->error() == QNetworkReply::NoError) {
-                QByteArray htmlData = reply->readAll();
-                static const QRegularExpression screenshotRegex("<img[^>]*data-original=\"([^\"]*)\"");
-                QRegularExpressionMatchIterator matchIterator = screenshotRegex.globalMatch(htmlData);
-
-                QStringList imageUrls;
-                while (matchIterator.hasNext()) {
-                    QRegularExpressionMatch match = matchIterator.next();
-                    QString imageUrl = match.captured(1);
-                    imageUrls.append(imageUrl);
-                }
-
-                if (imageUrls.isEmpty()) {
-                    ui->tabWidget_details->setCurrentIndex(0);
-                    ui->action_imgpkg->setEnabled(false);
-                    ui->action_imgpkg->setChecked(false);
-                } else {
-                    downloadAndSaveImages(packageName, imageUrls, mainDir + "cache/");
-                    ui->action_imgpkg->setEnabled(true);
-                }
-            } else {
-                ui->tabWidget_details->setCurrentIndex(0);
-                ui->action_imgpkg->setEnabled(false);
-                ui->action_imgpkg->setChecked(false);
-            }
-
-            removeToolButtonTooltips(ui->toolBar);
-            removeToolButtonTooltips(ui->toolBar_2);
-
-            reply->deleteLater();
-        });
-    }
+     }
 
     QSharedPointer<QProcess> currentProcess = QSharedPointer<QProcess>::create();
     int scrollBarValue = detailsWidget->verticalScrollBar()->value();
@@ -2409,9 +2143,10 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
         QString processedInfo;
         static const QRegularExpression regex("\\b(\\S+)\\b");
 
-        for (const QString& line : lines) {
-            if (line.isEmpty() || !line.contains(':'))
-                continue;
+        for (auto it = lines.cbegin(); it != lines.cend(); ++it) {
+           const QString& line = *it;
+           if (line.isEmpty() || !line.contains(':'))
+               continue;
 
             int colonIndex = line.indexOf(':');
             QString header = line.left(colonIndex).trimmed();
@@ -2502,9 +2237,6 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
                 QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
                 QCoreApplication::postEvent(ui->searchLineEdit, event);
 
-                if (page == 2)
-                    ui->action_like->setEnabled(false);
-
                 miniAnimation(false,detailsWidget);
             }
         });
@@ -2590,12 +2322,14 @@ void MainWindow::miniAnimation(bool visible, QWidget* targetWidget)
 QIcon MainWindow::getPackageIcon(const QString& packageName) {
 
     QString appName = packageName.split(' ').first();
-    for (const QString& ending : endingsToRemove) {
+    for (auto it = endingsToRemove.cbegin(); it != endingsToRemove.cend(); ++it) {
+        const QString& ending = *it;
         if (appName.endsWith(ending)) {
             appName.chop(ending.length());
             break;
         }
     }
+
 
     QString additionalIconPath = "/usr/share/icons/Papirus/48x48/apps/" + appName.toLower() + ".svg";
     if (QFileInfo(additionalIconPath).isFile()) {
@@ -2609,11 +2343,13 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
                                    "/usr/local/share/applications",
                                    "/var/lib/snapd/desktop/applications"};
 
-        for (const QString& searchPath : searchPaths) {
+        for (auto searchPathIt = searchPaths.cbegin(); searchPathIt != searchPaths.cend(); ++searchPathIt) {
+            const QString& searchPath = *searchPathIt;
             QDir desktopFilesDir(searchPath);
             QStringList desktopFiles = desktopFilesDir.entryList({"*.desktop"}, QDir::Files);
 
-            for (const QString& desktopFileName : desktopFiles) {
+            for (auto desktopFileIt = desktopFiles.cbegin(); desktopFileIt != desktopFiles.cend(); ++desktopFileIt) {
+                const QString& desktopFileName = *desktopFileIt;
                 QFile desktopFile(desktopFilesDir.filePath(desktopFileName));
                 if (desktopFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
                     QTextStream stream(&desktopFile);
@@ -2766,7 +2502,8 @@ void MainWindow::loadContent(int value, bool valuepage) {
     readProgramsFromFile(file, programs);
     file.close();
 
-    for (const QString& packageName : programs) {
+    for (auto it = programs.cbegin(); it != programs.cend(); ++it) {
+        const QString& packageName = *it;
         processPackageName(packageName, valuepage);
     }
 
@@ -2840,12 +2577,14 @@ void MainWindow::processPackageName(const QString& packageName, bool valuepage) 
         QString packageNameIcon;
         packageNameIcon = packageName;
 
-        for (const QString& ending : endingsToRemove) {
+        for (auto it = endingsToRemove.cbegin(); it != endingsToRemove.cend(); ++it) {
+            const QString& ending = *it;
             if (packageNameIcon.endsWith(ending)) {
                 packageNameIcon.chop(ending.length());
                 break;
             }
         }
+
         iconPath = "/usr/share/icons/Papirus/48x48/apps/" + packageNameIcon.toLower() + ".svg";
 
         QFileInfo fileInfo(iconPath);
@@ -2860,6 +2599,7 @@ void MainWindow::processPackageName(const QString& packageName, bool valuepage) 
     item->setIcon(QIcon(iconPath));
 
     item->setForeground(color);
+
     ui->list_aur->addItem(item);
 }
 
@@ -2942,7 +2682,8 @@ QString MainWindow::processPackageInfo(const QString& packageInfo)
     QStringList lines = packageInfo.split("\n");
     QString processedInfo;
 
-    for (const QString& line : lines) {
+    for (auto it = lines.cbegin(); it != lines.cend(); ++it) {
+        const QString& line = *it;
         if (!line.isEmpty()) {
             int colonIndex = line.indexOf(':');
             if (colonIndex != -1) {
@@ -3003,19 +2744,9 @@ void MainWindow::addLinkToList(const QString &link)
     QListWidgetItem *item = new QListWidgetItem(QIcon("/usr/share/icons/Papirus/48x48/mimetypes/application-x-xz-pkg.svg"), cleanedLink);
     item->setForeground(generateRandomColor(colorlist));
 
-    if (nvidia == 1 || nvidia < 1 || packageVersion(link) == nvidiaVersion)
-    {
-        ui->list_downgrade->insertItem(0, item);
-        addedLinks.insert(cleanedLink);
+    ui->list_downgrade->insertItem(0, item);
+    addedLinks.insert(cleanedLink);
 
-        if (nvidia == 1)
-        {
-            while (ui->list_downgrade->count() > 5)
-            {
-                delete ui->list_downgrade->takeItem(ui->list_downgrade->count() - 1);
-            }
-        }
-    }
 }
 
 void MainWindow::loadContentInstall()
@@ -3153,6 +2884,8 @@ void MainWindow::onCurrentProcessReadyRead()
             // Обработка orphaned
 
             QColor color = generateRandomColor(colorlist);
+
+            repoz = QFile::exists(":/img/" + repoz + ".png") ? repoz : "community"; //проверка на репозиторий, если нет то комьюнити
             CustomListItemWidget *itemWidget = new CustomListItemWidget(repoz, packageName, installed, orphaned, old, rating, sizeInstallation, color, ui->list_aur);
 
             QString styleSheet = QString("background: none;").arg(color.name());
@@ -3224,8 +2957,8 @@ void MainWindow::loadScripts(const QString& baseDir, QListWidget* listWidget)
     filter << "*.sh";
     QFileInfoList fileList = dir.entryInfoList(filter);
 
-    for (const QFileInfo& fileInfo : fileList)
-    {
+    for (auto it = fileList.cbegin(); it != fileList.cend(); ++it) {
+        const QFileInfo& fileInfo = *it;
         QString itemName;
         QString iconPath;
 
@@ -3345,11 +3078,14 @@ void MainWindow::loadFolders()
     QDir configDir(homeDir.absoluteFilePath(".config"));
 
     QStringList configFolderList = configDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-    for (const QString& folderName : configFolderList)
+    for (auto it = configFolderList.cbegin(); it != configFolderList.cend(); ++it) {
+        const QString& folderName = *it;
         addFolderItem(folderName);
+    }
 
     QFileInfoList homeFolderList = homeDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden);
-    for (const QFileInfo& fileInfo : homeFolderList) {
+    for (auto it = homeFolderList.cbegin(); it != homeFolderList.cend(); ++it) {
+        const QFileInfo& fileInfo = *it;
         QString folderName = fileInfo.fileName();
         if (folderName.startsWith('.') &&
             folderName != ".config" &&
@@ -3422,34 +3158,6 @@ void MainWindow::on_combo_lang_currentIndexChanged(int index)
     }
 }
 
-void MainWindow::on_combo_theme_currentIndexChanged(int index)
-{
-    settings.setValue("Animation", index);
-    animation = index;
-
-    QString animationName = ui->combo_theme->currentText();
-
-    *animationname = animationName.toLower();
-
-    if (animation == 0) {
-        settings.setValue("AnimationName", "");
-        videoItem->hide();
-        player->stop();
-        ui->centralwidget->setStyleSheet("#centralwidget{background: url(:/img/bg.png) no-repeat bottom right;background-color:#322F85;}");
-        opacityEffect->setOpacity(1.0);
-        ui->centralwidget->setGraphicsEffect(opacityEffect);
-    } else {
-        settings.setValue("AnimationName", animationName.toLower());
-        player->setSource(QUrl("qrc:/theme/" + animationName.toLower() + ".mp4"));
-        videoItem->show();
-        player->play();
-        ui->centralwidget->setStyleSheet("");
-        opacityEffect->setOpacity(0.8);
-        ui->centralwidget->setGraphicsEffect(opacityEffect);
-    }
-}
-
-
 //not
 void MainWindow::on_combo_bench_currentIndexChanged(int index)
 {
@@ -3469,8 +3177,8 @@ void MainWindow::on_combo_bench_currentIndexChanged(int index)
 
     QList<QListWidgetItem*> comboBenchScripts;
 
-    for (const QFileInfo& fileInfo : fileList)
-    {
+    for (auto it = fileList.cbegin(); it != fileList.cend(); ++it) {
+        const QFileInfo& fileInfo = *it;
         QString filePath = fileInfo.filePath();
         QString fileName = fileInfo.fileName();
 
@@ -3549,58 +3257,6 @@ void MainWindow::on_time_timeout_timeChanged(const QTime &time)
         sendNotification(tr("Ошибка"), tr("Неверный формат времени."));
 }
 
-void MainWindow::on_time_tea_timeChanged(const QTime &time)
-{
-    if (time.isValid()) {
-        timetea = time;
-        settings.setValue("TimeTea", timetea.toString("HH:mm")); // Сохраняем значение времени в настройках
-
-        int msecsToTea = QTime(0, 0).msecsTo(timetea);
-
-        if (msecsToTea == 0) {
-            teaTimer->stop();
-            ui->action_tea->setText(tr("Заваривание чая (выкл.)"));
-        } else {
-            teaTimer->setInterval(msecsToTea);
-            teaTimer->start();
-            ui->action_tea->setText(tr("Заваривание чая (каждые %1)").arg(timetea.toString("HH:mm")));
-        }
-    } else
-        sendNotification(tr("Ошибка"), tr("Неверный формат времени."));
-}
-
-void MainWindow::on_time_work_timeChanged(const QTime &time)
-{
-    if (time.isValid()) {
-        timework = time;
-        settings.setValue("TimeWork", timework.toString("HH:mm"));
-
-        int msecsToTea = QTime(0, 0).msecsTo(timework);
-
-        if (msecsToTea == 0) {
-            workTimer->stop();
-            ui->action_work->setText(tr("Зарядка (выкл.)"));
-        } else {
-            workTimer->setInterval(msecsToTea);
-            workTimer->start();
-            ui->action_work->setText(tr("Зарядка (каждые %1)").arg(timework.toString("HH:mm")));
-        }
-    } else
-        sendNotification(tr("Ошибка"), tr("Неверный формат времени."));
-}
-
-void MainWindow::on_line_tea_textChanged(const QString &arg1)
-{
-    teatext.reset(new QString(arg1));
-    settings.setValue("TeaText", arg1);
-}
-
-void MainWindow::on_line_work_textChanged(const QString &arg1)
-{
-    worktext.reset(new QString(arg1));
-    settings.setValue("WorkText", arg1);
-}
-
 void MainWindow::on_check_trans_stateChanged(int arg1)
 {
     trans = arg1;
@@ -3640,12 +3296,6 @@ void MainWindow::on_check_autostart_stateChanged(int arg1)
             QFile::link(sourceFilePath, autostartFilePath);
         }
     }
-}
-
-void MainWindow::on_check_cacheremove_stateChanged(int arg1)
-{
-    cacheremove = arg1;
-    settings.setValue("CacheRemove",arg1);
 }
 
 void MainWindow::on_check_repair_stateChanged(int arg1)
@@ -3696,7 +3346,8 @@ void MainWindow::handleListItemClicked(QListWidgetItem *item, const QString& scr
 
         QDir dir(scriptDir);
         QFileInfoList fileInfoList = dir.entryInfoList(QDir::Files);
-        for (const auto& fileInfo : fileInfoList) {
+        for (auto it = fileInfoList.cbegin(); it != fileInfoList.cend(); ++it) {
+            const QFileInfo& fileInfo = *it;
             QFile scriptFile(fileInfo.absoluteFilePath());
             if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
                 QTextStream scriptStream(&scriptFile);
@@ -3704,16 +3355,18 @@ void MainWindow::handleListItemClicked(QListWidgetItem *item, const QString& scr
                     QString line = scriptStream.readLine();
                     if (line.startsWith("#name_" + *lang)) {
                         QString name = line.mid(12).trimmed();
-                        if (name == itemName)
+                        if (name == itemName) {
                             scriptPath = fileInfo.absoluteFilePath();
-                    }
-                    else if (line.startsWith("#msg_" + *lang))
+                        }
+                    } else if (line.startsWith("#msg_" + *lang)) {
                         msg = line.mid(11).trimmed();
+                    }
                 }
                 scriptFile.close();
             }
-            if (!scriptPath.isEmpty())
-                break;
+            if (!scriptPath.isEmpty()) {
+                break; // Выход из цикла for, если scriptPath установлен
+            }
         }
 
         if (scriptPath.isEmpty())
@@ -3779,7 +3432,8 @@ void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString&
 
     QDir dir(scriptDir);
     QFileInfoList fileInfoList = dir.entryInfoList(QDir::Files);
-    for (const auto& fileInfo : fileInfoList) {
+    for (auto it = fileInfoList.cbegin(); it != fileInfoList.cend(); ++it) {
+        const QFileInfo& fileInfo = *it;
         QFile scriptFile(fileInfo.absoluteFilePath());
         if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
             QTextStream scriptStream(&scriptFile);
@@ -3787,15 +3441,18 @@ void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString&
                 QString line = scriptStream.readLine();
                 if (line.startsWith("#name_" + *lang)) {
                     QString name = line.mid(12).trimmed();
-                    if (name == itemName)
+                    if (name == itemName) {
                         scriptPath = fileInfo.absoluteFilePath();
+                        break; // Выход из цикла while
+                    }
                 }
             }
             scriptFile.close();
         }
         if (!scriptPath.isEmpty())
-            break;
+            break; // Выход из цикла for
     }
+
 
     if (scriptPath.isEmpty())
         scriptPath = scriptDir + itemName;
@@ -3868,26 +3525,6 @@ void MainWindow::on_push_kde_clicked()
     QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "sudo" << "rm" << QDir::homePath() + "/.config/kdeglobals");
 }
 
-void MainWindow::on_action_like_triggered()
-{
-    if (auth == 0)
-    {
-        sendNotification(tr("Ошибка"), tr("Для участия в голосовании пройдите авторизацию в настройках!"));
-        return;
-    }
-}
-
-void MainWindow::on_action_imgpkg_triggered(bool checked)
-{
-    if (checked)
-        ui->tabWidget_details->setCurrentIndex(1);
-    else
-        ui->tabWidget_details->setCurrentIndex(0);
-
-    removeToolButtonTooltips(ui->toolBar);
-    removeToolButtonTooltips(ui->toolBar_2);
-}
-
 void MainWindow::on_action_updatelist_triggered()
 {
     if (page == 2)
@@ -3895,17 +3532,11 @@ void MainWindow::on_action_updatelist_triggered()
         miniAnimation(true, ui->list_aur);
 
         ui->list_aur->clear();
-        ui->action_imgpkg->setChecked(false);
-        ui->action_imgpkg->setEnabled(false);
 
         QTimer::singleShot(500, this, [=]() {
             list = 0;
             loadContent(0, true);
 
-            ui->action_imgpkg->setChecked(false);
-            ui->action_imgpkg->setEnabled(false);
-
-            ui->action_like->setEnabled(false);
             ui->details_aur->setHtml(detailsAURdefault);
 
             ui->tabWidget_details->setCurrentIndex(0);
@@ -3964,3 +3595,4 @@ void MainWindow::on_push_grub_clicked()
 {
     writeToFile("/etc/default/grub", ui->text_grub->toPlainText());
 }
+
