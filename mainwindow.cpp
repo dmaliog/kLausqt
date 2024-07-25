@@ -198,6 +198,8 @@ void MainWindow::on_action_3_triggered()
 void MainWindow::on_action_8_triggered()
 {
     if (page == 7) return;
+    mrpropper(7, ui->action_8);
+
     QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
 
     process->start(packageCommands.value(pkg).value("query").at(0), QStringList() << packageCommands.value(pkg).value("query").at(1) << "ocs-url");
@@ -215,7 +217,6 @@ void MainWindow::on_action_8_triggered()
         }
     }
 
-    mrpropper(7, ui->action_8);
 
     bool isBlankPage = ui->webEngineView_custom->url().toString() == "about:blank";
 
@@ -282,6 +283,8 @@ void MainWindow::on_action_12_triggered()
 void MainWindow::on_action_host_triggered()
 {
     if (page == 10) return;
+    mrpropper(10, ui->action_host);
+
     QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
     process->start(packageCommands.value(pkg).value("query").at(0), QStringList() << packageCommands.value(pkg).value("query").at(1) << "apache");
 
@@ -299,7 +302,6 @@ void MainWindow::on_action_host_triggered()
             return;
         }
     }
-    mrpropper(10, ui->action_host);
 
     QString hostUrl = ui->webEngineView_host->url().toString();
     bool isBlankPage = hostUrl == "about:blank";
