@@ -31,12 +31,10 @@ int main(int argc, char *argv[])
     QSettings settings(filePath, QSettings::IniFormat);
 
     QString locale = "ru_RU";
-    int packageManagerIndex;
 
     splash.showMessage(QObject::tr("Проверяем сохраненный язык..."), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
-    if (settings.contains("Language") && settings.contains("PackageManager")) {
+    if (settings.contains("Language")) {
         QString savedLanguage = settings.value("Language").toString();
-        packageManagerIndex = settings.value("PackageManager").toInt();
 
         if (savedLanguage == "ru_RU" || savedLanguage == "en_US")
             locale = savedLanguage;
@@ -56,23 +54,13 @@ int main(int argc, char *argv[])
         languageComboBox->addItem("Русский", "ru_RU");
         languageComboBox->addItem("English", "en_US");
 
-        QLabel *packageManagerLabel = new QLabel("Select the package manager:", &dialog);
-        packageManagerLabel->setGeometry(20, 100, 260, 20);
-
-        QComboBox *packageManagerComboBox = new QComboBox(&dialog);
-        packageManagerComboBox->setGeometry(20, 130, 260, 30);
-        packageManagerComboBox->addItem("yay");
-        packageManagerComboBox->addItem("paru");
-
         QPushButton *saveButton = new QPushButton("Save", &dialog);
         saveButton->setGeometry(100, 200, 100, 30);
 
-        QObject::connect(saveButton, &QPushButton::clicked, std::bind([&dialog, &settings, &packageManagerComboBox, &languageComboBox]() {
+        QObject::connect(saveButton, &QPushButton::clicked, std::bind([&dialog, &settings, &languageComboBox]() {
             QString selectedLanguage = languageComboBox->currentData().toString();
             settings.setValue("Language", selectedLanguage);
 
-            int packageManagerIndex = packageManagerComboBox->currentIndex();
-            settings.setValue("PackageManager", packageManagerIndex);
 
             dialog.accept();
         }));
@@ -80,9 +68,6 @@ int main(int argc, char *argv[])
         if (dialog.exec() == QDialog::Accepted) {
             QString selectedLanguage = languageComboBox->currentData().toString();
             settings.setValue("Language", selectedLanguage);
-
-            packageManagerIndex = packageManagerComboBox->currentIndex();
-            settings.setValue("PackageManager", packageManagerIndex);
             settings.sync();
 
         } else
@@ -98,11 +83,11 @@ int main(int argc, char *argv[])
         return 1;
 
 
-    QString uniqueKey = "KlausKey";
-    QSharedMemory sharedMemory(uniqueKey);
+    QSharedMemory sharedMemory("KlausKey");
     if (!sharedMemory.create(1)) {
         return 1;
     }
+
     QSystemSemaphore systemSemaphore("KlausSemaphore", 1);
     systemSemaphore.acquire();
 

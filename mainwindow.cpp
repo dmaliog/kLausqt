@@ -17,14 +17,19 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "14.3";
+QString currentVersion = "14.4";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
 QString lockFilePath = "/var/lib/pacman/db.lck";
 QString description = "no";
 
-int pkg = 0; //пакетный менеджер 0-yay / 1-paru
+//proxy
+QString https;
+QString http;
+int proxy = 0;
+
+int pkg = 0; //пакетный менеджер 0-yay
 int page = 0; // какая страница используется
 int animloadpage = 0;
 int trayon = 0; // закрывать без трея
@@ -68,22 +73,6 @@ QMap<int, QMap<QString, QStringList>> packageCommands = {
             {"localinstall", {"yay", "-Udd"}},
             {"like", {"yay", "-Wv"}},
             {"dislike", {"yay", "-Wu"}}
-        }
-    },
-    {1,
-        {
-            {"install", {"paru", "-S", "--skipreview"}},
-            {"remove", {"paru", "-R"}},
-            {"update", {"paru", "-Syu", "--skipreview"}},
-            {"list_files", {"paru", "-Ql"}},
-            {"query", {"paru", "-Q"}},
-            {"query_explicit", {"paru", "-Qe"}},
-            {"query_q", {"paru", "-Qq"}},
-            {"remove_explicit", {"paru", "-Rs"}},
-            {"query_depends", {"paru", "-Qdtq"}},
-            {"clean_cache", {"paru", "-Sc"}},
-            {"clean_all_cache", {"paru", "-Scc"}},
-            {"localinstall", {"paru", "-Udd"}}
         }
     }
 };
@@ -760,8 +749,8 @@ void MainWindow::on_action_6_triggered()
 void MainWindow::on_action_4_triggered()
 {
     if (hasUpdates && updinst == 2 && page == 2) {
-        sendNotification(tr("Внимание"), tr("Вначале требуется обновить систему до актуального состояния! Это поможет предотвратить конфликт зависимостей и избежать кучи других проблем!"));
-        return;
+        QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Внимание"), tr("Обновить систему до последней версии, чтобы предотвратить конфликты между зависимостями?"), QMessageBox::Yes | QMessageBox::No);
+        if (reply == QMessageBox::Yes) on_action_11_triggered();
     }
 
     QListWidget* listWidget = nullptr;
@@ -794,16 +783,30 @@ void MainWindow::on_action_4_triggered()
 
     Terminal terminal = getTerminal();
 
-    if (clearinstall && (pkg == 0 || pkg == 1))
-        removeDirectory(QDir::homePath() + "/.cache/" + ((pkg == 0) ? "yay/" : "paru/clone/") + packageName);
+    if (clearinstall && (pkg == 0))
+        removeDirectory(QDir::homePath() + "/.cache/yay/" + packageName);
 
     currentTerminalProcess = QSharedPointer<QProcess>::create(this);
     connect(currentTerminalProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
         loadContentInstall();
     });
+
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    if (proxy == 2) {
+        env.insert("https_proxy", https);
+        env.insert("http_proxy", http);
+    }
+
+    QStringList arguments;
+    arguments << terminal.args;
+    arguments << packageCommands.value(pkg).value("install");
+    arguments << packageName;
+
     currentTerminalProcess->setProgram(terminal.binary);
-    currentTerminalProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("install") << packageName);
+    currentTerminalProcess->setArguments(arguments);
     currentTerminalProcess->setProcessChannelMode(QProcess::MergedChannels);
+    currentTerminalProcess->setEnvironment(env.toStringList());
+
     currentTerminalProcess->start();
 
 }
@@ -811,8 +814,8 @@ void MainWindow::on_action_4_triggered()
 void MainWindow::on_action_30_triggered()
 {
     if (hasUpdates && updinst == 2 && page == 2) {
-        sendNotification(tr("Внимание"), tr("Вначале требуется обновить систему до актуального состояния! Это поможет предотвратить конфликт зависимостей и избежать кучи других проблем!"));
-        return;
+        QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Внимание"), tr("Обновить систему до последней версии, чтобы предотвратить конфликты между зависимостями?"), QMessageBox::Yes | QMessageBox::No);
+        if (reply == QMessageBox::Yes) on_action_11_triggered();
     }
 
     if (ui->list_aur->currentItem() == nullptr) {
@@ -1283,9 +1286,10 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->check_updateinstall->setChecked(updinst);
     ui->check_clearinstall->setChecked(clearinstall);
     ui->combo_mainpage->setCurrentIndex(mainpage);
-    ui->combo_helper->setCurrentIndex(pkg);
     ui->combo_animload->setCurrentIndex(animloadpage);
     ui->check_saveurl->setChecked(saveurl);
+
+    ui->https_proxy->setText(https);
 
     ui->check_trans->setChecked(trans);
     ui->check_colorlist->setChecked(colorlist);
@@ -1300,7 +1304,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     else if (*lang == "en_US")
         ui->combo_lang->setCurrentIndex(1);
 
-    helper = (pkg == 0) ? "yay" : "paru";
+    helper = "yay";
 
     // Создание QNetworkAccessManager
     manager = new QNetworkAccessManager(this);
@@ -1428,7 +1432,6 @@ void MainWindow::loadSettings()
     //-##################################################################################
     //-############################## ОСНОВНАЯ ЧАСТЬ ####################################
     //-##################################################################################
-    pkg = settings.value("PackageManager", 0).toInt();
     mainpage = settings.value("MainPage", 0).toInt();
     animloadpage = settings.value("AnimLoadPage", 0).toInt();
     helpercache = settings.value("HelperCache", 0).toInt();
@@ -1442,6 +1445,10 @@ void MainWindow::loadSettings()
     saveurl = settings.value("SaveURL", 2).toInt();
     trans = settings.value("Trans", 2).toInt();
     colorlist = settings.value("ColorList", 2).toInt();
+
+    https = settings.value("HTTPS").toString();
+    http = settings.value("HTTP").toString();
+    proxy = settings.value("Proxy", 0).toInt();
 
     lang = QSharedPointer<QString>::create(settings.value("Language").toString());
     teatext = QSharedPointer<QString>::create(settings.value("TeaText").toString());
@@ -2151,8 +2158,7 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
                 ui->searchLineEdit->setText(packageName);
 
-                QMessageBox::StandardButton reply;
-                reply = QMessageBox::question(this, tr("Пакет не найден"), tr("Пакет не найден, перейти к его поиску?"), QMessageBox::Yes | QMessageBox::No);
+                QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Пакет не найден"), tr("Пакет не найден, перейти к его поиску?"), QMessageBox::Yes | QMessageBox::No);
 
                 if (reply == QMessageBox::Yes) {
                     QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
@@ -2851,7 +2857,7 @@ void MainWindow::loadingListWidget()
     loadScripts(mainDir + "journals/", ui->list_journal);
     loadScripts(mainDir + "bench/", ui->list_bench);
 
-    cacheButtonHelper = new QListWidgetItem((pkg == 0) ? tr("Кэш пакетов Yay") : tr("Кэш пакетов Paru"), ui->list_clear);
+    cacheButtonHelper = new QListWidgetItem(tr("Кэш пакетов Yay"), ui->list_clear);
     cacheButtonPacman = new QListWidgetItem(tr("Кэш пакетов Pacman"), ui->list_clear);
     orphanButton = new QListWidgetItem(tr("Пакеты сироты"), ui->list_clear);
 
@@ -2922,20 +2928,6 @@ QString MainWindow::findIconPath(const QString &iconNumber)
     QString iconPath = QString("/usr/share/icons/Papirus/48x48/apps/%1.svg").arg(iconNumber.toLower());
     QFileInfo fileInfo(iconPath);
     return fileInfo.exists() ? iconPath : QString(":/img/%1.png").arg(iconNumber.toLower());
-}
-
-void MainWindow::sendNotification(const QString& title, const QString& message)
-{
-    QStringList arguments{
-        title,
-        message,
-        "-i", mainDir + "other/notify.png",
-        "-a", "kLaus",
-        "-t", "10000"
-    };
-
-    QProcess::startDetached("notify-send", arguments);
-    loadSound(1);
 }
 
 void MainWindow::createArchive(const QString& folderPath, const QString& folderName)
@@ -3051,7 +3043,7 @@ void MainWindow::on_combo_helper_currentIndexChanged(int index)
 {
     pkg = index;
     settings.setValue("PackageManager", pkg);
-    cacheButtonHelper->setText((pkg == 0) ? tr("Кэш пакетов Yay") : tr("Кэш пакетов Paru"));
+    cacheButtonHelper->setText(tr("Кэш пакетов Yay"));
 }
 
 void MainWindow::on_combo_animload_currentIndexChanged(int index)
@@ -3178,6 +3170,25 @@ void MainWindow::on_time_timeout_timeChanged(const QTime &time)
     } else
         sendNotification(tr("Ошибка"), tr("Неверный формат времени."));
 }
+
+void MainWindow::on_https_proxy_textChanged(const QString &arg1)
+{
+    https = arg1;
+    settings.setValue("HTTPS", arg1);
+}
+
+void MainWindow::on_http_proxy_textChanged(const QString &arg1)
+{
+    http = arg1;
+    settings.setValue("HTTP", arg1);
+}
+
+void MainWindow::on_check_proxy_stateChanged(int arg1)
+{
+    proxy = arg1;
+    settings.setValue("Proxy",arg1);
+}
+
 
 void MainWindow::on_check_trans_stateChanged(int arg1)
 {
@@ -3333,7 +3344,7 @@ void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString&
             }
             case 2: {
                 if(item == cacheButtonHelper)
-                    sendNotification(tr("Ошибка"), tr("Yay и Paru так не умеют, измените настройки удаления кэша"));
+                    sendNotification(tr("Ошибка"), tr("Yay не может выполнить эту задачу, измените настройки удаления кэша"));
                 else
                 {
                     replymod = QMessageBox::question(this, tr("Вопрос"), tr("При обновлении пакетов старые версии пакетов сохраняются в кэше, чтобы вы могли откатиться к предыдущим версиям, если это необходимо. Однако, если вы не планируете откатываться к предыдущим версиям пакетов, удаление кэша может помочь вам освободить дополнительное место на диске. Вы действительно хотите удалить кэш всех пакетов кроме последних трех версий (можно изменить в настройках)?"), QMessageBox::Yes | QMessageBox::No);
@@ -3381,8 +3392,8 @@ void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString&
 
 
     if (hasUpdates && updinst == 2 && page == 2) {
-        sendNotification(tr("Внимание"), tr("Вначале требуется обновить систему до актуального состояния! Это поможет предотвратить конфликт зависимостей и избежать кучи других проблем!"));
-        return;
+        QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Внимание"), tr("Обновить систему до последней версии, чтобы предотвратить конфликты между зависимостями?"), QMessageBox::Yes | QMessageBox::No);
+        if (reply == QMessageBox::Yes) on_action_11_triggered();
     }
     QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "bash" << scriptPath << *lang << helper);
 }
@@ -3517,4 +3528,3 @@ void MainWindow::on_push_grub_clicked()
 {
     writeToFile("/etc/default/grub", ui->text_grub->toPlainText());
 }
-

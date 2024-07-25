@@ -3,6 +3,7 @@
 
 #include "qboxlayout.h"
 #include "qcompleter.h"
+#include "qdir.h"
 #include "qgraphicseffect.h"
 #include "qgraphicsvideoitem.h"
 #include "qmediaplayer.h"
@@ -39,6 +40,20 @@ public:
 
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+    void sendNotification(const QString& title, const QString& message)
+    {
+        QStringList arguments{
+            title,
+            message,
+            "-i", QDir::homePath() + "/.config/kLaus/other/notify.png",
+            "-a", "kLaus",
+            "-t", "10000"
+        };
+
+        QProcess::startDetached("notify-send", arguments);
+        loadSound(1);
+    }
 
 private:
     QColor generateRandomColor(const int &colorlist)
@@ -224,7 +239,6 @@ public slots:
     void on_action_17_triggered();
     void on_action_27_triggered();
     void on_action_30_triggered();
-    void sendNotification(const QString& title, const QString& message);
 
 private slots:
     void writeToFile(const QString& filePath, const QString& content);
@@ -350,6 +364,9 @@ private slots:
     void on_push_fstab_clicked();
     void on_action_fstab_triggered();
     void on_push_grub_clicked();
+    void on_https_proxy_textChanged(const QString &arg1);
+    void on_http_proxy_textChanged(const QString &arg1);
+    void on_check_proxy_stateChanged(int arg1);
 };
 
 class MySyntaxHighlighter : public QSyntaxHighlighter {
