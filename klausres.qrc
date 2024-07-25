@@ -202,5 +202,6 @@
         <file>img/orphaned.png</file>
         <file>img/installed.png</file>
         <file>img/splash.jpeg</file>
+        <file>img/settings.jpeg</file>
     </qresource>
 </RCC>

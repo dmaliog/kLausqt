@@ -44,7 +44,6 @@ int main(int argc, char *argv[])
             return 1;
 
     } else {
-        // Выводим диалоговое окно с выбором языка и менеджера пакетов
         QDialog dialog;
         dialog.setFixedSize(300, 250);
         dialog.setWindowTitle("Language selection and package manager");
@@ -98,13 +97,10 @@ int main(int argc, char *argv[])
     else
         return 1;
 
-    MainWindow w;
 
     QString uniqueKey = "KlausKey";
     QSharedMemory sharedMemory(uniqueKey);
     if (!sharedMemory.create(1)) {
-
-        w.sendNotification(QObject::tr("Ошибка"), QObject::tr("Приложение уже запущено!"));
         return 1;
     }
     QSystemSemaphore systemSemaphore("KlausSemaphore", 1);
@@ -150,7 +146,8 @@ int main(int argc, char *argv[])
     }
 
     splash.showMessage(QObject::tr("Запускаем kLaus..."), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
-    QTimer::singleShot(10000, [&splash, &w, &systemSemaphore]() {
+    MainWindow w;
+    QTimer::singleShot(1000, [&splash, &w, &systemSemaphore]() {
         splash.close();
         w.show();
         systemSemaphore.release();

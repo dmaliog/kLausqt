@@ -1513,7 +1513,9 @@ margin-left:10px;</string>
       </widget>
       <widget class="QWidget" name="tab_settings">
        <property name="styleSheet">
-        <string notr="true"/>
+        <string notr="true">QWidget#tab_settings{
+	background:#322F85 url(:/img/settings.jpeg) repeat;
+}</string>
        </property>
        <attribute name="title">
         <string>tab_settings</string>
@@ -1567,11 +1569,11 @@ margin-left:10px;</string>
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true">background:#2e2b79;
+           <string notr="true">background:#3c2023;
 padding:0 15px;
 border-top-left-radius: 15px;
 border-top-right-radius: 15px;
-color:#5752e7;
+color:#ac5c65;
 margin-left:10px;
 margin-right:35px;</string>
           </property>
@@ -1619,11 +1621,11 @@ margin-right:35px;</string>
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true">background:#2e2b79;
+           <string notr="true">background:#3c2023;
 padding:0 15px;
 border-top-left-radius: 15px;
 border-top-right-radius: 15px;
-color:#5752e7;
+color:#ac5c65;
 margin-left:10px;
 margin-right:35px;</string>
           </property>
@@ -2205,10 +2207,10 @@ padding-top:0;</string>
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">background:#2e2b79;
+                   <string notr="true">background:#3c2023;
 padding:0 15px;
 border-radius: 8px;
-color:#5752e7;
+color:#ac5c65;
 </string>
                   </property>
                   <property name="text">
@@ -4577,11 +4579,7 @@ QToolBar#toolBar QToolButton {
 
 QToolBar#toolBar QToolButton:hover{
 	background-color:#474c63;
-}
-
-QToolBar#toolBar QToolButton:checked {
-	background-color:#5020fe;
- }</string>
+}</string>
    </property>
    <property name="movable">
     <bool>false</bool>

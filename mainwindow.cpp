@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "14.2";
+QString currentVersion = "14.3";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
@@ -1466,33 +1466,21 @@ void MainWindow::loadSettings()
     switch(mainpage) {
         case 0:
             on_action_2_triggered();
-            ui->action_2->setChecked(true);
-            previousAction = ui->action_2;
             break;
         case 1:
             on_action_7_triggered();
-            ui->action_7->setChecked(true);
-            previousAction = ui->action_7;
             break;
         case 2:
             on_action_downgrade_triggered();
-            ui->action_downgrade->setChecked(true);
-            previousAction = ui->action_downgrade;
             break;
         case 3:
             on_action_9_triggered();
-            ui->action_9->setChecked(true);
-            previousAction = ui->action_9;
             break;
         case 4:
             on_action_17_triggered();
-            ui->action_17->setChecked(true);
-            previousAction = ui->action_17;
             break;
         case 5:
             on_action_12_triggered();
-            ui->action_12->setChecked(true);
-            previousAction = ui->action_12;
             break;
     }
     //-##################################################################################
@@ -1709,16 +1697,6 @@ void MainWindow::loadSettings()
 
     connect(&trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::onTrayIconActivated);
     //-##################################################################################
-    //-############################## ПЕРЕКЛЮЧЕНИЕ МЕНЮ #################################
-    //-##################################################################################
-    connect(ui->toolBar, &QToolBar::actionTriggered, this, [=](QAction* action) {
-        if (previousAction)
-            previousAction->setChecked(false);
-
-        action->setChecked(true);
-        previousAction = action;
-    });
-    //-##################################################################################
     //-##################################### GRUB #######################################
     //-##################################################################################
     QFile grub("/etc/default/grub");
@@ -1882,6 +1860,19 @@ void MainWindow::removeToolButtonTooltips(QToolBar* toolbar) {
 }
 
 void MainWindow::mrpropper(int value, QAction* action) {
+    if (previousAction)
+        previousAction->setChecked(false);
+
+    action->setChecked(true);
+    previousAction = action;
+
+    if (value == 9)
+        setStyleSheet(this->styleSheet() + " " + "QToolBar#toolBar QToolButton:checked { background-color: #3b2022; }");
+    else if(value == 10)
+        setStyleSheet(this->styleSheet() + " " + "QToolBar#toolBar QToolButton:checked { background-color: #0071cd; }");
+    else
+        setStyleSheet(this->styleSheet() + " " + "QToolBar#toolBar QToolButton:checked { background-color: #5020fe; }");
+
 
     ui->label1->setText(action->iconText());
     originalLabelText = ui->label1->text();
@@ -2158,8 +2149,13 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
                 ui->searchLineEdit->setText(packageName);
 
-                QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
-                QCoreApplication::postEvent(ui->searchLineEdit, event);
+                QMessageBox::StandardButton reply;
+                reply = QMessageBox::question(this, tr("Пакет не найден"), tr("Пакет не найден, перейти к его поиску?"), QMessageBox::Yes | QMessageBox::No);
+
+                if (reply == QMessageBox::Yes) {
+                    QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
+                    QCoreApplication::postEvent(ui->searchLineEdit, event);
+                }
 
                 miniAnimation(false,detailsWidget);
             }
