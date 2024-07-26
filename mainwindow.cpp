@@ -1880,7 +1880,7 @@ void MainWindow::mrpropper(int value, QAction* action) {
     else if(value == 10)
         setStyleSheet(this->styleSheet() + " " + "QToolBar#toolBar QToolButton:checked { background-color: #0071cd; }");
     else
-        setStyleSheet(this->styleSheet() + " " + "QToolBar#toolBar QToolButton:checked { background-color: #5020fe; }");
+        setStyleSheet(this->styleSheet() + " " + "QToolBar#toolBar QToolButton:checked { background-color: #468783; }");
 
 
     ui->label1->setText(action->iconText());
@@ -3012,7 +3012,7 @@ void MainWindow::loadFolders()
         }
     }
 
-    ui->label_repair->setText(tr("Очистка конфигураций: %1").arg(itemCount));
+    ui->label_repair->setText(tr("Конфигурации: %1").arg(itemCount));
 }
 
 void MainWindow::restoreArchive(const QString& archivePath)

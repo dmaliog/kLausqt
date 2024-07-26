@@ -60,12 +60,12 @@ private:
     {
         if (colorlist == 2)
         {
-            QColor color;
-            do {
-                color = QColor::fromHsv(QRandomGenerator::global()->bounded(360),
-                                        QRandomGenerator::global()->bounded(200),
-                                        QRandomGenerator::global()->bounded(150, 256));
-            } while (color.blue() > 200 || !color.isValid());
+            QColor baseColor("#F3B235");
+            int hue = baseColor.hue();
+            int saturation = QRandomGenerator::global()->bounded(256); // случайная насыщенность от 0 до 255
+            int value = QRandomGenerator::global()->bounded(150, 256); // случайная яркость от 130 до 255
+
+            QColor color = QColor::fromHsv(hue, saturation, value);
             return color;
         }
         else
@@ -584,7 +584,7 @@ protected:
         painter.drawRoundedRect(0, 0, width(), height(), 4, 4);
 
         int fillWidth = static_cast<int>((static_cast<double>(value) / maxValue) * width());
-        painter.setBrush(QColor(137, 123, 170));
+        painter.setBrush(QColor(70, 134, 130));
         painter.drawRoundedRect(0, 0, fillWidth, height(), 4, 4);
 
         painter.end();

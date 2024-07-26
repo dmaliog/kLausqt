@@ -98,7 +98,7 @@ QScrollBar:horizontal {
 
 QScrollBar::handle {
     padding: 60px 0;
-    background-color: #916ee4;
+    background-color: #529e99;
     border-radius: 4px;
 }
 
@@ -147,11 +147,11 @@ QTextEdit,
 QListWidget,
 QListView,
 QGraphicsView {
-    background-color: #272727;
-    border-radius: 10px;
-    border: 1px solid #222222;
+	background-color: #272727;
+	border-radius: 10px;
+	border: 1px solid #222222;
 	color:#dbd7da;
-    padding: 5px;
+	padding: 5px;
 }
 
 QCheckBox {
@@ -169,8 +169,10 @@ QCheckBox::indicator:checked {
 }
 
 QComboBox,
-QPushButton {
-    padding: 0 10px;
+QPushButton,
+QMenu::item:selected,
+QMessageBox QPushButton{
+    padding: 5 10px;
     background-color: #252525;
     border-radius: 8px;
     border: 1px solid #3d3d3d;
@@ -220,14 +222,6 @@ QComboBox QAbstractItemView {
 
 QMenu::item {
     padding: 5px 20px;
-}
-
-QMenu::item:selected,
-QMessageBox QPushButton {
-    border-radius: 10px;
-    padding: 5px 20px;
-    background-color: #916ee4;
-    color: #FFFFFF;
 }
 
 QMenu::separator {
@@ -286,7 +280,7 @@ QMenuBar::item:pressed {
    </property>
    <property name="styleSheet">
     <string notr="true">#centralwidget{
-	background:#322F85 url(:/img/bg.png) no-repeat bottom right;
+	background:#322F85 url(:/img/system.jpeg) repeat;
 }</string>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -392,7 +386,12 @@ QMenuBar::item:pressed {
           <enum>Qt::LayoutDirection::LeftToRight</enum>
          </property>
          <property name="styleSheet">
-          <string notr="true">padding-left:30px;background-image: url(:/img/m4.png);border:2px solid #4f1ffd;background-repeat: no-repeat;background-position: left center;background-color: #242424;</string>
+          <string notr="true">padding-left: 30px;
+background-image: url(:/img/m4.png);
+border: 2px solid #468783;
+background-repeat: no-repeat;
+background-position: left center;
+background-color: #242424;</string>
          </property>
         </widget>
        </item>
@@ -493,7 +492,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>7</number>
+       <number>11</number>
       </property>
       <widget class="QWidget" name="tab_webgame">
        <attribute name="title">
@@ -569,11 +568,11 @@ QTabWidget#tabWidget QTabBar::tab:selected {
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true">background:#2e2b79;
+           <string notr="true">background:#396d69;
 padding:0 15px;
 border-top-left-radius: 15px;
 border-top-right-radius: 15px;
-color:#5752e7;
+color:#66c3bb;
 margin-left:10px;</string>
           </property>
           <property name="text">
@@ -616,11 +615,11 @@ margin-left:10px;</string>
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true">background:#2e2b79;
+           <string notr="true">background:#396d69;
 padding:0 15px;
 border-top-left-radius: 15px;
 border-top-right-radius: 15px;
-color:#5752e7;
+color:#66c3bb;
 margin-left:10px;</string>
           </property>
           <property name="text">
@@ -709,7 +708,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;td&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;aur&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:28pt; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;содержит наиболее важное и популярное программное обеспечение, которое можно легко получить и установить при помощи &lt;/span&gt;&lt;a href=&quot;https://wiki.archlinux.org/title/Pacman_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; text-decoration: underline; color:#926ee4;&quot;&gt;pacman&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;. Эти репозитории поддерживают &lt;/span&gt;&lt;a href=&quot;https://wiki.archlinux.org/title/Arch_terminology#Package_maintainer&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; text-decoration: underline; color:#926ee4;&quot;&gt;мейнтейнеры пакетов&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;содержит наиболее важное и популярное программное обеспечение, которое можно легко получить и установить при помощи &lt;/span&gt;&lt;a href=&quot;https://wiki.archlinux.org/title/Pacman_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; text-decoration: underline; color:#c0a071;&quot;&gt;pacman&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;. Эти репозитории поддерживают &lt;/span&gt;&lt;a href=&quot;https://wiki.archlinux.org/title/Arch_terminology#Package_maintainer&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; text-decoration: underline; color:#c0a071;&quot;&gt;мейнтейнеры пакетов&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
@@ -725,7 +724,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;td&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;extra&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:28pt; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;содержит все пакеты, которые не подходят для &lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-style:italic;&quot;&gt;core&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;. Этот репозиторий совместно сопровождается &lt;/span&gt;&lt;a href=&quot;https://wiki.archlinux.org/title/Trusted_Users&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; text-decoration: underline; color:#926ee4;&quot;&gt;доверенными пользователями&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt; и разработчиками Arch. Примеры: Xorg, оконные менеджеры, веб-браузеры, медиаплееры, инструменты для работы с языками, такими как Python и Ruby, и многое другое.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;содержит все пакеты, которые не подходят для &lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-style:italic;&quot;&gt;core&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;. Этот репозиторий совместно сопровождается &lt;/span&gt;&lt;a href=&quot;https://wiki.archlinux.org/title/Trusted_Users&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; text-decoration: underline; color:#c0a071;&quot;&gt;доверенными пользователями&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt; и разработчиками Arch. Примеры: Xorg, оконные менеджеры, веб-браузеры, медиаплееры, инструменты для работы с языками, такими как Python и Ruby, и многое другое.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
@@ -733,7 +732,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;td&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;multilib&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:28pt; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;содержит 32-битное программное обеспечение и библиотеки, которые можно использовать для запуска и сборки 32-битных приложений на 64-битных системах (например, &lt;/span&gt;&lt;a href=&quot;https://archlinux.org/packages/?name=wine&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; text-decoration: underline; color:#926ee4;&quot;&gt;wine&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;, &lt;/span&gt;&lt;a href=&quot;https://archlinux.org/packages/?name=steam&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; text-decoration: underline; color:#926ee4;&quot;&gt;steam&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt; и т.д.).&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;содержит 32-битное программное обеспечение и библиотеки, которые можно использовать для запуска и сборки 32-битных приложений на 64-битных системах (например, &lt;/span&gt;&lt;a href=&quot;https://archlinux.org/packages/?name=wine&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; text-decoration: underline; color:#c0a071;&quot;&gt;wine&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;, &lt;/span&gt;&lt;a href=&quot;https://archlinux.org/packages/?name=steam&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; text-decoration: underline; color:#c0a071;&quot;&gt;steam&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt; и т.д.).&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;Пакеты AUR представляют собой пользовательский контент. Любое использование предоставленных файлов осуществляется на ваш страх и риск. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
@@ -913,11 +912,11 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true">background:#2e2b79;
+           <string notr="true">background:#396d69;
 padding:0 15px;
 border-top-left-radius: 15px;
 border-top-right-radius: 15px;
-color:#5752e7;
+color:#66c3bb;
 margin-left:10px;</string>
           </property>
           <property name="text">
@@ -1018,11 +1017,11 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true">background:#2e2b79;
+           <string notr="true">background:#396d69;
 padding:0 15px;
 border-top-left-radius: 15px;
 border-top-right-radius: 15px;
-color:#5752e7;
+color:#66c3bb;
 margin-left:10px;</string>
           </property>
           <property name="text">
@@ -1174,11 +1173,11 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true">background:#2e2b79;
+           <string notr="true">background:#396d69;
 padding:0 15px;
 border-top-left-radius: 15px;
 border-top-right-radius: 15px;
-color:#5752e7;
+color:#66c3bb;
 margin-left:10px;</string>
           </property>
           <property name="text">
@@ -1234,11 +1233,11 @@ margin-left:10px;</string>
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true">background:#2e2b79;
+           <string notr="true">background:#396d69;
 padding:0 15px;
 border-top-left-radius: 15px;
 border-top-right-radius: 15px;
-color:#5752e7;
+color:#66c3bb;
 margin-left:10px;</string>
           </property>
           <property name="text">
@@ -1301,6 +1300,9 @@ margin-left:10px;</string>
        </layout>
       </widget>
       <widget class="QWidget" name="tab_journal">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
        <attribute name="title">
         <string>tab_journal</string>
        </attribute>
@@ -1314,53 +1316,6 @@ margin-left:10px;</string>
         <property name="verticalSpacing">
          <number>0</number>
         </property>
-        <item row="0" column="1">
-         <widget class="QLabel" name="label_details_journal">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>230</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background:#2e2b79;
-padding:0 15px;
-border-top-left-radius: 15px;
-border-top-right-radius: 15px;
-color:#5752e7;
-margin-left:10px;</string>
-          </property>
-          <property name="text">
-           <string>Описание</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::TextFormat::AutoText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-          </property>
-          <property name="margin">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="1">
          <widget class="QTextBrowser" name="details_journal">
           <property name="enabled">
@@ -1403,31 +1358,50 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </property>
          </widget>
         </item>
-        <item row="1" column="0" rowspan="2">
-         <widget class="QListWidget" name="list_journal">
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_details_journal">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="minimumSize">
            <size>
-            <width>670</width>
-            <height>0</height>
+            <width>0</width>
+            <height>40</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>670</width>
-            <height>16777215</height>
+            <width>230</width>
+            <height>40</height>
            </size>
           </property>
           <property name="font">
            <font>
-            <pointsize>13</pointsize>
-            <bold>false</bold>
+            <pointsize>12</pointsize>
            </font>
           </property>
-          <property name="focusPolicy">
-           <enum>Qt::FocusPolicy::NoFocus</enum>
+          <property name="styleSheet">
+           <string notr="true">background:#396d69;
+padding:0 15px;
+border-top-left-radius: 15px;
+border-top-right-radius: 15px;
+color:#66c3bb;
+margin-left:10px;</string>
           </property>
-          <property name="horizontalScrollBarPolicy">
-           <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+          <property name="text">
+           <string>Описание</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::TextFormat::AutoText</enum>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+          </property>
+          <property name="margin">
+           <number>0</number>
           </property>
          </widget>
         </item>
@@ -1457,11 +1431,11 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true">background:#2e2b79;
+           <string notr="true">background:#396d69;
 padding:0 15px;
 border-top-left-radius: 15px;
 border-top-right-radius: 15px;
-color:#5752e7;
+color:#66c3bb;
 margin-left:10px;</string>
           </property>
           <property name="text">
@@ -1503,6 +1477,34 @@ margin-left:10px;</string>
            </size>
           </property>
          </spacer>
+        </item>
+        <item row="1" column="0" rowspan="2">
+         <widget class="QListWidget" name="list_journal">
+          <property name="minimumSize">
+           <size>
+            <width>670</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>670</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>13</pointsize>
+            <bold>false</bold>
+           </font>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::FocusPolicy::NoFocus</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -1954,7 +1956,7 @@ padding-top:0;</string>
                  <x>0</x>
                  <y>0</y>
                  <width>488</width>
-                 <height>203</height>
+                 <height>200</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_2">
@@ -2619,11 +2621,11 @@ color:#ac5c65;
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true">background:#2e2b79;
+           <string notr="true">background:#396d69;
 padding:0 15px;
 border-top-left-radius: 15px;
 border-top-right-radius: 15px;
-color:#5752e7;
+color:#66c3bb;
 margin-left:10px;</string>
           </property>
           <property name="text">
@@ -2656,10 +2658,10 @@ margin-left:10px;</string>
           </property>
           <property name="styleSheet">
            <string notr="true">QWidget#widget_8{
-background:#2e2b79;
-margin-left:10px;
-border-top-left-radius: 15px;
-border-top-right-radius: 15px;
+	margin-left:10px;
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+	background:#396d69;
 }</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_11">
@@ -2705,7 +2707,7 @@ border-top-right-radius: 15px;
              </property>
              <property name="styleSheet">
               <string notr="true">padding:0 25px;
-color:#5752e7;</string>
+color:#66c3bb;</string>
              </property>
              <property name="text">
               <string>Быстрая настройка</string>
@@ -2847,10 +2849,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </property>
           <property name="styleSheet">
            <string notr="true">QWidget#widget_7{
-background:#2e2b79;
-margin-left:10px;
-border-top-left-radius: 15px;
-border-top-right-radius: 15px;
+	margin-left:10px;
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+	background:#396d69;
 }</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_10">
@@ -2896,7 +2898,7 @@ border-top-right-radius: 15px;
              </property>
              <property name="styleSheet">
               <string notr="true">padding:0 25px;
-color:#5752e7;</string>
+color:#66c3bb;</string>
              </property>
              <property name="text">
               <string>Настройка GRUB</string>
@@ -3080,7 +3082,7 @@ background-position: left center;</string>
               </property>
               <property name="styleSheet">
                <string notr="true">border-radius:13px;
-padding: 0 10px 0 35px;
+padding: 0 10px 0 40px;
 background-image: url(:/img/m5.png);
 background-repeat: no-repeat;
 background-position: left center;</string>
@@ -3233,10 +3235,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </property>
           <property name="styleSheet">
            <string notr="true">QWidget#widget_2{
-background:#2e2b79;
 margin-left:10px;
 border-top-left-radius: 15px;
 border-top-right-radius: 15px;
+background:#396d69;
 }</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -3281,8 +3283,8 @@ border-top-right-radius: 15px;
               </font>
              </property>
              <property name="styleSheet">
-              <string notr="true">color:#5752e7;
-padding:0 25px;</string>
+              <string notr="true">padding:0 25px;
+color:#66c3bb;</string>
              </property>
              <property name="text">
               <string>Бенчмарки</string>
@@ -3378,11 +3380,11 @@ padding:0 25px;</string>
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true">background:#2e2b79;
+           <string notr="true">background:#396d69;
 padding:0 15px;
 border-top-left-radius: 15px;
 border-top-right-radius: 15px;
-color:#5752e7;
+color:#66c3bb;
 margin-left:10px;</string>
           </property>
           <property name="text">
@@ -3541,11 +3543,11 @@ margin-left:10px;</string>
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true">background:#2e2b79;
+           <string notr="true">background:#396d69;
 padding:0 15px;
 border-top-left-radius: 15px;
 border-top-right-radius: 15px;
-color:#5752e7;
+color:#66c3bb;
 margin-left:10px;</string>
           </property>
           <property name="text">
@@ -3599,10 +3601,10 @@ margin-left:10px;</string>
           </property>
           <property name="styleSheet">
            <string notr="true">QWidget#widget_3{
-	background:#2e2b79;
 	margin-left:10px;
 	border-top-left-radius: 15px;
 	border-top-right-radius: 15px;
+	background:#396d69;
 }</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -3648,10 +3650,10 @@ margin-left:10px;</string>
              </property>
              <property name="styleSheet">
               <string notr="true">padding:0 25px;
-color:#5752e7;</string>
+color:#66c3bb;</string>
              </property>
              <property name="text">
-              <string>Очистка конфигураций</string>
+              <string>Конфигурации</string>
              </property>
              <property name="textFormat">
               <enum>Qt::TextFormat::AutoText</enum>
@@ -3786,11 +3788,11 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true">background:#2e2b79;
+           <string notr="true">background:#396d69;
 padding:0 15px;
 border-top-left-radius: 15px;
 border-top-right-radius: 15px;
-color:#5752e7;
+color:#66c3bb;
 margin-left:10px;</string>
           </property>
           <property name="text">
@@ -3861,11 +3863,11 @@ margin-left:10px;</string>
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true">background:#2e2b79;
+           <string notr="true">background:#396d69;
 padding:0 15px;
 border-top-left-radius: 15px;
 border-top-right-radius: 15px;
-color:#5752e7;
+color:#66c3bb;
 margin-left:10px;</string>
           </property>
           <property name="text">
@@ -4082,10 +4084,10 @@ margin-left:10px;</string>
           </property>
           <property name="styleSheet">
            <string notr="true">QWidget#widget_5{
-background:#2e2b79;
-margin-left:10px;
-border-top-left-radius: 15px;
-border-top-right-radius: 15px;
+	margin-left:10px;
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+	background:#396d69;
 }</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -4131,7 +4133,7 @@ border-top-right-radius: 15px;
              </property>
              <property name="styleSheet">
               <string notr="true">padding:0 25px;
-color:#5752e7;</string>
+color:#66c3bb;</string>
              </property>
              <property name="text">
               <string>Настройка Pacman</string>
@@ -4202,11 +4204,11 @@ color:#5752e7;</string>
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true">background:#2e2b79;
+           <string notr="true">background:#396d69;
 padding:0 15px;
 border-top-left-radius: 15px;
 border-top-right-radius: 15px;
-color:#5752e7;
+color:#66c3bb;
 margin-left:10px;</string>
           </property>
           <property name="text">
@@ -4325,10 +4327,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </property>
           <property name="styleSheet">
            <string notr="true">QWidget#widget_6{
-background:#2e2b79;
-margin-left:10px;
-border-top-left-radius: 15px;
-border-top-right-radius: 15px;
+	margin-left:10px;
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+	background:#396d69;
 }</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_8">
@@ -4374,7 +4376,7 @@ border-top-right-radius: 15px;
              </property>
              <property name="styleSheet">
               <string notr="true">padding:0 25px;
-color:#5752e7;</string>
+color:#66c3bb;</string>
              </property>
              <property name="text">
               <string>Настройка fstab</string>
@@ -4445,11 +4447,11 @@ color:#5752e7;</string>
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true">background:#2e2b79;
+           <string notr="true">background:#396d69;
 padding:0 15px;
 border-top-left-radius: 15px;
 border-top-right-radius: 15px;
-color:#5752e7;
+color:#66c3bb;
 margin-left:10px;</string>
           </property>
           <property name="text">

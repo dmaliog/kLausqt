@@ -43,9 +43,6 @@
         <file>img/m4.png</file>
         <file>img/m5.png</file>
         <file>img/m6.png</file>
-        <file>img/m7.png</file>
-        <file>img/m8.png</file>
-        <file>img/m9.png</file>
         <file>img/p_1.png</file>
         <file>img/tray.png</file>
         <file>journals/fdisk.sh</file>
@@ -203,5 +200,6 @@
         <file>img/installed.png</file>
         <file>img/splash.jpeg</file>
         <file>img/settings.jpeg</file>
+        <file>img/system.jpeg</file>
     </qresource>
 </RCC>
