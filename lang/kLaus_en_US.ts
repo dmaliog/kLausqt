@@ -9,29 +9,29 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1932"/>
+        <location filename="../mainwindow.ui" line="1934"/>
         <source>Удаление кэша</source>
         <translation>Deleting the cache</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1866"/>
+        <location filename="../mainwindow.ui" line="1868"/>
         <source>Всех пакетов</source>
         <translation>All packages</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1899"/>
+        <location filename="../mainwindow.ui" line="1901"/>
         <source>Создать резервную копию при удалении конфигураций</source>
         <translation>Create a backup when deleting configurations</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1633"/>
-        <location filename="../mainwindow.ui" line="4893"/>
-        <location filename="../mainwindow.ui" line="4896"/>
+        <location filename="../mainwindow.ui" line="1635"/>
+        <location filename="../mainwindow.ui" line="4895"/>
+        <location filename="../mainwindow.ui" line="4898"/>
         <source>Настройки приложения</source>
         <translation>Application settings</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2351"/>
+        <location filename="../mainwindow.ui" line="2353"/>
         <source>Стартовая страница</source>
         <translation>Start page</translation>
     </message>
@@ -41,107 +41,219 @@
         <translation>Installed packages</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2561"/>
-        <location filename="../mainwindow.ui" line="4868"/>
-        <location filename="../mainwindow.ui" line="4871"/>
+        <location filename="../mainwindow.ui" line="2563"/>
+        <location filename="../mainwindow.ui" line="4870"/>
+        <location filename="../mainwindow.ui" line="4873"/>
         <location filename="../mainwindow.cpp" line="410"/>
         <location filename="../mainwindow.cpp" line="1682"/>
         <source>Информация о системе</source>
         <translation>Information about the system</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4846"/>
-        <location filename="../mainwindow.ui" line="4849"/>
+        <location filename="../mainwindow.ui" line="4848"/>
+        <location filename="../mainwindow.ui" line="4851"/>
         <source>Кастомизация</source>
         <translation>Customization</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2432"/>
+        <location filename="../mainwindow.ui" line="2434"/>
         <source>Язык</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2481"/>
+        <location filename="../mainwindow.ui" line="2483"/>
         <source>Русский</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2486"/>
+        <location filename="../mainwindow.ui" line="2488"/>
         <source>English</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2512"/>
+        <location filename="../mainwindow.ui" line="2514"/>
         <source>Химический процесс</source>
         <translation>Chemical process</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2517"/>
+        <location filename="../mainwindow.ui" line="2519"/>
         <source>Косатки</source>
         <translation>Killer whales</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2269"/>
+        <location filename="../mainwindow.ui" line="2271"/>
         <source>Звук уведомлений: 0/100</source>
         <translation>Notification sound: 0/100</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2075"/>
+        <location filename="../mainwindow.ui" line="2077"/>
         <source>Автообновление</source>
         <translation>Autoupdate</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3113"/>
+        <location filename="../mainwindow.ui" line="3115"/>
         <source>Ожидание загрузочного меню (секунды)</source>
         <translation>Waiting for the boot menu (seconds)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3057"/>
+        <location filename="../mainwindow.ui" line="3059"/>
         <source>Модули ядра при старте системы</source>
         <translation>Kernel modules at system startup</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="500"/>
+        <location filename="../mainwindow.ui" line="499"/>
         <source>tab_auradd</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="534"/>
+        <location filename="../mainwindow.ui" line="533"/>
         <source>tab_aur</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="580"/>
-        <location filename="../mainwindow.ui" line="1029"/>
+        <location filename="../mainwindow.ui" line="579"/>
+        <location filename="../mainwindow.ui" line="1028"/>
         <source>Описание пакета</source>
         <translation>Package description</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="844"/>
+        <location filename="../mainwindow.ui" line="843"/>
         <source>tab_aurpkg</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1063"/>
+        <location filename="../mainwindow.ui" line="1062"/>
         <source>tab_site</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="522"/>
-        <location filename="../mainwindow.ui" line="1085"/>
-        <location filename="../mainwindow.ui" line="3940"/>
-        <location filename="../mainwindow.ui" line="3974"/>
-        <location filename="../mainwindow.ui" line="4008"/>
+        <location filename="../mainwindow.ui" line="521"/>
+        <location filename="../mainwindow.ui" line="1084"/>
+        <location filename="../mainwindow.ui" line="3942"/>
+        <location filename="../mainwindow.ui" line="3976"/>
+        <location filename="../mainwindow.ui" line="4010"/>
         <source>about:blank</source>
         <translation>about:blank</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="431"/>
+        <location filename="../mainwindow.ui" line="430"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;☠ &lt;span style=&quot; font-weight:400;&quot;&gt;Установка может нанести вред вашей системе из-за конфликта зависимостей!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;☠ &lt;span style=&quot; font-weight:400;&quot;&gt;The installation may harm your system due to a dependency conflict!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="693"/>
+        <location filename="../mainwindow.ui" line="964"/>
+        <location filename="../mainwindow.ui" line="1136"/>
+        <location filename="../mainwindow.ui" line="1347"/>
+        <location filename="../mainwindow.ui" line="3195"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Noto Sans&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;Ничего не выбрано&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Noto Sans&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;sans Serif&apos;;&quot;&gt;No one is selected&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1096"/>
+        <source>tab_sh</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1184"/>
+        <source>Скрипты</source>
+        <translation>Scripts</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1244"/>
+        <source>Описание скрипта</source>
+        <translation>Description of the script</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1307"/>
+        <source>tab_journal</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1395"/>
+        <location filename="../mainwindow.ui" line="2632"/>
+        <location filename="../mainwindow.ui" line="3391"/>
+        <location filename="../mainwindow.ui" line="4215"/>
+        <location filename="../mainwindow.ui" line="4458"/>
+        <location filename="../mainwindow.cpp" line="2080"/>
+        <source>Описание</source>
+        <translation>Description</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1513"/>
+        <source>tab_custom</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1523"/>
+        <source>tab_settings</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="2123"/>
+        <source>Проверить актуальность системы перед установкой новых пакетов</source>
+        <translation>Check the system&apos;s relevance before installing new packages</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1863"/>
+        <source>Неустановленных</source>
+        <translation>Unidentified</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1873"/>
+        <source>Кроме 3-х последних</source>
+        <translation>Except for the last 3</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="2380"/>
+        <source>Показать анимацию загрузки</source>
+        <translation>Show the loading animation</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1814"/>
+        <source>Переводить описание пакетов на мой язык</source>
+        <translation>Translate package descriptions into my language</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="2147"/>
+        <source>Таймаут поиска пакетов</source>
+        <translation>Package search timeout</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="2323"/>
+        <source>Запустить приложение при старте системы</source>
+        <translation>Launch the application at system startup</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="2410"/>
+        <source>Раскрашивать список для лучшей читаемости</source>
+        <translation>Colorize the list for better readability</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="2455"/>
+        <source>Сохранить веб-страницы при выходе из приложения</source>
+        <translation>Save web pages when exiting the application</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="2302"/>
+        <source>Закрыть приложение без сворачивания в трей</source>
+        <translation>Close the application without collapsing to the tray</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="692"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -161,7 +273,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;td&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;aur&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:28pt; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;содержит наиболее важное и популярное программное обеспечение, которое можно легко получить и установить при помощи &lt;/span&gt;&lt;a href=&quot;https://wiki.archlinux.org/title/Pacman_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#926ee4;&quot;&gt;pacman&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;. Эти репозитории поддерживают &lt;/span&gt;&lt;a href=&quot;https://wiki.archlinux.org/title/Arch_terminology#Package_maintainer&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#926ee4;&quot;&gt;мейнтейнеры пакетов&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;содержит наиболее важное и популярное программное обеспечение, которое можно легко получить и установить при помощи &lt;/span&gt;&lt;a href=&quot;https://wiki.archlinux.org/title/Pacman_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#c0a071;&quot;&gt;pacman&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;. Эти репозитории поддерживают &lt;/span&gt;&lt;a href=&quot;https://wiki.archlinux.org/title/Arch_terminology#Package_maintainer&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#c0a071;&quot;&gt;мейнтейнеры пакетов&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
@@ -177,7 +289,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;td&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;extra&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:28pt; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;содержит все пакеты, которые не подходят для &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-style:italic;&quot;&gt;core&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;. Этот репозиторий совместно сопровождается &lt;/span&gt;&lt;a href=&quot;https://wiki.archlinux.org/title/Trusted_Users&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#926ee4;&quot;&gt;доверенными пользователями&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt; и разработчиками Arch. Примеры: Xorg, оконные менеджеры, веб-браузеры, медиаплееры, инструменты для работы с языками, такими как Python и Ruby, и многое другое.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;содержит все пакеты, которые не подходят для &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-style:italic;&quot;&gt;core&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;. Этот репозиторий совместно сопровождается &lt;/span&gt;&lt;a href=&quot;https://wiki.archlinux.org/title/Trusted_Users&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#c0a071;&quot;&gt;доверенными пользователями&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt; и разработчиками Arch. Примеры: Xorg, оконные менеджеры, веб-браузеры, медиаплееры, инструменты для работы с языками, такими как Python и Ruby, и многое другое.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
@@ -185,201 +297,61 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;td&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;multilib&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:28pt; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;содержит 32-битное программное обеспечение и библиотеки, которые можно использовать для запуска и сборки 32-битных приложений на 64-битных системах (например, &lt;/span&gt;&lt;a href=&quot;https://archlinux.org/packages/?name=wine&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#926ee4;&quot;&gt;wine&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;, &lt;/span&gt;&lt;a href=&quot;https://archlinux.org/packages/?name=steam&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#926ee4;&quot;&gt;steam&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt; и т.д.).&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;содержит 32-битное программное обеспечение и библиотеки, которые можно использовать для запуска и сборки 32-битных приложений на 64-битных системах (например, &lt;/span&gt;&lt;a href=&quot;https://archlinux.org/packages/?name=wine&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#c0a071;&quot;&gt;wine&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;, &lt;/span&gt;&lt;a href=&quot;https://archlinux.org/packages/?name=steam&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#c0a071;&quot;&gt;steam&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt; и т.д.).&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;Пакеты AUR представляют собой пользовательский контент. Любое использование предоставленных файлов осуществляется на ваш страх и риск. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt; &lt;html&gt;&lt;head&gt;&lt;meta name =&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt; p, li { white-space: pre-wrap; } hr { height: 1px; border-width: 0; } li.unchecked::marker { content: &quot;\2610&quot;; } li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Noto Sans&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style= &quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;Packages in the search are indicated by special icons, these are the repositories in which the package is stored.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent :0px; font-family:&apos;Sans Serif&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style= &quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;They are different, but here are the main ones:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent :0px; font-family:&apos;Sans Serif&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent :0px; font-family:&apos;Sans Serif&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;table border=&quot;0&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;&quot; cellspacing=&quot;2&quot; cellpadding=&quot;0&quot;&gt;
+&lt;p style=&quot; margin- top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;Packages in the search are marked with special icons, these are the repositories in which the package is stored.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom :0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt; p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font -family:&apos;Sans Serif&apos;;&quot;&gt;They are different, but here are the main ones:&lt;/span&gt;&lt;/p&gt; &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; bottom:0px; margin-right:0px; -qt-block-indent:0px; font-family:&apos;Sans Serif&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt; &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent :0px; font-family:&apos;Sans Serif&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt; &lt;table border=&quot;0&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;&quot; cellspacing=&quot;2&quot; cellpadding=&quot;0&quot;&gt; &lt;tr&gt; &lt;td&gt; &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/aur_mini.png&quot; /&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td &gt; &lt;td&gt; &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;aur&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:28pt; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt; &lt;td&gt; &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;contains the most important and popular software that can be easily obtained and installed using &lt;/span&gt;&lt;a href=&quot;https ://wiki.archlinux.org/title/Pacman_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)&quot;&gt;&lt;span style=&quot; font -family:&apos;Sans Serif&apos;; text-decoration: underline; color:#c0a071;&quot;&gt;pacman&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;. These repositories support &lt;/span&gt;&lt;a href=&quot;https://wiki.archlinux.org/title/Arch_terminology#Package_maintainer&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#c0a071;&quot;&gt;package maintainers&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;.&lt;/span&gt;&lt;/p&gt; &lt;p style=&quot;-qt- paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt; &lt;tr&gt; &lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src= &quot;:/img/core_mini.png&quot; /&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt; &lt;td&gt; &lt;p style=&quot; margin-top :0px; margin-bottom:0px; margin-right:0px; -qt-block-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif &apos;; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;core&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right: 0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;has fairly strict quality requirements. Developers/users must confirm (in response to &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-style:italic;&quot;&gt;signoff&lt;/span&gt;&lt;span style=&quot; font-family:&apos; Sans Serif&apos;;&quot;&gt;-request in mailing list) the functionality of updates before they are accepted.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin -bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;;&quot;&gt;&lt;br /&gt;&lt;/p &gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src= &quot;:/img/aur_mini.png&quot; /&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style= &quot; font-family:&apos;Sans Serif&apos;; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;aur&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font -size:28pt; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style= &quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;contains the most important and popular software that can be easily obtained and installed using &lt;/span&gt;&lt;a href=&quot;https://wiki.archlinux.org/title/Pacman_ (%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; underline; color:#926ee4;&quot;&gt;pacman&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;. These repositories support &lt;/span&gt;&lt;a href=&quot;https://wiki.archlinux.org/title/Arch_terminology#Package_maintainer&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color :#926ee4;&quot;&gt;Package maintainers&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent :0px; font-family:&apos;Sans Serif&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent :0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/extra_mini.png&quot; /&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td &gt; &lt;td&gt; &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;extra&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:28pt; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt; &lt;td&gt; &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;contains all packages that not suitable for &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-style:italic;&quot;&gt;core&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt; . This repository is jointly maintained by &lt;/span&gt;&lt;a href=&quot;https://wiki.archlinux.org/title/Trusted_Users&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#c0a071;&quot;&gt;trusted users&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt; and Arch developers. Examples: Xorg, window managers, web browsers, media players, tools for working with languages ​​such as Python and Ruby, and much more.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/td&gt; &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src= &quot;:/img/core_mini.png&quot; /&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style= &quot; font-family:&apos;Sans Serif&apos;; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;core&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font -size:28pt; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style= &quot;font-family:&apos;Sans Serif&apos;;&quot;&gt;has quite strict quality requirements. Developers/users must confirm (in response to&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-style:italic;&quot;&gt;signoff&lt;/span&gt;&lt;span style=&quot; font-family:&apos; Sans Serif&apos;;&quot;&gt;-request in the mailing list) the performance of updates before they are accepted.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent :0px; font-family:&apos;Sans Serif&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src= &quot;:/img/extra_mini.png&quot; /&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style= &quot; font-family:&apos;Sans Serif&apos;; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;extra&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font -size:28pt; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style= &quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;contains all packages that are not suitable for&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-style:italic;&quot;&gt;core&lt;/span &gt;&lt;span style=&quot;font-family:&apos;Sans Serif&apos;;&quot;&gt;. This repository is jointly maintained by &lt;/span&gt;&lt;a href=&quot;https://wiki.archlinux.org/title/Trusted_Users&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color: #926ee4;&quot;&gt;trusted users&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;and Arch developers. Examples: Xorg, window managers, web browsers, media players, tools for working with languages ​​such as Python and Ruby, and much more.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent :0px; font-family:&apos;Sans Serif&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src= &quot;:/img/multilib_mini.png&quot; /&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style= &quot; font-family:&apos;Sans Serif&apos;; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;multilib&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font -size:28pt; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style= &quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;contains 32-bit software and libraries that can be used to run and build 32-bit applications on 64-bit systems (for example, &lt;/span&gt;&lt;a href=&quot;https ://archlinux.org/packages/?name=wine&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#926ee4;&quot;&gt;wine&lt;/span&gt;&lt;/a &gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;, &lt;/span&gt;&lt;a href=&quot;https://archlinux.org/packages/?name=steam&quot;&gt;&lt;span style=&quot; font- family:&apos;Sans Serif&apos;; text-decoration: underline; color:#926ee4;&quot;&gt;steam&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt; etc. ).&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent :0px; font-family:&apos;Sans Serif&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style= &quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;AUR packages are user-generated content. Any use of the files provided is at your own risk. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/img/multilib_mini.png&quot; /&gt;&lt;/p&gt;&lt;/td&gt; &lt;td&gt; &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:28pt; font-style:italic; vertical-align:super;&quot;&gt;multilib&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:28pt; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt; &lt;td&gt; &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;contains 32-bit software and libraries that can be used to run and build 32-bit applications on 64-bit systems ( for example, &lt;/span&gt;&lt;a href=&quot;https://archlinux.org/packages/?name=wine&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:# c0a071;&quot;&gt;wine&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;, &lt;/span&gt;&lt;a href=&quot;https://archlinux.org/packages/? name=steam&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#c0a071;&quot;&gt;steam&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family: &apos;Sans Serif&apos;;&quot;&gt; etc.).&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top: 12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;;&quot;&gt;&lt;br /&gt; &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt; &lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;AUR packages are user-generated content. Any use of the files provided is at your own risk.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="965"/>
-        <location filename="../mainwindow.ui" line="1137"/>
-        <location filename="../mainwindow.ui" line="1392"/>
-        <location filename="../mainwindow.ui" line="3193"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Noto Sans&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;Ничего не выбрано&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Noto Sans&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;sans Serif&apos;;&quot;&gt;No one is selected&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1097"/>
-        <source>tab_sh</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1185"/>
-        <source>Скрипты</source>
-        <translation>Scripts</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1245"/>
-        <source>Описание скрипта</source>
-        <translation>Description of the script</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1305"/>
-        <source>tab_journal</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1351"/>
-        <location filename="../mainwindow.ui" line="2630"/>
-        <location filename="../mainwindow.ui" line="3389"/>
-        <location filename="../mainwindow.ui" line="4213"/>
-        <location filename="../mainwindow.ui" line="4456"/>
-        <location filename="../mainwindow.cpp" line="2080"/>
-        <source>Описание</source>
-        <translation>Description</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1511"/>
-        <source>tab_custom</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1521"/>
-        <source>tab_settings</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="2121"/>
-        <source>Проверить актуальность системы перед установкой новых пакетов</source>
-        <translation>Check the system&apos;s relevance before installing new packages</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1861"/>
-        <source>Неустановленных</source>
-        <translation>Unidentified</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1871"/>
-        <source>Кроме 3-х последних</source>
-        <translation>Except for the last 3</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="2378"/>
-        <source>Показать анимацию загрузки</source>
-        <translation>Show the loading animation</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1812"/>
-        <source>Переводить описание пакетов на мой язык</source>
-        <translation>Translate package descriptions into my language</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="2145"/>
-        <source>Таймаут поиска пакетов</source>
-        <translation>Package search timeout</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="2321"/>
-        <source>Запустить приложение при старте системы</source>
-        <translation>Launch the application at system startup</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="2408"/>
-        <source>Раскрашивать список для лучшей читаемости</source>
-        <translation>Colorize the list for better readability</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="2453"/>
-        <source>Сохранить веб-страницы при выходе из приложения</source>
-        <translation>Save web pages when exiting the application</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="2300"/>
-        <source>Закрыть приложение без сворачивания в трей</source>
-        <translation>Close the application without collapsing to the tray</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1976"/>
-        <location filename="../mainwindow.ui" line="1995"/>
+        <location filename="../mainwindow.ui" line="1978"/>
+        <location filename="../mainwindow.ui" line="1997"/>
         <source>socks5://127.0.0.1:1080</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2002"/>
+        <location filename="../mainwindow.ui" line="2004"/>
         <source>HTTPS</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2033"/>
+        <location filename="../mainwindow.ui" line="2035"/>
         <source>Прокси для пакетов</source>
         <translation>Proxy for packages</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2040"/>
+        <location filename="../mainwindow.ui" line="2042"/>
         <source>HTTP</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2047"/>
+        <location filename="../mainwindow.ui" line="2049"/>
         <source>Использовать прокси при установке пакетов</source>
         <translation>Use a proxy when installing packages</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2584"/>
+        <location filename="../mainwindow.ui" line="2586"/>
         <source>tab_system</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2781"/>
+        <location filename="../mainwindow.ui" line="2783"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -402,149 +374,154 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;It contains various parameters and settings that affect the behavior of the GRUB loader when booting the operating system. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3137"/>
+        <location filename="../mainwindow.ui" line="3139"/>
         <source>tab_timer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3332"/>
+        <location filename="../mainwindow.ui" line="3334"/>
         <source>Все</source>
         <translation>All</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3347"/>
+        <location filename="../mainwindow.ui" line="3349"/>
         <source>Графика</source>
         <translation>Graphics</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4137"/>
+        <location filename="../mainwindow.ui" line="3656"/>
+        <source>Конфигурации</source>
+        <translation>Configurations</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="4139"/>
         <source>Настройка Pacman</source>
         <translation>Setting up Pacman</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4380"/>
+        <location filename="../mainwindow.ui" line="4382"/>
         <source>Настройка fstab</source>
         <translation>Setting up fstab</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4923"/>
-        <location filename="../mainwindow.ui" line="4926"/>
+        <location filename="../mainwindow.ui" line="4925"/>
+        <location filename="../mainwindow.ui" line="4928"/>
         <source>Удалить пакет</source>
         <translation>Delete a package</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4938"/>
-        <location filename="../mainwindow.ui" line="4941"/>
+        <location filename="../mainwindow.ui" line="4940"/>
+        <location filename="../mainwindow.ui" line="4943"/>
         <source>Установить пакет</source>
         <translation>Install the package</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4987"/>
-        <location filename="../mainwindow.ui" line="4990"/>
+        <location filename="../mainwindow.ui" line="4989"/>
+        <location filename="../mainwindow.ui" line="4992"/>
         <source>Установить пакет с PKGBUILD</source>
         <translation>Install the package with PKGBUILD</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5002"/>
-        <location filename="../mainwindow.ui" line="5005"/>
+        <location filename="../mainwindow.ui" line="5004"/>
+        <location filename="../mainwindow.ui" line="5007"/>
         <source>Домашняя страница</source>
         <translation>Home page</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5017"/>
-        <location filename="../mainwindow.ui" line="5020"/>
+        <location filename="../mainwindow.ui" line="5019"/>
+        <location filename="../mainwindow.ui" line="5022"/>
         <source>Обновить страницу</source>
         <translation>Refresh the page</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5032"/>
-        <location filename="../mainwindow.ui" line="5035"/>
+        <location filename="../mainwindow.ui" line="5034"/>
+        <location filename="../mainwindow.ui" line="5037"/>
         <source>Скопировать URL</source>
         <translation>Copy the URL</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5077"/>
-        <location filename="../mainwindow.ui" line="5080"/>
+        <location filename="../mainwindow.ui" line="5079"/>
+        <location filename="../mainwindow.ui" line="5082"/>
         <source>Удалить скрипт</source>
         <translation>Delete the script</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5162"/>
-        <location filename="../mainwindow.ui" line="5165"/>
+        <location filename="../mainwindow.ui" line="5164"/>
+        <location filename="../mainwindow.ui" line="5167"/>
         <location filename="../mainwindow.cpp" line="452"/>
         <source>Настройки GRUB</source>
         <translation>Settings GRUB</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5189"/>
-        <location filename="../mainwindow.ui" line="5192"/>
+        <location filename="../mainwindow.ui" line="5191"/>
+        <location filename="../mainwindow.ui" line="5194"/>
         <location filename="../mainwindow.cpp" line="477"/>
         <source>Оптимизация</source>
         <translation>Optimization</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5249"/>
+        <location filename="../mainwindow.ui" line="5251"/>
         <source>Рестарт</source>
         <translation>Restart</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5321"/>
+        <location filename="../mainwindow.ui" line="5323"/>
         <location filename="../mainwindow.cpp" line="460"/>
         <source>Настройки Pacman</source>
         <translation>Settings Pacman</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5333"/>
-        <location filename="../mainwindow.ui" line="5336"/>
+        <location filename="../mainwindow.ui" line="5335"/>
+        <location filename="../mainwindow.ui" line="5338"/>
         <location filename="../mainwindow.cpp" line="468"/>
         <source>Настройки файловой системы</source>
         <translation>Settings file system</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5355"/>
-        <location filename="../mainwindow.ui" line="5358"/>
+        <location filename="../mainwindow.ui" line="5357"/>
+        <location filename="../mainwindow.ui" line="5360"/>
         <source>Файлы пакета</source>
         <translation>Package files</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5234"/>
+        <location filename="../mainwindow.ui" line="5236"/>
         <source>Остановить</source>
         <translation>Stop</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5219"/>
+        <location filename="../mainwindow.ui" line="5221"/>
         <source>Каталог</source>
         <translation>Catalog</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3288"/>
-        <location filename="../mainwindow.ui" line="5147"/>
+        <location filename="../mainwindow.ui" line="3290"/>
+        <location filename="../mainwindow.ui" line="5149"/>
         <location filename="../mainwindow.cpp" line="421"/>
         <source>Бенчмарки</source>
         <translation>Benchmarks</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3153"/>
-        <location filename="../mainwindow.ui" line="3450"/>
-        <location filename="../mainwindow.ui" line="3709"/>
-        <location filename="../mainwindow.ui" line="3918"/>
-        <location filename="../mainwindow.ui" line="3952"/>
-        <location filename="../mainwindow.ui" line="3986"/>
-        <location filename="../mainwindow.ui" line="4020"/>
-        <location filename="../mainwindow.ui" line="4300"/>
+        <location filename="../mainwindow.ui" line="3155"/>
+        <location filename="../mainwindow.ui" line="3452"/>
+        <location filename="../mainwindow.ui" line="3711"/>
+        <location filename="../mainwindow.ui" line="3920"/>
+        <location filename="../mainwindow.ui" line="3954"/>
+        <location filename="../mainwindow.ui" line="3988"/>
+        <location filename="../mainwindow.ui" line="4022"/>
+        <location filename="../mainwindow.ui" line="4302"/>
         <source>Страница</source>
         <translation>Page</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2566"/>
-        <location filename="../mainwindow.ui" line="4957"/>
-        <location filename="../mainwindow.ui" line="4960"/>
+        <location filename="../mainwindow.ui" line="2568"/>
+        <location filename="../mainwindow.ui" line="4959"/>
+        <location filename="../mainwindow.ui" line="4962"/>
         <location filename="../mainwindow.cpp" line="1686"/>
         <source>Полезные скрипты</source>
         <translation>Useful scripts</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3749"/>
+        <location filename="../mainwindow.ui" line="3751"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -563,7 +540,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style= &quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;Current version unknown&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4280"/>
+        <location filename="../mainwindow.ui" line="4282"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -586,7 +563,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style= &quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;This file defines pacman settings such as package repositories, mirrors, search options, updates, and much more.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html &gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4534"/>
+        <location filename="../mainwindow.ui" line="4536"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -609,18 +586,18 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style= &quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;It contains information about which file systems are automatically mounted when the system boots, as well as mounting options such as security settings and permissions.&lt;/span&gt;&lt;/p&gt;&lt;/ body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4605"/>
+        <location filename="../mainwindow.ui" line="4607"/>
         <source>toolBar</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4700"/>
+        <location filename="../mainwindow.ui" line="4702"/>
         <source>toolBar_2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4908"/>
-        <location filename="../mainwindow.ui" line="4911"/>
+        <location filename="../mainwindow.ui" line="4910"/>
+        <location filename="../mainwindow.ui" line="4913"/>
         <location filename="../mainwindow.cpp" line="1084"/>
         <source>Запустить</source>
         <translation>Run</translation>
@@ -636,109 +613,104 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation>Install</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5177"/>
+        <location filename="../mainwindow.ui" line="5179"/>
         <source>Применить</source>
         <translation>Apply</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1468"/>
-        <location filename="../mainwindow.ui" line="4972"/>
+        <location filename="../mainwindow.ui" line="1442"/>
+        <location filename="../mainwindow.ui" line="4974"/>
         <source>Журналы</source>
         <translation>Journals</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3337"/>
+        <location filename="../mainwindow.ui" line="3339"/>
         <source>Инструменты</source>
         <translation>Tools</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3342"/>
+        <location filename="../mainwindow.ui" line="3344"/>
         <source>Комплексы</source>
         <translation>Complexes</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5204"/>
+        <location filename="../mainwindow.ui" line="5206"/>
         <source>О пакете</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5047"/>
+        <location filename="../mainwindow.ui" line="5049"/>
         <source>Назад</source>
         <translation>Back</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="647"/>
+        <location filename="../mainwindow.ui" line="646"/>
         <source>Tab 1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="758"/>
+        <location filename="../mainwindow.ui" line="757"/>
         <source>Tab 2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1739"/>
+        <location filename="../mainwindow.ui" line="1741"/>
         <source>Очистить кэш пакета перед началом установки</source>
         <translation>Clear the package cache before starting the installation</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1581"/>
+        <location filename="../mainwindow.ui" line="1583"/>
         <source>Настройки пакетов</source>
         <translation>Package settings</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2711"/>
+        <location filename="../mainwindow.ui" line="2713"/>
         <source>Быстрая настройка</source>
         <translation>Quick setup</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2902"/>
+        <location filename="../mainwindow.ui" line="2904"/>
         <source>Настройка GRUB</source>
         <translation>Setting up GRUB</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5309"/>
+        <location filename="../mainwindow.ui" line="5311"/>
         <source>Обновить список</source>
         <translation>Update the list</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1782"/>
+        <location filename="../mainwindow.ui" line="1784"/>
         <source>HH:mm:ss</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2736"/>
-        <location filename="../mainwindow.ui" line="2927"/>
-        <location filename="../mainwindow.ui" line="4162"/>
-        <location filename="../mainwindow.ui" line="4405"/>
+        <location filename="../mainwindow.ui" line="2738"/>
+        <location filename="../mainwindow.ui" line="2929"/>
+        <location filename="../mainwindow.ui" line="4164"/>
+        <location filename="../mainwindow.ui" line="4407"/>
         <source> Применить</source>
         <translation> Apply</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3654"/>
-        <source>Очистка конфигураций</source>
-        <translation>Clearing configurations</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="3872"/>
+        <location filename="../mainwindow.ui" line="3874"/>
         <source>Выбор версии</source>
         <translation>Choosing a version</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3797"/>
+        <location filename="../mainwindow.ui" line="3799"/>
         <source>Текущая версия</source>
         <translation>Current version</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2556"/>
-        <location filename="../mainwindow.ui" line="5272"/>
-        <location filename="../mainwindow.ui" line="5275"/>
+        <location filename="../mainwindow.ui" line="2558"/>
+        <location filename="../mainwindow.ui" line="5274"/>
+        <location filename="../mainwindow.ui" line="5277"/>
         <location filename="../mainwindow.cpp" line="1678"/>
         <source>Откат пакетов</source>
         <translation>Rolling back packages</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3552"/>
+        <location filename="../mainwindow.ui" line="3554"/>
         <source>Очистка системы</source>
         <translation>Cleaning the system</translation>
     </message>
@@ -823,8 +795,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation>The system is up to date!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5114"/>
-        <location filename="../mainwindow.ui" line="5117"/>
+        <location filename="../mainwindow.ui" line="5116"/>
+        <location filename="../mainwindow.ui" line="5119"/>
         <location filename="../mainwindow.cpp" line="370"/>
         <location filename="../mainwindow.cpp" line="383"/>
         <location filename="../mainwindow.cpp" line="657"/>
@@ -895,9 +867,9 @@ It may have changed its name...</translation>
         <translation>Select the script from the list to delete!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2551"/>
-        <location filename="../mainwindow.ui" line="4824"/>
-        <location filename="../mainwindow.ui" line="4827"/>
+        <location filename="../mainwindow.ui" line="2553"/>
+        <location filename="../mainwindow.ui" line="4826"/>
+        <location filename="../mainwindow.ui" line="4829"/>
         <source>Каталог установленных пакетов</source>
         <translation>Directory of installed packages</translation>
     </message>
@@ -942,13 +914,13 @@ It may have changed its name...</translation>
         <translation>free %1 GiB</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5129"/>
-        <location filename="../mainwindow.ui" line="5132"/>
+        <location filename="../mainwindow.ui" line="5131"/>
+        <location filename="../mainwindow.ui" line="5134"/>
         <source>Обновить систему</source>
         <translation>Update the system</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2571"/>
+        <location filename="../mainwindow.ui" line="2573"/>
         <location filename="../mainwindow.cpp" line="1690"/>
         <source>Настройки</source>
         <translation>Settings</translation>
@@ -959,8 +931,8 @@ It may have changed its name...</translation>
         <translation>Exit</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="627"/>
-        <location filename="../mainwindow.ui" line="924"/>
+        <location filename="../mainwindow.ui" line="626"/>
+        <location filename="../mainwindow.ui" line="923"/>
         <source>Названия пакетов</source>
         <translation>Package names</translation>
     </message>
@@ -994,6 +966,11 @@ It may have changed its name...</translation>
         <location filename="../mainwindow.cpp" line="2935"/>
         <source>и создать резервную копию</source>
         <translation>and create a backup</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="3015"/>
+        <source>Конфигурации: %1</source>
+        <translation>Configurations: %1</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="3321"/>
@@ -1042,8 +1019,8 @@ It may have changed its name...</translation>
         <translation>Search for logs and configurations...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4802"/>
-        <location filename="../mainwindow.ui" line="4805"/>
+        <location filename="../mainwindow.ui" line="4804"/>
+        <location filename="../mainwindow.ui" line="4807"/>
         <source>Arch Linux - Wiki</source>
         <translation>Arch Linux - Wiki</translation>
     </message>
@@ -1056,8 +1033,8 @@ It may have changed its name...</translation>
         <translation>Enter the URL...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5370"/>
-        <location filename="../mainwindow.ui" line="5373"/>
+        <location filename="../mainwindow.ui" line="5372"/>
+        <location filename="../mainwindow.ui" line="5375"/>
         <source>Наше сообщество</source>
         <translation>Our community</translation>
     </message>
@@ -1067,8 +1044,8 @@ It may have changed its name...</translation>
         <translation>Install the apache package to manage the web server!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5294"/>
-        <location filename="../mainwindow.ui" line="5297"/>
+        <location filename="../mainwindow.ui" line="5296"/>
+        <location filename="../mainwindow.ui" line="5299"/>
         <source>Игровая совместимость - ProtonDB</source>
         <translation>Game compatibility - ProtonDB</translation>
     </message>
@@ -1224,11 +1201,6 @@ It may have changed its name...</translation>
         <translation>The backup has not been created or canceled</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3015"/>
-        <source>Очистка конфигураций: %1</source>
-        <translation>Clearing configurations: %1</translation>
-    </message>
-    <message>
         <location filename="../mainwindow.cpp" line="3028"/>
         <source>Резервная копия</source>
         <translation>Backup copy</translation>
@@ -1280,8 +1252,8 @@ It may have changed its name...</translation>
         <translation>--title=Select archive</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2546"/>
-        <location filename="../mainwindow.ui" line="4786"/>
+        <location filename="../mainwindow.ui" line="2548"/>
+        <location filename="../mainwindow.ui" line="4788"/>
         <location filename="../mainwindow.cpp" line="1670"/>
         <source>Каталог пакетов</source>
         <translation>Package catalog</translation>
@@ -1292,8 +1264,8 @@ It may have changed its name...</translation>
         <translation>File.desktop was not found for the package </translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5062"/>
-        <location filename="../mainwindow.ui" line="5065"/>
+        <location filename="../mainwindow.ui" line="5064"/>
+        <location filename="../mainwindow.ui" line="5067"/>
         <location filename="../mainwindow.cpp" line="861"/>
         <source>Добавить скрипт</source>
         <translation>Add a script</translation>
@@ -1347,8 +1319,8 @@ It may have changed its name...</translation>
         <translation>The script has been successfully deleted!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5092"/>
-        <location filename="../mainwindow.ui" line="5095"/>
+        <location filename="../mainwindow.ui" line="5094"/>
+        <location filename="../mainwindow.ui" line="5097"/>
         <location filename="../mainwindow.cpp" line="999"/>
         <source>Редактировать скрипт</source>
         <translation>Edit the script</translation>
@@ -1365,7 +1337,7 @@ It may have changed its name...</translation>
         <translation>The script has been successfully changed!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="367"/>
+        <location filename="../mainwindow.ui" line="361"/>
         <source>Добро пожаловать в kLaus - Arch Manager!</source>
         <translation>Welcome to kLaus - Arch Manager!</translation>
     </message>
