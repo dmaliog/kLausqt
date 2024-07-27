@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "14.7";
+QString currentVersion = "14.8";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
@@ -758,11 +758,6 @@ void MainWindow::on_action_6_triggered()
 
 void MainWindow::on_action_4_triggered()
 {
-    if (hasUpdates && updinst == 2 && page == 2) {
-        QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Внимание"), tr("Обновить систему до последней версии, чтобы предотвратить конфликты между зависимостями?"), QMessageBox::Yes | QMessageBox::No);
-        if (reply == QMessageBox::Yes) on_action_11_triggered();
-    }
-
     QListWidget* listWidget = nullptr;
 
     if (page == 2)
@@ -779,6 +774,11 @@ void MainWindow::on_action_4_triggered()
     if (lockFile.exists()) {
         sendNotification(tr("Внимание"), tr("Pacman уже используется! Завершите все операции в Pacman и попробуйте снова!"));
         return;
+    }
+
+    if (hasUpdates && updinst == 2 && page == 2) {
+        QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Внимание"), tr("Обновить систему до последней версии, чтобы предотвратить конфликты между зависимостями?"), QMessageBox::Yes | QMessageBox::No);
+        if (reply == QMessageBox::Yes) on_action_11_triggered();
     }
 
     QListWidgetItem *currentItem = listWidget->currentItem();
@@ -823,14 +823,20 @@ void MainWindow::on_action_4_triggered()
 
 void MainWindow::on_action_30_triggered()
 {
-    if (hasUpdates && updinst == 2 && page == 2) {
-        QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Внимание"), tr("Обновить систему до последней версии, чтобы предотвратить конфликты между зависимостями?"), QMessageBox::Yes | QMessageBox::No);
-        if (reply == QMessageBox::Yes) on_action_11_triggered();
-    }
-
     if (ui->list_aur->currentItem() == nullptr) {
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
         return;
+    }
+
+    QFile lockFile(lockFilePath);
+    if (lockFile.exists()) {
+        sendNotification(tr("Внимание"), tr("Pacman уже используется! Завершите все операции в Pacman и попробуйте снова!"));
+        return;
+    }
+
+    if (hasUpdates && updinst == 2 && page == 2) {
+        QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Внимание"), tr("Обновить систему до последней версии, чтобы предотвратить конфликты между зависимостями?"), QMessageBox::Yes | QMessageBox::No);
+        if (reply == QMessageBox::Yes) on_action_11_triggered();
     }
 
     QListWidgetItem *currentItem = ui->list_aur->currentItem();
@@ -3408,6 +3414,11 @@ void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString&
     if (scriptPath.isEmpty())
         scriptPath = scriptDir + itemName;
 
+    QFile lockFile(lockFilePath);
+    if (lockFile.exists()) {
+        sendNotification(tr("Внимание"), tr("Pacman уже используется! Завершите все операции в Pacman и попробуйте снова!"));
+        return;
+    }
 
     if (hasUpdates && updinst == 2 && page == 2) {
         QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Внимание"), tr("Обновить систему до последней версии, чтобы предотвратить конфликты между зависимостями?"), QMessageBox::Yes | QMessageBox::No);
