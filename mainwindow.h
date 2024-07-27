@@ -8,9 +8,11 @@
 #include "qgraphicsvideoitem.h"
 #include "qmediaplayer.h"
 #include "qnetworkaccessmanager.h"
+#include "qnetworkreply.h"
 #include "qstandarditemmodel.h"
 #include "qsyntaxhighlighter.h"
 #include "qtextbrowser.h"
+#include "qxmlstream.h"
 #include <QLabel>
 #include <QWebEngineView>
 #include <QSystemTrayIcon>
@@ -367,6 +369,8 @@ private slots:
     void on_http_proxy_textChanged(const QString &arg1);
     void on_check_proxy_stateChanged(int arg1);
     void on_line_ignored_textChanged(const QString &arg1);
+    void parseRSS(const QString &rssContent);
+    void onNetworkReply(QNetworkReply *reply);
 };
 
 class MySyntaxHighlighter : public QSyntaxHighlighter {

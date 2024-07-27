@@ -1832,6 +1832,66 @@ void MainWindow::loadSettings()
     QRegularExpression noSpaceRegExp("[^\\s]+");
     QRegularExpressionValidator *noSpaceValidator = new QRegularExpressionValidator(noSpaceRegExp, this);
     ui->line_ignored->setValidator(noSpaceValidator);
+    //-##################################################################################
+    //-###################################### RSS #######################################
+    //-##################################################################################
+    manager = new QNetworkAccessManager(this);
+    connect(manager, &QNetworkAccessManager::finished, this, &MainWindow::onNetworkReply);
+    manager->get(QNetworkRequest(QUrl("https://archlinux.org/feeds/packages/")));
+
+    connect(ui->text_updatepkg, &QTextBrowser::anchorClicked, this, [=](const QUrl& link) {
+        QString linkPath = link.path();
+
+        if (linkPath.endsWith('/')) {
+            linkPath.chop(1);
+        }
+
+        QString lastSegment = linkPath.section('/', -1); // Извлекаем последний сегмент пути
+        ui->searchLineEdit->setText(lastSegment);
+
+        QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
+        QCoreApplication::postEvent(ui->searchLineEdit, event);
+    });
+    //-##################################################################################
+    //-############################### ЦВЕТ ДЛЯ ССЫЛОК ##################################
+    //-##################################################################################
+    ui->text_updatepkg->document()->setDefaultStyleSheet("a { text-decoration: underline; color: #c0a071 }");
+    ui->details_aur->document()->setDefaultStyleSheet("a { text-decoration: underline; color: #c0a071 }");
+}
+
+void MainWindow::onNetworkReply(QNetworkReply *reply) {
+    if (reply->error() == QNetworkReply::NoError) {
+        QString content = reply->readAll();
+        parseRSS(content);
+    }
+    reply->deleteLater();
+}
+
+void MainWindow::parseRSS(const QString &rssContent) {
+    QXmlStreamReader xml(rssContent);
+    QString html;
+    while (!xml.atEnd() && !xml.hasError()) {
+        xml.readNext();
+        if (xml.isStartElement()) {
+            if (xml.name() == "item") {
+                QString title, link, description;
+                while (!(xml.isEndElement() && xml.name() == "item")) {
+                    if (xml.isStartElement()) {
+                        if (xml.name() == "title") {
+                            title = xml.readElementText();
+                        } else if (xml.name() == "link") {
+                            link = xml.readElementText();
+                        } else if (xml.name() == "description") {
+                            description = xml.readElementText();
+                        }
+                    }
+                    xml.readNext();
+                }
+                html += QString("<a href='%1'>%2</a><br>%3<br><br>").arg(link, title, description);
+            }
+        }
+    }
+    ui->text_updatepkg->setHtml(html);
 }
 
 void MainWindow::setupConnections()
@@ -2140,7 +2200,15 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
         connect(detailsWidget, &QTextBrowser::anchorClicked, this, [=](const QUrl& link) {
             if (link.scheme() == "p") {
                 ui->action_2->trigger();
-                ui->searchLineEdit->setText(link.path());
+
+                // Получение пути ссылки и обработка символа '>'
+                QString linkPath = link.path();
+                int pos = linkPath.indexOf('>');
+                if (pos != -1) {
+                    linkPath = linkPath.left(pos);
+                }
+                ui->searchLineEdit->setText(linkPath);
+
                 QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
                 QCoreApplication::postEvent(ui->searchLineEdit, event);
             }
