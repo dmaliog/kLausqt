@@ -9,114 +9,104 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1934"/>
+        <location filename="../mainwindow.ui" line="1893"/>
         <source>Удаление кэша</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1868"/>
+        <location filename="../mainwindow.ui" line="1655"/>
         <source>Всех пакетов</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1901"/>
+        <location filename="../mainwindow.ui" line="1980"/>
         <source>Создать резервную копию при удалении конфигураций</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1635"/>
-        <location filename="../mainwindow.ui" line="4895"/>
-        <location filename="../mainwindow.ui" line="4898"/>
+        <location filename="../mainwindow.ui" line="2619"/>
+        <location filename="../mainwindow.ui" line="4936"/>
+        <location filename="../mainwindow.ui" line="4939"/>
         <source>Настройки приложения</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2353"/>
+        <location filename="../mainwindow.ui" line="2386"/>
         <source>Стартовая страница</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1674"/>
+        <location filename="../mainwindow.cpp" line="1693"/>
         <source>Установленные пакеты</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2563"/>
-        <location filename="../mainwindow.ui" line="4870"/>
-        <location filename="../mainwindow.ui" line="4873"/>
-        <location filename="../mainwindow.cpp" line="410"/>
-        <location filename="../mainwindow.cpp" line="1682"/>
+        <location filename="../mainwindow.ui" line="2565"/>
+        <location filename="../mainwindow.ui" line="4911"/>
+        <location filename="../mainwindow.ui" line="4914"/>
+        <location filename="../mainwindow.cpp" line="411"/>
+        <location filename="../mainwindow.cpp" line="1701"/>
         <source>Информация о системе</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4848"/>
-        <location filename="../mainwindow.ui" line="4851"/>
+        <location filename="../mainwindow.ui" line="4889"/>
+        <location filename="../mainwindow.ui" line="4892"/>
         <source>Кастомизация</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2434"/>
+        <location filename="../mainwindow.ui" line="2467"/>
         <source>Язык</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2483"/>
+        <location filename="../mainwindow.ui" line="2516"/>
         <source>Русский</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2488"/>
+        <location filename="../mainwindow.ui" line="2521"/>
         <source>English</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2271"/>
+        <location filename="../mainwindow.ui" line="2304"/>
         <source>Звук уведомлений: 0/100</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3155"/>
-        <location filename="../mainwindow.ui" line="3452"/>
-        <location filename="../mainwindow.ui" line="3711"/>
-        <location filename="../mainwindow.ui" line="3920"/>
-        <location filename="../mainwindow.ui" line="3954"/>
-        <location filename="../mainwindow.ui" line="3988"/>
-        <location filename="../mainwindow.ui" line="4022"/>
-        <location filename="../mainwindow.ui" line="4302"/>
+        <location filename="../mainwindow.ui" line="3196"/>
+        <location filename="../mainwindow.ui" line="3493"/>
+        <location filename="../mainwindow.ui" line="3752"/>
+        <location filename="../mainwindow.ui" line="3961"/>
+        <location filename="../mainwindow.ui" line="3995"/>
+        <location filename="../mainwindow.ui" line="4029"/>
+        <location filename="../mainwindow.ui" line="4063"/>
+        <location filename="../mainwindow.ui" line="4343"/>
         <source>Страница</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2568"/>
-        <location filename="../mainwindow.ui" line="4959"/>
-        <location filename="../mainwindow.ui" line="4962"/>
-        <location filename="../mainwindow.cpp" line="1686"/>
+        <location filename="../mainwindow.ui" line="2570"/>
+        <location filename="../mainwindow.ui" line="5000"/>
+        <location filename="../mainwindow.ui" line="5003"/>
+        <location filename="../mainwindow.cpp" line="1705"/>
         <source>Полезные скрипты</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2514"/>
-        <source>Химический процесс</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="2519"/>
-        <source>Косатки</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="2077"/>
+        <location filename="../mainwindow.ui" line="2026"/>
         <source>Автообновление</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3115"/>
+        <location filename="../mainwindow.ui" line="3156"/>
         <source>Ожидание загрузочного меню (секунды)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3059"/>
+        <location filename="../mainwindow.ui" line="3100"/>
         <source>Модули ядра при старте системы</source>
         <translation type="unfinished"></translation>
     </message>
@@ -149,9 +139,9 @@
     <message>
         <location filename="../mainwindow.ui" line="521"/>
         <location filename="../mainwindow.ui" line="1084"/>
-        <location filename="../mainwindow.ui" line="3942"/>
-        <location filename="../mainwindow.ui" line="3976"/>
-        <location filename="../mainwindow.ui" line="4010"/>
+        <location filename="../mainwindow.ui" line="3983"/>
+        <location filename="../mainwindow.ui" line="4017"/>
+        <location filename="../mainwindow.ui" line="4051"/>
         <source>about:blank</source>
         <translation type="unfinished"></translation>
     </message>
@@ -164,7 +154,7 @@
         <location filename="../mainwindow.ui" line="964"/>
         <location filename="../mainwindow.ui" line="1136"/>
         <location filename="../mainwindow.ui" line="1347"/>
-        <location filename="../mainwindow.ui" line="3195"/>
+        <location filename="../mainwindow.ui" line="3236"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -197,11 +187,11 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1395"/>
-        <location filename="../mainwindow.ui" line="2632"/>
-        <location filename="../mainwindow.ui" line="3391"/>
-        <location filename="../mainwindow.ui" line="4215"/>
-        <location filename="../mainwindow.ui" line="4458"/>
-        <location filename="../mainwindow.cpp" line="2080"/>
+        <location filename="../mainwindow.ui" line="2673"/>
+        <location filename="../mainwindow.ui" line="3432"/>
+        <location filename="../mainwindow.ui" line="4256"/>
+        <location filename="../mainwindow.ui" line="4499"/>
+        <location filename="../mainwindow.cpp" line="2099"/>
         <source>Описание</source>
         <translation type="unfinished"></translation>
     </message>
@@ -216,32 +206,32 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2123"/>
+        <location filename="../mainwindow.ui" line="1841"/>
         <source>Проверить актуальность системы перед установкой новых пакетов</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1863"/>
+        <location filename="../mainwindow.ui" line="1650"/>
         <source>Неустановленных</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1873"/>
+        <location filename="../mainwindow.ui" line="1660"/>
         <source>Кроме 3-х последних</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2380"/>
+        <location filename="../mainwindow.ui" line="2413"/>
         <source>Показать анимацию загрузки</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2586"/>
+        <location filename="../mainwindow.ui" line="2627"/>
         <source>tab_system</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2783"/>
+        <location filename="../mainwindow.ui" line="2824"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -255,77 +245,77 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3139"/>
+        <location filename="../mainwindow.ui" line="3180"/>
         <source>tab_timer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3334"/>
+        <location filename="../mainwindow.ui" line="3375"/>
         <source>Все</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3349"/>
+        <location filename="../mainwindow.ui" line="3390"/>
         <source>Графика</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3290"/>
-        <location filename="../mainwindow.ui" line="5149"/>
-        <location filename="../mainwindow.cpp" line="421"/>
+        <location filename="../mainwindow.ui" line="3331"/>
+        <location filename="../mainwindow.ui" line="5190"/>
+        <location filename="../mainwindow.cpp" line="422"/>
         <source>Бенчмарки</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4607"/>
+        <location filename="../mainwindow.ui" line="4648"/>
         <source>toolBar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4702"/>
+        <location filename="../mainwindow.ui" line="4743"/>
         <source>toolBar_2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4910"/>
-        <location filename="../mainwindow.ui" line="4913"/>
-        <location filename="../mainwindow.cpp" line="1084"/>
+        <location filename="../mainwindow.ui" line="4951"/>
+        <location filename="../mainwindow.ui" line="4954"/>
+        <location filename="../mainwindow.cpp" line="1099"/>
         <source>Запустить</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1082"/>
+        <location filename="../mainwindow.cpp" line="1097"/>
         <source>Удалить</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1080"/>
+        <location filename="../mainwindow.cpp" line="1095"/>
         <source>Установить</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5179"/>
+        <location filename="../mainwindow.ui" line="5220"/>
         <source>Применить</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1442"/>
-        <location filename="../mainwindow.ui" line="4974"/>
+        <location filename="../mainwindow.ui" line="5015"/>
         <source>Журналы</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3339"/>
+        <location filename="../mainwindow.ui" line="3380"/>
         <source>Инструменты</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3344"/>
+        <location filename="../mainwindow.ui" line="3385"/>
         <source>Комплексы</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3751"/>
+        <location filename="../mainwindow.ui" line="3792"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -337,7 +327,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4282"/>
+        <location filename="../mainwindow.ui" line="4323"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -351,7 +341,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4536"/>
+        <location filename="../mainwindow.ui" line="4577"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -365,12 +355,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5206"/>
+        <location filename="../mainwindow.ui" line="5247"/>
         <source>О пакете</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5049"/>
+        <location filename="../mainwindow.ui" line="5090"/>
         <source>Назад</source>
         <translation type="unfinished"></translation>
     </message>
@@ -385,42 +375,42 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1583"/>
+        <location filename="../mainwindow.ui" line="2197"/>
         <source>Настройки пакетов</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1741"/>
+        <location filename="../mainwindow.ui" line="1944"/>
         <source>Очистить кэш пакета перед началом установки</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2147"/>
+        <location filename="../mainwindow.ui" line="1917"/>
         <source>Таймаут поиска пакетов</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1814"/>
+        <location filename="../mainwindow.ui" line="2053"/>
         <source>Переводить описание пакетов на мой язык</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2323"/>
+        <location filename="../mainwindow.ui" line="2356"/>
         <source>Запустить приложение при старте системы</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2410"/>
+        <location filename="../mainwindow.ui" line="2443"/>
         <source>Раскрашивать список для лучшей читаемости</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2455"/>
+        <location filename="../mainwindow.ui" line="2488"/>
         <source>Сохранить веб-страницы при выходе из приложения</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2302"/>
+        <location filename="../mainwindow.ui" line="2335"/>
         <source>Закрыть приложение без сворачивания в трей</source>
         <translation type="unfinished"></translation>
     </message>
@@ -475,399 +465,409 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1978"/>
-        <location filename="../mainwindow.ui" line="1997"/>
+        <location filename="../mainwindow.ui" line="1711"/>
+        <location filename="../mainwindow.ui" line="1730"/>
         <source>socks5://127.0.0.1:1080</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2004"/>
+        <location filename="../mainwindow.ui" line="1737"/>
         <source>HTTPS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2035"/>
+        <location filename="../mainwindow.ui" line="1768"/>
         <source>Прокси для пакетов</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2042"/>
+        <location filename="../mainwindow.ui" line="1775"/>
         <source>HTTP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2049"/>
+        <location filename="../mainwindow.ui" line="1782"/>
         <source>Использовать прокси при установке пакетов</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2713"/>
+        <location filename="../mainwindow.ui" line="2124"/>
+        <source>Игнорирование пакетов при обновлении</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="2137"/>
+        <source>первый,второй,третий,четвертый,пятый и т.д. (через запятую)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="2754"/>
         <source>Быстрая настройка</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2904"/>
+        <location filename="../mainwindow.ui" line="2945"/>
         <source>Настройка GRUB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3656"/>
+        <location filename="../mainwindow.ui" line="3697"/>
         <source>Конфигурации</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4139"/>
+        <location filename="../mainwindow.ui" line="4180"/>
         <source>Настройка Pacman</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4382"/>
+        <location filename="../mainwindow.ui" line="4423"/>
         <source>Настройка fstab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4925"/>
-        <location filename="../mainwindow.ui" line="4928"/>
+        <location filename="../mainwindow.ui" line="4966"/>
+        <location filename="../mainwindow.ui" line="4969"/>
         <source>Удалить пакет</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4940"/>
-        <location filename="../mainwindow.ui" line="4943"/>
+        <location filename="../mainwindow.ui" line="4981"/>
+        <location filename="../mainwindow.ui" line="4984"/>
         <source>Установить пакет</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4989"/>
-        <location filename="../mainwindow.ui" line="4992"/>
+        <location filename="../mainwindow.ui" line="5030"/>
+        <location filename="../mainwindow.ui" line="5033"/>
         <source>Установить пакет с PKGBUILD</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5004"/>
-        <location filename="../mainwindow.ui" line="5007"/>
+        <location filename="../mainwindow.ui" line="5045"/>
+        <location filename="../mainwindow.ui" line="5048"/>
         <source>Домашняя страница</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5019"/>
-        <location filename="../mainwindow.ui" line="5022"/>
+        <location filename="../mainwindow.ui" line="5060"/>
+        <location filename="../mainwindow.ui" line="5063"/>
         <source>Обновить страницу</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5034"/>
-        <location filename="../mainwindow.ui" line="5037"/>
+        <location filename="../mainwindow.ui" line="5075"/>
+        <location filename="../mainwindow.ui" line="5078"/>
         <source>Скопировать URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5079"/>
-        <location filename="../mainwindow.ui" line="5082"/>
+        <location filename="../mainwindow.ui" line="5120"/>
+        <location filename="../mainwindow.ui" line="5123"/>
         <source>Удалить скрипт</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5164"/>
-        <location filename="../mainwindow.ui" line="5167"/>
-        <location filename="../mainwindow.cpp" line="452"/>
+        <location filename="../mainwindow.ui" line="5205"/>
+        <location filename="../mainwindow.ui" line="5208"/>
+        <location filename="../mainwindow.cpp" line="453"/>
         <source>Настройки GRUB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5311"/>
+        <location filename="../mainwindow.ui" line="5352"/>
         <source>Обновить список</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5323"/>
-        <location filename="../mainwindow.cpp" line="460"/>
+        <location filename="../mainwindow.ui" line="5364"/>
+        <location filename="../mainwindow.cpp" line="461"/>
         <source>Настройки Pacman</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5335"/>
-        <location filename="../mainwindow.ui" line="5338"/>
-        <location filename="../mainwindow.cpp" line="468"/>
+        <location filename="../mainwindow.ui" line="5376"/>
+        <location filename="../mainwindow.ui" line="5379"/>
+        <location filename="../mainwindow.cpp" line="469"/>
         <source>Настройки файловой системы</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5357"/>
-        <location filename="../mainwindow.ui" line="5360"/>
+        <location filename="../mainwindow.ui" line="5398"/>
+        <location filename="../mainwindow.ui" line="5401"/>
         <source>Файлы пакета</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1784"/>
+        <location filename="../mainwindow.ui" line="1820"/>
         <source>HH:mm:ss</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2738"/>
-        <location filename="../mainwindow.ui" line="2929"/>
-        <location filename="../mainwindow.ui" line="4164"/>
-        <location filename="../mainwindow.ui" line="4407"/>
+        <location filename="../mainwindow.ui" line="2779"/>
+        <location filename="../mainwindow.ui" line="2970"/>
+        <location filename="../mainwindow.ui" line="4205"/>
+        <location filename="../mainwindow.ui" line="4448"/>
         <source> Применить</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3874"/>
+        <location filename="../mainwindow.ui" line="3915"/>
         <source>Выбор версии</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3799"/>
+        <location filename="../mainwindow.ui" line="3840"/>
         <source>Текущая версия</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2558"/>
-        <location filename="../mainwindow.ui" line="5274"/>
-        <location filename="../mainwindow.ui" line="5277"/>
-        <location filename="../mainwindow.cpp" line="1678"/>
+        <location filename="../mainwindow.ui" line="2560"/>
+        <location filename="../mainwindow.ui" line="5315"/>
+        <location filename="../mainwindow.ui" line="5318"/>
+        <location filename="../mainwindow.cpp" line="1697"/>
         <source>Откат пакетов</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5191"/>
-        <location filename="../mainwindow.ui" line="5194"/>
-        <location filename="../mainwindow.cpp" line="477"/>
+        <location filename="../mainwindow.ui" line="5232"/>
+        <location filename="../mainwindow.ui" line="5235"/>
+        <location filename="../mainwindow.cpp" line="478"/>
         <source>Оптимизация</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5251"/>
+        <location filename="../mainwindow.ui" line="5292"/>
         <source>Рестарт</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5236"/>
+        <location filename="../mainwindow.ui" line="5277"/>
         <source>Остановить</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5221"/>
+        <location filename="../mainwindow.ui" line="5262"/>
         <source>Каталог</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3554"/>
+        <location filename="../mainwindow.ui" line="3595"/>
         <source>Очистка системы</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1717"/>
+        <location filename="../mainwindow.cpp" line="1736"/>
         <source>GRUB не установлен</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="204"/>
-        <location filename="../mainwindow.cpp" line="244"/>
-        <location filename="../mainwindow.cpp" line="290"/>
-        <location filename="../mainwindow.cpp" line="508"/>
-        <location filename="../mainwindow.cpp" line="703"/>
-        <location filename="../mainwindow.cpp" line="1640"/>
-        <location filename="../mainwindow.cpp" line="2445"/>
-        <location filename="../mainwindow.cpp" line="2450"/>
-        <location filename="../mainwindow.cpp" line="2456"/>
-        <location filename="../mainwindow.cpp" line="2967"/>
-        <location filename="../mainwindow.cpp" line="3031"/>
-        <location filename="../mainwindow.cpp" line="3162"/>
-        <location filename="../mainwindow.cpp" line="3171"/>
-        <location filename="../mainwindow.cpp" line="3347"/>
-        <location filename="../mainwindow.cpp" line="3514"/>
+        <location filename="../mainwindow.cpp" line="205"/>
+        <location filename="../mainwindow.cpp" line="245"/>
+        <location filename="../mainwindow.cpp" line="291"/>
+        <location filename="../mainwindow.cpp" line="509"/>
+        <location filename="../mainwindow.cpp" line="713"/>
+        <location filename="../mainwindow.cpp" line="1659"/>
+        <location filename="../mainwindow.cpp" line="2464"/>
+        <location filename="../mainwindow.cpp" line="2469"/>
+        <location filename="../mainwindow.cpp" line="2475"/>
+        <location filename="../mainwindow.cpp" line="2986"/>
+        <location filename="../mainwindow.cpp" line="3050"/>
+        <location filename="../mainwindow.cpp" line="3175"/>
+        <location filename="../mainwindow.cpp" line="3184"/>
+        <location filename="../mainwindow.cpp" line="3365"/>
+        <location filename="../mainwindow.cpp" line="3532"/>
         <source>Ошибка</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="204"/>
+        <location filename="../mainwindow.cpp" line="205"/>
         <source>Установите пакет ocs-url для установки тем!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="244"/>
-        <location filename="../mainwindow.cpp" line="508"/>
+        <location filename="../mainwindow.cpp" line="245"/>
+        <location filename="../mainwindow.cpp" line="509"/>
         <source>Для вашего окружения тем не найдено!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="529"/>
-        <location filename="../mainwindow.cpp" line="564"/>
-        <location filename="../mainwindow.cpp" line="635"/>
-        <location filename="../mainwindow.cpp" line="668"/>
-        <location filename="../mainwindow.cpp" line="717"/>
-        <location filename="../mainwindow.cpp" line="723"/>
-        <location filename="../mainwindow.cpp" line="752"/>
-        <location filename="../mainwindow.cpp" line="764"/>
-        <location filename="../mainwindow.cpp" line="770"/>
-        <location filename="../mainwindow.cpp" line="817"/>
-        <location filename="../mainwindow.cpp" line="822"/>
-        <location filename="../mainwindow.cpp" line="915"/>
-        <location filename="../mainwindow.cpp" line="969"/>
-        <location filename="../mainwindow.cpp" line="2546"/>
-        <location filename="../mainwindow.cpp" line="2555"/>
-        <location filename="../mainwindow.cpp" line="3395"/>
+        <location filename="../mainwindow.cpp" line="530"/>
+        <location filename="../mainwindow.cpp" line="565"/>
+        <location filename="../mainwindow.cpp" line="636"/>
+        <location filename="../mainwindow.cpp" line="678"/>
+        <location filename="../mainwindow.cpp" line="727"/>
+        <location filename="../mainwindow.cpp" line="733"/>
+        <location filename="../mainwindow.cpp" line="762"/>
+        <location filename="../mainwindow.cpp" line="774"/>
+        <location filename="../mainwindow.cpp" line="780"/>
+        <location filename="../mainwindow.cpp" line="827"/>
+        <location filename="../mainwindow.cpp" line="832"/>
+        <location filename="../mainwindow.cpp" line="928"/>
+        <location filename="../mainwindow.cpp" line="982"/>
+        <location filename="../mainwindow.cpp" line="2565"/>
+        <location filename="../mainwindow.cpp" line="2574"/>
+        <location filename="../mainwindow.cpp" line="3413"/>
         <source>Внимание</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="529"/>
+        <location filename="../mainwindow.cpp" line="530"/>
         <source>Выберите пакет из списка для просмотра информации!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="626"/>
+        <location filename="../mainwindow.cpp" line="627"/>
         <source>Буфер обмена</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="626"/>
+        <location filename="../mainwindow.cpp" line="627"/>
         <source>Ссылка успешно скопирована в буфер обмена!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="649"/>
+        <location filename="../mainwindow.cpp" line="659"/>
         <source>Обновление</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="649"/>
+        <location filename="../mainwindow.cpp" line="659"/>
         <source>Система в актуальном состоянии!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5116"/>
-        <location filename="../mainwindow.ui" line="5119"/>
-        <location filename="../mainwindow.cpp" line="370"/>
-        <location filename="../mainwindow.cpp" line="383"/>
-        <location filename="../mainwindow.cpp" line="657"/>
+        <location filename="../mainwindow.ui" line="5157"/>
+        <location filename="../mainwindow.ui" line="5160"/>
+        <location filename="../mainwindow.cpp" line="371"/>
+        <location filename="../mainwindow.cpp" line="384"/>
+        <location filename="../mainwindow.cpp" line="667"/>
         <source>Веб-сервер</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="357"/>
+        <location filename="../mainwindow.cpp" line="358"/>
         <source>Поиск по архиву...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="668"/>
+        <location filename="../mainwindow.cpp" line="678"/>
         <source>Выберите пакет из списка для запуска!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="717"/>
+        <location filename="../mainwindow.cpp" line="727"/>
         <source>Выберите пакет из списка для удаления!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="764"/>
-        <location filename="../mainwindow.cpp" line="822"/>
+        <location filename="../mainwindow.cpp" line="774"/>
+        <location filename="../mainwindow.cpp" line="832"/>
         <source>Выберите пакет из списка для установки!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="848"/>
+        <location filename="../mainwindow.cpp" line="858"/>
         <source>GRUB изменен</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="848"/>
+        <location filename="../mainwindow.cpp" line="858"/>
         <source>Изменения GRUB вступят в силу после перезагрузки.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2157"/>
+        <location filename="../mainwindow.cpp" line="2176"/>
         <source>Пакет не найден!
 Возможно, он поменял свое название...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2445"/>
+        <location filename="../mainwindow.cpp" line="2464"/>
         <source>Не удалось создать каталог: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2450"/>
+        <location filename="../mainwindow.cpp" line="2469"/>
         <source>Не удалось скопировать файл из </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2450"/>
+        <location filename="../mainwindow.cpp" line="2469"/>
         <source> в </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2456"/>
+        <location filename="../mainwindow.cpp" line="2475"/>
         <source>Не удалось открыть файл ресурсов</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="915"/>
+        <location filename="../mainwindow.cpp" line="928"/>
         <source>Выберите скрипт из списка для удаления!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2553"/>
-        <location filename="../mainwindow.ui" line="4826"/>
-        <location filename="../mainwindow.ui" line="4829"/>
+        <location filename="../mainwindow.ui" line="2555"/>
+        <location filename="../mainwindow.ui" line="4867"/>
+        <location filename="../mainwindow.ui" line="4870"/>
         <source>Каталог установленных пакетов</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="118"/>
+        <location filename="../mainwindow.cpp" line="119"/>
         <source>Поиск установленных пакетов...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="131"/>
+        <location filename="../mainwindow.cpp" line="132"/>
         <source>Поиск скриптов...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="423"/>
+        <location filename="../mainwindow.cpp" line="424"/>
         <source>Поиск бенчмарков...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="969"/>
+        <location filename="../mainwindow.cpp" line="982"/>
         <source>Выберите скрипт из списка для изменения!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1081"/>
+        <location filename="../mainwindow.cpp" line="1096"/>
         <source>Изменить PKGBUILD и установить</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1083"/>
+        <location filename="../mainwindow.cpp" line="1098"/>
         <source>Информация о пакете</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1085"/>
+        <location filename="../mainwindow.cpp" line="1100"/>
         <source>Обновить версию</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1568"/>
+        <location filename="../mainwindow.cpp" line="1587"/>
         <source>свободно %1 ГиБ</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5131"/>
-        <location filename="../mainwindow.ui" line="5134"/>
+        <location filename="../mainwindow.ui" line="5172"/>
+        <location filename="../mainwindow.ui" line="5175"/>
         <source>Обновить систему</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2573"/>
-        <location filename="../mainwindow.cpp" line="1690"/>
+        <location filename="../mainwindow.ui" line="2575"/>
+        <location filename="../mainwindow.cpp" line="1709"/>
         <source>Настройки</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1694"/>
+        <location filename="../mainwindow.cpp" line="1713"/>
         <source>Выход</source>
         <translation type="unfinished"></translation>
     </message>
@@ -878,402 +878,402 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2860"/>
-        <location filename="../mainwindow.cpp" line="3046"/>
+        <location filename="../mainwindow.cpp" line="2879"/>
+        <location filename="../mainwindow.cpp" line="3065"/>
         <source>Кэш пакетов Yay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2861"/>
+        <location filename="../mainwindow.cpp" line="2880"/>
         <source>Кэш пакетов Pacman</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2862"/>
+        <location filename="../mainwindow.cpp" line="2881"/>
         <source>Пакеты сироты</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2935"/>
+        <location filename="../mainwindow.cpp" line="2954"/>
         <source>Вы уверены, что хотите удалить каталог &quot;%1&quot; %2?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2935"/>
+        <location filename="../mainwindow.cpp" line="2954"/>
         <source>с конфигурацией</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2935"/>
+        <location filename="../mainwindow.cpp" line="2954"/>
         <source>и создать резервную копию</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3015"/>
+        <location filename="../mainwindow.cpp" line="3034"/>
         <source>Конфигурации: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3321"/>
+        <location filename="../mainwindow.cpp" line="3339"/>
         <source>Обычно, когда пакет становится сиротой, это означает, что он был установлен в качестве зависимости другого пакета, но этот пакет был удален, и больше нет других пакетов, которые бы зависели от данного. Удаление сирот из системы помогает поддерживать систему более чистой и оптимизированной. Вы действительно хотите удалить пакеты сироты?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3336"/>
+        <location filename="../mainwindow.cpp" line="3354"/>
         <source>При обновлении пакетов старые версии пакетов сохраняются в кэше, чтобы вы могли откатиться к предыдущим версиям, если это необходимо. Однако, если вы не планируете откатываться к предыдущим версиям пакетов, удаление кэша может помочь вам освободить дополнительное место на диске. Вы действительно хотите удалить кэш только неустановленных пакетов (можно изменить в настройках)?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3341"/>
+        <location filename="../mainwindow.cpp" line="3359"/>
         <source>При обновлении пакетов старые версии пакетов сохраняются в кэше, чтобы вы могли откатиться к предыдущим версиям, если это необходимо. Однако, если вы не планируете откатываться к предыдущим версиям пакетов, удаление кэша может помочь вам освободить дополнительное место на диске. Вы действительно хотите удалить кэш пакетов всех пакетов (можно изменить в настройках)?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3511"/>
+        <location filename="../mainwindow.cpp" line="3529"/>
         <source>Новые настройки успешно сохранены!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3514"/>
+        <location filename="../mainwindow.cpp" line="3532"/>
         <source>Не удалось выполнить аутентификацию</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3350"/>
+        <location filename="../mainwindow.cpp" line="3368"/>
         <source>При обновлении пакетов старые версии пакетов сохраняются в кэше, чтобы вы могли откатиться к предыдущим версиям, если это необходимо. Однако, если вы не планируете откатываться к предыдущим версиям пакетов, удаление кэша может помочь вам освободить дополнительное место на диске. Вы действительно хотите удалить кэш всех пакетов кроме последних трех версий (можно изменить в настройках)?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1342"/>
+        <location filename="../mainwindow.cpp" line="1360"/>
         <source>Обновление kLaus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="104"/>
+        <location filename="../mainwindow.cpp" line="105"/>
         <source>Поиск по пакетам...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="142"/>
-        <location filename="../mainwindow.cpp" line="412"/>
+        <location filename="../mainwindow.cpp" line="143"/>
+        <location filename="../mainwindow.cpp" line="413"/>
         <source>Поиск журналов и конфигураций...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="4804"/>
-        <location filename="../mainwindow.ui" line="4807"/>
+        <location filename="../mainwindow.ui" line="4845"/>
+        <location filename="../mainwindow.ui" line="4848"/>
         <source>Arch Linux - Wiki</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="182"/>
-        <location filename="../mainwindow.cpp" line="220"/>
-        <location filename="../mainwindow.cpp" line="305"/>
-        <location filename="../mainwindow.cpp" line="333"/>
+        <location filename="../mainwindow.cpp" line="183"/>
+        <location filename="../mainwindow.cpp" line="221"/>
+        <location filename="../mainwindow.cpp" line="306"/>
+        <location filename="../mainwindow.cpp" line="334"/>
         <source>Введите URL адрес...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5372"/>
-        <location filename="../mainwindow.ui" line="5375"/>
+        <location filename="../mainwindow.ui" line="5413"/>
+        <location filename="../mainwindow.ui" line="5416"/>
         <source>Наше сообщество</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="290"/>
+        <location filename="../mainwindow.cpp" line="291"/>
         <source>Установите пакет apache для управления веб-сервером!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5296"/>
-        <location filename="../mainwindow.ui" line="5299"/>
+        <location filename="../mainwindow.ui" line="5337"/>
+        <location filename="../mainwindow.ui" line="5340"/>
         <source>Игровая совместимость - ProtonDB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="635"/>
-        <location filename="../mainwindow.cpp" line="723"/>
-        <location filename="../mainwindow.cpp" line="770"/>
-        <location filename="../mainwindow.cpp" line="2555"/>
+        <location filename="../mainwindow.cpp" line="636"/>
+        <location filename="../mainwindow.cpp" line="733"/>
+        <location filename="../mainwindow.cpp" line="780"/>
+        <location filename="../mainwindow.cpp" line="2574"/>
         <source>Pacman уже используется! Завершите все операции в Pacman и попробуйте снова!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="370"/>
+        <location filename="../mainwindow.cpp" line="371"/>
         <source>Веб-сервер перезапущен!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="383"/>
+        <location filename="../mainwindow.cpp" line="384"/>
         <source>Веб-сервер остановлен!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="479"/>
+        <location filename="../mainwindow.cpp" line="480"/>
         <source>Поиск конфигураций...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="564"/>
+        <location filename="../mainwindow.cpp" line="565"/>
         <source>URL недоступен!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="657"/>
+        <location filename="../mainwindow.cpp" line="667"/>
         <source>Веб-сервер запущен!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1342"/>
+        <location filename="../mainwindow.cpp" line="1360"/>
         <source>Версия kLaus поменялась, конфигурация сброшена!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2082"/>
+        <location filename="../mainwindow.cpp" line="2101"/>
         <source>Зависит от</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2082"/>
+        <location filename="../mainwindow.cpp" line="2101"/>
         <source>Конфликтует с</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2082"/>
+        <location filename="../mainwindow.cpp" line="2101"/>
         <source>Заменяет</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2082"/>
+        <location filename="../mainwindow.cpp" line="2101"/>
         <source>Предоставляет</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2082"/>
+        <location filename="../mainwindow.cpp" line="2101"/>
         <source>Обеспечивает</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2083"/>
+        <location filename="../mainwindow.cpp" line="2102"/>
         <source>Группы</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2083"/>
+        <location filename="../mainwindow.cpp" line="2102"/>
         <source>Опционально для</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2084"/>
+        <location filename="../mainwindow.cpp" line="2103"/>
         <source>Зависимости проверки</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2085"/>
-        <location filename="../mainwindow.cpp" line="2092"/>
+        <location filename="../mainwindow.cpp" line="2104"/>
+        <location filename="../mainwindow.cpp" line="2111"/>
         <source>Нет</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2091"/>
+        <location filename="../mainwindow.cpp" line="2110"/>
         <source>Факультативные зависимости</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2083"/>
+        <location filename="../mainwindow.cpp" line="2102"/>
         <source>Зависимости сборки</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="445"/>
+        <location filename="../mainwindow.cpp" line="446"/>
         <source>Не удалось открыть файл: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="752"/>
-        <location filename="../mainwindow.cpp" line="817"/>
-        <location filename="../mainwindow.cpp" line="3395"/>
+        <location filename="../mainwindow.cpp" line="762"/>
+        <location filename="../mainwindow.cpp" line="827"/>
+        <location filename="../mainwindow.cpp" line="3413"/>
         <source>Обновить систему до последней версии, чтобы предотвратить конфликты между зависимостями?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2083"/>
+        <location filename="../mainwindow.cpp" line="2102"/>
         <source>Требуется</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2084"/>
+        <location filename="../mainwindow.cpp" line="2103"/>
         <source>Ключевые слова</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2091"/>
+        <location filename="../mainwindow.cpp" line="2110"/>
         <source>Доп. зависимости</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2161"/>
+        <location filename="../mainwindow.cpp" line="2180"/>
         <source>Пакет не найден</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2161"/>
+        <location filename="../mainwindow.cpp" line="2180"/>
         <source>Пакет не найден, перейти к его поиску?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2546"/>
+        <location filename="../mainwindow.cpp" line="2565"/>
         <source>Выберите пакет для установки!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2653"/>
+        <location filename="../mainwindow.cpp" line="2672"/>
         <source>Пакет не найден в архиве</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2941"/>
+        <location filename="../mainwindow.cpp" line="2960"/>
         <source>Конфигурация успешно удалена!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2967"/>
+        <location filename="../mainwindow.cpp" line="2986"/>
         <source>Резервная копия не создана или отменена</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3028"/>
+        <location filename="../mainwindow.cpp" line="3047"/>
         <source>Резервная копия</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3028"/>
+        <location filename="../mainwindow.cpp" line="3047"/>
         <source>Резервная копия успешно восстановлена в папку: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3031"/>
+        <location filename="../mainwindow.cpp" line="3050"/>
         <source>Не удалось восстановить конфигурацию через архив</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3347"/>
+        <location filename="../mainwindow.cpp" line="3365"/>
         <source>Yay не может выполнить эту задачу, измените настройки удаления кэша</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3454"/>
+        <location filename="../mainwindow.cpp" line="3472"/>
         <source>Вы уверены, что хотите полностью сбросить конфигурацию DE? Вам придется заново все настроить.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3486"/>
+        <location filename="../mainwindow.cpp" line="3504"/>
         <source>Ничего не выбрано</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2944"/>
+        <location filename="../mainwindow.cpp" line="2963"/>
         <source>--title=Выберите путь сохранения архива</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2941"/>
-        <location filename="../mainwindow.cpp" line="2961"/>
+        <location filename="../mainwindow.cpp" line="2960"/>
+        <location filename="../mainwindow.cpp" line="2980"/>
         <source>Конфигурация</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2961"/>
+        <location filename="../mainwindow.cpp" line="2980"/>
         <source>Резервная копия %1 успешно создана! Конфигурация удалена!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="400"/>
+        <location filename="../mainwindow.cpp" line="401"/>
         <source>--title=Выберите архив</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2548"/>
-        <location filename="../mainwindow.ui" line="4788"/>
-        <location filename="../mainwindow.cpp" line="1670"/>
+        <location filename="../mainwindow.ui" line="2550"/>
+        <location filename="../mainwindow.ui" line="4829"/>
+        <location filename="../mainwindow.cpp" line="1689"/>
         <source>Каталог пакетов</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="703"/>
+        <location filename="../mainwindow.cpp" line="713"/>
         <source>Файл .desktop не найден для пакета </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5064"/>
-        <location filename="../mainwindow.ui" line="5067"/>
-        <location filename="../mainwindow.cpp" line="861"/>
+        <location filename="../mainwindow.ui" line="5105"/>
+        <location filename="../mainwindow.ui" line="5108"/>
+        <location filename="../mainwindow.cpp" line="873"/>
         <source>Добавить скрипт</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="863"/>
-        <location filename="../mainwindow.cpp" line="1003"/>
+        <location filename="../mainwindow.cpp" line="876"/>
+        <location filename="../mainwindow.cpp" line="1018"/>
         <source>Имя файла:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="865"/>
+        <location filename="../mainwindow.cpp" line="878"/>
         <source>Название скрипта:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="867"/>
+        <location filename="../mainwindow.cpp" line="880"/>
         <source>Описание скрипта:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="869"/>
-        <location filename="../mainwindow.cpp" line="1005"/>
+        <location filename="../mainwindow.cpp" line="882"/>
+        <location filename="../mainwindow.cpp" line="1020"/>
         <source>Тело скрипта:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="871"/>
-        <location filename="../mainwindow.cpp" line="1007"/>
+        <location filename="../mainwindow.cpp" line="884"/>
+        <location filename="../mainwindow.cpp" line="1022"/>
         <source>Сохранить</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="903"/>
+        <location filename="../mainwindow.cpp" line="916"/>
         <source>Добавление</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="903"/>
+        <location filename="../mainwindow.cpp" line="916"/>
         <source>Скрипт успешно добавлен!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="949"/>
+        <location filename="../mainwindow.cpp" line="962"/>
         <source>Удаление</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="949"/>
+        <location filename="../mainwindow.cpp" line="962"/>
         <source>Скрипт успешно удален!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="5094"/>
-        <location filename="../mainwindow.ui" line="5097"/>
-        <location filename="../mainwindow.cpp" line="999"/>
+        <location filename="../mainwindow.ui" line="5135"/>
+        <location filename="../mainwindow.ui" line="5138"/>
+        <location filename="../mainwindow.cpp" line="1014"/>
         <source>Редактировать скрипт</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1038"/>
-        <location filename="../mainwindow.cpp" line="3511"/>
+        <location filename="../mainwindow.cpp" line="1053"/>
+        <location filename="../mainwindow.cpp" line="3529"/>
         <source>Сохранение</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1038"/>
+        <location filename="../mainwindow.cpp" line="1053"/>
         <source>Скрипт успешно изменен!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1283,39 +1283,39 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1640"/>
+        <location filename="../mainwindow.cpp" line="1659"/>
         <source>Страница не найдена (ошибка 404)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1651"/>
-        <location filename="../mainwindow.cpp" line="3262"/>
+        <location filename="../mainwindow.cpp" line="1670"/>
+        <location filename="../mainwindow.cpp" line="3280"/>
         <source>Звук уведомлений: %1/100</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3062"/>
+        <location filename="../mainwindow.cpp" line="3075"/>
         <source>Смена языка</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3062"/>
+        <location filename="../mainwindow.cpp" line="3075"/>
         <source>Приложение будет перезагружено для смены языка</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3162"/>
-        <location filename="../mainwindow.cpp" line="3171"/>
+        <location filename="../mainwindow.cpp" line="3175"/>
+        <location filename="../mainwindow.cpp" line="3184"/>
         <source>Неверный формат времени.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2935"/>
-        <location filename="../mainwindow.cpp" line="3321"/>
-        <location filename="../mainwindow.cpp" line="3336"/>
-        <location filename="../mainwindow.cpp" line="3341"/>
-        <location filename="../mainwindow.cpp" line="3350"/>
-        <location filename="../mainwindow.cpp" line="3454"/>
+        <location filename="../mainwindow.cpp" line="2954"/>
+        <location filename="../mainwindow.cpp" line="3339"/>
+        <location filename="../mainwindow.cpp" line="3354"/>
+        <location filename="../mainwindow.cpp" line="3359"/>
+        <location filename="../mainwindow.cpp" line="3368"/>
+        <location filename="../mainwindow.cpp" line="3472"/>
         <source>Вопрос</source>
         <translation type="unfinished"></translation>
     </message>
