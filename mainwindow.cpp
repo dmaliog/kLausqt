@@ -868,7 +868,10 @@ void MainWindow::on_push_grub_fast_clicked()
 void MainWindow::on_action_addsh_triggered()
 {
     QDialog* dialog = new QDialog(this);
+
+    dialog->setMinimumSize(530, 620);
     dialog->setWindowTitle(tr("Добавить скрипт"));
+    dialog->setObjectName("addDialog");
 
     QLabel* nameLabel = new QLabel(tr("Имя файла:"), dialog);
     QLineEdit* nameLineEdit = new QLineEdit(dialog);
@@ -881,7 +884,7 @@ void MainWindow::on_action_addsh_triggered()
     QPushButton* saveButton = new QPushButton(tr("Сохранить"), dialog);
 
     QVBoxLayout* layout = new QVBoxLayout(dialog);
-    dialog->setStyleSheet("QWidget{background-color:#2d2b79;} QLineEdit,QTextEdit{background-color:#21205b;padding:10px;border-radius:10px;} QLabel{color:#fff;font-size:10pt;}QPushButton{border-radius:10px;padding:5px 20px;background-color:#916ee4;color:#fff;}");
+    dialog->setStyleSheet("QWidget#addDialog{background:#322F85 url(:/img/system.jpeg) repeat;} QLineEdit,QTextEdit{background:#32554b;padding:10px;border-radius:10px;}");
 
     layout->addWidget(nameLabel);
     layout->addWidget(nameLineEdit);
@@ -1006,8 +1009,10 @@ void MainWindow::on_action_editsh_triggered()
 
                         // Создание диалогового окна для редактирования
                         QDialog* editDialog = new QDialog(this);
+
+                        editDialog->setMinimumSize(530, 620);
                         editDialog->setWindowTitle(tr("Редактировать скрипт"));
-                        editDialog->resize(500, 300);
+                        editDialog->setObjectName("editDialog");
 
                         // Создание виджетов
                         QLabel* nameLabel = new QLabel(tr("Имя файла:"));
@@ -1021,7 +1026,7 @@ void MainWindow::on_action_editsh_triggered()
 
                         // Создание компоновки
                         QVBoxLayout* layout = new QVBoxLayout(editDialog);
-                        editDialog->setStyleSheet("QWidget{background-color:#2d2b79;} QLineEdit,QTextEdit{background-color:#21205b;padding:10px;border-radius:10px;} QLabel{color:#fff;font-size:10pt;}QPushButton{border-radius:10px;padding:5px 20px;background-color:#916ee4;color:#fff;}");
+                        editDialog->setStyleSheet("QWidget#editDialog{background:#322F85 url(:/img/system.jpeg) repeat;} QLineEdit,QTextEdit{background:#32554b;padding:10px;border-radius:10px;}");
                         layout->addWidget(nameLabel);
                         layout->addWidget(nameEdit);
                         layout->addWidget(scriptLabel);

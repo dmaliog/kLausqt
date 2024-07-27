@@ -280,7 +280,7 @@ QMenuBar::item:pressed {
    </property>
    <property name="styleSheet">
     <string notr="true">#centralwidget{
-	background:#322F85 url(:/img/system.jpeg) repeat;
+	background:#2f6661 url(:/img/system.jpeg) repeat;
 }</string>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -1516,7 +1516,7 @@ margin-left:10px;</string>
       <widget class="QWidget" name="tab_settings">
        <property name="styleSheet">
         <string notr="true">QWidget#tab_settings{
-	background:#322F85 url(:/img/settings.jpeg) repeat;
+	background:#2c1819 url(:/img/settings.jpeg) repeat;
 }</string>
        </property>
        <attribute name="title">
