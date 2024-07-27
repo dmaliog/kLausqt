@@ -312,7 +312,6 @@ private slots:
 
     void searchTextChanged(const QString& searchText);
     void on_combo_mainpage_currentIndexChanged(int index);
-    void on_combo_animload_currentIndexChanged(int index);
     void on_combo_cache_currentIndexChanged(int index);
     void on_combo_lang_currentIndexChanged(int index);
     void on_combo_helper_currentIndexChanged(int index);
@@ -367,6 +366,7 @@ private slots:
     void on_https_proxy_textChanged(const QString &arg1);
     void on_http_proxy_textChanged(const QString &arg1);
     void on_check_proxy_stateChanged(int arg1);
+    void on_line_ignored_textChanged(const QString &arg1);
 };
 
 class MySyntaxHighlighter : public QSyntaxHighlighter {

@@ -29,9 +29,10 @@ QString https;
 QString http;
 int proxy = 0;
 
+QString ignoredpkg;
+
 int pkg = 0; //пакетный менеджер 0-yay
 int page = 0; // какая страница используется
-int animloadpage = 0;
 int trayon = 0; // закрывать без трея
 int autostart = 0; //автостарт
 int repair = 0; // создавать бэкап при удалении или нет
@@ -638,11 +639,20 @@ void MainWindow::on_action_11_triggered()
 
         Terminal terminal = getTerminal();
         currentTerminalProcess = QSharedPointer<QProcess>::create(this);
+
         connect(currentTerminalProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
             UpdateIcon();
         });
+
+        QStringList arguments;
+        arguments << terminal.args;
+        arguments << packageCommands.value(pkg).value("update");
+
+        if (!ignoredpkg.isEmpty())
+            arguments << "--ignore=" + ignoredpkg;
+
         currentTerminalProcess->setProgram(terminal.binary);
-        currentTerminalProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("update"));
+        currentTerminalProcess->setArguments(arguments);
         currentTerminalProcess->setProcessChannelMode(QProcess::MergedChannels);
         currentTerminalProcess->start();
     } else
@@ -1286,10 +1296,13 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->check_updateinstall->setChecked(updinst);
     ui->check_clearinstall->setChecked(clearinstall);
     ui->combo_mainpage->setCurrentIndex(mainpage);
-    ui->combo_animload->setCurrentIndex(animloadpage);
     ui->check_saveurl->setChecked(saveurl);
 
     ui->https_proxy->setText(https);
+    ui->http_proxy->setText(http);
+    ui->check_proxy->setChecked(proxy);
+
+    ui->line_ignored->setText(ignoredpkg);
 
     ui->check_trans->setChecked(trans);
     ui->check_colorlist->setChecked(colorlist);
@@ -1433,7 +1446,6 @@ void MainWindow::loadSettings()
     //-############################## ОСНОВНАЯ ЧАСТЬ ####################################
     //-##################################################################################
     mainpage = settings.value("MainPage", 0).toInt();
-    animloadpage = settings.value("AnimLoadPage", 0).toInt();
     helpercache = settings.value("HelperCache", 0).toInt();
     trayon = settings.value("TrayOn", 0).toInt();
     autostart = settings.value("Autostart", 0).toInt();
@@ -1449,6 +1461,8 @@ void MainWindow::loadSettings()
     https = settings.value("HTTPS").toString();
     http = settings.value("HTTP").toString();
     proxy = settings.value("Proxy", 0).toInt();
+
+    ignoredpkg = settings.value("IgnoredPKG", 0).toString();
 
     lang = QSharedPointer<QString>::create(settings.value("Language").toString());
     teatext = QSharedPointer<QString>::create(settings.value("TeaText").toString());
@@ -1801,6 +1815,12 @@ void MainWindow::loadSettings()
     ui->action_grub->setIcon(QIcon("/usr/share/icons/Papirus/48x48/apps/grub-customizer.svg"));
     ui->action_pacman->setIcon(QIcon("/usr/share/icons/Papirus/48x48/apps/kapman.svg"));
     ui->action_fstab->setIcon(QIcon("/usr/share/icons/Papirus/48x48/apps/org.gnome.DiskUtility.svg"));
+    //-##################################################################################
+    //-#################### УБРАТЬ ПРОБЕЛЫ ИЗ ИГНОРИРОВАНИЯ ПАКЕТОВ #####################
+    //-##################################################################################
+    QRegularExpression noSpaceRegExp("[^\\s]+");
+    QRegularExpressionValidator *noSpaceValidator = new QRegularExpressionValidator(noSpaceRegExp, this);
+    ui->line_ignored->setValidator(noSpaceValidator);
 }
 
 void MainWindow::setupConnections()
@@ -1955,7 +1975,7 @@ void MainWindow::onTimeChanged(const QTime& time)
 
 void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
 {
-    if (animload == 0 || animloadpage > 1)
+    if (animload == 0)
         return;
 
     QWidget* overlayWidget = webView->property("OverlayWidget").value<QWidget*>();
@@ -1996,14 +2016,8 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
                 ui->action_updatelist->setVisible(false);
             }
 
-            if (animloadpage == 0) {
-                loadingMovie = new QMovie(":/img/loading.gif");
-                backgroundColor = "#472e91";
-            }
-            else if (animloadpage == 1) {
-                loadingMovie = new QMovie(":/img/loading2.gif");
-                backgroundColor = "#2d2b79";
-            }
+            loadingMovie = new QMovie(":/img/loading.gif");
+            backgroundColor = "#468682";
         }
 
         loadingLabel->setMovie(loadingMovie);
@@ -2156,7 +2170,7 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
                 else
                     detailsWidget->setText(tr("Пакет не найден!\nВозможно, он поменял свое название..."));
 
-                ui->searchLineEdit->setText(packageName);
+
 
                 QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Пакет не найден"), tr("Пакет не найден, перейти к его поиску?"), QMessageBox::Yes | QMessageBox::No);
 
@@ -3046,12 +3060,6 @@ void MainWindow::on_combo_helper_currentIndexChanged(int index)
     cacheButtonHelper->setText(tr("Кэш пакетов Yay"));
 }
 
-void MainWindow::on_combo_animload_currentIndexChanged(int index)
-{
-    animloadpage = index;
-    settings.setValue("AnimLoadPage", animloadpage);
-}
-
 void MainWindow::on_combo_lang_currentIndexChanged(int index)
 {
     QString newLang = (index == 0) ? "ru_RU" : (index == 1) ? "en_US" : "";
@@ -3189,6 +3197,11 @@ void MainWindow::on_check_proxy_stateChanged(int arg1)
     settings.setValue("Proxy",arg1);
 }
 
+void MainWindow::on_line_ignored_textChanged(const QString &arg1)
+{
+    ignoredpkg = arg1;
+    settings.setValue("IgnoredPKG", arg1);
+}
 
 void MainWindow::on_check_trans_stateChanged(int arg1)
 {
