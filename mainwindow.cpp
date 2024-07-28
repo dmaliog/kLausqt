@@ -1890,16 +1890,16 @@ void MainWindow::parseRSS(const QString &rssContent) {
     while (!xml.atEnd() && !xml.hasError()) {
         xml.readNext();
         if (xml.isStartElement()) {
-            if (xml.name() == "item") {
+            if (xml.name() == QStringLiteral("item")) {
                 QString title, link, description;
-                while (!(xml.isEndElement() && xml.name() == "item")) {
+                while (!(xml.isEndElement() && xml.name() == QStringLiteral("item"))) {
 
                     if (xml.isStartElement()) {
-                        if (xml.name() == "title")
+                        if (xml.name() == QStringLiteral("title"))
                             title = xml.readElementText();
-                        else if (xml.name() == "link")
+                        else if (xml.name() == QStringLiteral("link"))
                             link = xml.readElementText();
-                        else if (xml.name() == "description")
+                        else if (xml.name() == QStringLiteral("description"))
                             description = xml.readElementText();
                     }
 
@@ -1914,6 +1914,7 @@ void MainWindow::parseRSS(const QString &rssContent) {
     else
         ui->text_updatepkg->setHtml(html);
 }
+
 
 void MainWindow::setupConnections()
 {
