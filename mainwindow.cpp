@@ -49,6 +49,7 @@ int auth = 0;
 int saveurl = 2;
 int trans = 2; //перевод описания
 int colorlist = 2; //раскрашивать листы
+int timerupdpkg = 2;
 
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
@@ -1321,6 +1322,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->time_update->setTime(timeupdate);
     ui->time_timeout->setTime(timeout);
 
+    ui->spin_timerupdpkg->setValue(timerupdpkg);
+
     ui->dial_volnotify->setValue(volumenotify);
 
     if (*lang == "ru_RU")
@@ -1474,6 +1477,8 @@ void MainWindow::loadSettings()
     proxy = settings.value("Proxy", 0).toInt();
 
     ignoredpkg = settings.value("IgnoredPKG", 0).toString();
+
+    timerupdpkg = settings.value("Timerupdpkg", 2).toInt();
 
     lang = QSharedPointer<QString>::create(settings.value("Language").toString());
     teatext = QSharedPointer<QString>::create(settings.value("TeaText").toString());
@@ -1835,21 +1840,27 @@ void MainWindow::loadSettings()
     //-##################################################################################
     //-###################################### RSS #######################################
     //-##################################################################################
-    manager = new QNetworkAccessManager(this);
-    connect(manager, &QNetworkAccessManager::finished, this, &MainWindow::onNetworkReply);
-    manager->get(QNetworkRequest(QUrl("https://archlinux.org/feeds/packages/")));
+    rss = new QNetworkAccessManager(this);
+    connect(rss, &QNetworkAccessManager::finished, this, &MainWindow::onNetworkReply);
 
-    connect(ui->text_updatepkg, &QTextBrowser::anchorClicked, this, [=](const QUrl& link) {
+    timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &MainWindow::fetchData);
+
+    int timerupdpkgInMilliseconds = timerupdpkg * 60 * 1000;
+    timer->start(timerupdpkgInMilliseconds);
+
+    fetchData();
+
+    connect(ui->text_updatepkg, &QTextBrowser::anchorClicked, this, [=](const QUrl &link) {
         QString linkPath = link.path();
 
-        if (linkPath.endsWith('/')) {
+        if (linkPath.endsWith('/'))
             linkPath.chop(1);
-        }
 
         QString lastSegment = linkPath.section('/', -1); // Извлекаем последний сегмент пути
         ui->searchLineEdit->setText(lastSegment);
 
-        QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
+        QKeyEvent *event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
         QCoreApplication::postEvent(ui->searchLineEdit, event);
     });
     //-##################################################################################
@@ -1859,11 +1870,17 @@ void MainWindow::loadSettings()
     ui->details_aur->document()->setDefaultStyleSheet("a { text-decoration: underline; color: #c0a071 }");
 }
 
+void MainWindow::fetchData() {
+    rss->get(QNetworkRequest(QUrl("https://archlinux.org/feeds/packages/")));
+}
+
 void MainWindow::onNetworkReply(QNetworkReply *reply) {
     if (reply->error() == QNetworkReply::NoError) {
         QString content = reply->readAll();
         parseRSS(content);
-    }
+    } else
+        ui->text_updatepkg->setText(tr("Ошибка: ") + reply->errorString());
+
     reply->deleteLater();
 }
 
@@ -1876,22 +1893,26 @@ void MainWindow::parseRSS(const QString &rssContent) {
             if (xml.name() == "item") {
                 QString title, link, description;
                 while (!(xml.isEndElement() && xml.name() == "item")) {
+
                     if (xml.isStartElement()) {
-                        if (xml.name() == "title") {
+                        if (xml.name() == "title")
                             title = xml.readElementText();
-                        } else if (xml.name() == "link") {
+                        else if (xml.name() == "link")
                             link = xml.readElementText();
-                        } else if (xml.name() == "description") {
+                        else if (xml.name() == "description")
                             description = xml.readElementText();
-                        }
                     }
+
                     xml.readNext();
                 }
                 html += QString("<a href='%1'>%2</a><br>%3<br><br>").arg(link, title, description);
             }
         }
     }
-    ui->text_updatepkg->setHtml(html);
+    if (xml.hasError())
+        ui->text_updatepkg->setText(tr("Ошибка при разборе RSS-канала: ") + xml.errorString());
+    else
+        ui->text_updatepkg->setHtml(html);
 }
 
 void MainWindow::setupConnections()
@@ -3256,6 +3277,16 @@ void MainWindow::on_time_timeout_timeChanged(const QTime &time)
         settings.setValue("TimeUpdate", timeout.toString("HH:mm:ss"));
     } else
         sendNotification(tr("Ошибка"), tr("Неверный формат времени."));
+}
+
+void MainWindow::on_spin_timerupdpkg_valueChanged(int arg1)
+{
+    timerupdpkg = arg1;
+    settings.setValue("Timerupdpkg", arg1);
+
+    int timerupdpkgInMilliseconds = arg1 * 60 * 1000;
+    timer->stop();
+    timer->start(timerupdpkgInMilliseconds);
 }
 
 void MainWindow::on_https_proxy_textChanged(const QString &arg1)

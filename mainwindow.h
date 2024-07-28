@@ -12,6 +12,7 @@
 #include "qstandarditemmodel.h"
 #include "qsyntaxhighlighter.h"
 #include "qtextbrowser.h"
+#include "qtimer.h"
 #include "qxmlstream.h"
 #include <QLabel>
 #include <QWebEngineView>
@@ -137,8 +138,11 @@ private:
     QStringList helperPackageNames;
 
     // Статические переменные
+    QTimer *timer;
+
     QStringList imageUrls;
     QNetworkAccessManager *manager;
+    QNetworkAccessManager *rss;
     QNetworkAccessManager networkManager;
     QSet<QString> addedLinks;
     QMap<QString, QString> appIcons;
@@ -371,6 +375,8 @@ private slots:
     void on_line_ignored_textChanged(const QString &arg1);
     void parseRSS(const QString &rssContent);
     void onNetworkReply(QNetworkReply *reply);
+    void fetchData();
+    void on_spin_timerupdpkg_valueChanged(int arg1);
 };
 
 class MySyntaxHighlighter : public QSyntaxHighlighter {

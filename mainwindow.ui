@@ -492,7 +492,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>7</number>
       </property>
       <widget class="QWidget" name="tab_webgame">
        <attribute name="title">
@@ -1638,6 +1638,45 @@ background:none;</string>
           <widget class="QWidget" name="page_2"/>
          </widget>
         </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_settingspkg">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>280</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background:#3c2023;
+padding:0 15px;
+border-top-left-radius: 15px;
+border-top-right-radius: 15px;
+color:#ac5c65;
+margin-left:10px;
+margin-right:35px;</string>
+          </property>
+          <property name="text">
+           <string>Настройки пакетов</string>
+          </property>
+         </widget>
+        </item>
         <item row="2" column="1">
          <widget class="QScrollArea" name="scroll_pkgclear">
           <property name="minimumSize">
@@ -1860,7 +1899,7 @@ color:#ac5c65;
               </property>
               <property name="maximumSize">
                <size>
-                <width>16777215</width>
+                <width>180</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -1915,7 +1954,7 @@ color:#ac5c65;
               </property>
               <property name="maximumSize">
                <size>
-                <width>16777215</width>
+                <width>180</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -2080,7 +2119,7 @@ color:#ac5c65;
                </font>
               </property>
               <property name="text">
-               <string>Автообновление</string>
+               <string>Интервал автообновления</string>
               </property>
              </widget>
             </item>
@@ -2216,8 +2255,8 @@ color:#ac5c65;
           </property>
          </spacer>
         </item>
-        <item row="0" column="1">
-         <widget class="QLabel" name="label_settingspkg">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_settings">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -2251,7 +2290,7 @@ margin-left:10px;
 margin-right:35px;</string>
           </property>
           <property name="text">
-           <string>Настройки пакетов</string>
+           <string>Настройки приложения</string>
           </property>
          </widget>
         </item>
@@ -2259,13 +2298,13 @@ margin-right:35px;</string>
          <widget class="QScrollArea" name="scroll_othersettings">
           <property name="minimumSize">
            <size>
-            <width>520</width>
+            <width>530</width>
             <height>650</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>520</width>
+            <width>530</width>
             <height>16777215</height>
            </size>
           </property>
@@ -2280,7 +2319,7 @@ margin-right:35px;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>508</width>
+             <width>518</width>
              <height>679</height>
             </rect>
            </property>
@@ -2291,129 +2330,6 @@ margin-right:35px;</string>
             </size>
            </property>
            <layout class="QGridLayout" name="gridLayout">
-            <item row="12" column="0">
-             <widget class="QScrollArea" name="scroll_volume">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>170</height>
-               </size>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">background:#252525;
-padding-top:0;</string>
-              </property>
-              <property name="widgetResizable">
-               <bool>true</bool>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-              </property>
-              <widget class="QWidget" name="scrollArea_volume">
-               <property name="geometry">
-                <rect>
-                 <x>0</x>
-                 <y>3</y>
-                 <width>272</width>
-                 <height>307</height>
-                </rect>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_5">
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_volnotify">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>250</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">background:#3c2023;
-padding:0 15px;
-border-radius: 8px;
-color:#ac5c65;
-</string>
-                  </property>
-                  <property name="text">
-                   <string>Звук уведомлений: 0/100</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignmentFlag::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QDial" name="dial_volnotify"/>
-                </item>
-               </layout>
-              </widget>
-             </widget>
-            </item>
-            <item row="18" column="0" colspan="2">
-             <widget class="QCheckBox" name="check_trayon">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="text">
-               <string>Закрыть приложение без сворачивания в трей</string>
-              </property>
-             </widget>
-            </item>
-            <item row="19" column="0" colspan="2">
-             <widget class="QCheckBox" name="check_autostart">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="text">
-               <string>Запустить приложение при старте системы</string>
-              </property>
-             </widget>
-            </item>
             <item row="2" column="0">
              <widget class="QLabel" name="label_mainpage">
               <property name="sizePolicy">
@@ -2424,14 +2340,14 @@ color:#ac5c65;
               </property>
               <property name="minimumSize">
                <size>
-                <width>0</width>
+                <width>314</width>
                 <height>40</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
                 <width>16777215</width>
-                <height>30</height>
+                <height>40</height>
                </size>
               </property>
               <property name="font">
@@ -2445,6 +2361,75 @@ color:#ac5c65;
              </widget>
             </item>
             <item row="4" column="0">
+             <widget class="QLabel" name="label_timerupdpkg">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Интервал недавних обновлений</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_lang">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Язык</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0" colspan="4">
+             <widget class="QCheckBox" name="check_colorlist">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Раскрашивать список для лучшей читаемости</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0" colspan="4">
              <widget class="QCheckBox" name="check_animload">
               <property name="minimumSize">
                <size>
@@ -2480,52 +2465,7 @@ color:#ac5c65;
               </property>
              </widget>
             </item>
-            <item row="5" column="0" colspan="2">
-             <widget class="QCheckBox" name="check_colorlist">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="text">
-               <string>Раскрашивать список для лучшей читаемости</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_lang">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>12</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Язык</string>
-              </property>
-             </widget>
-            </item>
-            <item row="17" column="0" colspan="2">
+            <item row="18" column="0" colspan="4">
              <widget class="QCheckBox" name="check_saveurl">
               <property name="minimumSize">
                <size>
@@ -2546,41 +2486,130 @@ color:#ac5c65;
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
-             <widget class="QComboBox" name="combo_lang">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
+            <item row="19" column="0" colspan="4">
+             <widget class="QCheckBox" name="check_trayon">
+              <property name="minimumSize">
                <size>
-                <width>200</width>
-                <height>16777215</height>
+                <width>0</width>
+                <height>40</height>
                </size>
               </property>
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>10</pointsize>
                </font>
               </property>
               <property name="styleSheet">
                <string notr="true"/>
               </property>
-              <item>
-               <property name="text">
-                <string>Русский</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>English</string>
-               </property>
-              </item>
+              <property name="text">
+               <string>Закрыть приложение без сворачивания в трей</string>
+              </property>
              </widget>
             </item>
-            <item row="2" column="1">
+            <item row="20" column="0" colspan="4">
+             <widget class="QCheckBox" name="check_autostart">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Запустить приложение при старте системы</string>
+              </property>
+             </widget>
+            </item>
+            <item row="13" column="0" colspan="4">
+             <widget class="QScrollArea" name="scroll_volume">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>170</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background:#252525;
+padding-top:0;</string>
+              </property>
+              <property name="widgetResizable">
+               <bool>true</bool>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+              </property>
+              <widget class="QWidget" name="scrollArea_volume">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>3</y>
+                 <width>488</width>
+                 <height>261</height>
+                </rect>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_5">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_volnotify">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background:#3c2023;
+padding:0 15px;
+border-radius: 8px;
+color:#ac5c65;
+</string>
+                  </property>
+                  <property name="text">
+                   <string>Звук уведомлений: 0/100</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QDial" name="dial_volnotify"/>
+                </item>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+            <item row="2" column="1" colspan="3">
              <widget class="QComboBox" name="combo_mainpage">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -2590,7 +2619,7 @@ color:#ac5c65;
               </property>
               <property name="maximumSize">
                <size>
-                <width>200</width>
+                <width>180</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -2634,47 +2663,73 @@ color:#ac5c65;
               </item>
              </widget>
             </item>
+            <item row="3" column="1" colspan="3">
+             <widget class="QComboBox" name="combo_lang">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>180</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>9</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <item>
+               <property name="text">
+                <string>Русский</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>English</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QSpinBox" name="spin_timerupdpkg">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="minimum">
+               <number>2</number>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="2" colspan="2">
+             <widget class="QLabel" name="label_sec">
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>сек.</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_settings">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>280</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background:#3c2023;
-padding:0 15px;
-border-top-left-radius: 15px;
-border-top-right-radius: 15px;
-color:#ac5c65;
-margin-left:10px;
-margin-right:35px;</string>
-          </property>
-          <property name="text">
-           <string>Настройки приложения</string>
-          </property>
          </widget>
         </item>
        </layout>
