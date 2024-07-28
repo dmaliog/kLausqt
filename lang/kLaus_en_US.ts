@@ -384,11 +384,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation>The interval of recent updates</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2727"/>
-        <source>сек.</source>
-        <translation>sec.</translation>
-    </message>
-    <message>
         <location filename="../mainwindow.ui" line="2739"/>
         <source>tab_system</source>
         <translation></translation>
@@ -562,6 +557,11 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <location filename="../mainwindow.cpp" line="1716"/>
         <source>Полезные скрипты</source>
         <translation>Useful scripts</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="2727"/>
+        <source>мин.</source>
+        <translation>min.</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="3904"/>
@@ -1439,47 +1439,47 @@ It may have changed its name...</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../main.cpp" line="22"/>
+        <location filename="../main.cpp" line="23"/>
         <source>Вылавливаем молюсков...</source>
         <translation>We catch mollusks...</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="35"/>
+        <location filename="../main.cpp" line="36"/>
         <source>Проверяем сохраненный язык...</source>
         <translation>We check the saved language...</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="96"/>
+        <location filename="../main.cpp" line="97"/>
         <source>Проверяем наличие Pacman...</source>
         <translation>We check the availability of Pacman...</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="100"/>
+        <location filename="../main.cpp" line="101"/>
         <source>Внимание! Требуется Pacman!</source>
         <translation>Attention! Pacman is required!</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="109"/>
+        <location filename="../main.cpp" line="110"/>
         <source>Проверяем наличие notify-send...</source>
         <translation>We check for a notify-send...</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="114"/>
+        <location filename="../main.cpp" line="115"/>
         <source>Внимание! Требуется notify-send!</source>
         <translation>Attention! Notify-send is required!</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="123"/>
+        <location filename="../main.cpp" line="124"/>
         <source>Проверяем наличие терминалов...</source>
         <translation>We check the availability of terminals...</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="125"/>
+        <location filename="../main.cpp" line="126"/>
         <source>Внимание! Требуется любой из терминалов: konsole, gnome-terminal, xfce4-terminal, lxterminal, xterm, alacritty!</source>
         <translation>Attention! Any of the terminals is required: konsole, gnome-terminal, xfce4-terminal, lxterminal, xterm, alacritty!</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="133"/>
+        <location filename="../main.cpp" line="134"/>
         <source>Запускаем kLaus...</source>
         <translation>Launching kLaus...</translation>
     </message>

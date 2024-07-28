@@ -2717,14 +2717,14 @@ color:#ac5c65;
              </widget>
             </item>
             <item row="4" column="2" colspan="2">
-             <widget class="QLabel" name="label_sec">
+             <widget class="QLabel" name="label_minpkg">
               <property name="font">
                <font>
                 <pointsize>12</pointsize>
                </font>
               </property>
               <property name="text">
-               <string>сек.</string>
+               <string>мин.</string>
               </property>
              </widget>
             </item>
