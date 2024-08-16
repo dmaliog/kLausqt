@@ -92,6 +92,10 @@ int main(int argc, char *argv[])
     QSystemSemaphore systemSemaphore("KlausSemaphore", 1);
     systemSemaphore.acquire();
 
+    QObject::connect(&a, &QApplication::aboutToQuit, [&sharedMemory]() {
+        sharedMemory.detach();
+    });
+
     a.setWindowIcon(QIcon(":/img/2.png"));
 
     splash.showMessage(QObject::tr("Проверяем наличие Pacman..."), Qt::AlignLeft | Qt::AlignBottom, Qt::white);

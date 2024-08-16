@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "14.9";
+QString currentVersion = "15.0";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
@@ -854,6 +854,20 @@ void MainWindow::on_action_30_triggered()
     QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "bash" << mainDir + "sh/PKGBUILD.sh" << *lang << helper << packageName);
 }
 
+void MainWindow::on_action_infopkg_triggered(bool checked)
+{
+    if (checked)
+    {
+        ui->tabWidget_details->setCurrentIndex(1);
+        ui->label_details_aur->setText(tr("Файлы пакета"));
+    }
+    else
+    {
+        ui->tabWidget_details->setCurrentIndex(0);
+        ui->label_details_aur->setText(tr("Описание пакета"));
+    }
+}
+
 void MainWindow::on_push_grub_fast_clicked()
 {
     QString filename = "/etc/default/grub";
@@ -1476,7 +1490,7 @@ void MainWindow::loadSettings()
     http = settings.value("HTTP").toString();
     proxy = settings.value("Proxy", 0).toInt();
 
-    ignoredpkg = settings.value("IgnoredPKG", 0).toString();
+    ignoredpkg = settings.value("IgnoredPKG").toString();
 
     timerupdpkg = settings.value("Timerupdpkg", 2).toInt();
 
