@@ -1,7 +1,7 @@
 {"blender"}
 {"flameshot"}
 {"sublime-text-4"}
-{"skypeforlinux-stable-bin"}
+{"skypeforlinux-bin"}
 {"vlc"}
 {"gimp"}
 {"inkscape"}
@@ -16,7 +16,7 @@
 {"eiskaltdcpp-qt"}
 {"filezilla"}
 {"megasync-bin"}
-{"thorium-bin"}
+{"thorium-browser-bin"}
 {"transmission-qt"}
 {"vivaldi"}
 {"yandex-browser"}
