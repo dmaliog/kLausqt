@@ -30,7 +30,7 @@ else
     else
       # Замена соответствующих строк в конфигурационном файле
       sed -i 's/image_backend=.*/image_backend="iterm2" # Инструмент для обработки изображений/g' ~/.config/neofetch/config.conf
-      sed -i 's|image_source=.*/|image_source="'"$image_path"'" # Расположение картинки|g' ~/.config/neofetch/config.conf
+      sed -i 's|image_source=.*|image_source="'"$image_path"'" # Расположение картинки|g' ~/.config/neofetch/config.conf
       notify-send "${neofetch_img}" "${settings_ok}" -i $HOME/.config/kLaus/other/notify.png -a "kLaus" -t 10000
     fi
   fi

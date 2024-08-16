@@ -14,7 +14,7 @@ lang "$1"
 helper="$2"
 
 # Проверка наличия пакетов
-packages=("enchant1.6" "webkitgtk2-bin" "pkgextract" "imagemagick")
+packages=("enchant1.6" "webkitgtk2" "pkgextract" "imagemagick")
 missing_packages=()
 
 for package in "${packages[@]}"; do
