@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "15.1";
+QString currentVersion = "15.2";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
@@ -63,6 +63,7 @@ QMap<int, QMap<QString, QStringList>> packageCommands = {
             {"info", {"yay", "-Qi"}},
             {"update", {"yay", "-Syu"}},
             {"list_files", {"yay", "-Ql"}},
+            {"query_list_files", {"yay", "-Fl"}},
             {"query", {"yay", "-Q"}},
             {"show_info", {"yay", "-Si"}},
             {"query_explicit", {"yay", "-Qe"}},
@@ -2174,7 +2175,7 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
                 break; // Предполагается, что нужно удалить только первый найденный суффикс
             }
         }
-     }
+    }
 
     QSharedPointer<QProcess> currentProcess = QSharedPointer<QProcess>::create();
     int scrollBarValue = detailsWidget->verticalScrollBar()->value();
@@ -2189,9 +2190,9 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
         static const QRegularExpression regex("\\b(\\S+)\\b");
 
         for (auto it = lines.cbegin(); it != lines.cend(); ++it) {
-           const QString& line = *it;
-           if (line.isEmpty() || !line.contains(':'))
-               continue;
+            const QString& line = *it;
+            if (line.isEmpty() || !line.contains(':'))
+                continue;
 
             int colonIndex = line.indexOf(':');
             QString header = line.left(colonIndex).trimmed();
@@ -2201,8 +2202,8 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
             if (header == tr("Описание") && trans == 2)
                 description = content;
             else if (QStringList{tr("Зависит от"), tr("Конфликтует с"), tr("Заменяет"), tr("Предоставляет"), tr("Обеспечивает"),
-                                    tr("Группы"), tr("Зависимости сборки"), tr("Требуется"), tr("Опционально для"),
-                                    tr("Ключевые слова"), tr("Зависимости проверки")}.contains(header)) {
+                                 tr("Группы"), tr("Зависимости сборки"), tr("Требуется"), tr("Опционально для"),
+                                 tr("Ключевые слова"), tr("Зависимости проверки")}.contains(header)) {
                 if (content != tr("Нет"))
                 {
                     linkedContent = content;
@@ -2312,7 +2313,83 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
     currentProcess->setProcessEnvironment(env);
     currentProcess->start(command[0], QStringList() << command[1] << packageName);
+
+    // Код для выполнения команды и вывода в ui->tree_aur
+    QSharedPointer<QProcess> fileListProcess = QSharedPointer<QProcess>::create();
+
+    connect(fileListProcess.data(), &QProcess::readyReadStandardOutput, this, [=]() {
+        QByteArray fileOutput = fileListProcess->readAllStandardOutput();
+        QString fileInfo = QString::fromUtf8(fileOutput);
+        QStringList lines = fileInfo.split('\n', Qt::SkipEmptyParts);
+
+        if (lines.isEmpty()) {
+            // Проверяем стандартный вывод на наличие сообщения об ошибке
+            QByteArray errorOutput = fileListProcess->readAllStandardError();
+            QString errorInfo = QString::fromUtf8(errorOutput);
+            if (!errorInfo.isEmpty()) {
+                ui->tree_aur->clear(); // Очистка дерева при наличии ошибки
+                return;
+            }
+        }
+
+        ui->tree_aur->clear(); // Очистка дерева перед добавлением новых элементов
+
+        QMap<QString, QTreeWidgetItem*> pathMap; // Карта для хранения созданных элементов
+
+        for (auto it = lines.cbegin(); it != lines.cend(); ++it) {
+            const QString &line = *it;
+            QStringList parts = line.split(' ', Qt::SkipEmptyParts);
+
+            if (parts.size() < 2)
+                continue;
+
+            QString filePath = parts[1];
+            QStringList pathParts = filePath.split('/');
+
+            if (pathParts.isEmpty() || pathParts[0].isEmpty())
+                continue; // Пропустить пустые пути
+
+            QTreeWidgetItem* currentItem = nullptr;
+            QString currentPath;
+
+            for (auto it = pathParts.cbegin(); it != pathParts.cend(); ++it) {
+                const QString &part = *it;
+                if (part.isEmpty())
+                    continue; // Пропустить пустые части пути
+
+                if (currentPath.isEmpty())
+                    currentPath = part;
+                else
+                    currentPath += "/" + part;
+
+                if (!pathMap.contains(currentPath)) {
+                    QTreeWidgetItem* newItem;
+                    if (currentItem)
+                        newItem = new QTreeWidgetItem(currentItem);
+                    else
+                        newItem = new QTreeWidgetItem(ui->tree_aur);
+
+                    newItem->setText(0, part);
+                    pathMap[currentPath] = newItem;
+                    currentItem = newItem;
+                } else {
+                    currentItem = pathMap[currentPath];
+                }
+            }
+        }
+    });
+
+    connect(fileListProcess.data(), &QProcess::finished, this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
+        if (exitStatus == QProcess::CrashExit || exitCode != 0) {
+            ui->tree_aur->clear(); // Очистка дерева при ошибке
+        }
+    });
+
+    // Команда для получения списка файлов пакета
+    QStringList fileCommand = packageCommands.value(0).value("query_list_files");
+    fileListProcess->start(fileCommand.at(0), QStringList() << fileCommand.at(1) << packageName);
 }
+
 
 void MainWindow::onListItemClicked(const QString &packageName, int row, QListWidgetItem *item)
 {
@@ -2833,7 +2910,7 @@ void MainWindow::setCursorAndScrollToItem(const QString &itemName)
         QListWidgetItem *currentItem = ui->list_aur->item(row);
         CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(ui->list_aur->itemWidget(currentItem));
 
-        if (itemWidget && itemWidget->getPackageName() == itemName) {
+        if (itemWidget && itemWidget->getPackageNameWithoutRepo() == itemName) {
             // Вызываем слот напрямую, передавая нужные аргументы
             onListItemClicked(itemName, row, currentItem);
 

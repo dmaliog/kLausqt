@@ -226,6 +226,8 @@ private:
     QStringList endingsToRemove = QStringList() << "-bin" << "-git" << "-qt" << "-qt4" << "-qt5" << "-qt6"
                                                 << "qt-" << "qt4-" << "qt5-" << "qt6-" << "-gtk" << "-gtk2"
                                                 << "-gtk3" << "-cvs" << "-svn" << "-hg" << "-darcs" << "-bzr";
+
+
 protected:
     void closeEvent(QCloseEvent *event) override; // объявление метода closeEvent()
     bool eventFilter(QObject *obj, QEvent *event) override;
@@ -508,6 +510,10 @@ public:
         layout->setContentsMargins(4, 0, 4, 0);
 
         connect(this, &CustomListItemWidget::clicked, this, &CustomListItemWidget::handleClicked);
+    }
+
+    QString getPackageNameWithoutRepo() const {
+        return packageName.section('/', -1);  // Возвращает часть после последнего "/"
     }
 
     QString getPackageName() const {
