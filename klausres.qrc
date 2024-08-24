@@ -198,5 +198,6 @@
         <file>img/snap.png</file>
         <file>img/cachyos.png</file>
         <file>img/chaotic-aur.png</file>
+        <file>img/kde-unstable.png</file>
     </qresource>
 </RCC>
