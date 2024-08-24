@@ -13,7 +13,6 @@
 #include "qsyntaxhighlighter.h"
 #include "qtextbrowser.h"
 #include "qtimer.h"
-#include "qxmlstream.h"
 #include <QLabel>
 #include <QWebEngineView>
 #include <QSystemTrayIcon>
@@ -377,6 +376,7 @@ private slots:
     void onNetworkReply(QNetworkReply *reply);
     void fetchData();
     void on_spin_timerupdpkg_valueChanged(int arg1);
+    void on_action_infopkg_triggered(bool checked);
 };
 
 class MySyntaxHighlighter : public QSyntaxHighlighter {
@@ -457,19 +457,18 @@ class CustomListItemWidget : public QWidget
 
 public:
     CustomListItemWidget(const QString &repo, const QString &text, const int &installed, const int &orphaned, const int &old, const int &rating, const QString &sizeInstallation, const QColor &color, QWidget *parent = nullptr)
-        : QWidget(parent), packageName(text)
+        : QWidget(parent), packageName(repo + "/" + text)  // Здесь задается имя в формате repo/namePkg
     {
 
         QHBoxLayout *layout = new QHBoxLayout(this);
 
+        QLabel *repoLabel = createIconLabel(QFile::exists(":/img/" + repo + ".png") ? ":/img/" + repo + ".png" : ":/img/community.png");
 
-        QLabel *repoLabel = createIconLabel(":/img/" + repo + ".png");
         layout->addWidget(repoLabel);
 
-        QLabel *textLabel = new QLabel(text, this);
+        QLabel *textLabel = new QLabel(text, this);  // Здесь в QLabel устанавливаем только namePkg
         textLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         textLabel->setStyleSheet(QString("color:%1;font-size:12pt;").arg(color.name()));
-
 
         layout->addWidget(textLabel);
 
@@ -510,6 +509,7 @@ public:
 
         connect(this, &CustomListItemWidget::clicked, this, &CustomListItemWidget::handleClicked);
     }
+
     QString getPackageName() const {
         return packageName;
     }
@@ -550,12 +550,11 @@ private:
         painter.setBrush(QColor(47, 47, 47));
         painter.drawRoundedRect(0, 0, 50, 8, 4, 4);
 
-
         if (rating > 100)
             rating = 100;
 
         int fillWidth = static_cast<int>(50 * static_cast<double>(rating) / 100.0);
-        painter.setBrush(QColor(137, 123, 170));
+        painter.setBrush(QColor(72, 140, 135));
         painter.drawRoundedRect(0, 0, fillWidth, 8, 4, 4);
 
         label->setPixmap(pixmap);

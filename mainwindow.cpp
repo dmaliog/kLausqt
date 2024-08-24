@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "15.0";
+QString currentVersion = "15.1";
 QString packagesArchiveAUR = "steam";
 QSettings settings(filePath, QSettings::IniFormat);
 
@@ -1212,7 +1212,7 @@ void MainWindow::createAndAddListItemSearch(const QString& packageName)
     if (match.hasMatch()) {
         QString repoName = match.captured(1);
 
-        QString iconPath = QFile::exists(":/img/" + repoName + ".png") ? ":/img/" + repoName + ".png" : ":/img/community.png";
+        QString iconPath = ":/img/" + repoName + ".png";
 
         QString packageNameWithoutPrefix = packageName;
         QString prefixToRemove = repoName + "/";
@@ -2942,7 +2942,6 @@ void MainWindow::onCurrentProcessReadyRead()
 
             QColor color = generateRandomColor(colorlist);
 
-            repoz = QFile::exists(":/img/" + repoz + ".png") ? repoz : "community"; //проверка на репозиторий, если нет то комьюнити
             CustomListItemWidget *itemWidget = new CustomListItemWidget(repoz, packageName, installed, orphaned, old, rating, sizeInstallation, color, ui->list_aur);
 
             QString styleSheet = QString("background: none;").arg(color.name());

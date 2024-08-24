@@ -28,7 +28,8 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-RESOURCES += klausres.qrc
+RESOURCES += \
+    klausres.qrc
 
 TRANSLATIONS += lang/kLaus_ru_RU.ts \
                lang/kLaus_en_US.ts

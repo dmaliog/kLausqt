@@ -113,9 +113,6 @@
         <file>img/reload.png</file>
         <file>img/qr_linux2.png</file>
         <file>img/55.png</file>
-        <file>img/nvidia.png</file>
-        <file>img/amd.png</file>
-        <file>img/intel.png</file>
         <file>img/xiaomi.png</file>
         <file>img/populaty.png</file>
         <file>img/server.gif</file>
@@ -191,7 +188,6 @@
         <file>lang/kLaus_en_US.qm</file>
         <file>lang/kLaus_ru_RU.ts</file>
         <file>lang/kLaus_en_US.ts</file>
-        <file>img/snap.png</file>
         <file>sh/pacman-lock.sh</file>
         <file>img/old.png</file>
         <file>img/orphaned.png</file>
@@ -199,5 +195,8 @@
         <file>img/splash.jpeg</file>
         <file>img/settings.jpeg</file>
         <file>img/system.jpeg</file>
+        <file>img/snap.png</file>
+        <file>img/cachyos.png</file>
+        <file>img/chaotic-aur.png</file>
     </qresource>
 </RCC>

@@ -139,6 +139,8 @@ int main(int argc, char *argv[])
     MainWindow w;
     QTimer::singleShot(1000, [&splash, &w, &systemSemaphore]() {
         splash.close();
+        w.raise();
+        w.activateWindow();
         w.show();
         systemSemaphore.release();
     });
