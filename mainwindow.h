@@ -21,6 +21,7 @@
 #include <QProcess>
 #include <QGraphicsView>
 #include <QRandomGenerator>
+#include <QRegularExpression>
 
 struct Terminal {
     QString binary;
@@ -461,12 +462,20 @@ public:
     CustomListItemWidget(const QString &repo, const QString &text, const int &installed, const int &orphaned, const int &old, const int &rating, const QString &sizeInstallation, const QColor &color, QWidget *parent = nullptr)
         : QWidget(parent), packageName(repo + "/" + text)  // Здесь задается имя в формате repo/namePkg
     {
-
         QHBoxLayout *layout = new QHBoxLayout(this);
 
-        QLabel *repoLabel = createIconLabel(QFile::exists(":/img/" + repo + ".png") ? ":/img/" + repo + ".png" : ":/img/community.png");
+        QString repoName = repo;
+        // Убираем префиксы вида "cachyos-v3", "cachyos-core-v3" и т.д.
+        static const QRegularExpression prefixPattern("^(cachyos)(?:-(core|extra))?-v\\d+$");
+        QRegularExpressionMatch match = prefixPattern.match(repo);
+
+        if (match.hasMatch())
+            repoName = match.captured(1);
+
+        QLabel *repoLabel = createIconLabel(QFile::exists(":/img/" + repoName + ".png") ? ":/img/" + repoName + ".png" : ":/img/community.png");
 
         layout->addWidget(repoLabel);
+
 
         QLabel *textLabel = new QLabel(text, this);  // Здесь в QLabel устанавливаем только namePkg
         textLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
