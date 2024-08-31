@@ -1,3 +1,11 @@
+#name_ru_RU Отредактировать PKGBUILD перед установкой пакета
+#msg_ru_RU <b>PKGBUILD</b> — Сценарий оболочки, содержащий информацию, необходимую для сборки пакета Arch Linux. В Arch Linux пакеты собираются утилитой makepkg. При запуске makepkg находит в рабочем каталоге файл PKGBUILD и выполняет содержащиеся в нём указания по получению необходимых файлов, их компиляции и сборке архива пакета название_пакета.pkg.tar.zst.<br><br>Скрипт позволяет отредактировать PKGBUILD перед установкой пакета.
+
+#name_en_US Edit PKGBUILD before installing the package
+#msg_en_US <b>PKGBUILD</b> is a shell script containing the information needed to build the Arch Linux package. In Arch Linux, packages are assembled by the makepkg utility. At startup, makepkg finds the PKGBUILD file in the working directory and executes the instructions contained therein for obtaining the necessary files, compiling them and assembling the package archive package name.pkg.tar.zst.<br><br>The script allows you to edit PKGBUILD before installing the package.
+
+#icon synology-note-station
+
 #!/bin/bash
 
 # Импорт файла main.sh
