@@ -19,7 +19,9 @@ QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
 QString currentVersion = "15.3";
 QString packagesArchiveAUR = "steam";
-QString packagesArchiveCat = "packages";
+QString packagesArchiveDefault = "packages";
+QString packagesArchiveCat = packagesArchiveDefault;
+
 QSettings settings(filePath, QSettings::IniFormat);
 
 QString lockFilePath = "/var/lib/pacman/db.lck";
@@ -2928,7 +2930,7 @@ void MainWindow::onReplyFinished(QNetworkReply *reply)
 void MainWindow::addLinkToList(const QString &link) {
     QString cleanedLink = link;
 
-    if (packagesArchiveCat == "packages") {
+    if (packagesArchiveCat == packagesArchiveDefault) {
         // Удаление всех вхождений "../" и начальных символов новой строки
         static const QRegularExpression dotDotExp("\\.\\./");
         cleanedLink.replace(dotDotExp, "");
