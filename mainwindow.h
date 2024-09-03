@@ -102,6 +102,7 @@ private:
     QGraphicsOpacityEffect *opacityEffect;
 
     QString detailsAURdefault;
+    QString initialDetailsDowngradeText;
 
     QString originalLabelText;
 
@@ -249,6 +250,8 @@ public slots:
     void on_action_30_triggered();
 
 private slots:
+    void loadDowngrades(const QString& packagesArchiveCatalog);
+
     void writeToFile(const QString& filePath, const QString& content);
     void loadConfigFile(const QString &filePath, QTextEdit *targetTextEdit, int tabIndex);
 

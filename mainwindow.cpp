@@ -19,6 +19,7 @@ QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
 QString currentVersion = "15.3";
 QString packagesArchiveAUR = "steam";
+QString packagesArchiveCat = "packages";
 QSettings settings(filePath, QSettings::IniFormat);
 
 QString lockFilePath = "/var/lib/pacman/db.lck";
@@ -1331,6 +1332,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     setupConnections();
 
     detailsAURdefault = ui->details_aur->toHtml();
+    initialDetailsDowngradeText = ui->details_downgrade->toHtml();
 
     ui->check_trayon->setChecked(trayon);
     ui->check_autostart->setChecked(autostart);
@@ -1368,7 +1370,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     manager = new QNetworkAccessManager(this);
     connect(manager, &QNetworkAccessManager::finished, this, &MainWindow::onReplyFinished);
 
-    checkForDowngrades("steam");
+    loadDowngrades(packagesArchiveCat);
 }
 
 //not
@@ -2290,31 +2292,29 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
         }
 
     });
-    if (listWidget == ui->list_aur)
-    {
-        connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
-            if (exitCode != 0 || exitStatus == QProcess::CrashExit) {
-                QByteArray errorOutput = currentProcess->readAllStandardError();
-                QString errorMessage = QString::fromUtf8(errorOutput);
+    connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
+        if (exitCode != 0 || exitStatus == QProcess::CrashExit) {
+            QByteArray errorOutput = currentProcess->readAllStandardError();
+            QString errorMessage = QString::fromUtf8(errorOutput);
 
-                if (!errorMessage.trimmed().isEmpty())
-                    detailsWidget->setText(errorMessage);
-                else
-                    detailsWidget->setText(tr("Пакет не найден!\nВозможно, он поменял свое название..."));
+            if (!errorMessage.trimmed().isEmpty())
+                detailsWidget->setText(errorMessage);
+            else
+                if (listWidget == ui->list_aur) detailsWidget->setText(tr("Пакет не найден!\nВозможно, он поменял свое название..."));
 
-
-
+            if (listWidget == ui->list_aur)
+            {
                 QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Пакет не найден"), tr("Пакет не найден, перейти к его поиску?"), QMessageBox::Yes | QMessageBox::No);
 
                 if (reply == QMessageBox::Yes) {
                     QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
                     QCoreApplication::postEvent(ui->searchLineEdit, event);
                 }
-
-                miniAnimation(false,detailsWidget);
             }
-        });
-    }
+
+            miniAnimation(false,detailsWidget);
+        }
+    });
 
     detailsWidget->clear();
 
@@ -2762,32 +2762,49 @@ QString packageVersion(const QString& packageName) {
 
 //not
 void MainWindow::onListDowngradeItemDoubleClicked(QListWidgetItem *currentItem) {
-    QString packageName;
 
-    if (currentItem != nullptr)
-        packageName = currentItem->text();
-    else {
-        sendNotification(tr("Внимание"), tr("Выберите пакет для установки!"));
-        return;
+    bool isFolder = currentItem->data(Qt::UserRole).toBool();
+    QString itemName = currentItem->text();
+
+    if (itemName == "../") {
+        QStringList pathParts = packagesArchiveCat.split('/', Qt::SkipEmptyParts);
+        if (!pathParts.isEmpty()) {
+            pathParts.removeLast();
+            packagesArchiveCat = pathParts.join('/');
+        }
+        loadDowngrades(packagesArchiveCat);
     }
+    else if (isFolder) {
+        packagesArchiveCat += "/" + currentItem->text();
+        loadDowngrades(packagesArchiveCat);
+    } else {
+        QString packageName;
 
-    Terminal terminal = getTerminal();
-    QString installUrl = "https://archive.archlinux.org/packages/" + QString(packagesArchiveAUR.at(0)) + "/" + packagesArchiveAUR +  "/" + packageName;
+        if (currentItem != nullptr)
+            packageName = currentItem->text();
+        else {
+            sendNotification(tr("Внимание"), tr("Выберите пакет для установки!"));
+            return;
+        }
 
-    QFile lockFile(lockFilePath);
-    if (lockFile.exists()) {
-        sendNotification(tr("Внимание"), tr("Pacman уже используется! Завершите все операции в Pacman и попробуйте снова!"));
-        return;
+        Terminal terminal = getTerminal();
+        QString installUrl = "https://archive.archlinux.org/packages/" + QString(packagesArchiveAUR.at(0)) + "/" + packagesArchiveAUR +  "/" + packageName;
+
+        QFile lockFile(lockFilePath);
+        if (lockFile.exists()) {
+            sendNotification(tr("Внимание"), tr("Pacman уже используется! Завершите все операции в Pacman и попробуйте снова!"));
+            return;
+        }
+
+        currentTerminalProcess = QSharedPointer<QProcess>::create(this);
+        connect(currentTerminalProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
+            //ничего делать не надо
+        });
+        currentTerminalProcess->setProgram(terminal.binary);
+        currentTerminalProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("localinstall") << installUrl);
+        currentTerminalProcess->setProcessChannelMode(QProcess::MergedChannels);
+        currentTerminalProcess->start();
     }
-
-    currentTerminalProcess = QSharedPointer<QProcess>::create(this);
-    connect(currentTerminalProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
-        //ничего делать не надо
-    });
-    currentTerminalProcess->setProgram(terminal.binary);
-    currentTerminalProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("localinstall") << installUrl);
-    currentTerminalProcess->setProcessChannelMode(QProcess::MergedChannels);
-    currentTerminalProcess->start();
 }
 
 void MainWindow::checkForDowngrades(const QString& packagesArchiveAUR)
@@ -2801,9 +2818,22 @@ void MainWindow::checkForDowngrades(const QString& packagesArchiveAUR)
     QNetworkRequest request(url);
     manager->get(request);
 
-    ui->details_downgrade->clear();
+    packagesArchiveCat = "packages/" + QString(firstLetter) + "/" + packagesArchiveAUR;
+    ui->details_downgrade->setHtml(initialDetailsDowngradeText);
+}
 
-    processListItem(-1, ui->list_downgrade, ui->details_downgrade, packagesArchiveAUR);
+void MainWindow::loadDowngrades(const QString& packagesArchiveCatalog)
+{
+    miniAnimation(true, ui->list_downgrade);
+    addedLinks.clear();
+    ui->list_downgrade->clear();
+
+    packagesArchiveCat = packagesArchiveCatalog;
+    QUrl url("https://archive.archlinux.org/" + packagesArchiveCat);
+    QNetworkRequest request(url);
+    manager->get(request);
+
+    ui->details_downgrade->setHtml(initialDetailsDowngradeText);
 }
 
 void MainWindow::connectProcessSignals(QSharedPointer<QProcess>& process, QTextBrowser* outputWidget)
@@ -2862,44 +2892,78 @@ void MainWindow::onReplyFinished(QNetworkReply *reply)
         static QRegularExpression linkRegex("<a [^>]*href=\"([^\"]*)\"[^>]*>.*</a>");  // Статический объект
 
         int pos = 0;
-
         QRegularExpressionMatch match;
+
+        bool hasZstOrXzFiles = false;
+        QString packageName;
 
         while ((match = linkRegex.match(htmlContent, pos)).hasMatch())
         {
             QString link = match.captured(1);
             addLinkToList(link);
             pos += match.capturedLength();
+
+            if (link.endsWith(".zst") || link.endsWith(".xz")) {
+                hasZstOrXzFiles = true;
+            }
+        }
+
+        QStringList urlParts = packagesArchiveCat.split('/', Qt::SkipEmptyParts);
+        packageName = urlParts.isEmpty() ? "" : urlParts.last();
+
+        if (hasZstOrXzFiles && !packageName.isEmpty()) {
+            processListItem(-1, ui->list_downgrade, ui->details_downgrade, packageName);
         }
     }
-    else {
-        miniAnimation(false,ui->list_downgrade);
+    else
+    {
+        miniAnimation(false, ui->list_downgrade);
         ui->details_downgrade->setText(tr("Пакет не найден в архиве"));
     }
     reply->deleteLater();
 }
 
-void MainWindow::addLinkToList(const QString &link)
-{
-    QString cleanedLink = link;
-    static const QRegularExpression dotDotExp("\\.\\./");
-    cleanedLink.replace(dotDotExp, "");
 
-    static const QRegularExpression newlineExp("^\n");
+void MainWindow::addLinkToList(const QString &link) {
+    QString cleanedLink = link;
+
+    if (packagesArchiveCat == "packages") {
+        // Удаление всех вхождений "../" и начальных символов новой строки
+        static const QRegularExpression dotDotExp("\\.\\./");
+        cleanedLink.replace(dotDotExp, "");
+    }
+
+    static const QRegularExpression newlineExp("^\\n");
     cleanedLink.replace(newlineExp, "");
 
     miniAnimation(false, ui->list_downgrade);
 
-    if (cleanedLink.isEmpty() || cleanedLink.contains(".sig") || addedLinks.contains(cleanedLink))
+    if (cleanedLink.isEmpty() || cleanedLink.contains(".sig") || addedLinks.contains(cleanedLink)) {
         return;
+    }
 
-    QListWidgetItem *item = new QListWidgetItem(QIcon("/usr/share/icons/Papirus/48x48/mimetypes/application-x-xz-pkg.svg"), cleanedLink);
+    QIcon icon;
+    bool isFolder = !cleanedLink.contains('.');
+
+    if (cleanedLink == "../") {
+        icon = QIcon("/usr/share/icons/Papirus/48x48/places/folder-teal.svg");
+    } else if (isFolder) {
+        icon = QIcon("/usr/share/icons/Papirus/48x48/places/folder-teal-applications.svg");
+    } else {
+        icon = QIcon("/usr/share/icons/Papirus/48x48/mimetypes/application-x-xz-pkg.svg");
+    }
+
+    QListWidgetItem *item = new QListWidgetItem(icon, cleanedLink);
+
+    item->setData(Qt::UserRole, isFolder);
+
     item->setForeground(generateRandomColor(colorlist));
 
-    ui->list_downgrade->insertItem(0, item);
+    ui->list_downgrade->addItem(item);
     addedLinks.insert(cleanedLink);
-
 }
+
+// ----
 
 void MainWindow::loadContentInstall()
 {
