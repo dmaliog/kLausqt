@@ -380,6 +380,7 @@ private slots:
     void fetchData();
     void on_spin_timerupdpkg_valueChanged(int arg1);
     void on_action_infopkg_triggered(bool checked);
+    void on_action_infopkg_pkg_triggered(bool checked);
 };
 
 class MySyntaxHighlighter : public QSyntaxHighlighter {

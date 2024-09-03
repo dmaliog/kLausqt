@@ -126,6 +126,7 @@ void MainWindow::on_action_7_triggered()
     ui->action_5->setVisible(true);
     ui->action_6->setVisible(true);
     ui->action_34->setVisible(true);
+    ui->action_infopkg_pkg->setVisible(true);
 }
 
 void MainWindow::on_action_17_triggered()
@@ -868,6 +869,21 @@ void MainWindow::on_action_infopkg_triggered(bool checked)
         ui->label_details_aur->setText(tr("Описание пакета"));
     }
 }
+
+void MainWindow::on_action_infopkg_pkg_triggered(bool checked)
+{
+    if (checked)
+    {
+        ui->tabWidget_details_pkg->setCurrentIndex(1);
+        ui->label_details_aurpkg->setText(tr("Файлы пакета"));
+    }
+    else
+    {
+        ui->tabWidget_details_pkg->setCurrentIndex(0);
+        ui->label_details_aurpkg->setText(tr("Описание пакета"));
+    }
+}
+
 
 void MainWindow::on_push_grub_fast_clicked()
 {
@@ -2314,80 +2330,82 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
     currentProcess->setProcessEnvironment(env);
     currentProcess->start(command[0], QStringList() << command[1] << packageName);
 
-    // Код для выполнения команды и вывода в ui->tree_aur
-    QSharedPointer<QProcess> fileListProcess = QSharedPointer<QProcess>::create();
+    if (page == 2 || page == 4)
+    {
+        QTreeWidget* treeWidget = (page == 2) ? ui->tree_aur : ui->tree_files_pkg;
 
-    connect(fileListProcess.data(), &QProcess::readyReadStandardOutput, this, [=]() {
-        QByteArray fileOutput = fileListProcess->readAllStandardOutput();
-        QString fileInfo = QString::fromUtf8(fileOutput);
-        QStringList lines = fileInfo.split('\n', Qt::SkipEmptyParts);
+        QSharedPointer<QProcess> fileListProcess = QSharedPointer<QProcess>::create();
 
-        if (lines.isEmpty()) {
-            // Проверяем стандартный вывод на наличие сообщения об ошибке
-            QByteArray errorOutput = fileListProcess->readAllStandardError();
-            QString errorInfo = QString::fromUtf8(errorOutput);
-            if (!errorInfo.isEmpty()) {
-                ui->tree_aur->clear(); // Очистка дерева при наличии ошибки
-                return;
-            }
-        }
+        connect(fileListProcess.data(), &QProcess::readyReadStandardOutput, this, [=]() {
+            QByteArray fileOutput = fileListProcess->readAllStandardOutput();
+            QString fileInfo = QString::fromUtf8(fileOutput);
+            QStringList lines = fileInfo.split('\n', Qt::SkipEmptyParts);
 
-        ui->tree_aur->clear(); // Очистка дерева перед добавлением новых элементов
-
-        QMap<QString, QTreeWidgetItem*> pathMap; // Карта для хранения созданных элементов
-
-        for (auto it = lines.cbegin(); it != lines.cend(); ++it) {
-            const QString &line = *it;
-            QStringList parts = line.split(' ', Qt::SkipEmptyParts);
-
-            if (parts.size() < 2)
-                continue;
-
-            QString filePath = parts[1];
-            QStringList pathParts = filePath.split('/');
-
-            if (pathParts.isEmpty() || pathParts[0].isEmpty())
-                continue; // Пропустить пустые пути
-
-            QTreeWidgetItem* currentItem = nullptr;
-            QString currentPath;
-
-            for (auto it = pathParts.cbegin(); it != pathParts.cend(); ++it) {
-                const QString &part = *it;
-                if (part.isEmpty())
-                    continue; // Пропустить пустые части пути
-
-                if (currentPath.isEmpty())
-                    currentPath = part;
-                else
-                    currentPath += "/" + part;
-
-                if (!pathMap.contains(currentPath)) {
-                    QTreeWidgetItem* newItem;
-                    if (currentItem)
-                        newItem = new QTreeWidgetItem(currentItem);
-                    else
-                        newItem = new QTreeWidgetItem(ui->tree_aur);
-
-                    newItem->setText(0, part);
-                    pathMap[currentPath] = newItem;
-                    currentItem = newItem;
-                } else {
-                    currentItem = pathMap[currentPath];
+            if (lines.isEmpty()) {
+                QByteArray errorOutput = fileListProcess->readAllStandardError();
+                QString errorInfo = QString::fromUtf8(errorOutput);
+                if (!errorInfo.isEmpty()) {
+                    treeWidget->clear();
+                    return;
                 }
             }
-        }
-    });
 
-    connect(fileListProcess.data(), &QProcess::finished, this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
-        if (exitStatus == QProcess::CrashExit || exitCode != 0) {
-            ui->tree_aur->clear(); // Очистка дерева при ошибке
-        }
-    });
+            treeWidget->clear();
 
-    // Команда для получения списка файлов пакета
-    QStringList fileCommand = packageCommands.value(0).value("query_list_files");
-    fileListProcess->start(fileCommand.at(0), QStringList() << fileCommand.at(1) << packageName);
+            QMap<QString, QTreeWidgetItem*> pathMap;
+
+            for (auto it = lines.cbegin(); it != lines.cend(); ++it) {
+                const QString &line = *it;
+                QStringList parts = line.split(' ', Qt::SkipEmptyParts);
+
+                if (parts.size() < 2)
+                    continue;
+
+                QString filePath = parts[1];
+                QStringList pathParts = filePath.split('/');
+
+                if (pathParts.isEmpty() || pathParts[0].isEmpty())
+                    continue;
+
+                QTreeWidgetItem* currentItem = nullptr;
+                QString currentPath;
+
+                for (auto it = pathParts.cbegin(); it != pathParts.cend(); ++it) {
+                    const QString &part = *it;
+                    if (part.isEmpty())
+                        continue;
+
+                    if (currentPath.isEmpty())
+                        currentPath = part;
+                    else
+                        currentPath += "/" + part;
+
+                    if (!pathMap.contains(currentPath)) {
+                        QTreeWidgetItem* newItem;
+                        if (currentItem)
+                            newItem = new QTreeWidgetItem(currentItem);
+                        else
+                            newItem = new QTreeWidgetItem(treeWidget);
+
+                        newItem->setText(0, part);
+                        pathMap[currentPath] = newItem;
+                        currentItem = newItem;
+                    } else {
+                        currentItem = pathMap[currentPath];
+                    }
+                }
+            }
+        });
+
+        connect(fileListProcess.data(), &QProcess::finished, this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
+            if (exitStatus == QProcess::CrashExit || exitCode != 0) {
+                treeWidget->clear();
+            }
+        });
+
+        QStringList fileCommand = packageCommands.value(0).value("query_list_files");
+        fileListProcess->start(fileCommand.at(0), QStringList() << fileCommand.at(1) << packageName);
+    }
 }
 
 
