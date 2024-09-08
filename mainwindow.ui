@@ -924,6 +924,84 @@ margin-left:10px;</string>
         <property name="verticalSpacing">
          <number>0</number>
         </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_name_aurpkg">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>230</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background:#396d69;
+padding:0 15px;
+border-top-left-radius: 15px;
+border-top-right-radius: 15px;
+color:#66c3bb;
+margin-left:10px;</string>
+          </property>
+          <property name="text">
+           <string>Названия пакетов</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::TextFormat::AutoText</enum>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" rowspan="6">
+         <widget class="QListWidget" name="list_app">
+          <property name="minimumSize">
+           <size>
+            <width>670</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>670</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>13</pointsize>
+            <bold>false</bold>
+           </font>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::FocusPolicy::NoFocus</enum>
+          </property>
+          <property name="contextMenuPolicy">
+           <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+          </property>
+         </widget>
+        </item>
         <item row="6" column="1">
          <spacer name="verticalSpacer_5">
           <property name="orientation">
@@ -975,53 +1053,6 @@ margin-left:10px;</string>
           </property>
           <property name="text">
            <string>Описание пакета</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::TextFormat::AutoText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-          </property>
-          <property name="margin">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_name_aurpkg">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>230</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background:#396d69;
-padding:0 15px;
-border-top-left-radius: 15px;
-border-top-right-radius: 15px;
-color:#66c3bb;
-margin-left:10px;</string>
-          </property>
-          <property name="text">
-           <string>Названия пакетов</string>
           </property>
           <property name="textFormat">
            <enum>Qt::TextFormat::AutoText</enum>
@@ -1098,19 +1129,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <spacer name="horizontalSpacer_4">
-              <property name="orientation">
-               <enum>Qt::Orientation::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
            </layout>
           </widget>
           <widget class="QWidget" name="tab_files_pkg">
@@ -1149,36 +1167,18 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </widget>
          </widget>
         </item>
-        <item row="1" column="0" rowspan="6">
-         <widget class="QListWidget" name="list_app">
-          <property name="minimumSize">
+        <item row="2" column="2">
+         <spacer name="horizontalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
            <size>
-            <width>670</width>
-            <height>0</height>
+            <width>40</width>
+            <height>20</height>
            </size>
           </property>
-          <property name="maximumSize">
-           <size>
-            <width>670</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>13</pointsize>
-            <bold>false</bold>
-           </font>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::FocusPolicy::NoFocus</enum>
-          </property>
-          <property name="contextMenuPolicy">
-           <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
-          </property>
-          <property name="horizontalScrollBarPolicy">
-           <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
-          </property>
-         </widget>
+         </spacer>
         </item>
        </layout>
       </widget>
@@ -1770,8 +1770,8 @@ margin-right:35px;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>518</width>
-             <height>712</height>
+             <width>510</width>
+             <height>678</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_3">
@@ -1852,7 +1852,7 @@ padding-top:0;</string>
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>488</width>
+                 <width>480</width>
                  <height>203</height>
                 </rect>
                </property>
@@ -2253,7 +2253,7 @@ padding-top:0;</string>
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>488</width>
+                 <width>480</width>
                  <height>104</height>
                 </rect>
                </property>
@@ -2388,7 +2388,7 @@ margin-right:35px;</string>
              <x>0</x>
              <y>0</y>
              <width>518</width>
-             <height>679</height>
+             <height>638</height>
             </rect>
            </property>
            <property name="maximumSize">
@@ -2624,9 +2624,9 @@ padding-top:0;</string>
                <property name="geometry">
                 <rect>
                  <x>0</x>
-                 <y>3</y>
+                 <y>2</y>
                  <width>488</width>
-                 <height>261</height>
+                 <height>220</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_5">
@@ -3042,8 +3042,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>658</width>
-             <height>712</height>
+             <width>650</width>
+             <height>46</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_24">
@@ -3209,8 +3209,8 @@ color:#66c3bb;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>618</width>
-             <height>168</height>
+             <width>402</width>
+             <height>149</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_4">
@@ -4277,8 +4277,8 @@ margin-left:10px;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>658</width>
-             <height>712</height>
+             <width>650</width>
+             <height>46</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_18">
@@ -4714,8 +4714,8 @@ margin-left:10px;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>658</width>
-             <height>712</height>
+             <width>650</width>
+             <height>46</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_21">
