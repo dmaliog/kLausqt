@@ -224,6 +224,18 @@ private:
                                       ":/bench/hardinfo.sh",
                                       ":/bench/iozone.sh"};
 
+    QStringList menuResourcePaths = {":/menu/icon.ini",
+                                      ":/menu/ru_RU.ini",
+                                      ":/menu/en_US.ini",
+                                      ":/menu/Core_utilities/Core_utilities.txt",
+                                      ":/menu/Documents/Documents.txt",
+                                      ":/menu/Internet/Internet.txt",
+                                      ":/menu/List_of_games/List_of_games.txt",
+                                      ":/menu/Multimedia/Multimedia.txt",
+                                      ":/menu/Other/Other.txt",
+                                      ":/menu/Science/Science.txt",
+                                      ":/menu/Security/Security.txt",
+                                      ":/menu/Utilities/Utilities.txt"};
 
     QStringList endingsToRemove = QStringList() << "-bin" << "-git" << "-qt" << "-qt4" << "-qt5" << "-qt6"
                                                 << "qt-" << "qt4-" << "qt5-" << "qt6-" << "-gtk" << "-gtk2"
@@ -250,12 +262,18 @@ public slots:
     void on_action_30_triggered();
 
 private slots:
+    QIcon findIconInPapirus(const QString& iconName);
+
+    void loadPackages(const QString& category, const QString& subcategory);
+    void loadSubcategories(const QString& category);
+    void loadMainMenu();
+
+
     void loadDowngrades(const QString& packagesArchiveCatalog);
 
     void writeToFile(const QString& filePath, const QString& content);
     void loadConfigFile(const QString &filePath, QTextEdit *targetTextEdit, int tabIndex);
 
-    bool prepareFile(const QString& source, const QString& target, QFile& file);
     void readProgramsFromFile(QFile& file, QVector<QString>& programs);
     void processPackageName(const QString& packageName, bool valuepage);
 
@@ -266,7 +284,6 @@ private slots:
 
     void mrpropper(int value, QAction *action);
 
-    void connectProcessSignals(QSharedPointer<QProcess>& process, QTextBrowser* outputWidget);
     void onCurrentProcessReadyReadSearch();
     void onCurrentProcessReadyRead();
     void onReplyFinished(QNetworkReply *reply);
@@ -299,11 +316,10 @@ private slots:
 
     void loadSettings();
     void loadContentInstall();
-    void loadContent(int value, bool valuepage);
     void loadingListWidget();
     void loadFolders();
     void loadScripts(const QString& basedDir, QListWidget* listWidget);
-    void saveScripts(const QStringList& resourcePaths, const QString& baseDir);
+    void saveScripts(const QStringList& resourcePaths);
     void removeToolButtonTooltips(QToolBar* toolbar);
     void removeScripts(const QStringList& resourcePaths, const QString& baseDir);
     void removeDirectory(const QString& dirPath);
@@ -384,6 +400,7 @@ private slots:
     void on_spin_timerupdpkg_valueChanged(int arg1);
     void on_action_infopkg_triggered(bool checked);
     void on_action_infopkg_pkg_triggered(bool checked);
+    void on_list_aur_itemSelectionChanged();
 };
 
 class MySyntaxHighlighter : public QSyntaxHighlighter {

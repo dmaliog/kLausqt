@@ -1,6 +1,14 @@
-
 #include "mainwindow.h"
+#include "scrapper.h"
 #include <QtWidgets>
+#include <QApplication>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QFile>
+#include <QXmlStreamReader>
+#include <QTextStream>
+#include <QDir>
 
 bool isPackageInstalled(const QString& packageName)
 {
@@ -11,9 +19,11 @@ bool isPackageInstalled(const QString& packageName)
     return !output.isEmpty();
 }
 
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
 
     QPixmap pixmap(":/img/splash.jpeg");
     QPixmap scaledPixmap = pixmap.scaled(pixmap.width() / 2, pixmap.height() / 2, Qt::KeepAspectRatio);
@@ -22,6 +32,22 @@ int main(int argc, char *argv[])
 
     splash.showMessage(QObject::tr("Вылавливаем молюсков..."), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
 
+    //scrapper
+    splash.showMessage(QObject::tr("Скачиваем списки пакетов..."), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+    ArchWikiScraper *scraper = new ArchWikiScraper();
+
+    QList<QUrl> urls;
+    urls << QUrl("https://wiki.archlinux.org/title/List_of_applications/Documents")
+         << QUrl("https://wiki.archlinux.org/title/List_of_applications/Internet")
+         << QUrl("https://wiki.archlinux.org/title/List_of_applications/Multimedia")
+         << QUrl("https://wiki.archlinux.org/title/List_of_applications/Science")
+         << QUrl("https://wiki.archlinux.org/title/List_of_applications/Utilities")
+         << QUrl("https://wiki.archlinux.org/title/List_of_applications/Security")
+         << QUrl("https://wiki.archlinux.org/title/List_of_games")
+         << QUrl("https://wiki.archlinux.org/title/Core_utilities")
+         << QUrl("https://wiki.archlinux.org/title/List_of_applications/Other");
+
+    scraper->startScraping(urls);
 
     #if QT_VERSION > QT_VERSION_CHECK(5, 7, 0)
         QGuiApplication::setDesktopFileName("klaus");
@@ -137,12 +163,13 @@ int main(int argc, char *argv[])
 
     splash.showMessage(QObject::tr("Запускаем kLaus..."), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
     MainWindow w;
-    QTimer::singleShot(1000, [&splash, &w, &systemSemaphore]() {
+    QTimer::singleShot(0, [&splash, &w, &systemSemaphore]() {
         splash.close();
         w.raise();
         w.activateWindow();
         w.show();
         systemSemaphore.release();
+
     });
 
     return a.exec();

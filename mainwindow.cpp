@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "15.3";
+QString currentVersion = "15.4";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -115,6 +115,7 @@ void MainWindow::on_action_2_triggered()
     ui->action_30->setVisible(true);
     ui->action_34->setVisible(true);
     ui->action_infopkg->setVisible(true);
+
 }
 
 void MainWindow::on_action_7_triggered()
@@ -600,10 +601,14 @@ void MainWindow::on_action_35_triggered()
     ui->action_updatelist->setVisible(true);
 
     if (page == 2) {
+        ui->action_infopkg->setVisible(true);
         ui->tabWidget->setCurrentIndex(1);
     }
     else if (page == 4)
+    {
+        ui->action_infopkg_pkg->setVisible(true);
         ui->tabWidget->setCurrentIndex(2);
+    }
 
     removeToolButtonTooltips(ui->toolBar);
     removeToolButtonTooltips(ui->toolBar_2);
@@ -859,8 +864,25 @@ void MainWindow::on_action_30_triggered()
     QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "bash" << mainDir + "sh/PKGBUILD.sh" << *lang << helper << packageName);
 }
 
+void MainWindow::on_list_aur_itemSelectionChanged()
+{
+    if (ui->list_aur->selectedItems().isEmpty()) {
+        ui->action_infopkg->setChecked(false);
+        ui->details_aur->setHtml(detailsAURdefault);
+    }
+}
+
 void MainWindow::on_action_infopkg_triggered(bool checked)
 {
+    if (ui->list_aur->currentItem() == nullptr) {
+        QAction *action = qobject_cast<QAction*>(sender());
+        if (action)
+            action->setChecked(!checked);
+
+        sendNotification(tr("Внимание"), tr("Выберите пакет из списка для составления файлов пакета!"));
+        return;
+    }
+
     if (checked)
     {
         ui->tabWidget_details->setCurrentIndex(1);
@@ -875,6 +897,15 @@ void MainWindow::on_action_infopkg_triggered(bool checked)
 
 void MainWindow::on_action_infopkg_pkg_triggered(bool checked)
 {
+    if (ui->list_app->currentItem() == nullptr) {
+        QAction *action = qobject_cast<QAction*>(sender());
+        if (action)
+            action->setChecked(!checked);
+
+        sendNotification(tr("Внимание"), tr("Выберите пакет из списка для составления файлов пакета!"));
+        return;
+    }
+
     if (checked)
     {
         ui->tabWidget_details_pkg->setCurrentIndex(1);
@@ -1132,6 +1163,14 @@ void MainWindow::showListContextMenu(const QPoint& pos)
     if (!selectedItem)
         return;
 
+    // Получаем данные, установленные для элемента
+    QString itemType = selectedItem->data(Qt::UserRole + 1).toString();
+
+    // Проверяем, является ли элемент категорией или субкатегорией
+    if (itemType == "subcategory" || itemType == "category") {
+        return; // Не показываем контекстное меню для подкатегорий
+    }
+
     QMenu contextMenu(this);
     QAction action1(QIcon(":/img/15.png"), tr("Установить"), this);
     QAction action2(QIcon(":/img/27.png"), tr("Изменить PKGBUILD и установить"), this);
@@ -1326,7 +1365,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     UpdateIcon();
 
     list = 0;
-    loadContent(0, true);
+    loadMainMenu();
 
     loadContentInstall();
     loadFolders();
@@ -1386,7 +1425,7 @@ void MainWindow::checkVersionAndClear() {
         settings.setValue("Language", storedLanguage);
         settings.sync();
 
-        QStringList excludedFolders = {"clear", "journals", "bench", "other", "sh"};
+        QStringList excludedFolders = {"clear", "journals", "bench", "other", "menu", "sh"};
         QDir baseDir(mainDir);
 
         const QStringList subDirs = baseDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
@@ -1401,6 +1440,7 @@ void MainWindow::checkVersionAndClear() {
         removeDirectory(mainDir + "journals/");
         removeDirectory(mainDir + "bench/");
         removeDirectory(mainDir + "other/");
+        removeDirectory(mainDir + "menu/");
         sendNotification(tr("Обновление kLaus"), tr("Версия kLaus поменялась, конфигурация сброшена!"));
     }
 }
@@ -1419,13 +1459,25 @@ void MainWindow::removeDirectory(const QString& dirPath)
     QDir(dirPath).removeRecursively();
 }
 
-void MainWindow::saveScripts(const QStringList& resourcePaths, const QString& baseDir)
+void MainWindow::saveScripts(const QStringList& resourcePaths)
 {
-    QDir().mkpath(baseDir);
     for (const QString& path : resourcePaths)
     {
-        QFile::copy(path, baseDir + QFileInfo(path).fileName());
+        QString relativePath = path;
+
+        if (relativePath.startsWith(":/"))
+            relativePath = relativePath.mid(2);
+
+        QString relativeDir = QFileInfo(relativePath).path();
+
+        QString fullDirPath = mainDir + "/" + relativeDir;
+        QDir().mkpath(fullDirPath);
+
+        QFile::copy(path, fullDirPath + "/" + QFileInfo(path).fileName());
     }
+
+    if (resourcePaths == menuResourcePaths)
+        ui->action_updatelist->trigger();
 }
 
 MainWindow::~MainWindow()
@@ -1560,6 +1612,8 @@ void MainWindow::loadSettings()
     //-##################################################################################
     //-############################## СИГНАЛЫ И СЛОТЫ ###################################
     //-##################################################################################
+    connect(ui->list_aur, &QListWidget::itemSelectionChanged, this, &::MainWindow::on_list_aur_itemSelectionChanged);
+
     connect(ui->time_update, &QTimeEdit::timeChanged, this, &MainWindow::onTimeChanged);
 
     connect(ui->list_aur, &QListWidget::itemClicked, this, [=](QListWidgetItem *item) {
@@ -1568,8 +1622,9 @@ void MainWindow::loadSettings()
             QString packageName = itemWidget->getPackageName();
             int row = ui->list_aur->row(item);
             onListItemClicked(packageName, row, item);
-        } else
+        } else {
             onListItemClicked("", 0, item);
+        }
     });
 
     connect(ui->list_app, &QListWidget::itemClicked, this, [=](QListWidgetItem *item) {
@@ -2142,6 +2197,11 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
                 ui->action_11->setVisible(false);
                 ui->action_34->setVisible(false);
                 ui->action_updatelist->setVisible(false);
+
+                if(page == 2)
+                    ui->action_infopkg->setVisible(false);
+                else if (page == 4)
+                    ui->action_infopkg_pkg->setVisible(false);
             }
 
             loadingMovie = new QMovie(":/img/loading.gif");
@@ -2184,18 +2244,8 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
         packageName = nameItem->text();
     }
 
-    if (listWidget == ui->list_aur)
-    {
-        QString appName = packageName.split(' ')[0];
 
-        for (auto it = endingsToRemove.cbegin(); it != endingsToRemove.cend(); ++it) {
-            const QString& ending = *it;
-            if (appName.endsWith(ending, Qt::CaseInsensitive)) {
-                appName.chop(ending.length());
-                break; // Предполагается, что нужно удалить только первый найденный суффикс
-            }
-        }
-    }
+
 
     QSharedPointer<QProcess> currentProcess = QSharedPointer<QProcess>::create();
     int scrollBarValue = detailsWidget->verticalScrollBar()->value();
@@ -2301,22 +2351,32 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
             if (!errorMessage.trimmed().isEmpty())
                 detailsWidget->setText(errorMessage);
-            else
-                if (listWidget == ui->list_aur) detailsWidget->setText(tr("Пакет не найден!\nВозможно, он поменял свое название..."));
+            else if (listWidget == ui->list_aur)
+                detailsWidget->setText(tr("Пакет не найден!\nВозможно, он поменял свое название..."));
 
             if (listWidget == ui->list_aur)
             {
-                QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Пакет не найден"), tr("Пакет не найден, перейти к его поиску?"), QMessageBox::Yes | QMessageBox::No);
+                QListWidgetItem* currentItem = listWidget->currentItem();
+                if (currentItem) {
+                    QString packageName = currentItem->text();  // Получаем текст текущего элемента (имя пакета)
 
-                if (reply == QMessageBox::Yes) {
-                    QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
-                    QCoreApplication::postEvent(ui->searchLineEdit, event);
+                    QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Пакет не найден"),
+                                                                              tr("Пакет не найден, перейти к его поиску?"),
+                                                                              QMessageBox::Yes | QMessageBox::No);
+
+                    if (reply == QMessageBox::Yes) {
+                        ui->searchLineEdit->setText(packageName);
+
+                        QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
+                        QCoreApplication::postEvent(ui->searchLineEdit, event);
+                    }
                 }
             }
 
-            miniAnimation(false,detailsWidget);
+            miniAnimation(false, detailsWidget);
         }
     });
+
 
     detailsWidget->clear();
 
@@ -2413,23 +2473,36 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
 void MainWindow::onListItemClicked(const QString &packageName, int row, QListWidgetItem *item)
 {
-    if(page == 2)
+    if (page == 2)
     {
-        bool iconFound = false;
         row = ui->list_aur->row(item);
-        if (list != 8) {
-            for (auto it = appIcons.constBegin(); it != appIcons.constEnd(); ++it) {
-                if (appIcons.contains(item->text()) && appIcons[item->text()] == it.value()) {
-                    loadContent(row + 1, loadpage);
-                    iconFound = true;
-                    break;
-                }
+        CustomListItemWidget* customWidget = qobject_cast<CustomListItemWidget*>(ui->list_aur->itemWidget(item));
+
+        if(packageName.isEmpty())
+        {
+            QString categoryPath = item->data(Qt::UserRole).toString();
+            QString itemText = item->text();
+
+            if (!categoryPath.contains('/') && !categoryPath.isEmpty())
+                loadSubcategories(categoryPath);
+
+            else if (categoryPath.contains('/') && !itemText.isEmpty()) {
+                QString category = categoryPath.section('/', 0, 0);
+                QString subcategory = categoryPath.section('/', 1, 1);
+                loadPackages(category, subcategory);
             }
+
+            else if (categoryPath.isEmpty() && !itemText.isEmpty())
+                processListItem(row, ui->list_aur, ui->details_aur, packageName);
         }
-        if (!iconFound)
-            processListItem(row, ui->list_aur, ui->details_aur, packageName);
+        else if (customWidget) {
+            QString fullPackageName = customWidget->getPackageName();
+            processListItem(row, ui->list_aur, ui->details_aur, fullPackageName);
+        }
     }
-    if (page == 4) {
+
+    if (page == 4)
+    {
         row = ui->list_app->row(item);
         processListItem(row, ui->list_app, ui->details_aurpkg, "");
     }
@@ -2474,36 +2547,102 @@ void MainWindow::miniAnimation(bool visible, QWidget* targetWidget)
 }
 
 QIcon MainWindow::getPackageIcon(const QString& packageName) {
-
     QString appName = packageName.split(' ').first();
-    for (auto it = endingsToRemove.cbegin(); it != endingsToRemove.cend(); ++it) {
-        const QString& ending = *it;
+
+    // Убираем окончания из имени пакета
+    for (const QString& ending : endingsToRemove) {
         if (appName.endsWith(ending)) {
             appName.chop(ending.length());
             break;
         }
     }
 
+    // Лямбда-функция для поиска иконки по частичному совпадению имени
+    auto findIconByAppName = [&](const QString& name) -> QIcon {
+        // Проверка пути на наличие иконки
+        QStringList iconPaths = {
+            "/usr/share/icons/Papirus/48x48/apps/" + name.toLower() + ".svg",
+            "/usr/share/icons/Papirus/48x48/apps/" + name.toLower() + ".png"
+        };
 
-    QString additionalIconPath = "/usr/share/icons/Papirus/48x48/apps/" + appName.toLower() + ".svg";
-    if (QFileInfo(additionalIconPath).isFile()) {
-        return QIcon(additionalIconPath);
+        for (const QString& path : iconPaths) {
+            if (QFileInfo(path).isFile()) {
+                return QIcon(path);
+            }
+        }
+
+        // Ищем иконку в уже загруженной карте
+        if (iconMap.contains(name)) {
+            QString iconName = iconMap[name];
+
+            // Проверяем наличие иконки в теме
+            QIcon themeIcon = QIcon::fromTheme(iconName);
+            if (!themeIcon.isNull()) {
+                return themeIcon;
+            }
+
+            // Ищем иконку в альтернативных путях
+            QStringList searchPaths = {"/usr/share/icons", mainDir + "/share/icons"};
+            for (const QString& searchPath : searchPaths) {
+                QDirIterator it(searchPath, QDirIterator::Subdirectories);
+                while (it.hasNext()) {
+                    QString filePath = it.next();
+                    if (QFileInfo(filePath).isFile()) {
+                        QString fileName = QFileInfo(filePath).baseName();
+                        if (fileName.contains(name, Qt::CaseInsensitive)) {
+                            return QIcon(filePath);
+                        }
+                    }
+                }
+            }
+        }
+
+        return QIcon();
+    };
+
+    // Функция для удаления цифр из имени
+    auto removeNumbers = [](QString name) -> QString {
+        return name.remove(QRegularExpression("\\d+"));  // Убираем все цифры
+    };
+
+    // Цикл уменьшения имени пакета для поиска иконки
+    QStringList appNameParts = appName.split('-');
+    while (!appNameParts.isEmpty()) {
+        QString reducedAppName = appNameParts.join('-');
+
+        // Пробуем искать по текущему имени
+        QIcon icon = findIconByAppName(reducedAppName);
+        if (!icon.isNull()) {
+            return icon;  // Возвращаем иконку, если она найдена
+        }
+
+        // Пробуем искать без цифр
+        QString reducedAppNameWithoutNumbers = removeNumbers(reducedAppName);
+        if (reducedAppNameWithoutNumbers != reducedAppName) {
+            icon = findIconByAppName(reducedAppNameWithoutNumbers);
+            if (!icon.isNull()) {
+                return icon;  // Возвращаем иконку, если найдена без цифр
+            }
+        }
+
+        appNameParts.removeLast();  // Уменьшаем имя для дальнейшего поиска
     }
 
-    static QMap<QString, QString> iconMap;
+    // Если карта иконок пуста, инициализируем её
     if (iconMap.isEmpty()) {
-        QStringList searchPaths = {"/usr/share/applications/",
-                                   QDir::homePath() + "/.local/share/applications",
-                                   "/usr/local/share/applications",
-                                   "/var/lib/snapd/desktop/applications"};
+        QStringList searchPaths = {
+            "/usr/share/applications/",
+            QDir::homePath() + "/.local/share/applications",
+            "/usr/local/share/applications",
+            "/var/lib/snapd/desktop/applications"
+        };
 
-        for (auto searchPathIt = searchPaths.cbegin(); searchPathIt != searchPaths.cend(); ++searchPathIt) {
-            const QString& searchPath = *searchPathIt;
+        // Проходим по всем .desktop файлам, чтобы загрузить карту иконок
+        for (const QString& searchPath : searchPaths) {
             QDir desktopFilesDir(searchPath);
             QStringList desktopFiles = desktopFilesDir.entryList({"*.desktop"}, QDir::Files);
 
-            for (auto desktopFileIt = desktopFiles.cbegin(); desktopFileIt != desktopFiles.cend(); ++desktopFileIt) {
-                const QString& desktopFileName = *desktopFileIt;
+            for (const QString& desktopFileName : desktopFiles) {
                 QFile desktopFile(desktopFilesDir.filePath(desktopFileName));
                 if (desktopFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
                     QTextStream stream(&desktopFile);
@@ -2513,13 +2652,11 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
                         QString line = stream.readLine().trimmed();
                         if (line.startsWith("Icon=")) {
                             iconName = line.mid(5).trimmed();
-                        }
-                        if (!iconName.isEmpty()) {
-                            break;
+                            break;  // Найдена иконка, прекращаем чтение
                         }
                     }
-                    desktopFile.close();
 
+                    desktopFile.close();
                     if (!iconName.isEmpty()) {
                         iconMap[desktopFileName.split('.').first()] = iconName;
                     }
@@ -2528,161 +2665,144 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
         }
     }
 
-    if (iconMap.contains(appName)) {
-        QString iconName = iconMap[appName];
-
-        QIcon themeIcon = QIcon::fromTheme(iconName);
-        if (!themeIcon.isNull()) {
-            return themeIcon;
-        } else {
-            QStringList searchPaths = {"/usr/share/icons", mainDir + "/share/icons"};
-
-            for (const QString& searchPath : searchPaths) {
-                QDirIterator it(searchPath, QDirIterator::Subdirectories);
-                while (it.hasNext()) {
-                    QString filePath = it.next();
-                    if (QFileInfo(filePath).isFile() && filePath.endsWith(iconName + ".png")) {
-                        return QIcon(filePath);
-                    }
-                }
-            }
-        }
+    QIcon icon = findIconByAppName(appName);
+    if (!icon.isNull()) {
+        return icon;
     }
 
     return QIcon("/usr/share/icons/Papirus/48x48/apps/application-default-icon.svg");
 }
 
-void MainWindow::loadContent(int value, bool valuepage) {
-    miniAnimation(true, ui->list_aur);
-    ui->list_aur->clear();
+QIcon MainWindow::findIconInPapirus(const QString& iconName) {
+    QString basePath = "/usr/share/icons/Papirus/48x48/";
+    QDir baseDir(basePath);
 
-    QString sourceFilePath;
-    QString targetFilePath;
+    QStringList subdirs = baseDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
 
-    struct FileData {
-        int value;
-        int list;
-        QString filePath;
-        bool valueup;
-    };
-
-    const FileData data[] = {
-        {0, 0, "other/" + *lang + "/list.txt", true},
-
-        {1, 0, "other/populaty.txt", false},
-
-        {1, 2, "other/network.txt", false},
-        {1, 3, "other/codecs.txt", false},
-        {1, 4, "other/terminals.txt", false},
-        {1, 5, "other/texteditors.txt", false},
-        {1, 6, "other/network-security.txt", false},
-
-        {2, 0, "other/" + *lang + "/net.txt", true},
-        {2, 2, "other/browsers.txt", false},
-        {2, 3, "other/images.txt", false},
-        {2, 4, "other/files.txt", false},
-        {2, 5, "other/office.txt", false},
-        {2, 6, "other/firewall-management.txt", false},
-
-        {3, 0, "other/" + *lang + "/multimedia.txt", true},
-        {3, 2, "other/servers.txt", false},
-        {3, 3, "other/audio.txt", false},
-        {3, 4, "other/development.txt", false},
-        {3, 5, "other/markup-languages.txt", false},
-        {3, 6, "other/threat-and-vulnerability-detection.txt", false},
-
-        {4, 0, "other/" + *lang + "/utility.txt", true},
-        {4, 2, "other/file-sharing.txt", false},
-        {4, 3, "other/video.txt", false},
-        {4, 4, "other/text-input.txt", false},
-        {4, 5, "other/document-converters.txt", false},
-        {4, 6, "other/file-security.txt", false},
-
-        {5, 0, "other/" + *lang + "/office.txt", true},
-        {5, 2, "other/communication.txt", false},
-        {5, 3, "other/coll-managers.txt", false},
-        {5, 4, "other/disks.txt", false},
-        {5, 5, "other/bibliographic-reference-manager.txt", false},
-        {5, 6, "other/anti-malware.txt", false},
-
-        {6, 0, "other/" + *lang + "/security.txt", true},
-        {6, 2, "other/news-and-rss.txt", false},
-        {6, 3, "other/media-servers.txt", false},
-        {6, 4, "other/system.txt", false},
-        {6, 5, "other/reader-sand-viewers.txt", false},
-        {6, 6, "other/screen-lockers.txt", false},
-
-        {7, 0, "other/game.txt", false},
-        {7, 2, "other/remote-desktop.txt", false},
-        {7, 3, "other/metadata.txt", false},
-        {7, 5, "other/document-managers.txt", false,},
-        {7, 6, "other/password-auditing.txt", false},
-
-        {8, 0, "other/phone.txt", true},
-        {8, 3, "other/mobile-device-managers.txt", false},
-        {8, 5, "other/scanning-software.txt", false},
-        {8, 6, "other/password-managers.txt", false},
-
-        {9, 3, "other/optical-disc-burning.txt", false},
-        {9, 5, "other/osr-software.txt", false},
-        {9, 6, "other/cryptography.txt", false},
-
-        {10, 3, "other/personal-video-recorders.txt", false},
-        {10, 5, "other/notes.txt", false},
-        {10, 6, "other/privilege-elevation.txt", false},
-
-        {11, 5, "other/special-writing-environments.txt", false},
-        {12, 5, "other/language.txt", false},
-        {13, 5, "other/barcode-generators-and-readers.txt", false},
-    };
-
-    for (const FileData& item : data) {
-        if (value == item.value && list == item.list) {
-            sourceFilePath = ":/" + item.filePath;
-            targetFilePath = mainDir + item.filePath;
-            valuepage = item.valueup;
-            list = item.value;
-            break;
-        }
+    for (const QString& subdir : subdirs) {
+        QString iconPath = basePath + subdir + "/" + iconName + ".svg";
+        if (QFile::exists(iconPath))
+            return QIcon(iconPath);
     }
 
-    QFile file(sourceFilePath);
-
-    if (!prepareFile(sourceFilePath, targetFilePath, file)) {
-        return;
-    }
-
-    QVector<QString> programs;
-    readProgramsFromFile(file, programs);
-    file.close();
-
-    for (auto it = programs.cbegin(); it != programs.cend(); ++it) {
-        const QString& packageName = *it;
-        processPackageName(packageName, valuepage);
-    }
-
-    miniAnimation(false, ui->list_aur);
+    return QIcon();
 }
 
-bool MainWindow::prepareFile(const QString& source, const QString& target, QFile& file) {
-    QFileInfo fileInfo(target);
-    if (!fileInfo.exists()) {
-        if (!QDir().mkpath(fileInfo.absoluteDir().path())) {
-            sendNotification(tr("Ошибка"), tr("Не удалось создать каталог: ") + fileInfo.absoluteDir().path());
-            return false;
+void MainWindow::loadMainMenu() {
+    QDir menuDir("/home/dmali/.config/kLaus/menu/");
+    QStringList categories = menuDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+
+    ui->list_aur->clear();
+
+    QString translationFilePath = "/home/dmali/.config/kLaus/menu/" + *lang + ".ini";
+    QSettings translations(translationFilePath, QSettings::IniFormat);
+
+    QString iconFilePath = "/home/dmali/.config/kLaus/menu/icon.ini";
+    QSettings icons(iconFilePath, QSettings::IniFormat);
+
+    for (const QString& category : categories) {
+        QString iniFilePath = menuDir.filePath(category + "/cfg.ini");
+        QSettings settings(iniFilePath, QSettings::IniFormat);
+
+        QString categoryName = settings.value("name_ru_RU", category).toString();
+
+        QString translatedCategory = translations.value(category, categoryName).toString();
+
+        QString iconName = icons.value(category, "").toString();
+        QIcon icon;
+        if (!iconName.isEmpty()) {
+            icon = findIconInPapirus(iconName);
         }
 
-        if (!QFile::copy(source, target)) {
-            sendNotification(tr("Ошибка"), tr("Не удалось скопировать файл из ") + source + tr(" в ") + target);
-            return false;
+        QListWidgetItem* item = new QListWidgetItem(translatedCategory, ui->list_aur);
+        item->setIcon(icon);
+
+        QColor color = generateRandomColor(colorlist);
+        item->setForeground(color);
+
+        item->setData(Qt::UserRole, category);
+        item->setData(Qt::UserRole + 1, "category");
+    }
+}
+
+
+void MainWindow::loadSubcategories(const QString& category) {
+    QString categoryDir = "/home/dmali/.config/kLaus/menu/" + category;
+    QString subcategoriesFile = categoryDir + "/" + category + ".txt";
+
+    QString translationFilePath = "/home/dmali/.config/kLaus/menu/" + *lang + ".ini";
+    QSettings translations(translationFilePath, QSettings::IniFormat);
+
+    QString iconFilePath = "/home/dmali/.config/kLaus/menu/icon.ini";
+    QSettings icons(iconFilePath, QSettings::IniFormat);
+
+    QFile file(subcategoriesFile);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+
+    ui->list_aur->clear();
+    QTextStream in(&file);
+    QString currentCategory;
+
+    while (!in.atEnd()) {
+        QString line = in.readLine().trimmed();
+
+        if (line.startsWith('[') && line.endsWith(']')) {
+            currentCategory = line.mid(1, line.length() - 2);
+
+            QString translatedSubcategory = translations.value(currentCategory, currentCategory).toString();
+
+            QString iconName = icons.value(currentCategory, "").toString();
+            QIcon icon;
+            if (!iconName.isEmpty())
+                icon = findIconInPapirus(iconName);
+
+            QListWidgetItem* item = new QListWidgetItem(translatedSubcategory, ui->list_aur);
+            item->setIcon(icon);
+
+            QColor color = generateRandomColor(colorlist);
+            item->setForeground(color);
+
+            item->setData(Qt::UserRole, category + "/" + currentCategory);
+            item->setData(Qt::UserRole + 1, "subcategory");
         }
     }
 
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        sendNotification(tr("Ошибка"), tr("Не удалось открыть файл ресурсов"));
-        return false;
+    file.close();
+}
+
+void MainWindow::loadPackages(const QString& category, const QString& subcategory) {
+    QString subcategoriesFile = "/home/dmali/.config/kLaus/menu/" + category + "/" + category + ".txt";
+
+    QFile file(subcategoriesFile);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+
+    ui->list_aur->clear();
+    QTextStream in(&file);
+    QString currentCategory;
+    bool foundSubcategory = false;
+
+    while (!in.atEnd()) {
+        QString line = in.readLine().trimmed();
+
+        if (line.startsWith('[') && line.endsWith(']')) {
+            currentCategory = line.mid(1, line.length() - 2);
+            foundSubcategory = (currentCategory == subcategory);
+        } else if (foundSubcategory && !line.isEmpty()) {
+
+            QIcon icon = getPackageIcon(line);
+
+            QListWidgetItem* item = new QListWidgetItem(icon, line, ui->list_aur);
+
+            QColor color = generateRandomColor(colorlist);
+            item->setForeground(color);
+
+        } else if (!foundSubcategory && line.isEmpty())
+            break;
     }
-    return true;
+
+    file.close();
 }
 
 void MainWindow::readProgramsFromFile(QFile& file, QVector<QString>& programs) {
@@ -2715,43 +2835,70 @@ void MainWindow::processPackageName(const QString& packageName, bool valuepage) 
                 iconPath = ":/img/" + repoName + ".png";
         }
 
-
         static const QRegularExpression packageNameRegex(R"(/(.+)$)");
         QRegularExpressionMatch packageNameMatch = packageNameRegex.match(packageName);
         if (packageNameMatch.hasMatch()) {
             packageNameOrig = packageNameMatch.captured(1);
         }
 
-         appIcons[packageNameOrig] = iconPath;
+        appIcons[packageNameOrig] = iconPath;
 
     } else {
-        static const QRegularExpression regex("\\S+");
-        QRegularExpressionMatch match = regex.match(packageName);
+        QString packageNameIcon = packageName;
 
-        QString packageNameIcon;
-        packageNameIcon = packageName;
+        auto removeNumbers = [](QString name) -> QString {
+            return name.remove(QRegularExpression("\\d+"));  // Убираем все цифры
+        };
 
-        for (auto it = endingsToRemove.cbegin(); it != endingsToRemove.cend(); ++it) {
-            const QString& ending = *it;
-            if (packageNameIcon.endsWith(ending)) {
-                packageNameIcon.chop(ending.length());
+        auto findIconByAppName = [&](const QString& name) -> QString {
+            QStringList iconPaths;
+            QString nameLower = name.toLower();
+
+            iconPaths << "/usr/share/icons/Papirus/48x48/apps/" + nameLower + ".svg"
+                      << "/usr/share/icons/Papirus/48x48/apps/" + nameLower + ".png";
+
+            for (const QString& path : iconPaths) {
+                if (QFileInfo(path).exists()) {
+                    return path;
+                }
+            }
+
+            return QString();
+        };
+
+        QStringList appNameParts = packageNameIcon.split('-');
+        QString foundIconPath;
+
+        while (!appNameParts.isEmpty()) {
+            QString reducedAppName = appNameParts.join('-');
+
+            foundIconPath = findIconByAppName(reducedAppName);
+            if (!foundIconPath.isEmpty()) {
                 break;
             }
+
+            QString reducedAppNameWithoutNumbers = removeNumbers(reducedAppName);
+            if (reducedAppNameWithoutNumbers != reducedAppName) {
+                foundIconPath = findIconByAppName(reducedAppNameWithoutNumbers);
+                if (!foundIconPath.isEmpty()) {
+                    break;
+                }
+            }
+
+            appNameParts.removeLast();
         }
 
-        iconPath = "/usr/share/icons/Papirus/48x48/apps/" + packageNameIcon.toLower() + ".svg";
+        if (foundIconPath.isEmpty()) {
+            foundIconPath = "/usr/share/icons/Papirus/48x48/mimetypes/x-package-repository.svg";
+        }
 
-        QFileInfo fileInfo(iconPath);
-
-        if (!fileInfo.exists())
-            iconPath = "/usr/share/icons/Papirus/48x48/apps/app-outlet.svg";
+        iconPath = foundIconPath;
     }
 
     QColor color = generateRandomColor(colorlist);
     QListWidgetItem *item = new QListWidgetItem(valuepage ? packageNameOrig : packageName);
 
     item->setIcon(QIcon(iconPath));
-
     item->setForeground(color);
 
     ui->list_aur->addItem(item);
@@ -2838,29 +2985,6 @@ void MainWindow::loadDowngrades(const QString& packagesArchiveCatalog)
     ui->details_downgrade->setHtml(initialDetailsDowngradeText);
 }
 
-void MainWindow::connectProcessSignals(QSharedPointer<QProcess>& process, QTextBrowser* outputWidget)
-{
-    connect(process.data(), &QProcess::readyReadStandardOutput, this, [=]() {
-        QByteArray output = process->readAllStandardOutput();
-        QString packageInfo = QString::fromUtf8(output);
-        process->waitForFinished();
-
-        QString processedInfo = processPackageInfo(packageInfo);
-        outputWidget->append(processedInfo);
-        outputWidget->moveCursor(QTextCursor::Start);
-    });
-
-    connect(process.data(), &QProcess::readyReadStandardError, this, [=]() {
-        QByteArray errorOutput = process->readAllStandardError();
-        QString errorMessage = QString::fromUtf8(errorOutput);
-        process->waitForFinished();
-
-        if (!errorMessage.trimmed().isEmpty()) {
-            outputWidget->setText(errorMessage);
-        }
-    });
-}
-
 QString MainWindow::processPackageInfo(const QString& packageInfo)
 {
     QStringList lines = packageInfo.split("\n");
@@ -2931,7 +3055,6 @@ void MainWindow::addLinkToList(const QString &link) {
     QString cleanedLink = link;
 
     if (packagesArchiveCat == packagesArchiveDefault) {
-        // Удаление всех вхождений "../" и начальных символов новой строки
         static const QRegularExpression dotDotExp("\\.\\./");
         cleanedLink.replace(dotDotExp, "");
     }
@@ -2946,18 +3069,18 @@ void MainWindow::addLinkToList(const QString &link) {
     }
 
     QIcon icon;
-    bool isFolder = !cleanedLink.contains('.');
+    bool isArchive = cleanedLink.endsWith(".zst") || cleanedLink.endsWith(".xz");  // Проверяем на расширение .zst или .xz
+    bool isFolder = !isArchive;  // Если не архив - это папка
 
     if (cleanedLink == "../") {
-        icon = QIcon("/usr/share/icons/Papirus/48x48/places/folder-teal.svg");
+        icon = QIcon("/usr/share/icons/Papirus/48x48/places/folder-paleorange-drag-accept.svg");
     } else if (isFolder) {
-        icon = QIcon("/usr/share/icons/Papirus/48x48/places/folder-teal-applications.svg");
-    } else {
+        icon = QIcon("/usr/share/icons/Papirus/48x48/places/folder-paleorange-tar.svg");
+    } else if (isArchive) {
         icon = QIcon("/usr/share/icons/Papirus/48x48/mimetypes/application-x-xz-pkg.svg");
     }
 
     QListWidgetItem *item = new QListWidgetItem(icon, cleanedLink);
-
     item->setData(Qt::UserRole, isFolder);
 
     item->setForeground(generateRandomColor(colorlist));
@@ -3137,10 +3260,11 @@ void MainWindow::onSearchTimeout()
 //not
 void MainWindow::loadingListWidget()
 {
-    saveScripts(shResourcePaths, mainDir + "sh/");
-    saveScripts(clearResourcePaths, mainDir + "clear/");
-    saveScripts(journalsResourcePaths, mainDir + "journals/");
-    saveScripts(benchResourcePaths, mainDir + "bench/");
+    saveScripts(shResourcePaths);
+    saveScripts(clearResourcePaths);
+    saveScripts(journalsResourcePaths);
+    saveScripts(benchResourcePaths);
+    saveScripts(menuResourcePaths);
 
     loadScripts(mainDir + "sh/", ui->list_sh);
     loadScripts(mainDir + "clear/", ui->list_clear);
@@ -3160,7 +3284,6 @@ void MainWindow::loadingListWidget()
     orphanButton->setForeground(generateRandomColor(colorlist));
 
     QDir().mkpath(mainDir + "other/");
-
     QFile::copy(":/other/notify.png", mainDir + "other/notify.png");
     QFile::copy(":/other/en_US/translations.txt", mainDir + "other/en_US/translations.txt");
     QFile::copy(":/other/ru_RU/translations.txt", mainDir + "other/ru_RU/translations.txt");
@@ -3764,7 +3887,7 @@ void MainWindow::on_push_kde_clicked()
 
 void MainWindow::on_action_updatelist_triggered()
 {
-    if (page == 2)
+    if (page == 2) // Обновление категорий и подкатегорий
     {
         miniAnimation(true, ui->list_aur);
 
@@ -3772,16 +3895,12 @@ void MainWindow::on_action_updatelist_triggered()
 
         QTimer::singleShot(500, this, [=]() {
             list = 0;
-            loadContent(0, true);
+            loadMainMenu(); // Загружаем список категорий из подпапок
 
-            ui->details_aur->setHtml(detailsAURdefault);
-
-            ui->tabWidget_details->setCurrentIndex(0);
             miniAnimation(false, ui->list_aur);
         });
     }
-
-    if (page == 4)
+    else if (page == 4) // Обновление списка пакетов
     {
         miniAnimation(true, ui->list_app);
         ui->list_app->clear();
@@ -3789,13 +3908,14 @@ void MainWindow::on_action_updatelist_triggered()
         QTimer::singleShot(500, this, [=]() {
             ui->details_aurpkg->setText(tr("Ничего не выбрано"));
             miniAnimation(false, ui->list_app);
-            loadContentInstall();
+            loadContentInstall(); // Загружаем список установленных пакетов или что-то подобное
         });
     }
 
     removeToolButtonTooltips(ui->toolBar);
     removeToolButtonTooltips(ui->toolBar_2);
 }
+
 
 void MainWindow::writeToFile(const QString& filePath, const QString& content)
 {

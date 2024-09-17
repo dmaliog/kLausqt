@@ -1,0 +1,96 @@
+c_notify="Установщик 1С"
+c_norun="Файл .run не найден"
+
+no_neofetch="Пакет neofetch не установлен, скрипт завершается"
+path_img="Выберите картинку"
+neofetch_img="Картинка в neofetch"
+no_file="Файл не выбран"
+noselect_file="Файл $image_path не найден"
+settings_ok="Настройка завершена"
+
+path="Выберите архив"
+local_setup="Установщик локальных пакетов"
+no_ark="Архив не выбран"
+
+pkgbuild="Редактор PKGBUILD"
+pkgbuild_ok="Найден PKGBUILD файл для пакета $program_name"
+pkgbuild_edit="Нажмите Enter, чтобы открыть редактор для редактирования PKGBUILD..."
+pkgbuild_make="Нажмите Enter, чтобы начать компиляцию пакета..."
+pkgbuild_newpkg="Нажмите Enter, чтобы установить новый пакет..."
+pkgbuild_no="PKGBUILD файл не найден для пакета $program_name"
+
+sudo_ok="Вы уже убрали пароль. Вы хотите вернуть все? (y/n): "
+sudo="Пароль SUDO"
+removefile_ok="Файл успешно удален"
+createfile_ok="Файл успешно создан"
+
+pkgsave_name="Введите название пакета для скачивания: "
+path_pkgsave="Выберите каталог для сохранения архива"
+pkgsave="Создание локальных пакетов"
+pkgsave_ok="Пакеты $package_name и его зависимости успешно сохранены в архиве"
+pkgsave_error="Ошибка при скачивании пакета $package_name"
+no_direct="Каталог не выбран"
+
+wayland_nvidia="Поддержка Wayland+Nvidia"
+pkginstall_ok="Все пакеты уже установлены"
+grubmoduleadd_ok="У вас уже добавлены модули в GRUB"
+grubmodule_ok="У вас уже установлены модули nvidia_drm.modeset"
+
+zen="Установка ZEN"
+grub_no="Grub не обнаружен"
+delete_ok="Удаление завершено успешно"
+install_ok="Установка завершена успешно"
+
+trash="Корзина"
+trash_ok="Корзина успешно очищена"
+
+pacman="Пакеты Pacman"
+size_clear="Размер очистки: $folder_size"
+pacman_clear="Каталог /var/cache/pacman/pkg/ очищен"
+
+yay="Пакеты Yay"
+yay_clear="Каталог $HOME/.cache/yay/ очищен"
+
+enter_ok="Нажмите Enter, для продолжения..."
+
+link="Ссылка:"
+
+error="Ошибка"
+pkg="Пакет"
+pkgs="Пакеты"
+no_found="не найден"
+found="найден"
+
+install="Установка"
+noinstall="Установка отменена"
+
+instq="Вы действительно хотите установить"
+delq="Вы действительно хотите удалить"
+
+time="Запустим приложение klaus и посчитаем за сколько оно запустилось, например: time klauspro\n"
+name_pkg="Введите название пакета: "
+
+no_hdparm="Блочное устройство не найдено"
+hdparm_result="Расчет производительности и усреднение результатов может занять некоторое время..."
+
+average_results="Усредненные результаты:"
+timing_cached="Время чтения из кэша:"
+timing_buffered="Время чтения с диска:"
+iteration="Итерация"
+mb_2="МБ за 2,00 секунды"
+mb_3="МБ за 3,00 секунды"
+mbsec="МБ/сек"
+
+klaus="kLaus"
+dir="Местоположение:"
+
+test_ok="Тестирование завершено"
+tmp_file="Удаление временного файла..."
+time_cache="Скорость работы кэша:"
+time_dev="Скорость работы устройства:"
+new_tmp="Создание временного файла для записи..."
+
+file_size="Введите размер временного файла в МБ: "
+
+pacman="Pacman"
+pacman_nodb="Ваш экземпляр Pacman не заблокирован!"
