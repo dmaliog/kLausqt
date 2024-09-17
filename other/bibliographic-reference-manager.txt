@@ -1,8 +1,0 @@
-{"docear"}
-{"jabref"}
-{"kbibtex"}
-{"mendeleydesktop"}
-{"papis"}
-{"pybliographer"}
-{"referencer"}
-{"zotero"}

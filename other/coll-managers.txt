@@ -1,7 +1,0 @@
-{"datacrow"}
-{"gcstar"}
-{"griffith"}
-{"mediaelch"}
-{"tellico"}
-{"tiny-media-manager"}
-{"vmoviedb"}

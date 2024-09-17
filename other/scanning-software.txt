@@ -1,5 +1,0 @@
-{"scantailor-advanced"}
-{"simple-scan"}
-{"skanlite"}
-{"skanpage"}
-{"xsane"}
