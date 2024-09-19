@@ -95,7 +95,9 @@ void ArchWikiScraper::parseHTML(const QString &html) {
     if (!output.isEmpty()) {
         QString pathSegment = currentUrl.path().section('/', -1);
         QString fileName = pathSegment + ".txt";
-        QString directoryPath = QString("/home/dmali/.config/kLaus/menu/%1").arg(pathSegment);
+        QString mainDir = QDir::homePath() + "/.config/kLaus/";
+
+        QString directoryPath = QString(mainDir + "menu/%1").arg(pathSegment);
 
         saveToFile(output.join("\n"), directoryPath, fileName);
     }

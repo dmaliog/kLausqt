@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "15.4";
+QString currentVersion = "15.5";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -2690,15 +2690,15 @@ QIcon MainWindow::findIconInPapirus(const QString& iconName) {
 }
 
 void MainWindow::loadMainMenu() {
-    QDir menuDir("/home/dmali/.config/kLaus/menu/");
+    QDir menuDir(mainDir + "menu/");
     QStringList categories = menuDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
 
     ui->list_aur->clear();
 
-    QString translationFilePath = "/home/dmali/.config/kLaus/menu/" + *lang + ".ini";
+    QString translationFilePath = mainDir + "menu/" + *lang + ".ini";
     QSettings translations(translationFilePath, QSettings::IniFormat);
 
-    QString iconFilePath = "/home/dmali/.config/kLaus/menu/icon.ini";
+    QString iconFilePath = mainDir+ "menu/icon.ini";
     QSettings icons(iconFilePath, QSettings::IniFormat);
 
     for (const QString& category : categories) {
@@ -2728,13 +2728,13 @@ void MainWindow::loadMainMenu() {
 
 
 void MainWindow::loadSubcategories(const QString& category) {
-    QString categoryDir = "/home/dmali/.config/kLaus/menu/" + category;
+    QString categoryDir = mainDir+ "menu/" + category;
     QString subcategoriesFile = categoryDir + "/" + category + ".txt";
 
-    QString translationFilePath = "/home/dmali/.config/kLaus/menu/" + *lang + ".ini";
+    QString translationFilePath = mainDir + "menu/" + *lang + ".ini";
     QSettings translations(translationFilePath, QSettings::IniFormat);
 
-    QString iconFilePath = "/home/dmali/.config/kLaus/menu/icon.ini";
+    QString iconFilePath = mainDir + "menu/icon.ini";
     QSettings icons(iconFilePath, QSettings::IniFormat);
 
     QFile file(subcategoriesFile);
@@ -2773,7 +2773,7 @@ void MainWindow::loadSubcategories(const QString& category) {
 }
 
 void MainWindow::loadPackages(const QString& category, const QString& subcategory) {
-    QString subcategoriesFile = "/home/dmali/.config/kLaus/menu/" + category + "/" + category + ".txt";
+    QString subcategoriesFile = mainDir + "menu/" + category + "/" + category + ".txt";
 
     QFile file(subcategoriesFile);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
