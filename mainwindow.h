@@ -235,7 +235,9 @@ private:
                                       ":/menu/Other/Other.txt",
                                       ":/menu/Science/Science.txt",
                                       ":/menu/Security/Security.txt",
-                                      ":/menu/Utilities/Utilities.txt"};
+                                      ":/menu/Utilities/Utilities.txt",
+                                      ":/menu/Favorite/Favorite.txt",
+                                      ":/menu/Populaty/Populaty.txt"};
 
     QStringList endingsToRemove = QStringList() << "-bin" << "-git" << "-qt" << "-qt4" << "-qt5" << "-qt6"
                                                 << "qt-" << "qt4-" << "qt5-" << "qt6-" << "-gtk" << "-gtk2"

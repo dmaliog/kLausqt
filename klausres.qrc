@@ -150,5 +150,7 @@
         <file>menu/Science/Science.txt</file>
         <file>menu/Security/Security.txt</file>
         <file>menu/Utilities/Utilities.txt</file>
+        <file>menu/Populaty/Populaty.txt</file>
+        <file>menu/Favorite/Favorite.txt</file>
     </qresource>
 </RCC>

@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "15.5";
+QString currentVersion = "15.6";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -2698,15 +2698,43 @@ void MainWindow::loadMainMenu() {
     QString translationFilePath = mainDir + "menu/" + *lang + ".ini";
     QSettings translations(translationFilePath, QSettings::IniFormat);
 
-    QString iconFilePath = mainDir+ "menu/icon.ini";
+    QString iconFilePath = mainDir + "menu/icon.ini";
     QSettings icons(iconFilePath, QSettings::IniFormat);
+
+    QStringList prioritizedCategories = {"Favorite", "Populaty"};
+
+    for (const QString& category : prioritizedCategories) {
+        if (categories.contains(category)) {
+            QString iniFilePath = menuDir.filePath(category + "/cfg.ini");
+            QSettings settings(iniFilePath, QSettings::IniFormat);
+
+            QString categoryName = settings.value("name_ru_RU", category).toString();
+            QString translatedCategory = translations.value(category, categoryName).toString();
+
+            QString iconName = icons.value(category, "").toString();
+            QIcon icon;
+            if (!iconName.isEmpty()) {
+                icon = findIconInPapirus(iconName);
+            }
+
+            QListWidgetItem* item = new QListWidgetItem(translatedCategory, ui->list_aur);
+            item->setIcon(icon);
+
+            QColor color = generateRandomColor(colorlist);
+            item->setForeground(color);
+
+            item->setData(Qt::UserRole, category);
+            item->setData(Qt::UserRole + 1, "category");
+
+            categories.removeAll(category);
+        }
+    }
 
     for (const QString& category : categories) {
         QString iniFilePath = menuDir.filePath(category + "/cfg.ini");
         QSettings settings(iniFilePath, QSettings::IniFormat);
 
         QString categoryName = settings.value("name_ru_RU", category).toString();
-
         QString translatedCategory = translations.value(category, categoryName).toString();
 
         QString iconName = icons.value(category, "").toString();
@@ -2726,9 +2754,13 @@ void MainWindow::loadMainMenu() {
     }
 }
 
-
 void MainWindow::loadSubcategories(const QString& category) {
-    QString categoryDir = mainDir+ "menu/" + category;
+    if (category == "Populaty" || category == "Favorite") {
+        loadPackages(category, "");
+        return;
+    }
+
+    QString categoryDir = mainDir + "menu/" + category;
     QString subcategoriesFile = categoryDir + "/" + category + ".txt";
 
     QString translationFilePath = mainDir + "menu/" + *lang + ".ini";
@@ -2738,17 +2770,21 @@ void MainWindow::loadSubcategories(const QString& category) {
     QSettings icons(iconFilePath, QSettings::IniFormat);
 
     QFile file(subcategoriesFile);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        sendNotification(tr("Внимание"), tr("В данной категории ничего не содержится"));
         return;
+    }
 
     ui->list_aur->clear();
     QTextStream in(&file);
     QString currentCategory;
+    bool hasSubcategories = false;
 
     while (!in.atEnd()) {
         QString line = in.readLine().trimmed();
 
         if (line.startsWith('[') && line.endsWith(']')) {
+            hasSubcategories = true;
             currentCategory = line.mid(1, line.length() - 2);
 
             QString translatedSubcategory = translations.value(currentCategory, currentCategory).toString();
@@ -2770,37 +2806,64 @@ void MainWindow::loadSubcategories(const QString& category) {
     }
 
     file.close();
+
+    if (!hasSubcategories) {
+        sendNotification(tr("Внимание"), tr("В данной категории ничего не содержится"));
+    }
 }
 
 void MainWindow::loadPackages(const QString& category, const QString& subcategory) {
     QString subcategoriesFile = mainDir + "menu/" + category + "/" + category + ".txt";
 
     QFile file(subcategoriesFile);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        sendNotification(tr("Внимание"), tr("В данной категории ничего не содержится"));
         return;
+    }
 
-    ui->list_aur->clear();
     QTextStream in(&file);
     QString currentCategory;
     bool foundSubcategory = false;
+    bool hasPackages = false;
 
     while (!in.atEnd()) {
         QString line = in.readLine().trimmed();
 
         if (line.startsWith('[') && line.endsWith(']')) {
             currentCategory = line.mid(1, line.length() - 2);
-            foundSubcategory = (currentCategory == subcategory);
+            foundSubcategory = (currentCategory == subcategory || subcategory.isEmpty());
         } else if (foundSubcategory && !line.isEmpty()) {
+            hasPackages = true;
+            break;
+        }
+    }
 
+    file.close();
+
+    if (!hasPackages) {
+        sendNotification(tr("Внимание"), tr("В данной категории ничего не содержится"));
+        return;
+    }
+
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    ui->list_aur->clear();
+    in.setDevice(&file);
+
+    foundSubcategory = false;
+    while (!in.atEnd()) {
+        QString line = in.readLine().trimmed();
+
+        if (line.startsWith('[') && line.endsWith(']')) {
+            currentCategory = line.mid(1, line.length() - 2);
+            foundSubcategory = (currentCategory == subcategory || subcategory.isEmpty());
+        } else if (foundSubcategory && !line.isEmpty()) {
             QIcon icon = getPackageIcon(line);
 
             QListWidgetItem* item = new QListWidgetItem(icon, line, ui->list_aur);
 
             QColor color = generateRandomColor(colorlist);
             item->setForeground(color);
-
-        } else if (!foundSubcategory && line.isEmpty())
-            break;
+        }
     }
 
     file.close();
