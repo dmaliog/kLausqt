@@ -5622,6 +5622,30 @@ background-color:#474c63;
     <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
+  <action name="action_favorite">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/star.png</normaloff>:/img/star.png</iconset>
+   </property>
+   <property name="text">
+    <string>Добавить в избранное</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_favorite_del">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/star.png</normaloff>:/img/star.png</iconset>
+   </property>
+   <property name="text">
+    <string>Удалить из избранного</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

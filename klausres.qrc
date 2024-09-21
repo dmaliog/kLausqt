@@ -152,5 +152,6 @@
         <file>menu/Utilities/Utilities.txt</file>
         <file>menu/Populaty/Populaty.txt</file>
         <file>menu/Favorite/Favorite.txt</file>
+        <file>img/star.png</file>
     </qresource>
 </RCC>

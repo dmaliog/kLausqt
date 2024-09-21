@@ -105,6 +105,7 @@ private:
     QString initialDetailsDowngradeText;
 
     QString originalLabelText;
+    QString currentCategory;
 
     // Умные указатели
     QCompleter* completer;
@@ -403,6 +404,8 @@ private slots:
     void on_action_infopkg_triggered(bool checked);
     void on_action_infopkg_pkg_triggered(bool checked);
     void on_list_aur_itemSelectionChanged();
+    void on_action_favorite_triggered();
+    void on_action_favorite_del_triggered();
 };
 
 class MySyntaxHighlighter : public QSyntaxHighlighter {
