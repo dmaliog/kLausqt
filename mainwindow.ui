@@ -493,7 +493,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab_webgame">
        <attribute name="title">
@@ -1104,9 +1104,7 @@ margin-left:10px;</string>
                </font>
               </property>
               <property name="styleSheet">
-               <string notr="true">QTextEdit {
-	background:#272727;
-}</string>
+               <string notr="true"/>
               </property>
               <property name="verticalScrollBarPolicy">
                <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>

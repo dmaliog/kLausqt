@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "15.8";
+QString currentVersion = "15.9";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -365,6 +365,7 @@ void MainWindow::on_action_downgrade_triggered()
     ui->searchLineEdit->setPlaceholderText(tr("Поиск по архиву..."));
     ui->searchLineEdit->setVisible(true);
     ui->tabWidget->setCurrentIndex(12);
+    ui->action_updatelist->setVisible(true);
 }
 
 
@@ -788,8 +789,7 @@ void MainWindow::on_action_4_triggered()
     }
 
     if (hasUpdates && updinst == 2 && page == 2) {
-        QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Внимание"), tr("Обновить систему до последней версии, чтобы предотвратить конфликты между зависимостями?"), QMessageBox::Yes | QMessageBox::No);
-        if (reply == QMessageBox::Yes) on_action_11_triggered();
+        if (QMessageBox::question(this, tr("Внимание"), tr("Обновить систему до последней версии, чтобы предотвратить конфликты между зависимостями?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) on_action_11_triggered();
     }
 
     QListWidgetItem *currentItem = listWidget->currentItem();
@@ -846,8 +846,7 @@ void MainWindow::on_action_30_triggered()
     }
 
     if (hasUpdates && updinst == 2 && page == 2) {
-        QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Внимание"), tr("Обновить систему до последней версии, чтобы предотвратить конфликты между зависимостями?"), QMessageBox::Yes | QMessageBox::No);
-        if (reply == QMessageBox::Yes) on_action_11_triggered();
+        if (QMessageBox::question(this, tr("Внимание"), tr("Обновить систему до последней версии, чтобы предотвратить конфликты между зависимостями?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) on_action_11_triggered();
     }
 
     QListWidgetItem *currentItem = ui->list_aur->currentItem();
@@ -1681,7 +1680,7 @@ void MainWindow::loadSettings()
             onListItemClicked("", 0, item);
     });
 
-    connect(ui->list_downgrade, &QListWidget::itemDoubleClicked, this, &MainWindow::onListDowngradeItemDoubleClicked);
+    connect(ui->list_downgrade, &QListWidget::itemClicked, this, &MainWindow::onListDowngradeItemClicked);
 
     connect(ui->webEngineView, &QWebEngineView::urlChanged, this, [this](const QUrl &url) {
         QString urlString = url.toString();
@@ -2000,8 +1999,7 @@ void MainWindow::loadSettings()
     //-##################################################################################
     //-############################### ЦВЕТ ДЛЯ ССЫЛОК ##################################
     //-##################################################################################
-    ui->text_updatepkg->document()->setDefaultStyleSheet("a { text-decoration: underline; color: #c0a071 }");
-    ui->details_aur->document()->setDefaultStyleSheet("a { text-decoration: underline; color: #c0a071 }");
+    for (QTextBrowser* browser : {ui->text_updatepkg, ui->details_aur, ui->details_aurpkg}) browser->document()->setDefaultStyleSheet("a { text-decoration: underline; color: #c0a071 }");
 }
 
 void MainWindow::fetchData() {
@@ -2404,16 +2402,7 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
                 if (currentItem) {
                     QString packageName = currentItem->text();
 
-                    QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Пакет не найден"),
-                                                                              tr("Пакет не найден, перейти к его поиску?"),
-                                                                              QMessageBox::Yes | QMessageBox::No);
-
-                    if (reply == QMessageBox::Yes) {
-                        ui->searchLineEdit->setText(packageName);
-
-                        QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
-                        QCoreApplication::postEvent(ui->searchLineEdit, event);
-                    }
+                    if (QMessageBox::question(this, tr("Пакет не найден"), tr("Пакет не найден, перейти к его поиску?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) { ui->searchLineEdit->setText(packageName); QCoreApplication::postEvent(ui->searchLineEdit, new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier)); }
                 }
             }
 
@@ -3021,7 +3010,7 @@ QString packageVersion(const QString& packageName) {
 }
 
 //not
-void MainWindow::onListDowngradeItemDoubleClicked(QListWidgetItem *currentItem) {
+void MainWindow::onListDowngradeItemClicked(QListWidgetItem *currentItem) {
 
     bool isFolder = currentItem->data(Qt::UserRole).toBool();
     QString itemName = currentItem->text();
@@ -3055,6 +3044,8 @@ void MainWindow::onListDowngradeItemDoubleClicked(QListWidgetItem *currentItem) 
             sendNotification(tr("Внимание"), tr("Pacman уже используется! Завершите все операции в Pacman и попробуйте снова!"));
             return;
         }
+
+        if (QMessageBox::question(this, tr("Установить пакет"), tr("Установить пакет из архива?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) return;
 
         currentTerminalProcess = QSharedPointer<QProcess>::create(this);
         connect(currentTerminalProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
@@ -3454,8 +3445,7 @@ QString MainWindow::findIconPath(const QString &iconNumber)
 
 void MainWindow::createArchive(const QString& folderPath, const QString& folderName)
 {
-    QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), tr("Вы уверены, что хотите удалить каталог \"%1\" %2?").arg(folderPath + folderName, (repair == 0) ? tr("с конфигурацией") : tr("и создать резервную копию")), QMessageBox::Yes | QMessageBox::No);
-    if (reply == QMessageBox::No) return;
+    if (QMessageBox::question(this, tr("Вопрос"), tr("Вы уверены, что хотите удалить каталог \"%1\" %2?").arg(folderPath + folderName, (repair == 0) ? tr("с конфигурацией") : tr("и создать резервную копию")), QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) return;
 
     if (repair == 0) {
         removeDirectory(folderPath + folderName);
@@ -3849,13 +3839,7 @@ void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString&
     Terminal terminal = getTerminal();
 
     if (item == orphanButton) {
-        QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), tr("Обычно, когда пакет становится сиротой, это означает, что он был установлен в качестве зависимости другого пакета, но этот пакет был удален, и больше нет других пакетов, которые бы зависели от данного. Удаление сирот из системы помогает поддерживать систему более чистой и оптимизированной. Вы действительно хотите удалить пакеты сироты?"), QMessageBox::Yes | QMessageBox::No);
-        if (reply == QMessageBox::Yes) {
-            QString remove = packageCommands.value(pkg).value("remove_explicit").join(" ");
-            QString removelist = packageCommands.value(pkg).value("query_depends").join(" ");
-            QString command = remove + " $(" + removelist + ")";
-            QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "sh" << "-c" << command);
-        }
+        if (QMessageBox::question(this, tr("Вопрос"), tr("Обычно, когда пакет становится сиротой, это означает, что он был установлен в качестве зависимости другого пакета, но этот пакет был удален, и больше нет других пакетов, которые бы зависели от данного. Удаление сирот из системы помогает поддерживать систему более чистой и оптимизированной. Вы действительно хотите удалить пакеты сироты?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) { QString remove = packageCommands.value(pkg).value("remove_explicit").join(" "); QString removelist = packageCommands.value(pkg).value("query_depends").join(" "); QString command = remove + " $(" + removelist + ")"; QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "sh" << "-c" << command); }
         return;
     }
 
@@ -3928,8 +3912,7 @@ void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString&
     }
 
     if (hasUpdates && updinst == 2 && page == 2) {
-        QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Внимание"), tr("Обновить систему до последней версии, чтобы предотвратить конфликты между зависимостями?"), QMessageBox::Yes | QMessageBox::No);
-        if (reply == QMessageBox::Yes) on_action_11_triggered();
+        if (QMessageBox::question(this, tr("Внимание"), tr("Обновить систему до последней версии, чтобы предотвратить конфликты между зависимостями?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) on_action_11_triggered();
     }
     QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "bash" << scriptPath << *lang << helper);
 }
@@ -3987,8 +3970,7 @@ void MainWindow::on_list_bench_itemClicked(QListWidgetItem *item)
 
 void MainWindow::on_push_kde_clicked()
 {
-    QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Вопрос"), tr("Вы уверены, что хотите полностью сбросить конфигурацию DE? Вам придется заново все настроить."), QMessageBox::Yes | QMessageBox::No);
-    if (reply == QMessageBox::No) return;
+    if (QMessageBox::question(this, tr("Вопрос"), tr("Вы уверены, что хотите полностью сбросить конфигурацию DE? Вам придется заново все настроить."), QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) return;
 
     Terminal terminal = getTerminal();
     QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "sudo" << "rm" << QDir::homePath() + "/.config/kdeglobals");
@@ -4019,6 +4001,10 @@ void MainWindow::on_action_updatelist_triggered()
             miniAnimation(false, ui->list_app);
             loadContentInstall(); // Загружаем список установленных пакетов или что-то подобное
         });
+    }
+    else if (page == 14)
+    {
+        loadDowngrades("packages");
     }
 
     removeToolButtonTooltips(ui->toolBar);

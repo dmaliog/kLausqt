@@ -297,7 +297,7 @@ private slots:
     void updateCompleterModel();
     void setCursorAndScrollToItem(const QString& itemName);
     void checkForDowngrades(const QString& packagesArchiveAUR);
-    void onListDowngradeItemDoubleClicked(QListWidgetItem *item);
+    void onListDowngradeItemClicked(QListWidgetItem *item);
     void addLinkToList(const QString &link);
     void handleListItemClicked(QListWidgetItem *item, const QString& scriptDir);
     void processListItem(int row, QListWidget *listWidget, QTextBrowser *detailsWidget, const QString &package);
