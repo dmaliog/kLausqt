@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "15.9";
+QString currentVersion = "16.0";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -872,6 +872,14 @@ void MainWindow::on_list_aur_itemSelectionChanged()
     }
 }
 
+void MainWindow::on_list_aurpkg_itemSelectionChanged()
+{
+    if (ui->list_app->selectedItems().isEmpty()) {
+        ui->action_infopkg_pkg->setChecked(false);
+        ui->tabWidget_details_pkg->setCurrentIndex(0);
+        ui->details_aurpkg->setHtml(tr("Ничего не выбрано"));
+    }
+}
 void MainWindow::on_action_infopkg_triggered(bool checked)
 {
     if (ui->list_aur->currentItem() == nullptr) {
@@ -1656,6 +1664,7 @@ void MainWindow::loadSettings()
     //-############################## СИГНАЛЫ И СЛОТЫ ###################################
     //-##################################################################################
     connect(ui->list_aur, &QListWidget::itemSelectionChanged, this, &::MainWindow::on_list_aur_itemSelectionChanged);
+    connect(ui->list_app, &QListWidget::itemSelectionChanged, this, &::MainWindow::on_list_aurpkg_itemSelectionChanged);
 
     connect(ui->time_update, &QTimeEdit::timeChanged, this, &MainWindow::onTimeChanged);
 
@@ -3997,7 +4006,6 @@ void MainWindow::on_action_updatelist_triggered()
         ui->list_app->clear();
 
         QTimer::singleShot(500, this, [=]() {
-            ui->details_aurpkg->setText(tr("Ничего не выбрано"));
             miniAnimation(false, ui->list_app);
             loadContentInstall(); // Загружаем список установленных пакетов или что-то подобное
         });
