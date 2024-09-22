@@ -3222,6 +3222,9 @@ void MainWindow::loadingListWidget()
     orphanButton->setForeground(generateRandomColor(colorlist));
 
     QDir().mkpath(mainDir + "other/");
+    QDir().mkpath(mainDir + "other/en_US/");
+    QDir().mkpath(mainDir + "other/ru_RU/");
+
     QFile::copy(":/other/notify.png", mainDir + "other/notify.png");
     QFile::copy(":/other/en_US/translations.txt", mainDir + "other/en_US/translations.txt");
     QFile::copy(":/other/ru_RU/translations.txt", mainDir + "other/ru_RU/translations.txt");
