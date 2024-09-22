@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "16.0";
+QString currentVersion = "16.1";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -192,73 +192,62 @@ void MainWindow::on_action_3_triggered()
     ui->tabWidget->setCurrentIndex(15);
 }
 
-void MainWindow::on_action_8_triggered()
-{
+void MainWindow::on_action_8_triggered() {
     if (page == 7) return;
+
     mrpropper(7, ui->action_8);
+    auto process = QSharedPointer<QProcess>::create();
+    process->start(packageCommands.value(pkg).value("query").at(0),
+                   QStringList() << packageCommands.value(pkg).value("query").at(1) << "ocs-url");
 
-    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-
-    process->start(packageCommands.value(pkg).value("query").at(0), QStringList() << packageCommands.value(pkg).value("query").at(1) << "ocs-url");
-    if (process->waitForFinished()) {
-        QString output = QString::fromUtf8(process->readAllStandardOutput());
-        if (!output.contains("ocs-url")) {
-
-            ui->action_2->trigger();
-
-            ui->searchLineEdit->setText("ocs-url");
-            QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
-            QCoreApplication::postEvent(ui->searchLineEdit, event);
-            sendNotification(tr("Ошибка"), tr("Установите пакет ocs-url для установки тем!"));
-            return;
-        }
+    if (process->waitForFinished() && !process->readAllStandardOutput().contains("ocs-url")) {
+        ui->action_2->trigger();
+        ui->searchLineEdit->setText("ocs-url");
+        QCoreApplication::postEvent(ui->searchLineEdit, new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier));
+        sendNotification(tr("Ошибка"), tr("Установите пакет ocs-url для установки тем!"));
+        return;
     }
 
-
     bool isBlankPage = ui->webEngineView_custom->url().toString() == "about:blank";
-
-    if (isBlankPage)
-        showLoadingAnimation(true,ui->webEngineView_custom);
+    showLoadingAnimation(isBlankPage, ui->webEngineView_custom);
 
     ui->action_31->setVisible(true);
     ui->action_32->setVisible(true);
     ui->action_33->setVisible(true);
     ui->action_35->setVisible(true);
-
     ui->searchLineEdit->setPlaceholderText(tr("Введите URL адрес..."));
     ui->searchLineEdit->setVisible(true);
     ui->tabWidget->setCurrentIndex(14);
 
     if (isBlankPage) {
-
+        QString url;
         if (QUrl(*customurl).isValid() && saveurl)
-            ui->webEngineView_custom->setUrl(QUrl(*customurl));
+            url = *customurl;
         else {
-            if (*currentDesktop == "KDE")
-                ui->webEngineView_custom->setUrl(QUrl("https://store.kde.org/browse/"));
-            else if (*currentDesktop == "GNOME")
-                ui->webEngineView_custom->setUrl(QUrl("https://www.pling.com/s/Gnome/browse/"));
-            else if (*currentDesktop == "XFCE")
-                ui->webEngineView_custom->setUrl(QUrl("https://www.pling.com/s/XFCE/browse/"));
-            else if (*currentDesktop == "LXQt")
-                ui->webEngineView_custom->setUrl(QUrl("https://store.kde.org/browse?cat=446"));
-            else if (*currentDesktop == "Cinnamon")
-                ui->webEngineView_custom->setUrl(QUrl("https://www.pling.com/s/Cinnamon/browse/"));
-            else if (*currentDesktop == "MATE")
-                ui->webEngineView_custom->setUrl(QUrl("https://www.pling.com/s/Mate/browse/"));
-            else if (*currentDesktop == "Enlightenment")
-                ui->webEngineView_custom->setUrl(QUrl("https://www.pling.com/s/Enlightenment/browse/"));
+            const QMap<QString, QString> urls {
+                {"KDE", "https://store.kde.org/browse/"},
+                {"GNOME", "https://www.pling.com/s/Gnome/browse/"},
+                {"XFCE", "https://www.pling.com/s/XFCE/browse/"},
+                {"LXQt", "https://store.kde.org/browse?cat=446"},
+                {"Cinnamon", "https://www.pling.com/s/Cinnamon/browse/"},
+                {"MATE", "https://www.pling.com/s/Mate/browse/"},
+                {"Enlightenment", "https://www.pling.com/s/Enlightenment/browse/"}
+            };
+
+            if (urls.contains(*currentDesktop))
+                url = urls[*currentDesktop];
             else {
                 sendNotification(tr("Ошибка"), tr("Для вашего окружения тем не найдено!"));
                 return;
             }
-            *customurl = ui->webEngineView_custom->url().toString();
+            *customurl = url;
             ui->action_35->setEnabled(false);
         }
-    } else {
+        ui->webEngineView_custom->setUrl(QUrl(url));
+    } else
         ui->searchLineEdit->setText(ui->webEngineView_custom->url().toString());
-    }
 }
+
 
 void MainWindow::on_push_vk_clicked()
 {
@@ -277,34 +266,24 @@ void MainWindow::on_action_12_triggered()
     ui->tabWidget->setCurrentIndex(7);
 }
 
-void MainWindow::on_action_host_triggered()
-{
+void MainWindow::on_action_host_triggered() {
     if (page == 10) return;
+
     mrpropper(10, ui->action_host);
+    auto process = QSharedPointer<QProcess>::create();
+    process->start(packageCommands.value(pkg).value("query").at(0),
+                   QStringList() << packageCommands.value(pkg).value("query").at(1) << "apache");
 
-    QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-    process->start(packageCommands.value(pkg).value("query").at(0), QStringList() << packageCommands.value(pkg).value("query").at(1) << "apache");
-
-    if (process->waitForFinished()) {
-        QString output = QString::fromUtf8(process->readAllStandardOutput());
-        if (!output.contains("apache")) {
-
-            ui->action_2->trigger();
-            ui->searchLineEdit->setText("apache");
-
-            QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
-            QCoreApplication::postEvent(ui->searchLineEdit, event);
-
-            sendNotification(tr("Ошибка"), tr("Установите пакет apache для управления веб-сервером!"));
-            return;
-        }
+    if (process->waitForFinished() && !process->readAllStandardOutput().contains("apache")) {
+        ui->action_2->trigger();
+        ui->searchLineEdit->setText("apache");
+        QCoreApplication::postEvent(ui->searchLineEdit, new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier));
+        sendNotification(tr("Ошибка"), tr("Установите пакет apache для управления веб-сервером!"));
+        return;
     }
 
-    QString hostUrl = ui->webEngineView_host->url().toString();
-    bool isBlankPage = hostUrl == "about:blank";
-
-    if (isBlankPage)
-        showLoadingAnimation(true,ui->webEngineView_host);
+    bool isBlankPage = (ui->webEngineView_host->url().toString() == "about:blank");
+    showLoadingAnimation(isBlankPage, ui->webEngineView_host);
 
     ui->action_5->setVisible(true);
     ui->action_restart->setVisible(true);
@@ -312,27 +291,18 @@ void MainWindow::on_action_host_triggered()
     ui->action_catalog->setVisible(true);
     ui->searchLineEdit->setPlaceholderText(tr("Введите URL адрес..."));
     ui->searchLineEdit->setVisible(true);
-
     ui->tabWidget->setCurrentIndex(13);
 
-    if (isBlankPage) {
-        ui->webEngineView_host->setUrl(QUrl("http://localhost"));
-        ui->searchLineEdit->setText("http://localhost");
-    } else {
-        ui->searchLineEdit->setText(ui->webEngineView_host->url().toString());
-    }
+    ui->webEngineView_host->setUrl(isBlankPage ? QUrl("http://localhost") : ui->webEngineView_host->url());
+    ui->searchLineEdit->setText(isBlankPage ? "http://localhost" : ui->webEngineView_host->url().toString());
 }
 
-void MainWindow::on_action_game_triggered()
-{
+void MainWindow::on_action_game_triggered() {
     if (page == 11) return;
+
     mrpropper(11, ui->action_game);
-
-    QString protonDBUrl = ui->webEngineView_game->url().toString();
-    bool isBlankPage = protonDBUrl == "about:blank";
-
-    if (isBlankPage)
-        showLoadingAnimation(true,ui->webEngineView_game);
+    bool isBlankPage = (ui->webEngineView_game->url().toString() == "about:blank");
+    if (isBlankPage) showLoadingAnimation(true, ui->webEngineView_game);
 
     ui->action_31->setVisible(true);
     ui->action_32->setVisible(true);
@@ -343,18 +313,13 @@ void MainWindow::on_action_game_triggered()
     ui->tabWidget->setCurrentIndex(0);
 
     if (isBlankPage) {
-        if (QUrl(*gameurl).isValid() && saveurl)
-            ui->webEngineView_game->setUrl(QUrl(*gameurl));
-        else
-        {
-            ui->webEngineView_game->setUrl(QUrl("https://www.protondb.com/explore"));
-            ui->searchLineEdit->setText("https://www.protondb.com/explore");
-            *gameurl = ui->webEngineView_game->url().toString();
-            ui->action_35->setEnabled(false);
-        }
-    } else {
+        QUrl url = QUrl(*gameurl).isValid() && saveurl ? QUrl(*gameurl) : QUrl("https://www.protondb.com/explore");
+        ui->webEngineView_game->setUrl(url);
+        ui->searchLineEdit->setText(url.toString());
+        *gameurl = url.toString();
+        if (url.toString() == "https://www.protondb.com/explore") ui->action_35->setEnabled(false);
+    } else
         ui->searchLineEdit->setText(ui->webEngineView_game->url().toString());
-    }
 }
 
 //12-13 заняты
@@ -1156,82 +1121,46 @@ void MainWindow::setupListContextMenu()
 
 void MainWindow::showListContextMenu(const QPoint& pos)
 {
-    QListWidget* listWidget = nullptr;
+    QListWidget* listWidget = (page == 2) ? ui->list_aur : (page == 4) ? ui->list_app : nullptr;
+    if (!listWidget) return;
 
-    if (page == 2) {
-        listWidget = ui->list_aur;
-    } else if (page == 4) {
-        listWidget = ui->list_app;
-    }
+    QListWidgetItem* item = listWidget->itemAt(pos);
+    if (!item || item->data(Qt::UserRole + 1).toString().contains("category")) return;
 
-    if (!listWidget)
-        return;
+    QString itemName = item->text(), favoriteFile = mainDir + "menu/Favorite/Favorite.txt";
 
-    QListWidgetItem* selectedItem = listWidget->itemAt(pos);
-    if (!selectedItem)
-        return;
-
-    QString itemType = selectedItem->data(Qt::UserRole + 1).toString();
-
-    if (itemType == "subcategory" || itemType == "category") {
-        return;
-    }
-
-    QString itemName = selectedItem->text();
-    QString favoriteFilePath = mainDir + "menu/Favorite/Favorite.txt";
-
+    QFile file(favoriteFile);
     bool isFavorite = false;
-    QFile file(favoriteFilePath);
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream in(&file);
-        while (!in.atEnd()) {
-            QString line = in.readLine().trimmed();
-            if (line == itemName) {
-                isFavorite = true;
-                break;
-            }
-        }
-        file.close();
+        isFavorite = in.readAll().contains(itemName);
     }
 
-    QMenu contextMenu(this);
-    QAction action1(QIcon(":/img/15.png"), tr("Установить"), this);
-    QAction action2(QIcon(":/img/27.png"), tr("Изменить PKGBUILD и установить"), this);
-    QAction action3(QIcon(":/img/14.png"), tr("Удалить"), this);
-    QAction action4(QIcon(":/img/34.png"), tr("Информация о пакете"), this);
-    QAction action5(QIcon(":/img/13.png"), tr("Запустить"), this);
-    QAction action6(QIcon(":/img/15.png"), tr("Обновить версию"), this);
+    QMenu menu(this);
+    auto addAction = [&](const QString& icon, const QString& text, auto slot) {
+        QAction* action = new QAction(QIcon(icon), text, this);
+        connect(action, &QAction::triggered, this, slot);
+        menu.addAction(action);
+    };
 
-    QAction* favoriteAction;
-    if (isFavorite) {
-        favoriteAction = new QAction(QIcon(":/img/star.png"), tr("Удалить из избранного"), this);
-        connect(favoriteAction, &QAction::triggered, this, &MainWindow::on_action_favorite_del_triggered);
-    } else {
-        favoriteAction = new QAction(QIcon(":/img/star.png"), tr("Добавить в избранное"), this);
-        connect(favoriteAction, &QAction::triggered, this, &MainWindow::on_action_favorite_triggered);
-    }
-
-    connect(&action1, &QAction::triggered, this, &MainWindow::on_action_4_triggered);
-    connect(&action2, &QAction::triggered, this, &MainWindow::on_action_30_triggered);
-    connect(&action3, &QAction::triggered, this, &MainWindow::on_action_6_triggered);
-    connect(&action4, &QAction::triggered, this, &MainWindow::on_action_34_triggered);
-    connect(&action5, &QAction::triggered, this, &MainWindow::on_action_5_triggered);
-    connect(&action6, &QAction::triggered, this, &MainWindow::on_action_4_triggered);
 
     if (page == 2) {
-        contextMenu.addAction(&action1);
-        contextMenu.addAction(&action2);
+        addAction(":/img/15.png", tr("Установить"), &MainWindow::on_action_4_triggered);
+        addAction(":/img/27.png", tr("Изменить PKGBUILD и установить"), &MainWindow::on_action_30_triggered);
     } else if (page == 4) {
-        contextMenu.addAction(&action5);
-        contextMenu.addAction(&action6);
-        contextMenu.addAction(&action3);
+        addAction(":/img/25.png", tr("Найти в каталоге пакетов"), &MainWindow::on_action_searchpkg_triggered);
+        addAction(":/img/13.png", tr("Запустить"), &MainWindow::on_action_5_triggered);
+        addAction(":/img/15.png", tr("Обновить версию"), &MainWindow::on_action_4_triggered);
+        addAction(":/img/14.png", tr("Удалить"), &MainWindow::on_action_6_triggered);
     }
 
-    contextMenu.addAction(&action4);
-    contextMenu.addAction(favoriteAction);
+    addAction(":/img/34.png", tr("Информация о пакете"), &MainWindow::on_action_34_triggered);
+    addAction(":/img/star.png", isFavorite ? tr("Удалить из избранного") : tr("Добавить в избранное"),
+              isFavorite ? &MainWindow::on_action_favorite_del_triggered : &MainWindow::on_action_favorite_triggered);
 
-    contextMenu.exec(listWidget->viewport()->mapToGlobal(pos));
+    menu.exec(listWidget->viewport()->mapToGlobal(pos));
 }
+
 
 void MainWindow::createSearchBar()
 {
@@ -2283,61 +2212,35 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
 }
 
 //not
-void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser* detailsWidget, const QString& package)
-{
-    QString packageName;
-
-    if (!package.isEmpty())
-        packageName = package;
-    else
-    {
-        QListWidgetItem* nameItem = listWidget->item(row);
-        packageName = nameItem->text();
-    }
-
-
-
-
-    QSharedPointer<QProcess> currentProcess = QSharedPointer<QProcess>::create();
+void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser* detailsWidget, const QString& package) {
+    QString packageName = !package.isEmpty() ? package : listWidget->item(row)->text();
+    auto currentProcess = QSharedPointer<QProcess>::create();
     int scrollBarValue = detailsWidget->verticalScrollBar()->value();
-
-    QFutureWatcher<QByteArray>* watcher = new QFutureWatcher<QByteArray>(this);
+    auto watcher = new QFutureWatcher<QByteArray>(this);
 
     connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, [=]() {
-        QByteArray output = currentProcess->readAllStandardOutput();
-        QString packageInfo = QString::fromUtf8(output);
-        QStringList lines = packageInfo.split("\n");
+        QStringList lines = QString::fromUtf8(currentProcess->readAllStandardOutput()).split("\n");
         QString processedInfo;
         static const QRegularExpression regex("\\b(\\S+)\\b");
 
-        for (auto it = lines.cbegin(); it != lines.cend(); ++it) {
-            const QString& line = *it;
-            if (line.isEmpty() || !line.contains(':'))
-                continue;
+        for (const QString& line : lines) {
+            if (line.isEmpty() || !line.contains(':')) continue;
 
             int colonIndex = line.indexOf(':');
             QString header = line.left(colonIndex).trimmed();
             QString content = line.mid(colonIndex + 1).trimmed();
-            QString linkedContent = "";
 
-            if (header == tr("Описание") && trans == 2)
-                description = content;
-            else if (QStringList{tr("Зависит от"), tr("Конфликтует с"), tr("Заменяет"), tr("Предоставляет"), tr("Обеспечивает"),
-                                 tr("Группы"), tr("Зависимости сборки"), tr("Требуется"), tr("Опционально для"),
-                                 tr("Ключевые слова"), tr("Зависимости проверки")}.contains(header)) {
-                if (content != tr("Нет"))
-                {
-                    linkedContent = content;
-                    linkedContent.replace(regex, "<a href=\"p:\\1\">\\1</a>");
-                    content = linkedContent;
-                }
+            if (header == tr("Описание") && trans == 2) description = content;
+            else if (QStringList{tr("Зависит от"), tr("Конфликтует с"), tr("Заменяет"), tr("Предоставляет"),
+                                 tr("Обеспечивает"), tr("Группы"), tr("Зависимости сборки"),
+                                 tr("Требуется"), tr("Опционально для"), tr("Ключевые слова"),
+                                 tr("Зависимости проверки")}.contains(header)) {
+                if (content != tr("Нет")) content.replace(regex, "<a href=\"p:\\1\">\\1</a>");
             } else if (QStringList{tr("Доп. зависимости"), tr("Факультативные зависимости")}.contains(header)) {
-                if (content != tr("Нет"))
-                {
+                if (content != tr("Нет")) {
                     int spaceIndex = content.indexOf(' ');
                     if (content.contains(':')) {
-                        QString firstDependency = content.left(spaceIndex);
-                        firstDependency.replace(regex, "<a href=\"p:\\1\">\\1</a>");
+                        QString firstDependency = content.left(spaceIndex).replace(regex, "<a href=\"p:\\1\">\\1</a>");
                         content.replace(0, spaceIndex, firstDependency);
                     } else {
                         content.replace(regex, "<a href=\"p:\\1\">\\1</a>");
@@ -2345,152 +2248,82 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
                 }
             }
 
-            if (header.at(0).isUpper())
-                header = "<b>" + header + ":</b> ";
-            else {
-                header.replace(regex, "<a href=\"p:\\1\">\\1</a>");
-                header += ": ";
-            }
-
+            header = header.at(0).isUpper() ? "<b>" + header + ":</b> " : header.replace(regex, "<a href=\"p:\\1\">\\1</a>") + ": ";
             processedInfo += "<p><span>" + header + "</span>" + content + "</p>";
         }
 
         connect(detailsWidget, &QTextBrowser::anchorClicked, this, [=](const QUrl& link) {
             if (link.scheme() == "p") {
                 ui->action_2->trigger();
-
-                // Получение пути ссылки и обработка символа '>'
-                QString linkPath = link.path();
-                int pos = linkPath.indexOf('>');
-                if (pos != -1) {
-                    linkPath = linkPath.left(pos);
-                }
+                QString linkPath = link.path().split('>')[0];
                 ui->searchLineEdit->setText(linkPath);
 
-                QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
+                QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier);
                 QCoreApplication::postEvent(ui->searchLineEdit, event);
+
             }
         });
 
         detailsWidget->append(processedInfo);
         detailsWidget->verticalScrollBar()->setValue(scrollBarValue);
-
         miniAnimation(false, detailsWidget);
 
-        if(trans == 2)
-        {
+        if(trans == 2) {
             watcher->setFuture(QtConcurrent::run([=]() -> QByteArray {
                 QProcess transProcess;
-                transProcess.start("trans", QStringList() << "-brief" << ":" + (lang->contains('_') ? lang->left(lang->indexOf('_')) : *lang) << description);
+                transProcess.start("trans", QStringList() << "-brief" << ":" + lang->split('_')[0] << description);
                 transProcess.waitForFinished();
                 return transProcess.readAllStandardOutput().trimmed();
             }));
-
             connect(watcher, &QFutureWatcher<QByteArray>::finished, this, [=]() {
-                QByteArray translatedInfo = watcher->result();
-                QString modifiedHtml = detailsWidget->toHtml();
-                modifiedHtml.replace(description, QString::fromUtf8(translatedInfo));
-                detailsWidget->setHtml(modifiedHtml);
+                detailsWidget->setHtml(detailsWidget->toHtml().replace(description, QString::fromUtf8(watcher->result())));
             });
         }
-
     });
+
     connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
-        if (exitCode != 0 || exitStatus == QProcess::CrashExit) {
-            QByteArray errorOutput = currentProcess->readAllStandardError();
-            QString errorMessage = QString::fromUtf8(errorOutput);
+        if (exitCode || exitStatus == QProcess::CrashExit) {
+            QString errorMessage = QString::fromUtf8(currentProcess->readAllStandardError()).trimmed();
+            detailsWidget->setText(!errorMessage.isEmpty() ? errorMessage : (listWidget == ui->list_aur ? tr("Пакет не найден!\nВозможно, он поменял свое название...") : QString()));
+            if (listWidget == ui->list_aur && listWidget->currentItem() && QMessageBox::question(this, tr("Пакет не найден"), tr("Пакет не найден, перейти к его поиску?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+                ui->searchLineEdit->setText(listWidget->currentItem()->text());
 
-            if (!errorMessage.trimmed().isEmpty())
-                detailsWidget->setText(errorMessage);
-            else if (listWidget == ui->list_aur)
-                detailsWidget->setText(tr("Пакет не найден!\nВозможно, он поменял свое название..."));
+                QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier);
+                QCoreApplication::postEvent(ui->searchLineEdit, event);
 
-            if (listWidget == ui->list_aur)
-            {
-                QListWidgetItem* currentItem = listWidget->currentItem();
-                if (currentItem) {
-                    QString packageName = currentItem->text();
-
-                    if (QMessageBox::question(this, tr("Пакет не найден"), tr("Пакет не найден, перейти к его поиску?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) { ui->searchLineEdit->setText(packageName); QCoreApplication::postEvent(ui->searchLineEdit, new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier)); }
-                }
             }
-
             miniAnimation(false, detailsWidget);
         }
     });
 
-
     detailsWidget->clear();
+    miniAnimation(true, detailsWidget);
 
-    miniAnimation(true,detailsWidget);
-
-    QStringList command;
-
-    if (page == 2)
-        command = packageCommands.value(0).value("show_info");
-    else
-        command = packageCommands.value(0).value("info");
-
+    QStringList command = packageCommands.value(0).value(page == 2 ? "show_info" : "info");
     currentProcess->setProcessEnvironment(env);
     currentProcess->start(command[0], QStringList() << command[1] << packageName);
 
-    if (page == 2 || page == 4)
-    {
+    if (page == 2 || page == 4) {
         QTreeWidget* treeWidget = (page == 2) ? ui->tree_aur : ui->tree_files_pkg;
-
-        QSharedPointer<QProcess> fileListProcess = QSharedPointer<QProcess>::create();
+        auto fileListProcess = QSharedPointer<QProcess>::create();
 
         connect(fileListProcess.data(), &QProcess::readyReadStandardOutput, this, [=]() {
-            QByteArray fileOutput = fileListProcess->readAllStandardOutput();
-            QString fileInfo = QString::fromUtf8(fileOutput);
-            QStringList lines = fileInfo.split('\n', Qt::SkipEmptyParts);
-
-            if (lines.isEmpty()) {
-                QByteArray errorOutput = fileListProcess->readAllStandardError();
-                QString errorInfo = QString::fromUtf8(errorOutput);
-                if (!errorInfo.isEmpty()) {
-                    treeWidget->clear();
-                    return;
-                }
-            }
-
+            QStringList lines = QString::fromUtf8(fileListProcess->readAllStandardOutput()).split('\n', Qt::SkipEmptyParts);
+            if (lines.isEmpty() && !fileListProcess->readAllStandardError().isEmpty()) return treeWidget->clear();
             treeWidget->clear();
-
             QMap<QString, QTreeWidgetItem*> pathMap;
-
-            for (auto it = lines.cbegin(); it != lines.cend(); ++it) {
-                const QString &line = *it;
+            for (const QString& line : lines) {
                 QStringList parts = line.split(' ', Qt::SkipEmptyParts);
+                if (parts.size() < 2) continue;
 
-                if (parts.size() < 2)
-                    continue;
-
-                QString filePath = parts[1];
-                QStringList pathParts = filePath.split('/');
-
-                if (pathParts.isEmpty() || pathParts[0].isEmpty())
-                    continue;
-
-                QTreeWidgetItem* currentItem = nullptr;
                 QString currentPath;
-
-                for (auto it = pathParts.cbegin(); it != pathParts.cend(); ++it) {
-                    const QString &part = *it;
-                    if (part.isEmpty())
-                        continue;
-
-                    if (currentPath.isEmpty())
-                        currentPath = part;
-                    else
-                        currentPath += "/" + part;
+                QTreeWidgetItem* currentItem = nullptr;
+                for (const QString& part : parts[1].split('/')) {
+                    if (part.isEmpty()) continue;
+                    currentPath = currentPath.isEmpty() ? part : currentPath + "/" + part;
 
                     if (!pathMap.contains(currentPath)) {
-                        QTreeWidgetItem* newItem;
-                        if (currentItem)
-                            newItem = new QTreeWidgetItem(currentItem);
-                        else
-                            newItem = new QTreeWidgetItem(treeWidget);
-
+                        auto newItem = currentItem ? new QTreeWidgetItem(currentItem) : new QTreeWidgetItem(treeWidget);
                         newItem->setText(0, part);
                         pathMap[currentPath] = newItem;
                         currentItem = newItem;
@@ -2501,17 +2334,13 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
             }
         });
 
-        connect(fileListProcess.data(), &QProcess::finished, this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
-            if (exitStatus == QProcess::CrashExit || exitCode != 0) {
-                treeWidget->clear();
-            }
+        connect(fileListProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
+            if (exitStatus == QProcess::CrashExit || exitCode != 0) treeWidget->clear();
         });
 
-        QStringList fileCommand = packageCommands.value(0).value("query_list_files");
-        fileListProcess->start(fileCommand.at(0), QStringList() << fileCommand.at(1) << packageName);
+        fileListProcess->start(packageCommands.value(0).value("query_list_files").at(0), QStringList() << packageCommands.value(0).value("query_list_files").at(1) << packageName);
     }
 }
-
 
 void MainWindow::onListItemClicked(const QString &packageName, int row, QListWidgetItem *item)
 {
@@ -4057,9 +3886,17 @@ void MainWindow::on_push_grub_clicked()
 }
 
 void MainWindow::on_action_favorite_triggered() {
-    QListWidgetItem* currentItem = ui->list_aur->currentItem();
-    if (!currentItem)
+    QListWidgetItem* currentItem = nullptr;
+
+    if (page == 2) {
+        currentItem = ui->list_aur->currentItem();
+    } else if (page == 4) {
+        currentItem = ui->list_app->currentItem();
+    }
+
+    if (!currentItem) {
         return;
+    }
 
     QString itemName = currentItem->text();
     QString favoriteFilePath = mainDir + "menu/Favorite/Favorite.txt";
@@ -4120,7 +3957,14 @@ void MainWindow::on_action_favorite_triggered() {
 
 void MainWindow::on_action_favorite_del_triggered()
 {
-    QListWidgetItem* currentItem = ui->list_aur->currentItem();
+    QListWidgetItem* currentItem = nullptr;
+
+    if (page == 2) {
+        currentItem = ui->list_aur->currentItem();
+    } else if (page == 4) {
+        currentItem = ui->list_app->currentItem();
+    }
+
     if (!currentItem) {
         return;
     }
@@ -4191,3 +4035,11 @@ void MainWindow::on_action_favorite_del_triggered()
     }
 }
 
+void MainWindow::on_action_searchpkg_triggered()
+{
+    if (auto item = ui->list_app->currentItem()) {
+        ui->action_2->trigger();
+        ui->searchLineEdit->setText(item->text());
+        QCoreApplication::postEvent(ui->searchLineEdit, new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier));
+    }
+}

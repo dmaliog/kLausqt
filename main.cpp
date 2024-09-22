@@ -24,7 +24,6 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-
     QPixmap pixmap(":/img/splash.jpeg");
     QPixmap scaledPixmap = pixmap.scaled(pixmap.width() / 2, pixmap.height() / 2, Qt::KeepAspectRatio);
     QSplashScreen splash(scaledPixmap);

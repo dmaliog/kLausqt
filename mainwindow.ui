@@ -5644,6 +5644,18 @@ background-color:#474c63;
     <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
+  <action name="action_searchpkg">
+   <property name="icon">
+    <iconset resource="klausres.qrc">
+     <normaloff>:/img/25.png</normaloff>:/img/25.png</iconset>
+   </property>
+   <property name="text">
+    <string>Найти в каталоге пакетов</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

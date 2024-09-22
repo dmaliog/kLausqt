@@ -407,6 +407,7 @@ private slots:
     void on_list_aurpkg_itemSelectionChanged();
     void on_action_favorite_triggered();
     void on_action_favorite_del_triggered();
+    void on_action_searchpkg_triggered();
 };
 
 class MySyntaxHighlighter : public QSyntaxHighlighter {
