@@ -17,7 +17,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "16.1";
+QString currentVersion = "16.2";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -2223,7 +2223,7 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
         QString processedInfo;
         static const QRegularExpression regex("\\b(\\S+)\\b");
 
-        for (const QString& line : lines) {
+        for (const QString& line : std::as_const(lines)) {
             if (line.isEmpty() || !line.contains(':')) continue;
 
             int colonIndex = line.indexOf(':');
@@ -2255,12 +2255,22 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
         connect(detailsWidget, &QTextBrowser::anchorClicked, this, [=](const QUrl& link) {
             if (link.scheme() == "p") {
                 ui->action_2->trigger();
-                QString linkPath = link.path().split('>')[0];
-                ui->searchLineEdit->setText(linkPath);
+                QString linkPath = link.path();
 
-                QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier);
-                QCoreApplication::postEvent(ui->searchLineEdit, event);
+                // Находим минимальный индекс символов '=', '>', и '<'
+                int idxEqual = linkPath.indexOf('=');
+                int idxGreater = linkPath.indexOf('>');
+                int idxLess = linkPath.indexOf('<');
 
+                // Ищем минимальный индекс среди найденных
+                int minIndex = linkPath.length(); // по умолчанию - длина строки
+                if (idxEqual != -1) minIndex = idxEqual;
+                if (idxGreater != -1 && idxGreater < minIndex) minIndex = idxGreater;
+                if (idxLess != -1 && idxLess < minIndex) minIndex = idxLess;
+
+                // Обрезаем строку до минимального индекса
+                ui->searchLineEdit->setText(linkPath.left(minIndex).trimmed());
+                QCoreApplication::postEvent(ui->searchLineEdit, new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier));
             }
         });
 
@@ -2284,7 +2294,7 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
     connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
         if (exitCode || exitStatus == QProcess::CrashExit) {
             QString errorMessage = QString::fromUtf8(currentProcess->readAllStandardError()).trimmed();
-            detailsWidget->setText(!errorMessage.isEmpty() ? errorMessage : (listWidget == ui->list_aur ? tr("Пакет не найден!\nВозможно, он поменял свое название...") : QString()));
+            detailsWidget->setPlainText(!errorMessage.isEmpty() ? errorMessage : (listWidget == ui->list_aur ? tr("Пакет не найден!\nВозможно, он поменял свое название...") : QString()));
             if (listWidget == ui->list_aur && listWidget->currentItem() && QMessageBox::question(this, tr("Пакет не найден"), tr("Пакет не найден, перейти к его поиску?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
                 ui->searchLineEdit->setText(listWidget->currentItem()->text());
 
@@ -2312,13 +2322,15 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
             if (lines.isEmpty() && !fileListProcess->readAllStandardError().isEmpty()) return treeWidget->clear();
             treeWidget->clear();
             QMap<QString, QTreeWidgetItem*> pathMap;
-            for (const QString& line : lines) {
+            for (const QString& line : std::as_const(lines)) {
                 QStringList parts = line.split(' ', Qt::SkipEmptyParts);
                 if (parts.size() < 2) continue;
 
                 QString currentPath;
                 QTreeWidgetItem* currentItem = nullptr;
-                for (const QString& part : parts[1].split('/')) {
+
+                QStringList splitParts = parts[1].split('/');
+                for (const QString& part : std::as_const(splitParts)) {
                     if (part.isEmpty()) continue;
                     currentPath = currentPath.isEmpty() ? part : currentPath + "/" + part;
 
@@ -2331,6 +2343,8 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
                         currentItem = pathMap[currentPath];
                     }
                 }
+
+
             }
         });
 
@@ -2421,7 +2435,7 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
     QString appName = packageName.split(' ').first();
 
     // Убираем окончания из имени пакета
-    for (const QString& ending : endingsToRemove) {
+    for (const QString& ending : std::as_const(endingsToRemove)) {
         if (appName.endsWith(ending)) {
             appName.chop(ending.length());
             break;
@@ -2473,7 +2487,8 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
 
     // Функция для удаления цифр из имени
     auto removeNumbers = [](QString name) -> QString {
-        return name.remove(QRegularExpression("\\d+"));  // Убираем все цифры
+        name.removeIf([](QChar c) { return c.isDigit(); });
+        return name;
     };
 
     // Цикл уменьшения имени пакета для поиска иконки
@@ -2513,7 +2528,7 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
             QDir desktopFilesDir(searchPath);
             QStringList desktopFiles = desktopFilesDir.entryList({"*.desktop"}, QDir::Files);
 
-            for (const QString& desktopFileName : desktopFiles) {
+            for (const QString& desktopFileName : std::as_const(desktopFiles)) {
                 QFile desktopFile(desktopFilesDir.filePath(desktopFileName));
                 if (desktopFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
                     QTextStream stream(&desktopFile);
@@ -2550,7 +2565,7 @@ QIcon MainWindow::findIconInPapirus(const QString& iconName) {
 
     QStringList subdirs = baseDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
 
-    for (const QString& subdir : subdirs) {
+    for (const QString& subdir : std::as_const(subdirs)) {
         QString iconPath = basePath + subdir + "/" + iconName + ".svg";
         if (QFile::exists(iconPath))
             return QIcon(iconPath);
@@ -2602,7 +2617,7 @@ void MainWindow::loadMainMenu() {
         }
     }
 
-    for (const QString& category : categories) {
+    for (const QString& category : std::as_const(categories)) {
         QString iniFilePath = menuDir.filePath(category + "/cfg.ini");
         QSettings settings(iniFilePath, QSettings::IniFormat);
 
@@ -2784,8 +2799,10 @@ void MainWindow::processPackageName(const QString& packageName, bool valuepage) 
     } else {
         QString packageNameIcon = packageName;
 
+        // Функция для удаления цифр из имени
         auto removeNumbers = [](QString name) -> QString {
-            return name.remove(QRegularExpression("\\d+"));  // Убираем все цифры
+            name.removeIf([](QChar c) { return c.isDigit(); });
+            return name;
         };
 
         auto findIconByAppName = [&](const QString& name) -> QString {
@@ -2795,8 +2812,8 @@ void MainWindow::processPackageName(const QString& packageName, bool valuepage) 
             iconPaths << "/usr/share/icons/Papirus/48x48/apps/" + nameLower + ".svg"
                       << "/usr/share/icons/Papirus/48x48/apps/" + nameLower + ".png";
 
-            for (const QString& path : iconPaths) {
-                if (QFileInfo(path).exists()) {
+            for (const QString& path : std::as_const(iconPaths)) {
+                if (QFileInfo::exists(path)) {
                     return path;
                 }
             }

@@ -42,8 +42,8 @@ void ArchWikiScraper::onPageLoaded(QNetworkReply *reply) {
 
 void ArchWikiScraper::parseHTML(const QString &html) {
     // Регулярные выражения для заголовков и пакетов
-    QRegularExpression headerRegex("<h2><span class=\"mw-headline\" id=\"[^\"]*\">([^<]*)</span></h2>");
-    QRegularExpression packageRegex("<span class=\"plainlinks archwiki-template-pkg\"><a rel=\"nofollow\" class=\"external text\" href=\"[^\"]*\">([^<]*)</a></span>");
+    static const QRegularExpression headerRegex("<h2><span class=\"mw-headline\" id=\"[^\"]*\">([^<]*)</span></h2>");
+    static const QRegularExpression packageRegex("<span class=\"plainlinks archwiki-template-pkg\"><a rel=\"nofollow\" class=\"external text\" href=\"[^\"]*\">([^<]*)</a></span>");
 
     QRegularExpressionMatchIterator headerIterator = headerRegex.globalMatch(html);
     QRegularExpressionMatchIterator packageIterator;
