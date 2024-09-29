@@ -843,7 +843,6 @@ void MainWindow::on_list_aurpkg_itemSelectionChanged()
         ui->action_infopkg_pkg->setChecked(false);
         ui->tabWidget_details_pkg->setCurrentIndex(0);
         ui->details_aurpkg->setHtml(tr("Ничего не выбрано"));
-
     }
 }
 void MainWindow::on_action_infopkg_triggered(bool checked)
@@ -1194,25 +1193,22 @@ void MainWindow::createSearchBar()
     ui->searchLineEdit->installEventFilter(this);
  }
 
+void MainWindow::handleServerResponseSearch(const QString& reply)
+{
+    if (currentProcess && currentProcess->state() == QProcess::Running) {
+        currentProcess->disconnect();
+        currentProcess->kill();
+        currentProcess->waitForFinished();
+    }
+    completerModel->clear();
 
- void MainWindow::handleServerResponseSearch(const QString& reply)
- {
-     // Останавливаем текущий процесс, если он выполняется
-     if (currentProcess && currentProcess->state() == QProcess::Running) {
-         currentProcess->disconnect();
-         currentProcess->kill();
-         currentProcess->waitForFinished();
-     }
+    QString searchCommand = packageCommands.value(0).value("search").at(0);
+    QStringList arguments = {packageCommands.value(0).value("search").at(1), reply};
 
-     completerModel->clear();
-
-     QString searchCommand = packageCommands.value(0).value("search").at(0);
-     QStringList arguments = {packageCommands.value(0).value("search").at(1), reply};
-
-     currentProcess = QSharedPointer<QProcess>::create(this);
-     connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyReadSearch);
-     currentProcess->start(searchCommand, arguments);
- }
+    currentProcess = QSharedPointer<QProcess>::create(this);
+    connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyReadSearch);
+    currentProcess->start(searchCommand, arguments);
+}
 
 void MainWindow::onCurrentProcessReadyReadSearch()
 {
@@ -2218,16 +2214,7 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
 //not
 void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser* detailsWidget, const QString& package) {
     QString packageName = !package.isEmpty() ? package : listWidget->item(row)->text();
-
-    if (currentProcess && currentPackageName != packageName && listWidget->currentRow() != row) {
-        currentProcess->kill();
-    }
-
-    currentPackageName = packageName;
-
-    disconnect(currentProcess.data(), &QProcess::finished, nullptr, nullptr);
-    currentProcess = QSharedPointer<QProcess>::create();
-
+    auto currentProcess = QSharedPointer<QProcess>::create();
     int scrollBarValue = detailsWidget->verticalScrollBar()->value();
     auto watcher = new QFutureWatcher<QByteArray>(this);
 
@@ -2306,17 +2293,14 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
     connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
         if (exitCode || exitStatus == QProcess::CrashExit) {
-            if (currentProcess && currentPackageName == packageName && listWidget->currentRow() == row) {
+            QString errorMessage = QString::fromUtf8(currentProcess->readAllStandardError()).trimmed();
+            detailsWidget->setPlainText(!errorMessage.isEmpty() ? errorMessage : (listWidget == ui->list_aur ? tr("Пакет не найден!\nВозможно, он поменял свое название...") : QString()));
+            if (listWidget == ui->list_aur && listWidget->currentItem() && QMessageBox::question(this, tr("Пакет не найден"), tr("Пакет не найден, перейти к его поиску?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+                ui->searchLineEdit->setText(listWidget->currentItem()->text());
 
-                QString errorMessage = QString::fromUtf8(currentProcess->readAllStandardError()).trimmed();
-                detailsWidget->setPlainText(!errorMessage.isEmpty() ? errorMessage : (listWidget == ui->list_aur ? tr("Пакет не найден!\nВозможно, он поменял свое название...") : QString()));
-                if (listWidget == ui->list_aur && listWidget->currentItem() && QMessageBox::question(this, tr("Пакет не найден"), tr("Пакет не найден, перейти к его поиску?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-                    ui->searchLineEdit->setText(listWidget->currentItem()->text());
+                QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier);
+                QCoreApplication::postEvent(ui->searchLineEdit, event);
 
-                    QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier);
-                    QCoreApplication::postEvent(ui->searchLineEdit, event);
-
-                }
             }
             miniAnimation(false, detailsWidget);
         }
@@ -3116,13 +3100,10 @@ void MainWindow::handleServerResponse(const QString& reply)
     miniAnimation(true, ui->list_aur);
     helperPackageNames.clear();
 
-    stopProcessing = false;
-
     const QStringList& searchCommand = packageCommands.value(0).value("search");
 
     currentProcess = QSharedPointer<QProcess>::create(this);
     connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
-    connect(currentProcess.data(), &QProcess::finished, this, &MainWindow::onProcessFinished);
 
     currentProcess->setProcessEnvironment(enveng);
     currentProcess->start(searchCommand.at(0), QStringList() << searchCommand.at(1) << reply);
@@ -3144,9 +3125,6 @@ void MainWindow::onCurrentProcessReadyRead()
     int old = 0;
 
     while (currentProcess->canReadLine()) {
-        if (stopProcessing)
-            break;
-
         QCoreApplication::processEvents();
 
         QByteArray line = currentProcess->readLine();
@@ -3221,15 +3199,9 @@ void MainWindow::onCurrentProcessReadyRead()
             scrollBar->setValue(scrollBar->maximum());
         }
     }
-}
 
-void MainWindow::onProcessFinished()
-{
+    // Процесс завершился, можно выполнить завершающие действия
     miniAnimation(false, ui->list_aur);
-
-    if (stopProcessing)
-        return;
-
     QString searchText = ui->searchLineEdit->text();
     setCursorAndScrollToItem(searchText);
 }
@@ -3867,13 +3839,6 @@ void MainWindow::on_action_updatelist_triggered()
     if (page == 2) // Обновление категорий и подкатегорий
     {
         miniAnimation(true, ui->list_aur);
-
-        stopProcessing = true;
-
-        if (currentProcess && currentProcess->state() == QProcess::Running) {
-            currentProcess->kill();
-            currentProcess->waitForFinished();
-        }
 
         ui->list_aur->clear();
 

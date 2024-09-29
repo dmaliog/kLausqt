@@ -86,8 +86,6 @@ private:
         return process.exitCode() == 0;
     }
 
-    QString currentPackageName;
-
     QGraphicsScene* imageScene;
     QStandardItemModel* thumbnailModel;
     int currentIndex;
@@ -159,8 +157,6 @@ private:
     bool hasUpdatesSnap = false;
     bool loadpage = true;
     bool isFirstLoad = true;
-
-    bool stopProcessing = false;
 
     // QAction
     QAction* actionLoad = nullptr;
@@ -269,7 +265,6 @@ public slots:
     void on_action_30_triggered();
 
 private slots:
-    void onProcessFinished();
     QIcon findIconInPapirus(const QString& iconName);
 
     void loadPackages(const QString& category, const QString& subcategory);
