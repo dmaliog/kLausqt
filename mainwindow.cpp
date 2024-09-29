@@ -843,6 +843,7 @@ void MainWindow::on_list_aurpkg_itemSelectionChanged()
         ui->action_infopkg_pkg->setChecked(false);
         ui->tabWidget_details_pkg->setCurrentIndex(0);
         ui->details_aurpkg->setHtml(tr("Ничего не выбрано"));
+
     }
 }
 void MainWindow::on_action_infopkg_triggered(bool checked)
@@ -1193,22 +1194,24 @@ void MainWindow::createSearchBar()
     ui->searchLineEdit->installEventFilter(this);
  }
 
-void MainWindow::handleServerResponseSearch(const QString& reply)
-{
-    if (currentProcess && currentProcess->state() == QProcess::Running) {
-        currentProcess->disconnect();
-        currentProcess->kill();
-        currentProcess->waitForFinished();
-    }
-    completerModel->clear();
 
-    QString searchCommand = packageCommands.value(0).value("search").at(0);
-    QStringList arguments = {packageCommands.value(0).value("search").at(1), reply};
+ void MainWindow::handleServerResponseSearch(const QString& reply)
+ {
+     if (currentProcess && currentProcess->state() == QProcess::Running) {
+         currentProcess->disconnect();
+         currentProcess->kill();
+         currentProcess->waitForFinished();
+     }
 
-    currentProcess = QSharedPointer<QProcess>::create(this);
-    connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyReadSearch);
-    currentProcess->start(searchCommand, arguments);
-}
+     completerModel->clear();
+
+     QString searchCommand = packageCommands.value(0).value("search").at(0);
+     QStringList arguments = {packageCommands.value(0).value("search").at(1), reply};
+
+     currentProcess = QSharedPointer<QProcess>::create(this);
+     connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyReadSearch);
+     currentProcess->start(searchCommand, arguments);
+ }
 
 void MainWindow::onCurrentProcessReadyReadSearch()
 {
@@ -2214,7 +2217,16 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
 //not
 void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser* detailsWidget, const QString& package) {
     QString packageName = !package.isEmpty() ? package : listWidget->item(row)->text();
-    auto currentProcess = QSharedPointer<QProcess>::create();
+
+    if (currentProcess && currentPackageName != packageName && listWidget->currentRow() != row) {
+        currentProcess->kill();
+    }
+
+    currentPackageName = packageName;
+
+    disconnect(currentProcess.data(), &QProcess::finished, nullptr, nullptr);
+    currentProcess = QSharedPointer<QProcess>::create();
+
     int scrollBarValue = detailsWidget->verticalScrollBar()->value();
     auto watcher = new QFutureWatcher<QByteArray>(this);
 
@@ -2293,14 +2305,17 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
     connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
         if (exitCode || exitStatus == QProcess::CrashExit) {
-            QString errorMessage = QString::fromUtf8(currentProcess->readAllStandardError()).trimmed();
-            detailsWidget->setPlainText(!errorMessage.isEmpty() ? errorMessage : (listWidget == ui->list_aur ? tr("Пакет не найден!\nВозможно, он поменял свое название...") : QString()));
-            if (listWidget == ui->list_aur && listWidget->currentItem() && QMessageBox::question(this, tr("Пакет не найден"), tr("Пакет не найден, перейти к его поиску?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-                ui->searchLineEdit->setText(listWidget->currentItem()->text());
+            if (currentProcess && currentPackageName == packageName && listWidget->currentRow() == row) {
 
-                QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier);
-                QCoreApplication::postEvent(ui->searchLineEdit, event);
+                QString errorMessage = QString::fromUtf8(currentProcess->readAllStandardError()).trimmed();
+                detailsWidget->setPlainText(!errorMessage.isEmpty() ? errorMessage : (listWidget == ui->list_aur ? tr("Пакет не найден!\nВозможно, он поменял свое название...") : QString()));
+                if (listWidget == ui->list_aur && listWidget->currentItem() && QMessageBox::question(this, tr("Пакет не найден"), tr("Пакет не найден, перейти к его поиску?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+                    ui->searchLineEdit->setText(listWidget->currentItem()->text());
 
+                    QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier);
+                    QCoreApplication::postEvent(ui->searchLineEdit, event);
+
+                }
             }
             miniAnimation(false, detailsWidget);
         }
@@ -2358,25 +2373,46 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
 void MainWindow::onListItemClicked(const QString &packageName, int row, QListWidgetItem *item)
 {
+    // Проверяем, что страница 2 (категории и пакеты)
     if (page == 2)
     {
         row = ui->list_aur->row(item);
         CustomListItemWidget* customWidget = qobject_cast<CustomListItemWidget*>(ui->list_aur->itemWidget(item));
 
-        if(packageName.isEmpty())
+        // Проверяем, является ли кликнутый элемент элементом для возврата
+        if (item->data(Qt::UserRole).toString() == "back") {
+            // Логика возврата
+            if (!currentCategory.isEmpty() && currentSubcategory.isEmpty()) {
+                // Если мы находимся в подкатегории, то возвращаемся к списку категорий
+                currentCategory.clear();
+                loadMainMenu();
+            } else if (!currentSubcategory.isEmpty()) {
+                // Если мы находимся в пакетах, то возвращаемся в подкатегорию
+                currentSubcategory.clear();
+                loadSubcategories(currentCategory);
+            }
+            return;
+        }
+
+        // Логика перехода в подкатегорию или пакет
+        if (packageName.isEmpty())
         {
             QString categoryPath = item->data(Qt::UserRole).toString();
             QString itemText = item->text();
 
-            if (!categoryPath.contains('/') && !categoryPath.isEmpty())
-                loadSubcategories(categoryPath);
-
+            if (!categoryPath.contains('/') && !categoryPath.isEmpty()) {
+                // Переходим в подкатегорию
+                currentCategory = categoryPath;
+                loadSubcategories(currentCategory);
+            }
             else if (categoryPath.contains('/') && !itemText.isEmpty()) {
+                // Переходим в список пакетов подкатегории
                 QString category = categoryPath.section('/', 0, 0);
                 QString subcategory = categoryPath.section('/', 1, 1);
+                currentCategory = category;
+                currentSubcategory = subcategory;
                 loadPackages(category, subcategory);
             }
-
             else if (categoryPath.isEmpty() && !itemText.isEmpty())
                 processListItem(row, ui->list_aur, ui->details_aur, packageName);
         }
@@ -2386,12 +2422,15 @@ void MainWindow::onListItemClicked(const QString &packageName, int row, QListWid
         }
     }
 
+    // Проверяем, что страница 4 (другая логика для другой страницы)
     if (page == 4)
     {
         row = ui->list_app->row(item);
         processListItem(row, ui->list_app, ui->details_aurpkg, "");
     }
 }
+
+
 
 //not
 void MainWindow::miniAnimation(bool visible, QWidget* targetWidget)
@@ -2669,6 +2708,11 @@ void MainWindow::loadSubcategories(const QString& category) {
     QString currentCategory;
     bool hasSubcategories = false;
 
+    QListWidgetItem* backItem = new QListWidgetItem("../", ui->list_aur);
+    backItem->setData(Qt::UserRole, "back");
+    backItem->setData(Qt::UserRole + 1, "subcategory");
+    backItem->setIcon(QIcon("/usr/share/icons/Papirus/48x48/places/folder-paleorange-drag-accept.svg"));
+
     while (!in.atEnd()) {
         QString line = in.readLine().trimmed();
 
@@ -2702,6 +2746,7 @@ void MainWindow::loadSubcategories(const QString& category) {
 }
 
 void MainWindow::loadPackages(const QString& category, const QString& subcategory) {
+
     QString subcategoriesFile = mainDir + "menu/" + category + "/" + category + ".txt";
 
     QFile file(subcategoriesFile);
@@ -2736,6 +2781,12 @@ void MainWindow::loadPackages(const QString& category, const QString& subcategor
 
     file.open(QIODevice::ReadOnly | QIODevice::Text);
     ui->list_aur->clear();
+
+    QListWidgetItem* backItem = new QListWidgetItem("../", ui->list_aur);
+    backItem->setData(Qt::UserRole, "back");
+    backItem->setData(Qt::UserRole + 1, "package");
+    backItem->setIcon(QIcon("/usr/share/icons/Papirus/48x48/places/folder-paleorange-drag-accept.svg"));
+
     in.setDevice(&file);
 
     foundSubcategory = false;
@@ -3071,6 +3122,7 @@ void MainWindow::loadContentInstall()
 
 void MainWindow::setCursorAndScrollToItem(const QString &itemName)
 {
+
     for (int row = 0; row < ui->list_aur->count(); ++row) {
         QListWidgetItem *currentItem = ui->list_aur->item(row);
         CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(ui->list_aur->itemWidget(currentItem));
@@ -3079,9 +3131,12 @@ void MainWindow::setCursorAndScrollToItem(const QString &itemName)
             onListItemClicked(itemName, row, currentItem);
 
             ui->list_aur->setCurrentItem(currentItem);
-            ui->list_aur->selectionModel()->select(ui->list_aur->model()->index(ui->list_aur->row(currentItem), 0),
-                                                   QItemSelectionModel::Select);
+
+
             ui->list_aur->scrollToItem(currentItem);
+            ui->list_aur->selectionModel()->select(ui->list_aur->model()->index(ui->list_aur->row(currentItem), 0),
+                                                       QItemSelectionModel::Select);
+
             break;
         }
     }
@@ -3099,6 +3154,8 @@ void MainWindow::handleServerResponse(const QString& reply)
 {
     miniAnimation(true, ui->list_aur);
     helperPackageNames.clear();
+
+    stopProcessing = false;
 
     const QStringList& searchCommand = packageCommands.value(0).value("search");
 
@@ -3125,6 +3182,9 @@ void MainWindow::onCurrentProcessReadyRead()
     int old = 0;
 
     while (currentProcess->canReadLine()) {
+        if (stopProcessing)
+            break;
+
         QCoreApplication::processEvents();
 
         QByteArray line = currentProcess->readLine();
@@ -3200,8 +3260,8 @@ void MainWindow::onCurrentProcessReadyRead()
         }
     }
 
-    // Процесс завершился, можно выполнить завершающие действия
     miniAnimation(false, ui->list_aur);
+
     QString searchText = ui->searchLineEdit->text();
     setCursorAndScrollToItem(searchText);
 }
@@ -3839,6 +3899,13 @@ void MainWindow::on_action_updatelist_triggered()
     if (page == 2) // Обновление категорий и подкатегорий
     {
         miniAnimation(true, ui->list_aur);
+
+        stopProcessing = true;
+
+        if (currentProcess && currentProcess->state() == QProcess::Running) {
+            currentProcess->kill();
+            currentProcess->waitForFinished();
+        }
 
         ui->list_aur->clear();
 

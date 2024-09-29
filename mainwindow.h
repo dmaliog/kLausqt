@@ -86,6 +86,8 @@ private:
         return process.exitCode() == 0;
     }
 
+    QString currentPackageName;
+
     QGraphicsScene* imageScene;
     QStandardItemModel* thumbnailModel;
     int currentIndex;
@@ -105,7 +107,9 @@ private:
     QString initialDetailsDowngradeText;
 
     QString originalLabelText;
-    QString currentCategory;
+
+    QString currentCategory;      // Текущая категория
+    QString currentSubcategory;   // Текущая подкатегория
 
     // Умные указатели
     QCompleter* completer;
@@ -157,6 +161,8 @@ private:
     bool hasUpdatesSnap = false;
     bool loadpage = true;
     bool isFirstLoad = true;
+
+    bool stopProcessing = false;
 
     // QAction
     QAction* actionLoad = nullptr;
