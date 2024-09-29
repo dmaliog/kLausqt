@@ -86,6 +86,8 @@ private:
         return process.exitCode() == 0;
     }
 
+    QString currentPackageName;
+
     QGraphicsScene* imageScene;
     QStandardItemModel* thumbnailModel;
     int currentIndex;

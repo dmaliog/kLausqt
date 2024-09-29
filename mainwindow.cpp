@@ -2214,7 +2214,16 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
 //not
 void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser* detailsWidget, const QString& package) {
     QString packageName = !package.isEmpty() ? package : listWidget->item(row)->text();
-    auto currentProcess = QSharedPointer<QProcess>::create();
+
+    if (currentProcess && currentPackageName != packageName && listWidget->currentRow() != row) {
+        currentProcess->kill();
+    }
+
+    currentPackageName = packageName;
+
+    disconnect(currentProcess.data(), &QProcess::finished, nullptr, nullptr);
+    currentProcess = QSharedPointer<QProcess>::create();
+
     int scrollBarValue = detailsWidget->verticalScrollBar()->value();
     auto watcher = new QFutureWatcher<QByteArray>(this);
 
@@ -2293,14 +2302,17 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
     connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
         if (exitCode || exitStatus == QProcess::CrashExit) {
-            QString errorMessage = QString::fromUtf8(currentProcess->readAllStandardError()).trimmed();
-            detailsWidget->setPlainText(!errorMessage.isEmpty() ? errorMessage : (listWidget == ui->list_aur ? tr("Пакет не найден!\nВозможно, он поменял свое название...") : QString()));
-            if (listWidget == ui->list_aur && listWidget->currentItem() && QMessageBox::question(this, tr("Пакет не найден"), tr("Пакет не найден, перейти к его поиску?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-                ui->searchLineEdit->setText(listWidget->currentItem()->text());
+            if (currentProcess && currentPackageName == packageName && listWidget->currentRow() == row) {
 
-                QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier);
-                QCoreApplication::postEvent(ui->searchLineEdit, event);
+                QString errorMessage = QString::fromUtf8(currentProcess->readAllStandardError()).trimmed();
+                detailsWidget->setPlainText(!errorMessage.isEmpty() ? errorMessage : (listWidget == ui->list_aur ? tr("Пакет не найден!\nВозможно, он поменял свое название...") : QString()));
+                if (listWidget == ui->list_aur && listWidget->currentItem() && QMessageBox::question(this, tr("Пакет не найден"), tr("Пакет не найден, перейти к его поиску?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+                    ui->searchLineEdit->setText(listWidget->currentItem()->text());
 
+                    QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier);
+                    QCoreApplication::postEvent(ui->searchLineEdit, event);
+
+                }
             }
             miniAnimation(false, detailsWidget);
         }
