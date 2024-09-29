@@ -1053,24 +1053,20 @@ void MainWindow::on_action_editsh_triggered()
                     if (itemName == itemContent) {
                         scriptFile.close();
 
-                        // Создание диалогового окна для редактирования
                         QDialog* editDialog = new QDialog(this);
 
                         editDialog->setMinimumSize(530, 620);
                         editDialog->setWindowTitle(tr("Редактировать скрипт"));
                         editDialog->setObjectName("editDialog");
 
-                        // Создание виджетов
                         QLabel* nameLabel = new QLabel(tr("Имя файла:"));
                         QLineEdit* nameEdit = new QLineEdit(fileName);
                         QLabel* scriptLabel = new QLabel(tr("Тело скрипта:"));
                         QTextEdit* scriptEdit = new QTextEdit();
                         QPushButton* saveButton = new QPushButton(tr("Сохранить"));
 
-                        // Настройка виджетов
                         scriptEdit->setPlainText(getScriptContent(filePath));
 
-                        // Создание компоновки
                         QVBoxLayout* layout = new QVBoxLayout(editDialog);
                         editDialog->setStyleSheet("QWidget#editDialog{background:#322F85 url(:/img/system.jpeg) repeat;} QLineEdit,QTextEdit{background:#32554b;padding:10px;border-radius:10px;}");
                         layout->addWidget(nameLabel);
@@ -1080,7 +1076,6 @@ void MainWindow::on_action_editsh_triggered()
                         layout->addWidget(saveButton);
                         editDialog->setLayout(layout);
 
-                        // Подключение кнопки сохранения
                         connect(saveButton, &QPushButton::clicked, this, [=]() mutable {
                             QString newFileName = nameEdit->text();
                             QString newScriptContent = scriptEdit->toPlainText();
@@ -1099,7 +1094,6 @@ void MainWindow::on_action_editsh_triggered()
                             sendNotification(tr("Сохранение"), tr("Скрипт успешно изменен!"));
                         });
 
-                        // Отображение диалогового окна
                         editDialog->exec();
                         return;
                     }
@@ -1290,7 +1284,6 @@ void MainWindow::updateCompleterModel()
         completer->complete();
 }
 
-//not
 void MainWindow::searchAndScroll(QAbstractItemView* view, const QString& text)
 {
     if (QListWidget* listWidget = qobject_cast<QListWidget*>(view))
@@ -1298,14 +1291,12 @@ void MainWindow::searchAndScroll(QAbstractItemView* view, const QString& text)
         for (int row = 0; row < listWidget->count(); ++row) {
             QListWidgetItem *currentItem = listWidget->item(row);
 
-            // Поиск в обычных QListWidgetItem
             if (currentItem->text().contains(text, Qt::CaseInsensitive)) {
                 listWidget->setCurrentItem(currentItem);
                 listWidget->scrollToItem(currentItem, QAbstractItemView::PositionAtCenter);
                 break;
             }
 
-            // Поиск в дочерних виджетах CustomListItemWidget
             CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(listWidget->itemWidget(currentItem));
             if (itemWidget && itemWidget->getPackageName().contains(text, Qt::CaseInsensitive)) {
                 listWidget->setCurrentItem(currentItem);
@@ -1373,14 +1364,12 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     helper = "yay";
 
-    // Создание QNetworkAccessManager
     manager = new QNetworkAccessManager(this);
     connect(manager, &QNetworkAccessManager::finished, this, &MainWindow::onReplyFinished);
 
     loadDowngrades(packagesArchiveCat);
 }
 
-//not
 void MainWindow::checkVersionAndClear() {
     QSettings settings(filePath, QSettings::IniFormat);
     QString storedVersion = settings.value("Version").toString();
@@ -1426,19 +1415,15 @@ void MainWindow::removeDirectory(const QString& dirPath)
     if (!dir.exists())
         return;
 
-    // Проходим по каждому элементу директории
     foreach (QFileInfo item, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::AllEntries)) {
         QString itemPath = item.absoluteFilePath();
         if (item.isDir()) {
-            // Пропускаем папку Favorite
+
             if (item.fileName() == "Favorite")
                 continue;
-            // Рекурсивно удаляем содержимое других папок
             QDir(itemPath).removeRecursively();
-        } else {
-            // Удаляем файл
+        } else
             QFile::remove(itemPath);
-        }
     }
 }
 
@@ -1467,15 +1452,8 @@ MainWindow::~MainWindow()
 {
     iconMap.clear();
 
-    //delete videoItem;
-    //delete graphicsView;
-    //delete player;
-    //delete videoWidget;
     delete scene;
-    delete opacityEffect;
-
     delete previousAction;
-    //delete actionLoad;
     delete orphanButton;
     delete cacheButtonHelper;
     delete cacheButtonPacman;
@@ -1514,11 +1492,8 @@ void MainWindow::loadSound(int soundIndex)
     beep->play();
 }
 
-//not
 void MainWindow::loadSettings()
 {
-    // Создание эффекта прозрачности
-    opacityEffect = new QGraphicsOpacityEffect;
     //-##################################################################################
     //-########################## НАСТРОЕННЫЕ ПЕРЕМЕННЫЕ ################################
     //-##################################################################################
@@ -1875,9 +1850,9 @@ void MainWindow::loadSettings()
             QString line = in.readLine().trimmed();
             if (line.startsWith('[') && line.endsWith(']')) {
                 QString section = line.mid(1, line.length() - 2);
-                if (section != "options") { // Исключение секции [options]
+                if (section != "options")
                     sections.append(section);
-                }
+
             }
         }
         pacman.close();
@@ -2214,13 +2189,11 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
     removeToolButtonTooltips(ui->toolBar_2);
 }
 
-//not
 void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser* detailsWidget, const QString& package) {
     QString packageName = !package.isEmpty() ? package : listWidget->item(row)->text();
 
-    if (currentProcess && currentPackageName != packageName && listWidget->currentRow() != row) {
+    if (currentProcess && currentPackageName != packageName && listWidget->currentRow() != row)
         currentProcess->kill();
-    }
 
     currentPackageName = packageName;
 
@@ -2269,18 +2242,15 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
                 ui->action_2->trigger();
                 QString linkPath = link.path();
 
-                // Находим минимальный индекс символов '=', '>', и '<'
                 int idxEqual = linkPath.indexOf('=');
                 int idxGreater = linkPath.indexOf('>');
                 int idxLess = linkPath.indexOf('<');
 
-                // Ищем минимальный индекс среди найденных
-                int minIndex = linkPath.length(); // по умолчанию - длина строки
+                int minIndex = linkPath.length();
                 if (idxEqual != -1) minIndex = idxEqual;
                 if (idxGreater != -1 && idxGreater < minIndex) minIndex = idxGreater;
                 if (idxLess != -1 && idxLess < minIndex) minIndex = idxLess;
 
-                // Обрезаем строку до минимального индекса
                 ui->searchLineEdit->setText(linkPath.left(minIndex).trimmed());
                 QCoreApplication::postEvent(ui->searchLineEdit, new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier));
             }
@@ -2421,8 +2391,6 @@ void MainWindow::onListItemClicked(const QString &packageName, int row, QListWid
     }
 }
 
-
-//not
 void MainWindow::miniAnimation(bool visible, QWidget* targetWidget)
 {
     static QLabel* miniLoadLabel = nullptr;
@@ -2463,7 +2431,6 @@ void MainWindow::miniAnimation(bool visible, QWidget* targetWidget)
 QIcon MainWindow::getPackageIcon(const QString& packageName) {
     QString appName = packageName.split(' ').first();
 
-    // Убираем окончания из имени пакета
     for (const QString& ending : std::as_const(endingsToRemove)) {
         if (appName.endsWith(ending)) {
             appName.chop(ending.length());
@@ -2471,9 +2438,8 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
         }
     }
 
-    // Лямбда-функция для поиска иконки по частичному совпадению имени
     auto findIconByAppName = [&](const QString& name) -> QIcon {
-        // Проверка пути на наличие иконки
+
         QStringList iconPaths = {
             "/usr/share/icons/Papirus/48x48/apps/" + name.toLower() + ".svg",
             "/usr/share/icons/Papirus/48x48/apps/" + name.toLower() + ".png"
@@ -2485,17 +2451,14 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
             }
         }
 
-        // Ищем иконку в уже загруженной карте
         if (iconMap.contains(name)) {
             QString iconName = iconMap[name];
 
-            // Проверяем наличие иконки в теме
             QIcon themeIcon = QIcon::fromTheme(iconName);
             if (!themeIcon.isNull()) {
                 return themeIcon;
             }
 
-            // Ищем иконку в альтернативных путях
             QStringList searchPaths = {"/usr/share/icons", mainDir + "/share/icons"};
             for (const QString& searchPath : searchPaths) {
                 QDirIterator it(searchPath, QDirIterator::Subdirectories);
@@ -2514,36 +2477,31 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
         return QIcon();
     };
 
-    // Функция для удаления цифр из имени
     auto removeNumbers = [](QString name) -> QString {
         name.removeIf([](QChar c) { return c.isDigit(); });
         return name;
     };
 
-    // Цикл уменьшения имени пакета для поиска иконки
     QStringList appNameParts = appName.split('-');
     while (!appNameParts.isEmpty()) {
         QString reducedAppName = appNameParts.join('-');
 
-        // Пробуем искать по текущему имени
         QIcon icon = findIconByAppName(reducedAppName);
         if (!icon.isNull()) {
-            return icon;  // Возвращаем иконку, если она найдена
+            return icon;
         }
 
-        // Пробуем искать без цифр
         QString reducedAppNameWithoutNumbers = removeNumbers(reducedAppName);
         if (reducedAppNameWithoutNumbers != reducedAppName) {
             icon = findIconByAppName(reducedAppNameWithoutNumbers);
             if (!icon.isNull()) {
-                return icon;  // Возвращаем иконку, если найдена без цифр
+                return icon;
             }
         }
 
-        appNameParts.removeLast();  // Уменьшаем имя для дальнейшего поиска
+        appNameParts.removeLast();
     }
 
-    // Если карта иконок пуста, инициализируем её
     if (iconMap.isEmpty()) {
         QStringList searchPaths = {
             "/usr/share/applications/",
@@ -2552,7 +2510,6 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
             "/var/lib/snapd/desktop/applications"
         };
 
-        // Проходим по всем .desktop файлам, чтобы загрузить карту иконок
         for (const QString& searchPath : searchPaths) {
             QDir desktopFilesDir(searchPath);
             QStringList desktopFiles = desktopFilesDir.entryList({"*.desktop"}, QDir::Files);
@@ -2567,7 +2524,7 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
                         QString line = stream.readLine().trimmed();
                         if (line.startsWith("Icon=")) {
                             iconName = line.mid(5).trimmed();
-                            break;  // Найдена иконка, прекращаем чтение
+                            break;
                         }
                     }
 
@@ -2840,7 +2797,6 @@ void MainWindow::processPackageName(const QString& packageName, bool valuepage) 
     } else {
         QString packageNameIcon = packageName;
 
-        // Функция для удаления цифр из имени
         auto removeNumbers = [](QString name) -> QString {
             name.removeIf([](QChar c) { return c.isDigit(); });
             return name;
@@ -2905,7 +2861,6 @@ QString packageVersion(const QString& packageName) {
     return regex.match(packageName).captured(0);
 }
 
-//not
 void MainWindow::onListDowngradeItemClicked(QListWidgetItem *currentItem) {
 
     bool isFolder = currentItem->data(Qt::UserRole).toBool();
@@ -3013,7 +2968,7 @@ void MainWindow::onReplyFinished(QNetworkReply *reply)
 
         QByteArray htmlData = reply->readAll();
         QString htmlContent(htmlData);
-        static QRegularExpression linkRegex("<a [^>]*href=\"([^\"]*)\"[^>]*>.*</a>");  // Статический объект
+        static QRegularExpression linkRegex("<a [^>]*href=\"([^\"]*)\"[^>]*>.*</a>");
 
         int pos = 0;
         QRegularExpressionMatch match;
@@ -3068,7 +3023,7 @@ void MainWindow::addLinkToList(const QString &link) {
 
     QIcon icon;
     bool isArchive = cleanedLink.endsWith(".zst") || cleanedLink.endsWith(".xz");  // Проверяем на расширение .zst или .xz
-    bool isFolder = !isArchive;  // Если не архив - это папка
+    bool isFolder = !isArchive;
 
     if (cleanedLink == "../") {
         icon = QIcon("/usr/share/icons/Papirus/48x48/places/folder-paleorange-drag-accept.svg");
@@ -3262,7 +3217,6 @@ void MainWindow::onSearchTimeout()
     miniAnimation(false, ui->list_aur);
 }
 
-//not
 void MainWindow::loadingListWidget()
 {
     saveScripts(shResourcePaths);
@@ -3319,9 +3273,8 @@ void MainWindow::loadScripts(const QString& baseDir, QListWidget* listWidget)
             {
                 QString line = scriptStream.readLine();
                 if (line.startsWith("#name_" + *lang))
-                {
                     itemName = line.mid(12).trimmed();
-                }
+
                 else if (line.startsWith("#icon"))
                 {
                     QString iconNumber = line.mid(6).trimmed();
@@ -3396,7 +3349,7 @@ void MainWindow::loadFolders()
     auto addFolderItem = [&](const QString& folderName) {
         QString iconName = folderName;
         if (iconName.startsWith('.') && iconName.length() > 1) {
-            iconName = iconName.mid(1); // Убираем точку из начала названия
+            iconName = iconName.mid(1);
         }
 
         QString iconPath = QString("/usr/share/icons/Papirus/48x48/apps/") + iconName.toLower() + ".svg";
@@ -3486,7 +3439,6 @@ void MainWindow::on_combo_lang_currentIndexChanged(int index)
     }
 }
 
-//not
 void MainWindow::on_combo_bench_currentIndexChanged(int index)
 {
     benchlist = index;
@@ -3521,9 +3473,8 @@ void MainWindow::on_combo_bench_currentIndexChanged(int index)
             {
                 QString line = scriptStream.readLine();
                 if (line.startsWith("#name_" + *lang))
-                {
                     itemName = line.mid(12).trimmed();
-                }
+
                 else if (line.startsWith("#icon"))
                 {
                     QString iconNumber = line.mid(6).trimmed();
@@ -3531,9 +3482,9 @@ void MainWindow::on_combo_bench_currentIndexChanged(int index)
                     iconPath = QString("/usr/share/icons/Papirus/48x48/apps/%1.svg").arg(iconNumber.toLower());
 
                     QFileInfo fileInfo(iconPath);
-                    if (!fileInfo.exists()) {
+                    if (!fileInfo.exists())
                         iconPath = QString(":/img/%1.png").arg(iconNumber.toLower());
-                    }
+
                 }
             }
             scriptFile.close();
@@ -3550,15 +3501,13 @@ void MainWindow::on_combo_bench_currentIndexChanged(int index)
         if ((index == 1 && !iconPath.isEmpty() && (iconPath == "/usr/share/icons/Papirus/48x48/apps/org.kde.plasma.systemmonitor.svg" || iconPath == "/usr/share/icons/Papirus/48x48/apps/org.kde.plasma.systemmonitor.cpucore.svg")) ||
             (index == 2 && !iconPath.isEmpty() && iconPath == "/usr/share/icons/Papirus/48x48/apps/io.elementary.monitor.svg") ||
             (index == 3 && !iconPath.isEmpty() && iconPath == "/usr/share/icons/Papirus/48x48/apps/multimedia-photo-viewer.svg"))
-        {
             comboBenchScripts.append(item);
-        }
+
     }
 
     for (QListWidgetItem* item : comboBenchScripts)
-    {
         ui->list_bench->addItem(item);
-    }
+
 }
 
 void MainWindow::on_combo_cache_currentIndexChanged(int index)
@@ -3727,7 +3676,7 @@ void MainWindow::handleListItemClicked(QListWidgetItem *item, const QString& scr
                 scriptFile.close();
             }
             if (!scriptPath.isEmpty()) {
-                break; // Выход из цикла for, если scriptPath установлен
+                break;
             }
         }
 
@@ -3799,14 +3748,14 @@ void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString&
                     QString name = line.mid(12).trimmed();
                     if (name == itemName) {
                         scriptPath = fileInfo.absoluteFilePath();
-                        break; // Выход из цикла while
+                        break;
                     }
                 }
             }
             scriptFile.close();
         }
         if (!scriptPath.isEmpty())
-            break; // Выход из цикла for
+            break;
     }
 
 
@@ -3886,7 +3835,7 @@ void MainWindow::on_push_kde_clicked()
 
 void MainWindow::on_action_updatelist_triggered()
 {
-    if (page == 2) // Обновление категорий и подкатегорий
+    if (page == 2)
     {
         miniAnimation(true, ui->list_aur);
 
@@ -3901,25 +3850,22 @@ void MainWindow::on_action_updatelist_triggered()
 
         QTimer::singleShot(500, this, [=]() {
             list = 0;
-            loadMainMenu(); // Загружаем список категорий из подпапок
-
+            loadMainMenu();
             miniAnimation(false, ui->list_aur);
         });
     }
-    else if (page == 4) // Обновление списка пакетов
+    else if (page == 4)
     {
         miniAnimation(true, ui->list_app);
         ui->list_app->clear();
 
         QTimer::singleShot(500, this, [=]() {
             miniAnimation(false, ui->list_app);
-            loadContentInstall(); // Загружаем список установленных пакетов или что-то подобное
+            loadContentInstall();
         });
     }
     else if (page == 14)
-    {
         loadDowngrades("packages");
-    }
 
     removeToolButtonTooltips(ui->toolBar);
     removeToolButtonTooltips(ui->toolBar_2);
@@ -4092,7 +4038,7 @@ void MainWindow::on_action_favorite_del_triggered()
                 out << line << "\n";
             } else {
                 out << "[Favorite]\n" << line << "\n";
-                hasFavoriteSection = true;  // Обновляем статус наличия секции Favorite
+                hasFavoriteSection = true;
                 firstLine = false;
             }
         }

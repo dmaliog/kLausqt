@@ -35,7 +35,7 @@ QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT // Добавляем макрос Q_OBJECT
+    Q_OBJECT
 
 public:
     Ui::MainWindow *ui;
@@ -101,7 +101,6 @@ private:
     QMediaPlayer *player;
     QVideoWidget *videoWidget;
     QGraphicsScene *scene;
-    QGraphicsOpacityEffect *opacityEffect;
 
     QString detailsAURdefault;
     QString initialDetailsDowngradeText;
@@ -422,7 +421,7 @@ public:
         HighlightingRule rule;
 
         // Ключевые слова
-        keywordFormat.setForeground(QColor(86, 156, 214)); // #569cd6
+        keywordFormat.setForeground(QColor(86, 156, 214));
         keywordFormat.setFontWeight(QFont::Bold);
         QStringList keywordPatterns;
         keywordPatterns << "\\bif\\b" << "\\belse\\b" << "\\bfor\\b" << "\\bwhile\\b";
@@ -433,31 +432,31 @@ public:
         }
 
         // Комментарии
-        singleLineCommentFormat.setForeground(QColor(128, 128, 128)); // #808080
+        singleLineCommentFormat.setForeground(QColor(128, 128, 128));
         rule.pattern = QRegularExpression("#[^\n]*");
         rule.format = singleLineCommentFormat;
         highlightingRules.append(rule);
 
         // Строки в одинарных кавычках
-        quotationFormat.setForeground(QColor(215, 186, 125)); // #d7ba7d
+        quotationFormat.setForeground(QColor(215, 186, 125));
         rule.pattern = QRegularExpression("\'([^\'\\n]*)\'");
         rule.format = quotationFormat;
         highlightingRules.append(rule);
 
         // Строки в двойных кавычках
-        quotationFormat.setForeground(QColor(215, 186, 125)); // #d7ba7d
+        quotationFormat.setForeground(QColor(215, 186, 125));
         rule.pattern = QRegularExpression("\"([^\"]*)\"");
         rule.format = quotationFormat;
         highlightingRules.append(rule);
 
         // Числа
-        numberFormat.setForeground(QColor(181, 206, 168)); // #b5cea8
+        numberFormat.setForeground(QColor(181, 206, 168));
         rule.pattern = QRegularExpression("\\b\\d+\\b");
         rule.format = numberFormat;
         highlightingRules.append(rule);
 
         // Квадратные скобки
-        bracketFormat.setForeground(QColor(0, 149, 200)); // #0095c8
+        bracketFormat.setForeground(QColor(0, 149, 200));
         rule.pattern = QRegularExpression("\\[([^\\]]+)\\]");
         rule.format = bracketFormat;
         highlightingRules.append(rule);
@@ -494,7 +493,7 @@ class CustomListItemWidget : public QWidget
 
 public:
     CustomListItemWidget(const QString &repo, const QString &text, const int &installed, const int &orphaned, const int &old, const int &rating, const QString &sizeInstallation, const QColor &color, QWidget *parent = nullptr)
-        : QWidget(parent), packageName(repo + "/" + text)  // Здесь задается имя в формате repo/namePkg
+        : QWidget(parent), packageName(repo + "/" + text)
     {
         QHBoxLayout *layout = new QHBoxLayout(this);
 
@@ -511,7 +510,7 @@ public:
         layout->addWidget(repoLabel);
 
 
-        QLabel *textLabel = new QLabel(text, this);  // Здесь в QLabel устанавливаем только namePkg
+        QLabel *textLabel = new QLabel(text, this);
         textLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         textLabel->setStyleSheet(QString("color:%1;font-size:12pt;").arg(color.name()));
 

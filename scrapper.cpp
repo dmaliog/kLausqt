@@ -41,7 +41,6 @@ void ArchWikiScraper::onPageLoaded(QNetworkReply *reply) {
 }
 
 void ArchWikiScraper::parseHTML(const QString &html) {
-    // Регулярные выражения для заголовков и пакетов
     static const QRegularExpression headerRegex("<h2><span class=\"mw-headline\" id=\"[^\"]*\">([^<]*)</span></h2>");
     static const QRegularExpression packageRegex("<span class=\"plainlinks archwiki-template-pkg\"><a rel=\"nofollow\" class=\"external text\" href=\"[^\"]*\">([^<]*)</a></span>");
 
@@ -83,7 +82,6 @@ void ArchWikiScraper::parseHTML(const QString &html) {
         }
     }
 
-    // Подготавливаем вывод
     QStringList output;
     for (auto it = categories.begin(); it != categories.end(); ++it) {
         if (!it.value().isEmpty()) {
