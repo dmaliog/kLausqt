@@ -2373,40 +2373,32 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
 void MainWindow::onListItemClicked(const QString &packageName, int row, QListWidgetItem *item)
 {
-    // Проверяем, что страница 2 (категории и пакеты)
     if (page == 2)
     {
         row = ui->list_aur->row(item);
         CustomListItemWidget* customWidget = qobject_cast<CustomListItemWidget*>(ui->list_aur->itemWidget(item));
 
-        // Проверяем, является ли кликнутый элемент элементом для возврата
         if (item->data(Qt::UserRole).toString() == "back") {
-            // Логика возврата
             if (!currentCategory.isEmpty() && currentSubcategory.isEmpty()) {
-                // Если мы находимся в подкатегории, то возвращаемся к списку категорий
                 currentCategory.clear();
                 loadMainMenu();
             } else if (!currentSubcategory.isEmpty()) {
-                // Если мы находимся в пакетах, то возвращаемся в подкатегорию
                 currentSubcategory.clear();
                 loadSubcategories(currentCategory);
             }
             return;
         }
 
-        // Логика перехода в подкатегорию или пакет
         if (packageName.isEmpty())
         {
             QString categoryPath = item->data(Qt::UserRole).toString();
             QString itemText = item->text();
 
             if (!categoryPath.contains('/') && !categoryPath.isEmpty()) {
-                // Переходим в подкатегорию
                 currentCategory = categoryPath;
                 loadSubcategories(currentCategory);
             }
             else if (categoryPath.contains('/') && !itemText.isEmpty()) {
-                // Переходим в список пакетов подкатегории
                 QString category = categoryPath.section('/', 0, 0);
                 QString subcategory = categoryPath.section('/', 1, 1);
                 currentCategory = category;
@@ -2422,14 +2414,12 @@ void MainWindow::onListItemClicked(const QString &packageName, int row, QListWid
         }
     }
 
-    // Проверяем, что страница 4 (другая логика для другой страницы)
     if (page == 4)
     {
         row = ui->list_app->row(item);
         processListItem(row, ui->list_app, ui->details_aurpkg, "");
     }
 }
-
 
 
 //not
