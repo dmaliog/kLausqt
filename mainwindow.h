@@ -160,6 +160,8 @@ private:
     bool loadpage = true;
     bool isFirstLoad = true;
 
+    bool stopProcessing = false;
+
     // QAction
     QAction* actionLoad = nullptr;
     QAction* previousAction = nullptr;
@@ -267,6 +269,7 @@ public slots:
     void on_action_30_triggered();
 
 private slots:
+    void onProcessFinished();
     QIcon findIconInPapirus(const QString& iconName);
 
     void loadPackages(const QString& category, const QString& subcategory);

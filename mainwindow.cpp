@@ -843,6 +843,7 @@ void MainWindow::on_list_aurpkg_itemSelectionChanged()
         ui->action_infopkg_pkg->setChecked(false);
         ui->tabWidget_details_pkg->setCurrentIndex(0);
         ui->details_aurpkg->setHtml(tr("Ничего не выбрано"));
+
     }
 }
 void MainWindow::on_action_infopkg_triggered(bool checked)
@@ -1193,22 +1194,25 @@ void MainWindow::createSearchBar()
     ui->searchLineEdit->installEventFilter(this);
  }
 
-void MainWindow::handleServerResponseSearch(const QString& reply)
-{
-    if (currentProcess && currentProcess->state() == QProcess::Running) {
-        currentProcess->disconnect();
-        currentProcess->kill();
-        currentProcess->waitForFinished();
-    }
-    completerModel->clear();
 
-    QString searchCommand = packageCommands.value(0).value("search").at(0);
-    QStringList arguments = {packageCommands.value(0).value("search").at(1), reply};
+ void MainWindow::handleServerResponseSearch(const QString& reply)
+ {
+     // Останавливаем текущий процесс, если он выполняется
+     if (currentProcess && currentProcess->state() == QProcess::Running) {
+         currentProcess->disconnect();
+         currentProcess->kill();
+         currentProcess->waitForFinished();
+     }
 
-    currentProcess = QSharedPointer<QProcess>::create(this);
-    connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyReadSearch);
-    currentProcess->start(searchCommand, arguments);
-}
+     completerModel->clear();
+
+     QString searchCommand = packageCommands.value(0).value("search").at(0);
+     QStringList arguments = {packageCommands.value(0).value("search").at(1), reply};
+
+     currentProcess = QSharedPointer<QProcess>::create(this);
+     connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyReadSearch);
+     currentProcess->start(searchCommand, arguments);
+ }
 
 void MainWindow::onCurrentProcessReadyReadSearch()
 {
@@ -3112,10 +3116,13 @@ void MainWindow::handleServerResponse(const QString& reply)
     miniAnimation(true, ui->list_aur);
     helperPackageNames.clear();
 
+    stopProcessing = false;
+
     const QStringList& searchCommand = packageCommands.value(0).value("search");
 
     currentProcess = QSharedPointer<QProcess>::create(this);
     connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
+    connect(currentProcess.data(), &QProcess::finished, this, &MainWindow::onProcessFinished);
 
     currentProcess->setProcessEnvironment(enveng);
     currentProcess->start(searchCommand.at(0), QStringList() << searchCommand.at(1) << reply);
@@ -3137,6 +3144,9 @@ void MainWindow::onCurrentProcessReadyRead()
     int old = 0;
 
     while (currentProcess->canReadLine()) {
+        if (stopProcessing)
+            break;
+
         QCoreApplication::processEvents();
 
         QByteArray line = currentProcess->readLine();
@@ -3211,9 +3221,15 @@ void MainWindow::onCurrentProcessReadyRead()
             scrollBar->setValue(scrollBar->maximum());
         }
     }
+}
 
-    // Процесс завершился, можно выполнить завершающие действия
+void MainWindow::onProcessFinished()
+{
     miniAnimation(false, ui->list_aur);
+
+    if (stopProcessing)
+        return;
+
     QString searchText = ui->searchLineEdit->text();
     setCursorAndScrollToItem(searchText);
 }
@@ -3851,6 +3867,13 @@ void MainWindow::on_action_updatelist_triggered()
     if (page == 2) // Обновление категорий и подкатегорий
     {
         miniAnimation(true, ui->list_aur);
+
+        stopProcessing = true;
+
+        if (currentProcess && currentProcess->state() == QProcess::Running) {
+            currentProcess->kill();
+            currentProcess->waitForFinished();
+        }
 
         ui->list_aur->clear();
 
