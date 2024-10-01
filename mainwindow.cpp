@@ -2913,7 +2913,8 @@ void MainWindow::processPackageName(const QString& packageName, bool valuepage) 
 
             QString reducedAppNameWithoutNumbers = removeNumbers(reducedAppName);
             if (reducedAppNameWithoutNumbers != reducedAppName) {
-                foundIconPath = findIconByAppName(reducedAppNameWithoutNumbers);
+                                foundIconPath = findIconByAppName(reducedAppNameWithoutNumbers);
+
                 if (!foundIconPath.isEmpty())
                     break;
             }
