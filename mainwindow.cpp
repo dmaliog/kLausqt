@@ -18,7 +18,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "16.4";
+QString currentVersion = "16.5";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
