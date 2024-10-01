@@ -107,7 +107,6 @@ Terminal getTerminal()
 void MainWindow::on_action_2_triggered()
 {
     mrpropper(2, ui->action_2);
-
     ui->searchLineEdit->setPlaceholderText(tr("Поиск по пакетам..."));
     ui->searchLineEdit->setVisible(true);
     ui->tabWidget->setCurrentIndex(1);
@@ -122,7 +121,6 @@ void MainWindow::on_action_2_triggered()
 void MainWindow::on_action_7_triggered()
 {
     mrpropper(4, ui->action_7);
-
     ui->searchLineEdit->setPlaceholderText(tr("Поиск установленных пакетов..."));
     ui->searchLineEdit->setVisible(true);
     ui->tabWidget->setCurrentIndex(2);
