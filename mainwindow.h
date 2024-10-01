@@ -120,6 +120,7 @@ private:
     QSharedPointer<QProcess> snapProcess;
 
     QSharedPointer<QProcess> currentTerminalProcess;
+    QSharedPointer<QProcess> currentProcessDetails;
     QSharedPointer<QProcess> currentProcess;
     QScopedPointer<QLabel> loadingLabel;
     QSharedPointer<QLabel> loadingAnimationLabel;
@@ -165,6 +166,7 @@ private:
     bool loadpage = true;
     bool isFirstLoad = true;
     bool stopProcessing = false;
+    bool allItemsAdded = true;
 
     // QAction
     QAction* actionLoad = nullptr;
@@ -305,7 +307,6 @@ private slots:
     void onSearchTimeout();
     void createAndAddListItemSearch(const QString& packageName);
     void updateCompleterModel();
-    void setCursorAndScrollToItem(const QString& itemName);
     void checkForDowngrades(const QString& packagesArchiveAUR);
     void onListDowngradeItemClicked(QListWidgetItem *item);
     void addLinkToList(const QString &link);

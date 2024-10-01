@@ -18,7 +18,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "16.5";
+QString currentVersion = "16.6";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -246,7 +246,6 @@ void MainWindow::on_action_8_triggered() {
     } else
         ui->searchLineEdit->setText(ui->webEngineView_custom->url().toString());
 }
-
 
 void MainWindow::on_push_vk_clicked()
 {
@@ -499,7 +498,6 @@ void MainWindow::on_action_34_triggered()
         else if (ui->tabWidget_pkg->currentIndex() == 1)
             listWidget = ui->list_sysapp;
     }
-
 
     if (!listWidget || !listWidget->currentItem()) {
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для просмотра информации!"));
@@ -807,9 +805,7 @@ void MainWindow::on_action_4_triggered()
     currentTerminalProcess->setArguments(arguments);
     currentTerminalProcess->setProcessChannelMode(QProcess::MergedChannels);
     currentTerminalProcess->setEnvironment(env.toStringList());
-
     currentTerminalProcess->start();
-
 }
 
 void MainWindow::on_action_30_triggered()
@@ -865,7 +861,6 @@ void MainWindow::on_list_aurpkg_itemSelectionChanged()
         ui->action_infopkg_pkg->setChecked(false);
         ui->tabWidget_details_pkg->setCurrentIndex(0);
         ui->details_aurpkg->setHtml(tr("Ничего не выбрано"));
-
     }
 }
 void MainWindow::on_action_infopkg_triggered(bool checked)
@@ -1123,7 +1118,6 @@ void MainWindow::on_action_editsh_triggered()
                     break;
                 }
             }
-
             scriptFile.close();
         }
     }
@@ -1215,7 +1209,6 @@ void MainWindow::createSearchBar()
     connect(ui->searchLineEdit, &QLineEdit::returnPressed, this, [this] {
         search(ui->searchLineEdit->text());
     });
-
     ui->searchLineEdit->installEventFilter(this);
  }
 
@@ -1505,9 +1498,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (trayon == 2) {
+    if (trayon == 2)
         QCoreApplication::exit();
-    } else {
+    else {
         hide();
         event->ignore();
     }
@@ -1617,9 +1610,8 @@ void MainWindow::loadSettings()
             QString packageName = itemWidget->getPackageName();
             int row = ui->list_aur->row(item);
             onListItemClicked(packageName, row, item);
-        } else {
+        } else
             onListItemClicked("", 0, item);
-        }
     });
 
     connect(ui->list_app, &QListWidget::itemClicked, this, [=](QListWidgetItem *item) {
@@ -2113,7 +2105,6 @@ void MainWindow::mrpropper(int value, QAction* action) {
     else
         setStyleSheet(this->styleSheet() + " " + "QToolBar#toolBar QToolButton:checked { background-color: #468783; }");
 
-
     ui->label1->setText(action->iconText());
     originalLabelText = ui->label1->text();
 
@@ -2246,14 +2237,11 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
         overlayWidget->show();
         loadingLabel->show();
     } else {
-
-        if (overlayWidget) {
+        if (overlayWidget)
             overlayWidget->hide();
-        }
 
-        if (loadingLabel) {
+        if (loadingLabel)
             loadingLabel->hide();
-        }
     }
     removeToolButtonTooltips(ui->toolBar);
     removeToolButtonTooltips(ui->toolBar_2);
@@ -2262,19 +2250,19 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
 void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser* detailsWidget, const QString& package) {
     QString packageName = !package.isEmpty() ? package : listWidget->item(row)->text();
 
-    if (currentProcess && currentPackageName != packageName && listWidget->currentRow() != row)
-        currentProcess->kill();
+    if (currentProcessDetails && currentPackageName != packageName && listWidget->currentRow() != row)
+        currentProcessDetails->kill();
 
     currentPackageName = packageName;
 
-    disconnect(currentProcess.data(), &QProcess::finished, nullptr, nullptr);
-    currentProcess = QSharedPointer<QProcess>::create();
+    disconnect(currentProcessDetails.data(), &QProcess::finished, nullptr, nullptr);
+    currentProcessDetails = QSharedPointer<QProcess>::create();
 
     int scrollBarValue = detailsWidget->verticalScrollBar()->value();
     auto watcher = new QFutureWatcher<QByteArray>(this);
 
-    connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, [=]() {
-        QStringList lines = QString::fromUtf8(currentProcess->readAllStandardOutput()).split("\n");
+    connect(currentProcessDetails.data(), &QProcess::readyReadStandardOutput, this, [=]() {
+        QStringList lines = QString::fromUtf8(currentProcessDetails->readAllStandardOutput()).split("\n");
         QString processedInfo;
         static const QRegularExpression regex("\\b(\\S+)\\b");
 
@@ -2343,11 +2331,11 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
         }
     });
 
-    connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
+    connect(currentProcessDetails.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
         if (exitCode != 0 || exitStatus == QProcess::CrashExit) {
-            if (currentProcess && currentPackageName == packageName && listWidget->currentRow() == row) {
+            if (currentProcessDetails && currentPackageName == packageName && listWidget->currentRow() == row) {
 
-                QString errorMessage = QString::fromUtf8(currentProcess->readAllStandardError()).trimmed();
+                QString errorMessage = QString::fromUtf8(currentProcessDetails->readAllStandardError()).trimmed();
 
                 if (!errorMessage.isEmpty())
                     detailsWidget->setPlainText(errorMessage);
@@ -2379,8 +2367,8 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
     miniAnimation(true, detailsWidget);
 
     QStringList command = packageCommands.value(0).value(page == 2 ? "show_info" : "info");
-    currentProcess->setProcessEnvironment(env);
-    currentProcess->start(command[0], QStringList() << command[1] << packageName);
+    currentProcessDetails->setProcessEnvironment(env);
+    currentProcessDetails->start(command[0], QStringList() << command[1] << packageName);
 
     if (page == 2 || page == 4) {
         QTreeWidget* treeWidget = (page == 2) ? ui->tree_aur : ui->tree_files_pkg;
@@ -2471,7 +2459,6 @@ void MainWindow::onListItemClicked(const QString &packageName, int row, QListWid
     if (page == 4)
     {
         QListWidget* listWidget = nullptr;
-
         if (ui->tabWidget_pkg->currentIndex() == 0)
             listWidget = ui->list_app;
         else if (ui->tabWidget_pkg->currentIndex() == 1)
@@ -2513,7 +2500,6 @@ void MainWindow::miniAnimation(bool visible, QWidget* targetWidget)
             miniLoadLabel = nullptr;
         }
         targetWidget->setStyleSheet("background-color: #272727;");
-
         removeToolButtonTooltips(ui->toolBar);
         removeToolButtonTooltips(ui->toolBar_2);
     }
@@ -2847,7 +2833,6 @@ void MainWindow::loadPackages(const QString& category, const QString& subcategor
             item->setForeground(color);
         }
     }
-
     file.close();
 }
 
@@ -2887,7 +2872,6 @@ void MainWindow::processPackageName(const QString& packageName, bool valuepage) 
 
     } else {
         QString packageNameIcon = packageName;
-
         auto removeNumbers = [](QString name) -> QString {
             name.removeIf([](QChar c) { return c.isDigit(); });
             return name;
@@ -2922,9 +2906,8 @@ void MainWindow::processPackageName(const QString& packageName, bool valuepage) 
             appNameParts.removeLast();
         }
 
-        if (foundIconPath.isEmpty()) {
+        if (foundIconPath.isEmpty())
             foundIconPath = "/usr/share/icons/Papirus/48x48/mimetypes/x-package-repository.svg";
-        }
 
         iconPath = foundIconPath;
     }
@@ -3133,41 +3116,17 @@ void MainWindow::loadContentInstall() {
 }
 
 void MainWindow::loadPackageList(const QStringList& packages, QListWidget* listWidget) {
-    // Очищаем список
     listWidget->clear();
 
-    // Заполняем список
     for (const QString& package : packages) {
         QStringList packageParts = package.split(' ');
-        QString packageName = packageParts.at(0);  // Получаем имя пакета
-        QIcon packageIcon = getPackageIcon(packageName);  // Иконка пакета
+        QString packageName = packageParts.at(0);
+        QIcon packageIcon = getPackageIcon(packageName);
 
-        // Создаем элемент списка
         QListWidgetItem* item = new QListWidgetItem(packageName);
         item->setIcon(packageIcon);
-        item->setForeground(generateRandomColor(colorlist));  // Генерация случайного цвета
-
-        // Добавляем элемент в список
+        item->setForeground(generateRandomColor(colorlist));
         listWidget->addItem(item);
-    }
-}
-
-void MainWindow::setCursorAndScrollToItem(const QString &itemName)
-{
-    for (int row = 0; row < ui->list_aur->count(); ++row) {
-        QListWidgetItem *currentItem = ui->list_aur->item(row);
-        CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(ui->list_aur->itemWidget(currentItem));
-
-        if (itemWidget && itemWidget->getPackageNameWithoutRepo() == itemName) {
-            onListItemClicked(itemName, row, currentItem);
-
-            ui->list_aur->setCurrentItem(currentItem);
-            ui->list_aur->scrollToItem(currentItem);
-            ui->list_aur->selectionModel()->select(ui->list_aur->model()->index(ui->list_aur->row(currentItem), 0),
-                                                       QItemSelectionModel::Select);
-
-            break;
-        }
     }
 }
 
@@ -3192,22 +3151,30 @@ void MainWindow::handleServerResponse(const QString& reply)
 
     currentProcess->setProcessEnvironment(enveng);
     currentProcess->start(searchCommand.at(0), QStringList() << searchCommand.at(1) << reply);
+
+    connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
+        miniAnimation(false, ui->list_aur);
+    });
 }
 
 void MainWindow::onCurrentProcessReadyRead()
 {
     QTimer::singleShot(timeout.msecsSinceStartOfDay(), this, &MainWindow::onSearchTimeout);
 
-    QString repoz = "";
-    QString packageName = "";
-    QString version = "";
-    int installed = 0;
-    QString sizeDownload = "";
-    QString sizeInstallation = "";
-    int rating = 0;
-//    double popularity = 0.00;
-    int orphaned = 0;
-    int old = 0;
+    QString repoz, packageName, version, sizeDownload, sizeInstallation;
+    int installed = 0, rating = 0, orphaned = 0, old = 0;
+    QListWidgetItem* foundItem = nullptr; // Переменная для хранения найденного элемента
+    bool found = false;
+
+    // Инициализация регулярных выражений
+    static const QRegularExpression repoRegex(R"(^([^/]+))");
+    static const QRegularExpression packageNameRegex(R"(/\s*([^\s]+)\s)");
+    static const QRegularExpression versionRegex(R"(\s([^\s]+)\s)");
+    static const QRegularExpression sizeRegex(R"(\(([\d.]+ [KMGT]iB) ([\d.]+ [KMGT]iB)\))");
+    static const QRegularExpression installedRegex(R"(\(Installed\))");
+    static const QRegularExpression ratingRegex(R"(\(\+(\d+) ([\d.]+)\))");
+    static const QRegularExpression outOfDateRegex(R"(\(Out-of-date: (\d{4}-\d{2}-\d{2})\))");
+    static const QRegularExpression orphanedRegex(R"(\(Orphaned\))");
 
     while (currentProcess->canReadLine()) {
         if (stopProcessing)
@@ -3220,53 +3187,32 @@ void MainWindow::onCurrentProcessReadyRead()
 
         QRegularExpressionMatch match = QRegularExpression(*repo).match(lineString);
         if (match.hasMatch()) {
-            static const QRegularExpression repoRegex(R"(^([^/]+))");
             QRegularExpressionMatch repoMatch = repoRegex.match(line);
-            if (repoMatch.hasMatch()) {
+            if (repoMatch.hasMatch())
                 repoz = repoMatch.captured(1);
-                // Обработка repo
-            }
 
-            static const QRegularExpression packageNameRegex(R"(/\s*([^\s]+)\s)");
             QRegularExpressionMatch packageNameMatch = packageNameRegex.match(line);
-            if (packageNameMatch.hasMatch()) {
+            if (packageNameMatch.hasMatch())
                 packageName = packageNameMatch.captured(1);
-                // Обработка packageName
-            }
 
-            static const QRegularExpression versionRegex(R"(\s([^\s]+)\s)");
             QRegularExpressionMatch versionMatch = versionRegex.match(line);
-            if (versionMatch.hasMatch()) {
+            if (versionMatch.hasMatch())
                 version = versionMatch.captured(1);
-                // Обработка version
-            }
 
-            static const QRegularExpression sizeRegex(R"(\(([\d.]+ [KMGT]iB) ([\d.]+ [KMGT]iB)\))");
             QRegularExpressionMatch sizeMatch = sizeRegex.match(line);
             if (sizeMatch.hasMatch()) {
                 sizeDownload = sizeMatch.captured(1);
                 sizeInstallation = sizeMatch.captured(2);
-                // Обработка sizeDownload и sizeInstallation
             }
 
-            static const QRegularExpression installedRegex(R"(\(Installed\))");
             installed = installedRegex.match(line).hasMatch() ? 1 : 0;
-            // Обработка installed
 
-            static const QRegularExpression ratingRegex(R"(\(\+(\d+) ([\d.]+)\))");
             QRegularExpressionMatch ratingMatch = ratingRegex.match(line);
-            if (ratingMatch.hasMatch()) {
+            if (ratingMatch.hasMatch())
                 rating = ratingMatch.captured(1).toInt();
-                //popularity = ratingMatch.captured(2).toDouble();
-                // Обработка rating и popularity
-            }
 
-            static const QRegularExpression outOfDateRegex(R"(\(Out-of-date: (\d{4}-\d{2}-\d{2})\))");
             old = outOfDateRegex.match(line).hasMatch() ? 1 : 0;
-
-            static const QRegularExpression orphanedRegex(R"(\(Orphaned\))");
             orphaned = orphanedRegex.match(line).hasMatch() ? 1 : 0;
-            // Обработка orphaned
 
             QColor color = generateRandomColor(colorlist);
 
@@ -3285,13 +3231,23 @@ void MainWindow::onCurrentProcessReadyRead()
 
             QScrollBar *scrollBar = ui->list_aur->verticalScrollBar();
             scrollBar->setValue(scrollBar->maximum());
+
+            QString searchText = ui->searchLineEdit->text();
+            if (packageName == searchText && !found) {
+                foundItem = item;
+                found = true;
+            }
         }
     }
 
-    miniAnimation(false, ui->list_aur);
+    if (foundItem) {
+        int row = ui->list_aur->row(foundItem);
+        onListItemClicked(ui->searchLineEdit->text(), row, foundItem);
 
-    QString searchText = ui->searchLineEdit->text();
-    setCursorAndScrollToItem(searchText);
+        ui->list_aur->setCurrentItem(foundItem);
+        ui->list_aur->scrollToItem(foundItem);
+        ui->list_aur->selectionModel()->select(ui->list_aur->model()->index(ui->list_aur->row(foundItem), 0), QItemSelectionModel::Select);
+    }
 }
 
 void MainWindow::onSearchTimeout()
@@ -3572,12 +3528,10 @@ void MainWindow::on_combo_bench_currentIndexChanged(int index)
             (index == 2 && !iconPath.isEmpty() && iconPath == "/usr/share/icons/Papirus/48x48/apps/io.elementary.monitor.svg") ||
             (index == 3 && !iconPath.isEmpty() && iconPath == "/usr/share/icons/Papirus/48x48/apps/multimedia-photo-viewer.svg"))
             comboBenchScripts.append(item);
-
     }
 
     for (QListWidgetItem* item : comboBenchScripts)
         ui->list_bench->addItem(item);
-
 }
 
 void MainWindow::on_combo_cache_currentIndexChanged(int index)
@@ -3664,7 +3618,6 @@ void MainWindow::on_check_trayon_stateChanged(int arg1)
 void MainWindow::on_check_autostart_stateChanged(int arg1)
 {
     settings.setValue("Autostart", arg1);
-
     QString autostartFilePath = QDir::homePath() + "/.config/autostart/klaus.desktop";
 
     if (arg1 == 0) {
