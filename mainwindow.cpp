@@ -2325,17 +2325,31 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
     });
 
     connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
-        if (exitCode || exitStatus == QProcess::CrashExit) {
+        if (exitCode != 0 || exitStatus == QProcess::CrashExit) {
             if (currentProcess && currentPackageName == packageName && listWidget->currentRow() == row) {
 
                 QString errorMessage = QString::fromUtf8(currentProcess->readAllStandardError()).trimmed();
-                detailsWidget->setPlainText(!errorMessage.isEmpty() ? errorMessage : (listWidget == ui->list_aur ? tr("Пакет не найден!\nВозможно, он поменял свое название...") : QString()));
-                if (listWidget == ui->list_aur && listWidget->currentItem() && QMessageBox::question(this, tr("Пакет не найден"), tr("Пакет не найден, перейти к его поиску?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-                    ui->searchLineEdit->setText(listWidget->currentItem()->text());
 
-                    QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier);
-                    QCoreApplication::postEvent(ui->searchLineEdit, event);
+                if (!errorMessage.isEmpty())
+                    detailsWidget->setPlainText(errorMessage);
+                else if (listWidget == ui->list_aur)
+                    detailsWidget->setPlainText(tr("Пакет не найден!\nВозможно, он поменял свое название..."));
+                else
+                    detailsWidget->clear();
 
+                if (listWidget == ui->list_aur && listWidget->currentItem()) {
+                    auto userResponse = QMessageBox::question(
+                        this,
+                        tr("Пакет не найден"),
+                        tr("Пакет не найден, перейти к его поиску?"),
+                        QMessageBox::Yes | QMessageBox::No
+                        );
+
+                    if (userResponse == QMessageBox::Yes) {
+                        ui->searchLineEdit->setText(listWidget->currentItem()->text());
+                        QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier);
+                        QCoreApplication::postEvent(ui->searchLineEdit, event);
+                    }
                 }
             }
             miniAnimation(false, detailsWidget);
