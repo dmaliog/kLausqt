@@ -19,13 +19,15 @@ bool isPackageInstalled(const QString& packageName)
     return !output.isEmpty();
 }
 
-
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+    // Загрузка изображения для сплэш-экрана
     QPixmap pixmap(":/img/splash.jpeg");
     QPixmap scaledPixmap = pixmap.scaled(pixmap.width() / 2, pixmap.height() / 2, Qt::KeepAspectRatio);
+
+    // Создание сплэш-экрана
     QSplashScreen splash(scaledPixmap);
     splash.show();
 

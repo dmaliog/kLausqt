@@ -153,5 +153,7 @@
         <file>menu/Populaty/Populaty.txt</file>
         <file>menu/Favorite/Favorite.txt</file>
         <file>img/star.png</file>
+        <file>img/pkgall.png</file>
+        <file>img/pkguser.png</file>
     </qresource>
 </RCC>

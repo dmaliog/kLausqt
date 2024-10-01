@@ -58,6 +58,10 @@ public:
         loadSound(1);
     }
 
+    void fadeIn(QWidget *widget);
+    void fadeOut(QWidget *widget);
+
+
 private:
     QColor generateRandomColor(const int &colorlist)
     {
@@ -270,6 +274,8 @@ public slots:
     void on_action_30_triggered();
 
 private slots:
+    void loadPackageList(const QStringList& packages, QListWidget* listWidget);
+
     QIcon findIconInPapirus(const QString& iconName);
 
     void loadPackages(const QString& category, const QString& subcategory);
@@ -413,6 +419,53 @@ private slots:
     void on_action_favorite_triggered();
     void on_action_favorite_del_triggered();
     void on_action_searchpkg_triggered();
+    void on_action_allpkg_triggered(bool checked);
+};
+
+
+class CustomSplashScreen : public QFrame {
+public:
+    CustomSplashScreen(const QPixmap &pixmap) : QFrame() {
+        setPixmap(pixmap);
+        setWindowFlags(Qt::FramelessWindowHint);
+        setAttribute(Qt::WA_TranslucentBackground);
+        setStyleSheet("border: 1px solid #0a1318; border-radius: 20px;");
+        resize(pixmap.size());
+    }
+
+    void showMessage(const QString &message, int alignment, const QColor &color) {
+        this->message = message;
+        this->alignment = alignment;
+        this->color = color;
+        update(); // Перерисовываем фрейм
+    }
+
+protected:
+    void paintEvent(QPaintEvent *event) override {
+        QFrame::paintEvent(event);
+        QPainter painter(this);
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.setBrush(Qt::white);
+        painter.setPen(Qt::NoPen);
+        painter.drawRoundedRect(rect(), 20, 20);
+
+        // Рисуем сообщение
+        if (!message.isEmpty()) {
+            painter.setPen(color);
+            painter.drawText(rect(), alignment, message);
+        }
+    }
+
+private:
+    void setPixmap(const QPixmap &pixmap) {
+        QPalette palette;
+        palette.setBrush(QPalette::Window, pixmap);
+        setPalette(palette);
+    }
+
+    QString message;
+    int alignment;
+    QColor color;
 };
 
 class MySyntaxHighlighter : public QSyntaxHighlighter {

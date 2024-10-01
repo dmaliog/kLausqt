@@ -3,6 +3,7 @@
 //-#####################################################################################################################################################
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "AnimationHelper.h"
 #include <QtWebEngineWidgets>
 #include <QSoundEffect>
 #include <QRegularExpression>
@@ -17,7 +18,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "16.2";
+QString currentVersion = "16.3";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -125,6 +126,7 @@ void MainWindow::on_action_7_triggered()
     ui->searchLineEdit->setPlaceholderText(tr("Поиск установленных пакетов..."));
     ui->searchLineEdit->setVisible(true);
     ui->tabWidget->setCurrentIndex(2);
+    ui->action_allpkg->setVisible(true);
     ui->action_updatelist->setVisible(true);
     ui->action_11->setVisible(true);
     ui->action_5->setVisible(true);
@@ -322,8 +324,6 @@ void MainWindow::on_action_game_triggered() {
         ui->searchLineEdit->setText(ui->webEngineView_game->url().toString());
 }
 
-//12-13 заняты
-
 void MainWindow::on_action_downgrade_triggered()
 {
     mrpropper(14, ui->action_downgrade);
@@ -496,8 +496,13 @@ void MainWindow::on_action_34_triggered()
 
     if (page == 2)
         listWidget = ui->list_aur;
-    else if (page == 4)
-        listWidget = ui->list_app;
+    else if (page == 4) {
+        if (ui->tabWidget_pkg->currentIndex() == 0)
+            listWidget = ui->list_app;
+        else if (ui->tabWidget_pkg->currentIndex() == 1)
+            listWidget = ui->list_sysapp;
+    }
+
 
     if (!listWidget || !listWidget->currentItem()) {
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для просмотра информации!"));
@@ -649,7 +654,12 @@ void MainWindow::on_action_5_triggered()
         currentProcess->setProcessChannelMode(QProcess::MergedChannels);
         currentProcess->start();
     } else {
-        QListWidget* listWidget = ui->list_app;
+        QListWidget* listWidget = nullptr;
+
+        if (ui->tabWidget_pkg->currentIndex() == 0)
+            listWidget = ui->list_app;
+        else if (ui->tabWidget_pkg->currentIndex() == 1)
+            listWidget = ui->list_sysapp;
 
         if (listWidget->currentItem() == nullptr) {
             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для запуска!"));
@@ -697,8 +707,12 @@ void MainWindow::on_action_6_triggered()
 
     if (page == 2)
         listWidget = ui->list_aur;
-    else
-        listWidget = ui->list_app;
+    else if (page == 4) {
+        if (ui->tabWidget_pkg->currentIndex() == 0)
+            listWidget = ui->list_app;
+        else if (ui->tabWidget_pkg->currentIndex() == 1)
+            listWidget = ui->list_sysapp;
+    }
 
     if (listWidget->currentItem() == nullptr) {
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для удаления!"));
@@ -739,8 +753,12 @@ void MainWindow::on_action_4_triggered()
 
     if (page == 2)
         listWidget = ui->list_aur;
-    else
-        listWidget = ui->list_app;
+    else if (page == 4) {
+        if (ui->tabWidget_pkg->currentIndex() == 0)
+            listWidget = ui->list_app;
+        else if (ui->tabWidget_pkg->currentIndex() == 1)
+            listWidget = ui->list_sysapp;
+    }
 
     if (listWidget->currentItem() == nullptr) {
         sendNotification(tr("Внимание"), tr("Выберите пакет из списка для установки!"));
@@ -839,7 +857,14 @@ void MainWindow::on_list_aur_itemSelectionChanged()
 
 void MainWindow::on_list_aurpkg_itemSelectionChanged()
 {
-    if (ui->list_app->selectedItems().isEmpty()) {
+    QListWidget* listWidget = nullptr;
+
+    if (ui->tabWidget_pkg->currentIndex() == 0)
+        listWidget = ui->list_app;
+    else if (ui->tabWidget_pkg->currentIndex() == 1)
+        listWidget = ui->list_sysapp;
+
+    if (listWidget->selectedItems().isEmpty()) {
         ui->action_infopkg_pkg->setChecked(false);
         ui->tabWidget_details_pkg->setCurrentIndex(0);
         ui->details_aurpkg->setHtml(tr("Ничего не выбрано"));
@@ -857,21 +882,25 @@ void MainWindow::on_action_infopkg_triggered(bool checked)
         return;
     }
 
-    if (checked)
-    {
+    if (checked) {
         ui->tabWidget_details->setCurrentIndex(1);
-        ui->label_details_aur->setText(tr("Файлы пакета"));
-    }
-    else
-    {
+        ui->action_infopkg->setText(tr("Описание пакета"));
+    } else {
         ui->tabWidget_details->setCurrentIndex(0);
-        ui->label_details_aur->setText(tr("Описание пакета"));
+        ui->action_infopkg->setText(tr("Файлы пакета"));
     }
 }
 
 void MainWindow::on_action_infopkg_pkg_triggered(bool checked)
 {
-    if (ui->list_app->currentItem() == nullptr) {
+    QListWidget* listWidget = nullptr;
+
+    if (ui->tabWidget_pkg->currentIndex() == 0)
+        listWidget = ui->list_app;
+    else if (ui->tabWidget_pkg->currentIndex() == 1)
+        listWidget = ui->list_sysapp;
+
+    if (listWidget->currentItem() == nullptr) {
         QAction *action = qobject_cast<QAction*>(sender());
         if (action)
             action->setChecked(!checked);
@@ -880,15 +909,12 @@ void MainWindow::on_action_infopkg_pkg_triggered(bool checked)
         return;
     }
 
-    if (checked)
-    {
+    if (checked) {
         ui->tabWidget_details_pkg->setCurrentIndex(1);
-        ui->label_details_aurpkg->setText(tr("Файлы пакета"));
-    }
-    else
-    {
+        ui->action_infopkg_pkg->setText(tr("Описание пакета"));
+    } else {
         ui->tabWidget_details_pkg->setCurrentIndex(0);
-        ui->label_details_aurpkg->setText(tr("Описание пакета"));
+        ui->action_infopkg_pkg->setText(tr("Файлы пакета"));
     }
 }
 
@@ -1112,12 +1138,21 @@ void MainWindow::setupListContextMenu()
 {
     connect(ui->list_aur, &QListWidget::customContextMenuRequested, this, &MainWindow::showListContextMenu);
     connect(ui->list_app, &QListWidget::customContextMenuRequested, this, &MainWindow::showListContextMenu);
+    connect(ui->list_sysapp, &QListWidget::customContextMenuRequested, this, &MainWindow::showListContextMenu);
 }
 
 void MainWindow::showListContextMenu(const QPoint& pos)
 {
-    QListWidget* listWidget = (page == 2) ? ui->list_aur : (page == 4) ? ui->list_app : nullptr;
-    if (!listWidget) return;
+    QListWidget* listWidget = nullptr;
+
+    if (page == 2) {
+        listWidget = ui->list_aur;
+    } else if (page == 4) {
+        if (ui->tabWidget_pkg->currentIndex() == 0)
+            listWidget = ui->list_app;
+        else if (ui->tabWidget_pkg->currentIndex() == 1)
+            listWidget = ui->list_sysapp;
+    }
 
     QListWidgetItem* item = listWidget->itemAt(pos);
     if (!item || item->data(Qt::UserRole + 1).toString().contains("category")) return;
@@ -1137,7 +1172,6 @@ void MainWindow::showListContextMenu(const QPoint& pos)
         connect(action, &QAction::triggered, this, slot);
         menu.addAction(action);
     };
-
 
     if (page == 2) {
         addAction(":/img/15.png", tr("Установить"), &MainWindow::on_action_4_triggered);
@@ -1258,16 +1292,20 @@ void MainWindow::search(const QString& searchText)
         ui->webEngineView_host->setUrl(QUrl(searchText));
     else if (page == 11)
         ui->webEngineView_game->setUrl(QUrl(searchText));
-    else if (page == 14) {
-            checkForDowngrades(searchText);
-    }
+    else if (page == 14)
+        checkForDowngrades(searchText);
 }
 
 void MainWindow::searchTextChanged(const QString& searchText)
 {
     switch (page) {
         case 2: searchAndScroll(ui->list_aur, searchText); break;
-        case 4: searchAndScroll(ui->list_app, searchText); break;
+        case 4:
+            if (ui->tabWidget_pkg->currentIndex() == 0)
+                searchAndScroll(ui->list_app, searchText);
+            else if (ui->tabWidget_pkg->currentIndex() == 1)
+                searchAndScroll(ui->list_sysapp, searchText);
+            break;
         case 3: searchAndScroll(ui->list_sh, searchText); break;
         case 14: searchAndScroll(ui->list_downgrade, searchText); break;
         case 111: searchAndScroll(ui->list_journal, searchText); break;
@@ -1572,6 +1610,7 @@ void MainWindow::loadSettings()
     //-##################################################################################
     connect(ui->list_aur, &QListWidget::itemSelectionChanged, this, &::MainWindow::on_list_aur_itemSelectionChanged);
     connect(ui->list_app, &QListWidget::itemSelectionChanged, this, &::MainWindow::on_list_aurpkg_itemSelectionChanged);
+    connect(ui->list_sysapp, &QListWidget::itemSelectionChanged, this, &::MainWindow::on_list_aurpkg_itemSelectionChanged);
 
     connect(ui->time_update, &QTimeEdit::timeChanged, this, &MainWindow::onTimeChanged);
 
@@ -1591,6 +1630,16 @@ void MainWindow::loadSettings()
         if (itemWidget) {
             QString packageName = itemWidget->getPackageName();
             int row = ui->list_app->row(item);
+            onListItemClicked(packageName, row, item);
+        } else
+            onListItemClicked("", 0, item);
+    });
+
+    connect(ui->list_sysapp, &QListWidget::itemClicked, this, [=](QListWidgetItem *item) {
+        CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(ui->list_sysapp->itemWidget(item));
+        if (itemWidget) {
+            QString packageName = itemWidget->getPackageName();
+            int row = ui->list_sysapp->row(item);
             onListItemClicked(packageName, row, item);
         } else
             onListItemClicked("", 0, item);
@@ -1997,7 +2046,11 @@ void MainWindow::handleActionHovered()
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
     if (obj == ui->toolBar || obj == ui->toolBar_2) {
-        if (event->type() == QEvent::Leave)
+        if (event->type() == QEvent::Enter) {
+            QAction* action = qobject_cast<QAction*>(obj);
+            if (action)
+                ui->label1->setText(action->text());
+        } else if (event->type() == QEvent::Leave)
             ui->label1->setText(originalLabelText);
     }
 
@@ -2386,8 +2439,15 @@ void MainWindow::onListItemClicked(const QString &packageName, int row, QListWid
 
     if (page == 4)
     {
-        row = ui->list_app->row(item);
-        processListItem(row, ui->list_app, ui->details_aurpkg, "");
+        QListWidget* listWidget = nullptr;
+
+        if (ui->tabWidget_pkg->currentIndex() == 0)
+            listWidget = ui->list_app;
+        else if (ui->tabWidget_pkg->currentIndex() == 1)
+            listWidget = ui->list_sysapp;
+
+        row = listWidget->row(item);
+        processListItem(row, listWidget, ui->details_aurpkg, "");
     }
 }
 
@@ -3043,25 +3103,33 @@ void MainWindow::addLinkToList(const QString &link) {
 }
 
 // ----
+void MainWindow::loadContentInstall() {
+    QStringList commandExplicit = packageCommands.value(pkg).value("query_explicit");
+    QStringList allPackagesExplicit = executeCommand(commandExplicit);
+    loadPackageList(allPackagesExplicit, ui->list_app);
 
-void MainWindow::loadContentInstall()
-{
-    QStringList allPackages = executeCommand(packageCommands.value(pkg).value("query_explicit"));
+    QStringList commandQuery = packageCommands.value(pkg).value("query");
+    QStringList allPackagesQuery = executeCommand(commandQuery);
+    loadPackageList(allPackagesQuery, ui->list_sysapp);
+}
 
-    const QStringList& allPackagesCombined = allPackages;
+void MainWindow::loadPackageList(const QStringList& packages, QListWidget* listWidget) {
+    // Очищаем список
+    listWidget->clear();
 
-    numPackages = allPackagesCombined.size();
-    ui->list_app->clear();
-
-    for (const QString& package : allPackagesCombined) {
+    // Заполняем список
+    for (const QString& package : packages) {
         QStringList packageParts = package.split(' ');
-        QString packageName = packageParts.at(0);
-        QIcon packageIcon = getPackageIcon(packageName);
+        QString packageName = packageParts.at(0);  // Получаем имя пакета
+        QIcon packageIcon = getPackageIcon(packageName);  // Иконка пакета
 
+        // Создаем элемент списка
         QListWidgetItem* item = new QListWidgetItem(packageName);
         item->setIcon(packageIcon);
-        item->setForeground(generateRandomColor(colorlist));
-        ui->list_app->addItem(item);
+        item->setForeground(generateRandomColor(colorlist));  // Генерация случайного цвета
+
+        // Добавляем элемент в список
+        listWidget->addItem(item);
     }
 }
 
@@ -3856,11 +3924,18 @@ void MainWindow::on_action_updatelist_triggered()
     }
     else if (page == 4)
     {
-        miniAnimation(true, ui->list_app);
-        ui->list_app->clear();
+        QListWidget* listWidget = nullptr;
+
+        if (ui->tabWidget_pkg->currentIndex() == 0)
+            listWidget = ui->list_app;
+        else if (ui->tabWidget_pkg->currentIndex() == 1)
+            listWidget = ui->list_sysapp;
+
+        miniAnimation(true, listWidget);
+        listWidget->clear();
 
         QTimer::singleShot(500, this, [=]() {
-            miniAnimation(false, ui->list_app);
+            miniAnimation(false, listWidget);
             loadContentInstall();
         });
     }
@@ -3911,10 +3986,17 @@ void MainWindow::on_push_grub_clicked()
 void MainWindow::on_action_favorite_triggered() {
     QListWidgetItem* currentItem = nullptr;
 
-    if (page == 2) {
+    if (page == 2)
         currentItem = ui->list_aur->currentItem();
-    } else if (page == 4) {
-        currentItem = ui->list_app->currentItem();
+    else if (page == 4) {
+        QListWidget* listWidget = nullptr;
+
+        if (ui->tabWidget_pkg->currentIndex() == 0)
+            listWidget = ui->list_app;
+        else if (ui->tabWidget_pkg->currentIndex() == 1)
+            listWidget = ui->list_sysapp;
+
+        currentItem = listWidget->currentItem();
     }
 
     if (!currentItem) {
@@ -3982,10 +4064,17 @@ void MainWindow::on_action_favorite_del_triggered()
 {
     QListWidgetItem* currentItem = nullptr;
 
-    if (page == 2) {
+    if (page == 2)
         currentItem = ui->list_aur->currentItem();
-    } else if (page == 4) {
-        currentItem = ui->list_app->currentItem();
+    else if (page == 4) {
+        QListWidget* listWidget = nullptr;
+
+        if (ui->tabWidget_pkg->currentIndex() == 0)
+            listWidget = ui->list_app;
+        else if (ui->tabWidget_pkg->currentIndex() == 1)
+            listWidget = ui->list_sysapp;
+
+        currentItem = listWidget->currentItem();
     }
 
     if (!currentItem) {
@@ -4060,9 +4149,27 @@ void MainWindow::on_action_favorite_del_triggered()
 
 void MainWindow::on_action_searchpkg_triggered()
 {
-    if (auto item = ui->list_app->currentItem()) {
+    QListWidget* listWidget = nullptr;
+
+    if (ui->tabWidget_pkg->currentIndex() == 0)
+        listWidget = ui->list_app;
+    else if (ui->tabWidget_pkg->currentIndex() == 1)
+        listWidget = ui->list_sysapp;
+
+    if (auto item = listWidget->currentItem()) {
         ui->action_2->trigger();
         ui->searchLineEdit->setText(item->text());
         QCoreApplication::postEvent(ui->searchLineEdit, new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier));
+    }
+}
+
+void MainWindow::on_action_allpkg_triggered(bool checked)
+{
+    if (checked) {
+        ui->tabWidget_pkg->setCurrentIndex(1);
+        ui->action_allpkg->setText(tr("Пользовательские пакеты"));
+    } else {
+        ui->tabWidget_pkg->setCurrentIndex(0);
+        ui->action_allpkg->setText(tr("Все пакеты"));
     }
 }
