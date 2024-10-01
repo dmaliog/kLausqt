@@ -23,16 +23,16 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    QPixmap pixmap(":/img/splash.jpeg");
+    QPixmap pixmap(":/img/splash.png");
     QPixmap scaledPixmap = pixmap.scaled(pixmap.width() / 2, pixmap.height() / 2, Qt::KeepAspectRatio);
 
     QSplashScreen splash(scaledPixmap);
     splash.show();
 
-    splash.showMessage(QObject::tr("Вылавливаем молюсков..."), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+    splash.showMessage(QObject::tr("Вылавливаем молюсков..."), Qt::AlignCenter | Qt::AlignBottom, Qt::white);
 
     //scrapper
-    splash.showMessage(QObject::tr("Скачиваем списки пакетов..."), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+    splash.showMessage(QObject::tr("Скачиваем списки пакетов..."), Qt::AlignCenter | Qt::AlignBottom, Qt::white);
     ArchWikiScraper *scraper = new ArchWikiScraper();
 
     QList<QUrl> urls;
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 
     QString locale = "ru_RU";
 
-    splash.showMessage(QObject::tr("Проверяем сохраненный язык..."), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+    splash.showMessage(QObject::tr("Проверяем сохраненный язык..."), Qt::AlignCenter | Qt::AlignBottom, Qt::white);
     if (settings.contains("Language")) {
         QString savedLanguage = settings.value("Language").toString();
 
@@ -123,11 +123,11 @@ int main(int argc, char *argv[])
 
     a.setWindowIcon(QIcon(":/img/2.png"));
 
-    splash.showMessage(QObject::tr("Проверяем наличие Pacman..."), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+    splash.showMessage(QObject::tr("Проверяем наличие Pacman..."), Qt::AlignCenter | Qt::AlignBottom, Qt::white);
     bool pacmanInstalled = isPackageInstalled("pacman");
 
     if (!pacmanInstalled) {
-        splash.showMessage(QObject::tr("Внимание! Требуется Pacman!"), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+        splash.showMessage(QObject::tr("Внимание! Требуется Pacman!"), Qt::AlignCenter | Qt::AlignBottom, Qt::white);
 
         QTimer::singleShot(10000, [&splash]() {
             splash.close();
@@ -136,12 +136,12 @@ int main(int argc, char *argv[])
     }
 
     QSharedPointer<QProcess> process = QSharedPointer<QProcess>::create();
-    splash.showMessage(QObject::tr("Проверяем наличие notify-send..."), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+    splash.showMessage(QObject::tr("Проверяем наличие notify-send..."), Qt::AlignCenter | Qt::AlignBottom, Qt::white);
     process->start("which", QStringList() << "notify-send");
     process->waitForFinished();
 
     if (process->exitCode() != 0) {
-        splash.showMessage(QObject::tr("Внимание! Требуется notify-send!"), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+        splash.showMessage(QObject::tr("Внимание! Требуется notify-send!"), Qt::AlignCenter | Qt::AlignBottom, Qt::white);
 
         QTimer::singleShot(10000, [&splash]() {
             splash.close();
@@ -150,9 +150,9 @@ int main(int argc, char *argv[])
     }
 
     Terminal terminal = getTerminal();
-    splash.showMessage(QObject::tr("Проверяем наличие терминалов..."), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+    splash.showMessage(QObject::tr("Проверяем наличие терминалов..."), Qt::AlignCenter | Qt::AlignBottom, Qt::white);
     if (terminal.binary.isEmpty()) {
-        splash.showMessage(QObject::tr("Внимание! Требуется любой из терминалов: konsole, gnome-terminal, xfce4-terminal, lxterminal, xterm, alacritty!"), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+        splash.showMessage(QObject::tr("Внимание! Требуется любой из терминалов: konsole, gnome-terminal, xfce4-terminal, lxterminal, xterm, alacritty!"), Qt::AlignCenter | Qt::AlignBottom, Qt::white);
 
         QTimer::singleShot(10000, [&splash]() {
             splash.close();
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
         });
     }
 
-    splash.showMessage(QObject::tr("Запускаем kLaus..."), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+    splash.showMessage(QObject::tr("Запускаем kLaus..."), Qt::AlignCenter | Qt::AlignBottom, Qt::white);
     MainWindow w;
     QTimer::singleShot(0, [&splash, &w, &systemSemaphore]() {
         splash.close();

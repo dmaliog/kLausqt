@@ -2531,15 +2531,9 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
 
     auto findIconByAppName = [&](const QString& name) -> QIcon {
 
-        QStringList iconPaths = {
-            "/usr/share/icons/Papirus/48x48/apps/" + name.toLower() + ".svg",
-            "/usr/share/icons/Papirus/48x48/apps/" + name.toLower() + ".png"
-        };
-
-        for (const QString& path : iconPaths) {
-            if (QFileInfo(path).isFile()) {
-                return QIcon(path);
-            }
+        QString iconPath = findIconPapirus(name.toLower());
+        if (!iconPath.isEmpty()) {
+            return QIcon(iconPath);
         }
 
         if (iconMap.contains(name)) {
@@ -2644,7 +2638,7 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
     return QIcon("/usr/share/icons/Papirus/48x48/apps/application-default-icon.svg");
 }
 
-QIcon MainWindow::findIconInPapirus(const QString& iconName) {
+QString MainWindow::findIconPapirus(const QString& iconName) {
     QString basePath = "/usr/share/icons/Papirus/48x48/";
     QDir baseDir(basePath);
 
@@ -2653,11 +2647,22 @@ QIcon MainWindow::findIconInPapirus(const QString& iconName) {
     for (const QString& subdir : std::as_const(subdirs)) {
         QString iconPath = basePath + subdir + "/" + iconName + ".svg";
         if (QFile::exists(iconPath))
-            return QIcon(iconPath);
+            return iconPath; // Возвращаем путь к иконке
     }
 
-    return QIcon();
+    // Если иконка не найдена, создаем путь к ресурсам
+    QString resourceIconPath = QString(":/img/%1.png").arg(iconName.toLower());
+
+    // Проверяем, существует ли иконка в ресурсах
+    if (QFile::exists(resourceIconPath)) {
+        return resourceIconPath; // Возвращаем путь к ресурсной иконке
+    }
+
+    // Возвращаем пустую строку, если ничего не найдено
+    return QString();
 }
+
+
 
 void MainWindow::loadMainMenu() {
     currentCategory = "";
@@ -2685,9 +2690,10 @@ void MainWindow::loadMainMenu() {
 
             QString iconName = icons.value(category, "").toString();
             QIcon icon;
-            if (!iconName.isEmpty()) {
-                icon = findIconInPapirus(iconName);
-            }
+
+            QString iconPath = findIconPapirus(iconName);
+            if (!iconPath.isEmpty())
+                icon = QIcon(findIconPapirus(iconName));
 
             QListWidgetItem* item = new QListWidgetItem(translatedCategory, ui->list_aur);
             item->setIcon(icon);
@@ -2711,9 +2717,10 @@ void MainWindow::loadMainMenu() {
 
         QString iconName = icons.value(category, "").toString();
         QIcon icon;
-        if (!iconName.isEmpty()) {
-            icon = findIconInPapirus(iconName);
-        }
+
+        QString iconPath = findIconPapirus(iconName);
+        if (!iconPath.isEmpty())
+            icon = QIcon(findIconPapirus(iconName));
 
         QListWidgetItem* item = new QListWidgetItem(translatedCategory, ui->list_aur);
         item->setIcon(icon);
@@ -2770,8 +2777,10 @@ void MainWindow::loadSubcategories(const QString& category) {
 
             QString iconName = icons.value(currentCategory, "").toString();
             QIcon icon;
-            if (!iconName.isEmpty())
-                icon = findIconInPapirus(iconName);
+
+            QString iconPath = findIconPapirus(iconName);
+            if (!iconPath.isEmpty())
+                icon = QIcon(findIconPapirus(iconName));
 
             QListWidgetItem* item = new QListWidgetItem(translatedSubcategory, ui->list_aur);
             item->setIcon(icon);
@@ -2878,11 +2887,7 @@ void MainWindow::processPackageName(const QString& packageName, bool valuepage) 
         QRegularExpressionMatch repoMatch = repoRegex.match(packageName);
         if (repoMatch.hasMatch()) {
             QString repoName = repoMatch.captured(1);
-            iconPath = "/usr/share/icons/Papirus/48x48/apps/" + repoName + ".svg";
-
-            QFileInfo fileInfo(iconPath);
-            if (!fileInfo.exists())
-                iconPath = ":/img/" + repoName + ".png";
+            iconPath = findIconPapirus(repoName);
         }
 
         static const QRegularExpression packageNameRegex(R"(/(.+)$)");
@@ -2902,16 +2907,9 @@ void MainWindow::processPackageName(const QString& packageName, bool valuepage) 
         };
 
         auto findIconByAppName = [&](const QString& name) -> QString {
-            QStringList iconPaths;
-            QString nameLower = name.toLower();
-
-            iconPaths << "/usr/share/icons/Papirus/48x48/apps/" + nameLower + ".svg"
-                      << "/usr/share/icons/Papirus/48x48/apps/" + nameLower + ".png";
-
-            for (const QString& path : std::as_const(iconPaths)) {
-                if (QFileInfo::exists(path)) {
-                    return path;
-                }
+            QString iconPath = findIconPapirus(name.toLower());
+            if (!iconPath.isEmpty()) {
+               return QString();
             }
 
             return QString();
@@ -3384,7 +3382,7 @@ void MainWindow::loadScripts(const QString& baseDir, QListWidget* listWidget)
                 else if (line.startsWith("#icon"))
                 {
                     QString iconNumber = line.mid(6).trimmed();
-                    iconPath = findIconPath(iconNumber);
+                    iconPath = findIconPapirus(iconNumber);
                 }
             }
             scriptFile.close();
@@ -3401,13 +3399,6 @@ void MainWindow::loadScripts(const QString& baseDir, QListWidget* listWidget)
         listWidget->addItem(item);
     }
     listWidget->sortItems(Qt::AscendingOrder);
-}
-
-QString MainWindow::findIconPath(const QString &iconNumber)
-{
-    QString iconPath = QString("/usr/share/icons/Papirus/48x48/apps/%1.svg").arg(iconNumber.toLower());
-    QFileInfo fileInfo(iconPath);
-    return fileInfo.exists() ? iconPath : QString(":/img/%1.png").arg(iconNumber.toLower());
 }
 
 void MainWindow::createArchive(const QString& folderPath, const QString& folderName)
@@ -3454,14 +3445,13 @@ void MainWindow::loadFolders()
 
     auto addFolderItem = [&](const QString& folderName) {
         QString iconName = folderName;
-        if (iconName.startsWith('.') && iconName.length() > 1) {
+        if (iconName.startsWith('.') && iconName.length() > 1)
             iconName = iconName.mid(1);
-        }
 
-        QString iconPath = QString("/usr/share/icons/Papirus/48x48/apps/") + iconName.toLower() + ".svg";
-        if (!QFileInfo::exists(iconPath)) {
+        QString iconPath = findIconPapirus(iconName.toLower());
+
+        if (!QFileInfo::exists(iconPath))
             iconPath = "/usr/share/icons/Papirus/48x48/apps/gnome-do.svg";
-        }
 
         ui->list_repair->addItem(new QListWidgetItem(QIcon(iconPath), folderName));
         itemCount++;
@@ -3584,12 +3574,7 @@ void MainWindow::on_combo_bench_currentIndexChanged(int index)
                 else if (line.startsWith("#icon"))
                 {
                     QString iconNumber = line.mid(6).trimmed();
-
-                    iconPath = QString("/usr/share/icons/Papirus/48x48/apps/%1.svg").arg(iconNumber.toLower());
-
-                    QFileInfo fileInfo(iconPath);
-                    if (!fileInfo.exists())
-                        iconPath = QString(":/img/%1.png").arg(iconNumber.toLower());
+                    iconPath = findIconPapirus(iconNumber.toLower());
 
                 }
             }

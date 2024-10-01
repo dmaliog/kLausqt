@@ -131,7 +131,6 @@
         <file>img/old.png</file>
         <file>img/orphaned.png</file>
         <file>img/installed.png</file>
-        <file>img/splash.jpeg</file>
         <file>img/settings.jpeg</file>
         <file>img/system.jpeg</file>
         <file>img/snap.png</file>
@@ -191,5 +190,6 @@
         <file>img/letter-7.png</file>
         <file>img/letter-8.png</file>
         <file>img/letter-9.png</file>
+        <file>img/splash.png</file>
     </qresource>
 </RCC>

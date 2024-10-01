@@ -275,7 +275,7 @@ public slots:
 private slots:
     void loadPackageList(const QStringList& packages, QListWidget* listWidget);
 
-    QIcon findIconInPapirus(const QString& iconName);
+    QString findIconPapirus(const QString& iconName);
 
     void loadPackages(const QString& category, const QString& subcategory);
     void loadSubcategories(const QString& category);
@@ -321,7 +321,6 @@ private slots:
     QIcon getPackageIcon(const QString& packageName);
     QString getScriptContent(const QString& filePath);
     QString processPackageInfo(const QString& packageInfo);
-    QString findIconPath(const QString &iconNumber);
     QStringList executeCommand(const QStringList& command);
 
     void onTimeChanged(const QTime& time);
