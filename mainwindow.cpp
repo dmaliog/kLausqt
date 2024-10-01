@@ -18,7 +18,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "16.3";
+QString currentVersion = "16.4";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -2612,6 +2612,14 @@ QIcon MainWindow::getPackageIcon(const QString& packageName) {
     QIcon icon = findIconByAppName(appName);
     if (!icon.isNull()) {
         return icon;
+    }
+
+    QChar firstChar = appName[0].toLower();
+    if (firstChar.isLetterOrNumber()) {
+        QString iconPath = QString(":/img/letter-%1.png").arg(firstChar);
+        if (QFileInfo(iconPath).isFile()) {
+            return QIcon(iconPath);
+        }
     }
 
     return QIcon("/usr/share/icons/Papirus/48x48/apps/application-default-icon.svg");

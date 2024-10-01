@@ -155,5 +155,41 @@
         <file>img/star.png</file>
         <file>img/pkgall.png</file>
         <file>img/pkguser.png</file>
+        <file>img/letter-a.png</file>
+        <file>img/letter-b.png</file>
+        <file>img/letter-c.png</file>
+        <file>img/letter-d.png</file>
+        <file>img/letter-e.png</file>
+        <file>img/letter-f.png</file>
+        <file>img/letter-g.png</file>
+        <file>img/letter-h.png</file>
+        <file>img/letter-i.png</file>
+        <file>img/letter-j.png</file>
+        <file>img/letter-k.png</file>
+        <file>img/letter-l.png</file>
+        <file>img/letter-m.png</file>
+        <file>img/letter-n.png</file>
+        <file>img/letter-o.png</file>
+        <file>img/letter-p.png</file>
+        <file>img/letter-q.png</file>
+        <file>img/letter-r.png</file>
+        <file>img/letter-s.png</file>
+        <file>img/letter-t.png</file>
+        <file>img/letter-u.png</file>
+        <file>img/letter-v.png</file>
+        <file>img/letter-w.png</file>
+        <file>img/letter-x.png</file>
+        <file>img/letter-y.png</file>
+        <file>img/letter-z.png</file>
+        <file>img/letter-1.png</file>
+        <file>img/letter-0.png</file>
+        <file>img/letter-2.png</file>
+        <file>img/letter-3.png</file>
+        <file>img/letter-4.png</file>
+        <file>img/letter-5.png</file>
+        <file>img/letter-6.png</file>
+        <file>img/letter-7.png</file>
+        <file>img/letter-8.png</file>
+        <file>img/letter-9.png</file>
     </qresource>
 </RCC>
