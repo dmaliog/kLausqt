@@ -165,8 +165,6 @@ private:
     bool loadpage = true;
     bool isFirstLoad = true;
     bool stopProcessing = false;
-    bool readingInProgress = false;
-    QTimer *readTimer;
 
     // QAction
     QAction* actionLoad = nullptr;
