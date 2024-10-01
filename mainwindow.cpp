@@ -115,7 +115,6 @@ void MainWindow::on_action_2_triggered()
     ui->action_30->setVisible(true);
     ui->action_34->setVisible(true);
     ui->action_infopkg->setVisible(true);
-
 }
 
 void MainWindow::on_action_7_triggered()
@@ -1981,7 +1980,9 @@ void MainWindow::onNetworkReply(QNetworkReply *reply) {
 
 void MainWindow::parseRSS(const QString &rssContent) {
     QXmlStreamReader xml(rssContent);
-    QString html;
+    ui->text_updatepkg->clear();
+    QTextCursor cursor(ui->text_updatepkg->textCursor());
+
     while (!xml.atEnd() && !xml.hasError()) {
         xml.readNext();
         if (xml.isStartElement()) {
@@ -2000,16 +2001,34 @@ void MainWindow::parseRSS(const QString &rssContent) {
 
                     xml.readNext();
                 }
-                html += QString("<a href='%1'>%2</a><br>%3<br><br>").arg(link, title, description);
+
+                QIcon icon = getPackageIcon(title);
+                QString htmlText;
+
+                if (!icon.isNull()) {
+                    QPixmap pixmap = icon.pixmap(16, 16);
+                    QByteArray byteArray;
+                    QBuffer buffer(&byteArray);
+                    buffer.open(QIODevice::WriteOnly);
+                    pixmap.save(&buffer, "PNG");
+                    QString imgBase64 = "data:image/png;base64," + byteArray.toBase64();
+
+                    htmlText += QString("<img src='%1' style='vertical-align: middle;' /> "
+                                        "<a href='%2' style='vertical-align: middle;'>%3</a><br>%4<br><br>")
+                                    .arg(imgBase64, link, title, description);
+                } else {
+                    htmlText += QString("<a href='%1'>%2</a><br>%3<br><br>")
+                    .arg(link, title, description);
+                }
+
+                cursor.insertHtml(htmlText);
             }
         }
     }
+
     if (xml.hasError())
         ui->text_updatepkg->setText(tr("Ошибка при разборе RSS-канала: ") + xml.errorString());
-    else
-        ui->text_updatepkg->setHtml(html);
 }
-
 
 void MainWindow::setupConnections()
 {
@@ -3155,7 +3174,6 @@ void MainWindow::loadPackageList(const QStringList& packages, QListWidget* listW
 
 void MainWindow::setCursorAndScrollToItem(const QString &itemName)
 {
-
     for (int row = 0; row < ui->list_aur->count(); ++row) {
         QListWidgetItem *currentItem = ui->list_aur->item(row);
         CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(ui->list_aur->itemWidget(currentItem));
@@ -3201,7 +3219,7 @@ void MainWindow::handleServerResponse(const QString& reply)
 
 void MainWindow::onCurrentProcessReadyRead()
 {
-    QTimer::singleShot(timeout.msecsSinceStartOfDay() / 1000, this, &MainWindow::onSearchTimeout);
+    QTimer::singleShot(timeout.msecsSinceStartOfDay(), this, &MainWindow::onSearchTimeout);
 
     QString repoz = "";
     QString packageName = "";
