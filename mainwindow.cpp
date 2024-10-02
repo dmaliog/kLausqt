@@ -18,7 +18,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "17.0";
+QString currentVersion = "17.1";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -2467,16 +2467,12 @@ void MainWindow::prepareDetails(QListWidget* listWidget, QTextBrowser* detailsWi
                 }
             }
         }
+        miniAnimation(false, detailsWidget);
     });
 
     QStringList command = packageCommands.value(0).value(page == 2 ? "show_info" : "info");
     currentProcessDetails->setProcessEnvironment(env);
     currentProcessDetails->start(command[0], QStringList() << command[1] << packageName);
-
-    connect(currentProcessDetails.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
-        miniAnimation(false, detailsWidget);
-    });
-
 }
 
 void MainWindow::prepareFiles(QTreeWidget* treeWidget, const QString& packageName) {
@@ -2490,7 +2486,7 @@ void MainWindow::prepareFiles(QTreeWidget* treeWidget, const QString& packageNam
         disconnect(fileListProcess.data(), &QProcess::finished, nullptr, nullptr);
     }
 
-    auto fileListProcess = QSharedPointer<QProcess>::create();
+    fileListProcess = QSharedPointer<QProcess>::create();
     connect(fileListProcess.data(), &QProcess::readyReadStandardOutput, this, [=]() {
         QStringList lines = QString::fromUtf8(fileListProcess->readAllStandardOutput()).split('\n', Qt::SkipEmptyParts);
 
