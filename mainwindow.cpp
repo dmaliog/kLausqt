@@ -1589,7 +1589,7 @@ void MainWindow::loadSettings()
     aururl = QSharedPointer<QString>::create(settings.value("AurURL").toString());
 
     timeupdate = QTime::fromString(settings.value("TimeUpdate").toString(), "HH:mm");
-    timeout = QTime::fromString(settings.value("TimeOut", "00:00:10").toString(), "HH:mm:ss");
+    timeout = QTime::fromString(settings.value("TimeOut", "00:00:50").toString(), "HH:mm:ss");
     timetea = QTime::fromString(settings.value("TimeTea").toString(), "HH:mm");
     timework = QTime::fromString(settings.value("TimeWork").toString(), "HH:mm");
 
@@ -1936,8 +1936,8 @@ void MainWindow::loadSettings()
         }
         grub.close();
 
-        int timeout = timeoutStr.toInt();
-        ui->spin_grub->setValue(timeout);
+        int timeoutgrub = timeoutStr.toInt();
+        ui->spin_grub->setValue(timeoutgrub);
         ui->line_grub->setText(grubContent);
     }
     //-##################################################################################
@@ -3325,7 +3325,7 @@ void MainWindow::onCurrentProcessReadyRead()
 
 void MainWindow::onSearchTimeout()
 {
-    currentProcess->terminate();
+    stopProcessing = true;
     miniAnimation(false, ui->list_aur);
 }
 
@@ -3625,11 +3625,18 @@ void MainWindow::on_time_update_timeChanged(const QTime &time)
 void MainWindow::on_time_timeout_timeChanged(const QTime &time)
 {
     if (time.isValid()) {
-        timeout = time;
-        settings.setValue("TimeUpdate", timeout.toString("HH:mm:ss"));
+        if (time < QTime(0, 0, 50)) {
+            timeout = QTime(0, 0, 50);
+            settings.setValue("TimeUpdate", timeout.toString("HH:mm:ss"));
+            ui->time_timeout->setTime(timeout);
+        } else {
+            timeout = time;
+            settings.setValue("TimeUpdate", timeout.toString("HH:mm:ss"));
+        }
     } else
         sendNotification(tr("Ошибка"), tr("Неверный формат времени."));
 }
+
 
 void MainWindow::on_spin_timerupdpkg_valueChanged(int arg1)
 {
