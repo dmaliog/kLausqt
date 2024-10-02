@@ -3583,7 +3583,6 @@ void MainWindow::on_combo_bench_currentIndexChanged(int index)
                 {
                     QString iconNumber = line.mid(6).trimmed();
                     iconPath = findIconPapirus(iconNumber.toLower());
-
                 }
             }
             scriptFile.close();
