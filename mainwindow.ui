@@ -493,7 +493,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab_webgame">
        <attribute name="title">
@@ -888,6 +888,12 @@ margin-left:10px;</string>
             </property>
             <item row="1" column="0">
              <widget class="QTreeWidget" name="tree_aur">
+              <property name="focusPolicy">
+               <enum>Qt::FocusPolicy::NoFocus</enum>
+              </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
+              </property>
               <property name="styleSheet">
                <string notr="true"/>
               </property>
@@ -1259,6 +1265,12 @@ margin-left:10px;</string>
             </property>
             <item row="1" column="0">
              <widget class="QTreeWidget" name="tree_files_pkg">
+              <property name="focusPolicy">
+               <enum>Qt::FocusPolicy::NoFocus</enum>
+              </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
+              </property>
               <attribute name="headerVisible">
                <bool>false</bool>
               </attribute>
@@ -1930,8 +1942,8 @@ margin-right:35px;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>510</width>
-             <height>678</height>
+             <width>518</width>
+             <height>712</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_3">
@@ -2012,7 +2024,7 @@ padding-top:0;</string>
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>480</width>
+                 <width>488</width>
                  <height>203</height>
                 </rect>
                </property>
@@ -2413,7 +2425,7 @@ padding-top:0;</string>
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>480</width>
+                 <width>488</width>
                  <height>104</height>
                 </rect>
                </property>
@@ -2548,7 +2560,7 @@ margin-right:35px;</string>
              <x>0</x>
              <y>0</y>
              <width>518</width>
-             <height>638</height>
+             <height>679</height>
             </rect>
            </property>
            <property name="maximumSize">
@@ -2784,9 +2796,9 @@ padding-top:0;</string>
                <property name="geometry">
                 <rect>
                  <x>0</x>
-                 <y>2</y>
+                 <y>3</y>
                  <width>488</width>
-                 <height>220</height>
+                 <height>261</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_5">
@@ -3202,8 +3214,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>650</width>
-             <height>46</height>
+             <width>658</width>
+             <height>712</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_24">
@@ -3369,8 +3381,8 @@ color:#66c3bb;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>402</width>
-             <height>149</height>
+             <width>618</width>
+             <height>168</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_4">
@@ -4449,8 +4461,8 @@ margin-left:10px;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>650</width>
-             <height>46</height>
+             <width>658</width>
+             <height>712</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_18">
@@ -4886,8 +4898,8 @@ margin-left:10px;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>650</width>
-             <height>46</height>
+             <width>658</width>
+             <height>712</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_21">

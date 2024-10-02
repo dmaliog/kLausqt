@@ -335,6 +335,14 @@ void MainWindow::on_action_downgrade_triggered()
 //-#####################################################################################################################################################
 void MainWindow::on_action_restart_triggered()
 {
+    if (currentProcess && currentProcess->state() == QProcess::Running) {
+        currentProcess->kill();
+        currentProcess->waitForFinished();
+
+        disconnect(currentProcess.data(), &QProcess::readyReadStandardOutput, nullptr, nullptr);
+        disconnect(currentProcess.data(), &QProcess::finished, nullptr, nullptr);
+    }
+
     currentProcess = QSharedPointer<QProcess>::create(this);
     connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
         sendNotification(tr("Веб-сервер"), tr("Веб-сервер перезапущен!"));
@@ -348,6 +356,14 @@ void MainWindow::on_action_restart_triggered()
 
 void MainWindow::on_action_stop_triggered()
 {
+    if (currentProcess && currentProcess->state() == QProcess::Running) {
+        currentProcess->kill();
+        currentProcess->waitForFinished();
+
+        disconnect(currentProcess.data(), &QProcess::readyReadStandardOutput, nullptr, nullptr);
+        disconnect(currentProcess.data(), &QProcess::finished, nullptr, nullptr);
+    }
+
     currentProcess = QSharedPointer<QProcess>::create(this);
     connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
         sendNotification(tr("Веб-сервер"), tr("Веб-сервер остановлен!"));
@@ -917,6 +933,14 @@ void MainWindow::on_push_grub_fast_clicked()
     QString grubContent = ui->line_grub->text().trimmed();
     QString timeout = ui->spin_grub->value() > 0 ? QString::number(ui->spin_grub->value()) : "5";
 
+    if (currentProcess && currentProcess->state() == QProcess::Running) {
+        currentProcess->kill();
+        currentProcess->waitForFinished();
+
+        disconnect(currentProcess.data(), &QProcess::readyReadStandardOutput, nullptr, nullptr);
+        disconnect(currentProcess.data(), &QProcess::finished, nullptr, nullptr);
+    }
+
     currentProcess = QSharedPointer<QProcess>::create(this);
     connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
         sendNotification(tr("GRUB изменен"), tr("Изменения GRUB вступят в силу после перезагрузки."));
@@ -1216,9 +1240,11 @@ void MainWindow::createSearchBar()
  void MainWindow::handleServerResponseSearch(const QString& reply)
  {
      if (currentProcess && currentProcess->state() == QProcess::Running) {
-         currentProcess->disconnect();
          currentProcess->kill();
          currentProcess->waitForFinished();
+
+         disconnect(currentProcess.data(), &QProcess::readyReadStandardOutput, nullptr, nullptr);
+         disconnect(currentProcess.data(), &QProcess::finished, nullptr, nullptr);
      }
 
      completerModel->clear();
@@ -2250,12 +2276,15 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
 void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser* detailsWidget, const QString& package) {
     QString packageName = !package.isEmpty() ? package : listWidget->item(row)->text();
 
-    if (currentProcessDetails && currentPackageName != packageName && listWidget->currentRow() != row)
-        currentProcessDetails->kill();
-
     currentPackageName = packageName;
 
-    disconnect(currentProcessDetails.data(), &QProcess::finished, nullptr, nullptr);
+    if (currentProcessDetails && currentProcessDetails->state() == QProcess::Running) {
+        currentProcessDetails->kill();
+        currentProcessDetails->waitForFinished();
+
+        disconnect(currentProcessDetails.data(), &QProcess::readyReadStandardOutput, nullptr, nullptr);
+        disconnect(currentProcessDetails.data(), &QProcess::finished, nullptr, nullptr);
+    }
     currentProcessDetails = QSharedPointer<QProcess>::create();
 
     int scrollBarValue = detailsWidget->verticalScrollBar()->value();
