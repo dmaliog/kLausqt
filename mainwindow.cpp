@@ -18,7 +18,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "16.7";
+QString currentVersion = "16.8";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -2392,12 +2392,17 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
                 QString errorMessage = QString::fromUtf8(currentProcessDetails->readAllStandardError()).trimmed();
 
-                if (!errorMessage.isEmpty())
-                    detailsWidget->setPlainText(errorMessage);
-                else if (listWidget == ui->list_aur)
-                    detailsWidget->setPlainText(tr("Пакет не найден!\nВозможно, он поменял свое название..."));
-                else
+                QString formattedText;
+                if (!errorMessage.isEmpty()) {
+                    formattedText = QString("<span style=\"font-size: 11pt;\">%1</span>").arg(errorMessage);
+                } else if (listWidget == ui->list_aur) {
+                    formattedText = QString("<span style=\"font-size: 11pt;\">%1</span>").arg(tr("Пакет не найден!\nВозможно, он поменял свое название..."));
+                } else {
                     detailsWidget->clear();
+                    return;
+                }
+
+                detailsWidget->setHtml(formattedText);
 
                 if (listWidget == ui->list_aur && listWidget->currentItem()) {
                     auto userResponse = QMessageBox::question(
