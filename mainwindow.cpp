@@ -18,7 +18,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "16.6";
+QString currentVersion = "16.7";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -1630,6 +1630,44 @@ void MainWindow::loadSettings()
 
     connect(ui->time_update, &QTimeEdit::timeChanged, this, &MainWindow::onTimeChanged);
 
+    connect(ui->details_aur, &QTextBrowser::anchorClicked, this, [=](const QUrl& link) {
+        if (link.scheme() == "p") {
+            ui->action_2->trigger();
+            QString linkPath = link.path();
+
+            int idxEqual = linkPath.indexOf('=');
+            int idxGreater = linkPath.indexOf('>');
+            int idxLess = linkPath.indexOf('<');
+
+            int minIndex = linkPath.length();
+            if (idxEqual != -1) minIndex = idxEqual;
+            if (idxGreater != -1 && idxGreater < minIndex) minIndex = idxGreater;
+            if (idxLess != -1 && idxLess < minIndex) minIndex = idxLess;
+
+            ui->searchLineEdit->setText(linkPath.left(minIndex).trimmed());
+            QCoreApplication::postEvent(ui->searchLineEdit, new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier));
+        }
+    });
+
+    connect(ui->details_aurpkg, &QTextBrowser::anchorClicked, this, [=](const QUrl& link) {
+        if (link.scheme() == "p") {
+            ui->action_2->trigger();
+            QString linkPath = link.path();
+
+            int idxEqual = linkPath.indexOf('=');
+            int idxGreater = linkPath.indexOf('>');
+            int idxLess = linkPath.indexOf('<');
+
+            int minIndex = linkPath.length();
+            if (idxEqual != -1) minIndex = idxEqual;
+            if (idxGreater != -1 && idxGreater < minIndex) minIndex = idxGreater;
+            if (idxLess != -1 && idxLess < minIndex) minIndex = idxLess;
+
+            ui->searchLineEdit->setText(linkPath.left(minIndex).trimmed());
+            QCoreApplication::postEvent(ui->searchLineEdit, new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier));
+        }
+    });
+
     connect(ui->list_aur, &QListWidget::itemClicked, this, [=](QListWidgetItem *item) {
         CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(ui->list_aur->itemWidget(item));
         if (itemWidget) {
@@ -2276,6 +2314,13 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
 void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser* detailsWidget, const QString& package) {
     QString packageName = !package.isEmpty() ? package : listWidget->item(row)->text();
 
+    if (row == lastSelectedRow && packageName == lastSelectedPackage) {
+        return;
+    }
+
+    lastSelectedRow = row;
+    lastSelectedPackage = packageName;
+
     currentPackageName = packageName;
 
     if (currentProcessDetails && currentProcessDetails->state() == QProcess::Running) {
@@ -2283,6 +2328,7 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
         currentProcessDetails->waitForFinished();
 
         disconnect(currentProcessDetails.data(), &QProcess::readyReadStandardOutput, nullptr, nullptr);
+        disconnect(currentProcessDetails.data(), &QProcess::finished, nullptr, nullptr);
         disconnect(currentProcessDetails.data(), &QProcess::finished, nullptr, nullptr);
     }
     currentProcessDetails = QSharedPointer<QProcess>::create();
@@ -2323,26 +2369,6 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
             header = header.at(0).isUpper() ? "<b>" + header + ":</b> " : header.replace(regex, "<a href=\"p:\\1\">\\1</a>") + ": ";
             processedInfo += "<p><span>" + header + "</span>" + content + "</p>";
         }
-
-        connect(detailsWidget, &QTextBrowser::anchorClicked, this, [=](const QUrl& link) {
-            if (link.scheme() == "p") {
-                ui->action_2->trigger();
-                QString linkPath = link.path();
-
-                int idxEqual = linkPath.indexOf('=');
-                int idxGreater = linkPath.indexOf('>');
-                int idxLess = linkPath.indexOf('<');
-
-                int minIndex = linkPath.length();
-                if (idxEqual != -1) minIndex = idxEqual;
-                if (idxGreater != -1 && idxGreater < minIndex) minIndex = idxGreater;
-                if (idxLess != -1 && idxLess < minIndex) minIndex = idxLess;
-
-                ui->searchLineEdit->setText(linkPath.left(minIndex).trimmed());
-                QCoreApplication::postEvent(ui->searchLineEdit, new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier));
-            }
-        });
-
         detailsWidget->append(processedInfo);
         detailsWidget->verticalScrollBar()->setValue(scrollBarValue);
         miniAnimation(false, detailsWidget);
@@ -2401,6 +2427,16 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
     if (page == 2 || page == 4) {
         QTreeWidget* treeWidget = (page == 2) ? ui->tree_aur : ui->tree_files_pkg;
+
+        if (currentProcessDetails && currentProcessDetails->state() == QProcess::Running) {
+            currentProcessDetails->kill();
+            currentProcessDetails->waitForFinished();
+
+            disconnect(currentProcessDetails.data(), &QProcess::readyReadStandardOutput, nullptr, nullptr);
+            disconnect(currentProcessDetails.data(), &QProcess::finished, nullptr, nullptr);
+            disconnect(currentProcessDetails.data(), &QProcess::finished, nullptr, nullptr);
+        }
+
         auto fileListProcess = QSharedPointer<QProcess>::create();
 
         connect(fileListProcess.data(), &QProcess::readyReadStandardOutput, this, [=]() {

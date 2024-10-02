@@ -171,6 +171,9 @@ private:
     bool stopProcessing = false;
     bool allItemsAdded = true;
 
+    int lastSelectedRow = -1;
+    QString lastSelectedPackage;
+
     // QAction
     QAction* actionLoad = nullptr;
     QAction* previousAction = nullptr;
