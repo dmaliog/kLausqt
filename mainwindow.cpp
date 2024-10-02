@@ -1199,9 +1199,11 @@ void MainWindow::showListContextMenu(const QPoint& pos) {
         menu.addAction(action);
     };
 
-    if (QDir(currentPath).exists() || isFile) {
-        QString pathToOpen = isFile ? QFileInfo(currentPath).absolutePath() : currentPath;
-        addAction(":/img/48.png", tr("Перейти к расположению"), [=]() { openFolder(pathToOpen); });
+    if (treeWidget) {
+        if (QDir(currentPath).exists() || isFile) {
+            QString pathToOpen = isFile ? QFileInfo(currentPath).absolutePath() : currentPath;
+            addAction(":/img/48.png", tr("Перейти к расположению"), [=]() { openFolder(pathToOpen); });
+        }
     }
 
     if (listWidget) {
@@ -2508,7 +2510,6 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
                     if (!pathMap.contains(currentPath)) {
                         auto newItem = currentItem ? new QTreeWidgetItem(currentItem) : new QTreeWidgetItem(treeWidget);
-
                         QFileInfo fileInfo(fullPath);
 
                         QIcon icon;
