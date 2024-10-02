@@ -1154,26 +1154,38 @@ void MainWindow::setupListContextMenu()
     connect(ui->list_aur, &QListWidget::customContextMenuRequested, this, &MainWindow::showListContextMenu);
     connect(ui->list_app, &QListWidget::customContextMenuRequested, this, &MainWindow::showListContextMenu);
     connect(ui->list_sysapp, &QListWidget::customContextMenuRequested, this, &MainWindow::showListContextMenu);
+    connect(ui->tree_aur, &QListWidget::customContextMenuRequested, this, &MainWindow::showListContextMenu);
+    connect(ui->tree_files_pkg, &QListWidget::customContextMenuRequested, this, &MainWindow::showListContextMenu);
 }
 
-void MainWindow::showListContextMenu(const QPoint& pos)
-{
-    QListWidget* listWidget = nullptr;
+void MainWindow::showListContextMenu(const QPoint& pos) {
+    QWidget* senderWidget = qobject_cast<QWidget*>(sender());
+    if (!senderWidget) return;
 
-    if (page == 2) {
-        listWidget = ui->list_aur;
-    } else if (page == 4) {
-        if (ui->tabWidget_pkg->currentIndex() == 0)
-            listWidget = ui->list_app;
-        else if (ui->tabWidget_pkg->currentIndex() == 1)
-            listWidget = ui->list_sysapp;
+    QListWidget* listWidget = qobject_cast<QListWidget*>(senderWidget);
+    QTreeWidget* treeWidget = qobject_cast<QTreeWidget*>(senderWidget);
+
+    QString itemName;
+    QString currentPath;
+    bool isFile = false;
+
+    if (listWidget) {
+        QListWidgetItem* item = listWidget->itemAt(pos);
+        if (!item || item->data(Qt::UserRole + 1).toString().contains("category")) return;
+        itemName = item->text();
+        currentPath = getCurrentPathFromList(itemName);
+    } else if (treeWidget) {
+        QTreeWidgetItem* treeItem = treeWidget->itemAt(pos);
+        if (!treeItem) return;
+        itemName = treeItem->text(0);
+        currentPath = getCurrentPathFromTree(treeItem);
+
+        isFile = QFileInfo::exists(currentPath) && !QFileInfo(currentPath).isDir();
+    } else {
+        return;
     }
 
-    QListWidgetItem* item = listWidget->itemAt(pos);
-    if (!item || item->data(Qt::UserRole + 1).toString().contains("category")) return;
-
-    QString itemName = item->text(), favoriteFile = mainDir + "menu/Favorite/Favorite.txt";
-
+    QString favoriteFile = mainDir + "menu/Favorite/Favorite.txt";
     QFile file(favoriteFile);
     bool isFavorite = false;
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -1188,23 +1200,54 @@ void MainWindow::showListContextMenu(const QPoint& pos)
         menu.addAction(action);
     };
 
-    if (page == 2) {
-        addAction(":/img/15.png", tr("Установить"), &MainWindow::on_action_4_triggered);
-        addAction(":/img/27.png", tr("Изменить PKGBUILD и установить"), &MainWindow::on_action_30_triggered);
-    } else if (page == 4) {
-        addAction(":/img/25.png", tr("Найти в каталоге пакетов"), &MainWindow::on_action_searchpkg_triggered);
-        addAction(":/img/13.png", tr("Запустить"), &MainWindow::on_action_5_triggered);
-        addAction(":/img/15.png", tr("Обновить версию"), &MainWindow::on_action_4_triggered);
-        addAction(":/img/14.png", tr("Удалить"), &MainWindow::on_action_6_triggered);
+    if (QDir(currentPath).exists() || isFile) {
+        QString pathToOpen = isFile ? QFileInfo(currentPath).absolutePath() : currentPath;
+        addAction(":/img/25.png", tr("Перейти к расположению"), [=]() { openFolder(pathToOpen); });
     }
 
-    addAction(":/img/34.png", tr("Информация о пакете"), &MainWindow::on_action_34_triggered);
-    addAction(":/img/star.png", isFavorite ? tr("Удалить из избранного") : tr("Добавить в избранное"),
-              isFavorite ? &MainWindow::on_action_favorite_del_triggered : &MainWindow::on_action_favorite_triggered);
+    if (listWidget) {
+        if (listWidget == ui->list_aur) {
+            addAction(":/img/15.png", tr("Установить"), &MainWindow::on_action_4_triggered);
+            addAction(":/img/27.png", tr("Изменить PKGBUILD и установить"), &MainWindow::on_action_30_triggered);
+        } else if (listWidget == ui->list_app || listWidget == ui->list_sysapp) {
+            addAction(":/img/25.png", tr("Найти в каталоге пакетов"), &MainWindow::on_action_searchpkg_triggered);
+            addAction(":/img/13.png", tr("Запустить"), &MainWindow::on_action_5_triggered);
+            addAction(":/img/15.png", tr("Обновить версию"), &MainWindow::on_action_4_triggered);
+            addAction(":/img/14.png", tr("Удалить"), &MainWindow::on_action_6_triggered);
+        }
 
-    menu.exec(listWidget->viewport()->mapToGlobal(pos));
+        addAction(":/img/34.png", tr("Информация о пакете"), &MainWindow::on_action_34_triggered);
+        addAction(":/img/star.png", isFavorite ? tr("Удалить из избранного") : tr("Добавить в избранное"),
+                  isFavorite ? &MainWindow::on_action_favorite_del_triggered : &MainWindow::on_action_favorite_triggered);
+    }
+
+    if (menu.actions().isEmpty()) return;
+
+    menu.exec(senderWidget->mapToGlobal(pos));
 }
 
+void MainWindow::openFolder(const QString& path) {
+    QUrl url = QUrl::fromLocalFile(path);
+    QDesktopServices::openUrl(url);
+}
+
+QString MainWindow::getCurrentPathFromList(const QString& itemName) {
+    QString path = mainDir + "/" + itemName; // Замените на вашу логику
+    return path;
+}
+
+QString MainWindow::getCurrentPathFromTree(QTreeWidgetItem* item) {
+    QString path;
+    if (item) {
+        QStringList pathParts;
+        while (item) {
+            pathParts.prepend(item->text(0));
+            item = item->parent();
+        }
+        path = "/" + pathParts.join("/");
+    }
+    return path;
+}
 
 void MainWindow::createSearchBar()
 {

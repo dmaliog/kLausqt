@@ -13,6 +13,7 @@
 #include "qsyntaxhighlighter.h"
 #include "qtextbrowser.h"
 #include "qtimer.h"
+#include "qtreewidget.h"
 #include <QLabel>
 #include <QWebEngineView>
 #include <QSystemTrayIcon>
@@ -281,7 +282,12 @@ public slots:
     void on_action_30_triggered();
 
 private slots:
+    void openFolder(const QString& path);
+
     void loadPackageList(const QStringList& packages, QListWidget* listWidget);
+
+    QString getCurrentPathFromList(const QString& itemName);
+    QString getCurrentPathFromTree(QTreeWidgetItem* item);
 
     QString findIconPapirus(const QString& iconName);
 
