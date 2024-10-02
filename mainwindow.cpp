@@ -3146,6 +3146,14 @@ void MainWindow::handleServerResponse(const QString& reply)
 
     const QStringList& searchCommand = packageCommands.value(0).value("search");
 
+    if (currentProcess && currentProcess->state() == QProcess::Running) {
+        currentProcess->kill();
+        currentProcess->waitForFinished();
+
+        disconnect(currentProcess.data(), &QProcess::readyReadStandardOutput, nullptr, nullptr);
+        disconnect(currentProcess.data(), &QProcess::finished, nullptr, nullptr);
+    }
+
     currentProcess = QSharedPointer<QProcess>::create(this);
     connect(currentProcess.data(), &QProcess::readyReadStandardOutput, this, &MainWindow::onCurrentProcessReadyRead);
 
@@ -3159,7 +3167,7 @@ void MainWindow::handleServerResponse(const QString& reply)
 
 void MainWindow::onCurrentProcessReadyRead()
 {
-    QTimer::singleShot(timeout.msecsSinceStartOfDay(), this, &MainWindow::onSearchTimeout);
+    searchTimer->singleShot(timeout.msecsSinceStartOfDay(), this, &MainWindow::onSearchTimeout);
 
     QString repoz, packageName, version, sizeDownload, sizeInstallation;
     int installed = 0, rating = 0, orphaned = 0, old = 0;

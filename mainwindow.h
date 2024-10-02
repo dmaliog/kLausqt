@@ -160,6 +160,9 @@ private:
     QTime timetea;
     QTime timework;
     QTime timeout;
+
+    QTimer *searchTimer;
+
     bool errorShown = false;
     bool hasUpdates = false;
     bool hasUpdatesSnap = false;
