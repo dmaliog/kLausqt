@@ -2363,8 +2363,19 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
     lastSelectedRow = row;
     lastSelectedPackage = packageName;
-
     currentPackageName = packageName;
+
+    prepareDetails(listWidget, detailsWidget, packageName);
+
+    if (page == 2 || page == 4) {
+        QTreeWidget* treeWidget = (page == 2) ? ui->tree_aur : ui->tree_files_pkg;
+        prepareFiles(treeWidget, packageName);
+    }
+}
+
+void MainWindow::prepareDetails(QListWidget* listWidget, QTextBrowser* detailsWidget, const QString& packageName) {
+    detailsWidget->clear();
+    miniAnimation(true, detailsWidget);
 
     if (currentProcessDetails && currentProcessDetails->state() == QProcess::Running) {
         currentProcessDetails->kill();
@@ -2431,7 +2442,7 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
 
     connect(currentProcessDetails.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
         if (exitCode != 0 || exitStatus == QProcess::CrashExit) {
-            if (currentProcessDetails && currentPackageName == packageName && listWidget->currentRow() == row) {
+            if (currentProcessDetails && currentPackageName == packageName && listWidget->currentRow() == lastSelectedRow) {
 
                 QString errorMessage = QString::fromUtf8(currentProcessDetails->readAllStandardError()).trimmed();
 
@@ -2466,78 +2477,87 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
         }
     });
 
-    detailsWidget->clear();
-    miniAnimation(true, detailsWidget);
-
     QStringList command = packageCommands.value(0).value(page == 2 ? "show_info" : "info");
     currentProcessDetails->setProcessEnvironment(env);
     currentProcessDetails->start(command[0], QStringList() << command[1] << packageName);
+}
 
-    if (page == 2 || page == 4) {
-        QTreeWidget* treeWidget = (page == 2) ? ui->tree_aur : ui->tree_files_pkg;
+void MainWindow::prepareFiles(QTreeWidget* treeWidget, const QString& packageName) {
+    treeWidget->clear();
+    miniAnimation(true, treeWidget);
 
-        if (currentProcessDetails && currentProcessDetails->state() == QProcess::Running) {
-            currentProcessDetails->kill();
-            currentProcessDetails->waitForFinished();
+    if (currentProcessDetails && currentProcessDetails->state() == QProcess::Running) {
+        currentProcessDetails->kill();
+        currentProcessDetails->waitForFinished();
 
-            disconnect(currentProcessDetails.data(), &QProcess::readyReadStandardOutput, nullptr, nullptr);
-            disconnect(currentProcessDetails.data(), &QProcess::finished, nullptr, nullptr);
-            disconnect(currentProcessDetails.data(), &QProcess::finished, nullptr, nullptr);
+        disconnect(currentProcessDetails.data(), &QProcess::readyReadStandardOutput, nullptr, nullptr);
+        disconnect(currentProcessDetails.data(), &QProcess::finished, nullptr, nullptr);
+    }
+
+    auto fileListProcess = QSharedPointer<QProcess>::create();
+    connect(fileListProcess.data(), &QProcess::readyReadStandardOutput, this, [=]() {
+        QStringList lines = QString::fromUtf8(fileListProcess->readAllStandardOutput()).split('\n', Qt::SkipEmptyParts);
+
+        if (lines.isEmpty() && !fileListProcess->readAllStandardError().isEmpty()) {
+            treeWidget->clear();
+            return;
         }
 
-        auto fileListProcess = QSharedPointer<QProcess>::create();
-        connect(fileListProcess.data(), &QProcess::readyReadStandardOutput, this, [=]() {
-            QStringList lines = QString::fromUtf8(fileListProcess->readAllStandardOutput()).split('\n', Qt::SkipEmptyParts);
-            if (lines.isEmpty() && !fileListProcess->readAllStandardError().isEmpty()) return treeWidget->clear();
-            treeWidget->clear();
-            QMap<QString, QTreeWidgetItem*> pathMap;
+        treeWidget->clear();
+        QMap<QString, QTreeWidgetItem*> pathMap;
 
-            QFileIconProvider iconProvider;
+        QFileIconProvider iconProvider;
 
-            for (const QString& line : std::as_const(lines)) {
-                QStringList parts = line.split(' ', Qt::SkipEmptyParts);
-                if (parts.size() < 2) continue;
+        for (const QString& line : std::as_const(lines)) {
+            QStringList parts = line.split(' ', Qt::SkipEmptyParts);
+            if (parts.size() < 2) continue;
 
-                QString currentPath;
-                QTreeWidgetItem* currentItem = nullptr;
+            QString currentPath;
+            QTreeWidgetItem* currentItem = nullptr;
 
-                QString fullPath = "/" + QDir::cleanPath(parts[1]);
+            QString fullPath = "/" + QDir::cleanPath(parts[1]);
 
-                QStringList splitParts = fullPath.split('/');
-                for (const QString& part : std::as_const(splitParts)) {
-                    if (part.isEmpty()) continue;
-                    currentPath = currentPath.isEmpty() ? part : currentPath + "/" + part;
+            QStringList splitParts = fullPath.split('/');
+            for (const QString& part : std::as_const(splitParts)) {
+                if (part.isEmpty()) continue;
+                currentPath = currentPath.isEmpty() ? part : currentPath + "/" + part;
 
-                    if (!pathMap.contains(currentPath)) {
-                        auto newItem = currentItem ? new QTreeWidgetItem(currentItem) : new QTreeWidgetItem(treeWidget);
-                        QFileInfo fileInfo(fullPath);
+                if (!pathMap.contains(currentPath)) {
+                    auto newItem = currentItem ? new QTreeWidgetItem(currentItem) : new QTreeWidgetItem(treeWidget);
+                    QFileInfo fileInfo(fullPath);
 
-                        QIcon icon;
-                        if (fileInfo.isDir())
-                            icon = iconProvider.icon(QFileIconProvider::Folder);
-                        else
-                            icon = iconProvider.icon(fileInfo);
+                    QIcon icon;
+                    if (fileInfo.isDir())
+                        icon = iconProvider.icon(QFileIconProvider::Folder);
+                    else
+                        icon = iconProvider.icon(fileInfo);
 
-                        newItem->setIcon(0, icon);
-                        newItem->setText(0, part);
+                    newItem->setIcon(0, icon);
+                    newItem->setText(0, part);
 
-                        pathMap[currentPath] = newItem;
-                        currentItem = newItem;
-                    } else
-                        currentItem = pathMap[currentPath];
-                }
+                    pathMap[currentPath] = newItem;
+                    currentItem = newItem;
+                } else
+                    currentItem = pathMap[currentPath];
             }
-        });
+        }
+    });
 
-        connect(fileListProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
-            if (exitStatus == QProcess::CrashExit || exitCode != 0) treeWidget->clear();
-        });
+    connect(fileListProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
+        miniAnimation(false, treeWidget);
 
-        fileListProcess->start(packageCommands.value(0).value("query_list_files").at(0),
-                               QStringList() << packageCommands.value(0).value("query_list_files").at(1) << packageName);
+        if (treeWidget->topLevelItemCount() == 0) {
+            auto messageItem = new QTreeWidgetItem(treeWidget);
+            messageItem->setText(0, tr("Не удалось получить список файлов для данного пакета."));
+            messageItem->setForeground(0, QBrush(Qt::red));
+            messageItem->setFlags(Qt::ItemIsEnabled);
+        }
+    });
 
-    }
+    fileListProcess->start(packageCommands.value(0).value("query_list_files").at(0),
+                           QStringList() << packageCommands.value(0).value("query_list_files").at(1) << packageName);
 }
+
 
 void MainWindow::onListItemClicked(const QString &packageName, int row, QListWidgetItem *item)
 {

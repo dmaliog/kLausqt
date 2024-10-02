@@ -282,6 +282,9 @@ public slots:
     void on_action_30_triggered();
 
 private slots:
+    void prepareDetails(QListWidget* listWidget, QTextBrowser* detailsWidget, const QString& packageName);
+    void prepareFiles(QTreeWidget* treeWidget, const QString& packageName);
+
     void openFolder(const QString& path);
 
     void loadPackageList(const QStringList& packages, QListWidget* listWidget);
