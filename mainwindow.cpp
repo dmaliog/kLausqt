@@ -1230,7 +1230,7 @@ void MainWindow::openFolder(const QString& path) {
 }
 
 QString MainWindow::getCurrentPathFromList(const QString& itemName) {
-    QString path = mainDir + "/" + itemName; // Замените на вашу логику
+    QString path = mainDir + "/" + itemName;
     return path;
 }
 
@@ -2434,11 +2434,11 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
                 QString errorMessage = QString::fromUtf8(currentProcessDetails->readAllStandardError()).trimmed();
 
                 QString formattedText;
-                if (!errorMessage.isEmpty()) {
+                if (!errorMessage.isEmpty())
                     formattedText = QString("<span style=\"font-size: 11pt;\">%1</span>").arg(errorMessage);
-                } else if (listWidget == ui->list_aur) {
+                else if (listWidget == ui->list_aur)
                     formattedText = QString("<span style=\"font-size: 11pt;\">%1</span>").arg(tr("Пакет не найден!\nВозможно, он поменял свое название..."));
-                } else {
+                else {
                     detailsWidget->clear();
                     return;
                 }
@@ -2484,12 +2484,14 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
         }
 
         auto fileListProcess = QSharedPointer<QProcess>::create();
-
         connect(fileListProcess.data(), &QProcess::readyReadStandardOutput, this, [=]() {
             QStringList lines = QString::fromUtf8(fileListProcess->readAllStandardOutput()).split('\n', Qt::SkipEmptyParts);
             if (lines.isEmpty() && !fileListProcess->readAllStandardError().isEmpty()) return treeWidget->clear();
             treeWidget->clear();
             QMap<QString, QTreeWidgetItem*> pathMap;
+
+            QFileIconProvider iconProvider;
+
             for (const QString& line : std::as_const(lines)) {
                 QStringList parts = line.split(' ', Qt::SkipEmptyParts);
                 if (parts.size() < 2) continue;
@@ -2497,22 +2499,32 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
                 QString currentPath;
                 QTreeWidgetItem* currentItem = nullptr;
 
-                QStringList splitParts = parts[1].split('/');
+                QString fullPath = "/" + QDir::cleanPath(parts[1]);
+
+                QStringList splitParts = fullPath.split('/');
                 for (const QString& part : std::as_const(splitParts)) {
                     if (part.isEmpty()) continue;
                     currentPath = currentPath.isEmpty() ? part : currentPath + "/" + part;
 
                     if (!pathMap.contains(currentPath)) {
                         auto newItem = currentItem ? new QTreeWidgetItem(currentItem) : new QTreeWidgetItem(treeWidget);
+
+                        QFileInfo fileInfo(fullPath);
+
+                        QIcon icon;
+                        if (fileInfo.isDir())
+                            icon = iconProvider.icon(QFileIconProvider::Folder);
+                        else
+                            icon = iconProvider.icon(fileInfo);
+
+                        newItem->setIcon(0, icon);
                         newItem->setText(0, part);
+
                         pathMap[currentPath] = newItem;
                         currentItem = newItem;
-                    } else {
+                    } else
                         currentItem = pathMap[currentPath];
-                    }
                 }
-
-
             }
         });
 
@@ -2520,7 +2532,9 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
             if (exitStatus == QProcess::CrashExit || exitCode != 0) treeWidget->clear();
         });
 
-        fileListProcess->start(packageCommands.value(0).value("query_list_files").at(0), QStringList() << packageCommands.value(0).value("query_list_files").at(1) << packageName);
+        fileListProcess->start(packageCommands.value(0).value("query_list_files").at(0),
+                               QStringList() << packageCommands.value(0).value("query_list_files").at(1) << packageName);
+
     }
 }
 
