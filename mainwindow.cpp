@@ -18,7 +18,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "17.1";
+QString currentVersion = "17.2";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -577,6 +577,7 @@ void MainWindow::on_action_35_triggered()
 
     ui->action_34->setVisible(true);
     ui->action_11->setVisible(page == 4);
+    ui->action_allpkg->setVisible(page == 4);
     ui->action_35->setVisible(false);
     ui->action_updatelist->setVisible(true);
 
@@ -2317,6 +2318,7 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
             {
                 ui->action_35->setVisible(true);
                 ui->action_11->setVisible(false);
+                ui->action_allpkg->setVisible(false);
                 ui->action_34->setVisible(false);
                 ui->action_updatelist->setVisible(false);
 
