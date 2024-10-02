@@ -1181,9 +1181,8 @@ void MainWindow::showListContextMenu(const QPoint& pos) {
         currentPath = getCurrentPathFromTree(treeItem);
 
         isFile = QFileInfo::exists(currentPath) && !QFileInfo(currentPath).isDir();
-    } else {
+    } else
         return;
-    }
 
     QString favoriteFile = mainDir + "menu/Favorite/Favorite.txt";
     QFile file(favoriteFile);
@@ -1202,7 +1201,7 @@ void MainWindow::showListContextMenu(const QPoint& pos) {
 
     if (QDir(currentPath).exists() || isFile) {
         QString pathToOpen = isFile ? QFileInfo(currentPath).absolutePath() : currentPath;
-        addAction(":/img/25.png", tr("Перейти к расположению"), [=]() { openFolder(pathToOpen); });
+        addAction(":/img/48.png", tr("Перейти к расположению"), [=]() { openFolder(pathToOpen); });
     }
 
     if (listWidget) {
@@ -1222,7 +1221,6 @@ void MainWindow::showListContextMenu(const QPoint& pos) {
     }
 
     if (menu.actions().isEmpty()) return;
-
     menu.exec(senderWidget->mapToGlobal(pos));
 }
 
