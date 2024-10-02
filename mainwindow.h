@@ -114,7 +114,6 @@ private:
 
     QString currentCategory;      // Текущая категория
     QString currentSubcategory;   // Текущая подкатегория
-
     // Умные указатели
     QCompleter* completer;
     QStandardItemModel* completerModel;
@@ -122,6 +121,7 @@ private:
 
     QSharedPointer<QProcess> currentTerminalProcess;
     QSharedPointer<QProcess> currentProcessDetails;
+    QSharedPointer<QProcess> fileListProcess;
     QSharedPointer<QProcess> currentProcess;
     QScopedPointer<QLabel> loadingLabel;
     QSharedPointer<QLabel> loadingAnimationLabel;

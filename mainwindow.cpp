@@ -18,7 +18,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "16.8";
+QString currentVersion = "16.9";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -337,7 +337,6 @@ void MainWindow::on_action_restart_triggered()
 {
     if (currentProcess && currentProcess->state() == QProcess::Running) {
         currentProcess->kill();
-        currentProcess->waitForFinished();
 
         disconnect(currentProcess.data(), &QProcess::readyReadStandardOutput, nullptr, nullptr);
         disconnect(currentProcess.data(), &QProcess::finished, nullptr, nullptr);
@@ -358,7 +357,6 @@ void MainWindow::on_action_stop_triggered()
 {
     if (currentProcess && currentProcess->state() == QProcess::Running) {
         currentProcess->kill();
-        currentProcess->waitForFinished();
 
         disconnect(currentProcess.data(), &QProcess::readyReadStandardOutput, nullptr, nullptr);
         disconnect(currentProcess.data(), &QProcess::finished, nullptr, nullptr);
@@ -935,7 +933,6 @@ void MainWindow::on_push_grub_fast_clicked()
 
     if (currentProcess && currentProcess->state() == QProcess::Running) {
         currentProcess->kill();
-        currentProcess->waitForFinished();
 
         disconnect(currentProcess.data(), &QProcess::readyReadStandardOutput, nullptr, nullptr);
         disconnect(currentProcess.data(), &QProcess::finished, nullptr, nullptr);
@@ -1284,7 +1281,6 @@ void MainWindow::createSearchBar()
  {
      if (currentProcess && currentProcess->state() == QProcess::Running) {
          currentProcess->kill();
-         currentProcess->waitForFinished();
 
          disconnect(currentProcess.data(), &QProcess::readyReadStandardOutput, nullptr, nullptr);
          disconnect(currentProcess.data(), &QProcess::finished, nullptr, nullptr);
@@ -2379,10 +2375,8 @@ void MainWindow::prepareDetails(QListWidget* listWidget, QTextBrowser* detailsWi
 
     if (currentProcessDetails && currentProcessDetails->state() == QProcess::Running) {
         currentProcessDetails->kill();
-        currentProcessDetails->waitForFinished();
 
         disconnect(currentProcessDetails.data(), &QProcess::readyReadStandardOutput, nullptr, nullptr);
-        disconnect(currentProcessDetails.data(), &QProcess::finished, nullptr, nullptr);
         disconnect(currentProcessDetails.data(), &QProcess::finished, nullptr, nullptr);
     }
     currentProcessDetails = QSharedPointer<QProcess>::create();
@@ -2425,7 +2419,6 @@ void MainWindow::prepareDetails(QListWidget* listWidget, QTextBrowser* detailsWi
         }
         detailsWidget->append(processedInfo);
         detailsWidget->verticalScrollBar()->setValue(scrollBarValue);
-        miniAnimation(false, detailsWidget);
 
         if(trans == 2) {
             watcher->setFuture(QtConcurrent::run([=]() -> QByteArray {
@@ -2473,25 +2466,28 @@ void MainWindow::prepareDetails(QListWidget* listWidget, QTextBrowser* detailsWi
                     }
                 }
             }
-            miniAnimation(false, detailsWidget);
         }
     });
 
     QStringList command = packageCommands.value(0).value(page == 2 ? "show_info" : "info");
     currentProcessDetails->setProcessEnvironment(env);
     currentProcessDetails->start(command[0], QStringList() << command[1] << packageName);
+
+    connect(currentProcessDetails.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
+        miniAnimation(false, detailsWidget);
+    });
+
 }
 
 void MainWindow::prepareFiles(QTreeWidget* treeWidget, const QString& packageName) {
     treeWidget->clear();
     miniAnimation(true, treeWidget);
 
-    if (currentProcessDetails && currentProcessDetails->state() == QProcess::Running) {
-        currentProcessDetails->kill();
-        currentProcessDetails->waitForFinished();
+    if (fileListProcess && fileListProcess->state() == QProcess::Running) {
+        fileListProcess->kill();
 
-        disconnect(currentProcessDetails.data(), &QProcess::readyReadStandardOutput, nullptr, nullptr);
-        disconnect(currentProcessDetails.data(), &QProcess::finished, nullptr, nullptr);
+        disconnect(fileListProcess.data(), &QProcess::readyReadStandardOutput, nullptr, nullptr);
+        disconnect(fileListProcess.data(), &QProcess::finished, nullptr, nullptr);
     }
 
     auto fileListProcess = QSharedPointer<QProcess>::create();
@@ -2619,6 +2615,9 @@ void MainWindow::miniAnimation(bool visible, QWidget* targetWidget)
 {
     static QLabel* miniLoadLabel = nullptr;
 
+    if (!targetWidget->isVisible())
+        return;
+
     if (visible) {
         if (miniLoadLabel) {
             delete miniLoadLabel;
@@ -2646,6 +2645,7 @@ void MainWindow::miniAnimation(bool visible, QWidget* targetWidget)
             miniLoadLabel = nullptr;
         }
         targetWidget->setStyleSheet("background-color: #272727;");
+
         removeToolButtonTooltips(ui->toolBar);
         removeToolButtonTooltips(ui->toolBar_2);
     }
@@ -3294,7 +3294,6 @@ void MainWindow::handleServerResponse(const QString& reply)
 
     if (currentProcess && currentProcess->state() == QProcess::Running) {
         currentProcess->kill();
-        currentProcess->waitForFinished();
 
         disconnect(currentProcess.data(), &QProcess::readyReadStandardOutput, nullptr, nullptr);
         disconnect(currentProcess.data(), &QProcess::finished, nullptr, nullptr);
@@ -4025,7 +4024,6 @@ void MainWindow::on_action_updatelist_triggered()
 
         if (currentProcess && currentProcess->state() == QProcess::Running) {
             currentProcess->kill();
-            currentProcess->waitForFinished();
         }
 
         ui->list_aur->clear();
