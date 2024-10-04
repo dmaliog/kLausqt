@@ -18,7 +18,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "17.4";
+QString currentVersion = "17.5";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -681,12 +681,14 @@ void MainWindow::on_action_5_triggered()
         QListWidgetItem *currentItem = listWidget->currentItem();
         CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(listWidget->itemWidget(currentItem));
 
-        QString packageName;
+        QString basePackageName;
 
         if (itemWidget)
-            packageName = itemWidget->getPackageName();
+            basePackageName = itemWidget->getPackageName();
         else
-            packageName = currentItem->text();
+            basePackageName = currentItem->text();
+
+        QString packageName = basePackageName.section('/', -1);
 
         QString desktopFilePath;
 
@@ -1173,11 +1175,17 @@ void MainWindow::setupListContextMenu()
 }
 
 bool MainWindow::checkIfPackageIsInstalled(const QString& packageName) {
+    QString basePackageName = packageName.section('/', -1);
+
     for (int i = 0; i < ui->list_sysapp->count(); ++i) {
         QListWidgetItem* item = ui->list_sysapp->item(i);
-        if (item->text() == packageName) {
+        if (!item) continue;
+
+        QString installedPackageName = item->text();
+        QString installedBasePackageName = installedPackageName.section('/', -1);
+
+        if (installedBasePackageName == basePackageName)
             return true;
-        }
     }
     return false;
 }
@@ -1198,7 +1206,15 @@ void MainWindow::showListContextMenu(const QPoint& pos) {
     if (listWidget) {
         QListWidgetItem* item = listWidget->itemAt(pos);
         if (!item || item->data(Qt::UserRole + 1).toString().contains("category")) return;
-        itemName = item->text();
+
+        QListWidgetItem *currentItem = listWidget->currentItem();
+        CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(listWidget->itemWidget(currentItem));
+
+        if (itemWidget)
+            itemName = itemWidget->getPackageName();
+        else
+            itemName = currentItem->text();
+
         currentPath = getCurrentPathFromList(itemName);
     } else if (treeWidget) {
         QTreeWidgetItem* treeItem = treeWidget->itemAt(pos);
@@ -1232,13 +1248,14 @@ void MainWindow::showListContextMenu(const QPoint& pos) {
 
     if (listWidget) {
         if (!isInstalled) {
+            addAction(":/img/25.png", tr("Найти в каталоге пакетов"), &MainWindow::on_action_searchpkg_triggered);
             addAction(":/img/15.png", tr("Установить"), &MainWindow::on_action_4_triggered);
             addAction(":/img/27.png", tr("Изменить PKGBUILD и установить"), &MainWindow::on_action_30_triggered);
         } else if (isInstalled) {
-                addAction(":/img/25.png", tr("Найти в каталоге пакетов"), &MainWindow::on_action_searchpkg_triggered);
-                addAction(":/img/13.png", tr("Запустить"), &MainWindow::on_action_5_triggered);
-                addAction(":/img/15.png", tr("Обновить версию"), &MainWindow::on_action_4_triggered);
-                addAction(":/img/14.png", tr("Удалить"), &MainWindow::on_action_6_triggered);
+            addAction(":/img/25.png", tr("Найти в каталоге пакетов"), &MainWindow::on_action_searchpkg_triggered);
+            addAction(":/img/13.png", tr("Запустить"), &MainWindow::on_action_5_triggered);
+            addAction(":/img/15.png", tr("Обновить версию"), &MainWindow::on_action_4_triggered);
+            addAction(":/img/14.png", tr("Удалить"), &MainWindow::on_action_6_triggered);
         }
 
         addAction(":/img/34.png", tr("Информация о пакете"), &MainWindow::on_action_34_triggered);
@@ -1246,9 +1263,8 @@ void MainWindow::showListContextMenu(const QPoint& pos) {
                   isFavorite ? &MainWindow::on_action_favorite_del_triggered : &MainWindow::on_action_favorite_triggered);
     }
 
-    if (!menu.actions().isEmpty()) {
+    if (!menu.actions().isEmpty())
         menu.exec(senderWidget->mapToGlobal(pos));
-    }
 }
 
 void MainWindow::openFolder(const QString& path) {
@@ -4284,8 +4300,7 @@ void MainWindow::on_action_favorite_del_triggered()
         loadSubcategories("Favorite");
 }
 
-void MainWindow::on_action_searchpkg_triggered()
-{
+void MainWindow::on_action_searchpkg_triggered() {
     QListWidget* listWidget = nullptr;
     if (page == 2) {
         listWidget = ui->list_aur;
@@ -4296,11 +4311,27 @@ void MainWindow::on_action_searchpkg_triggered()
             listWidget = ui->list_sysapp;
     }
 
-    if (auto item = listWidget->currentItem()) {
-        ui->action_2->trigger();
-        ui->searchLineEdit->setText(item->text());
-        QCoreApplication::postEvent(ui->searchLineEdit, new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier));
-    }
+    QListWidgetItem* currentItem = listWidget->currentItem();
+
+    if (!currentItem)
+        return;
+
+    CustomListItemWidget* itemWidget = qobject_cast<CustomListItemWidget*>(listWidget->itemWidget(currentItem));
+    QString basePackageName;
+
+    if (itemWidget)
+        basePackageName = itemWidget->getPackageName();
+    else
+        basePackageName = currentItem->text();
+
+    QString packageName = basePackageName.section('/', -1);
+
+    if (packageName.isEmpty())
+        return;
+
+    ui->action_2->trigger();
+    ui->searchLineEdit->setText(packageName);
+    QCoreApplication::postEvent(ui->searchLineEdit, new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier));
 }
 
 void MainWindow::on_action_allpkg_triggered(bool checked)
