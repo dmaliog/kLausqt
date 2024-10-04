@@ -178,9 +178,8 @@ void MainWindow::on_action_3_triggered()
         ui->searchLineEdit->setText(wikiUrl);
         *aururl = ui->webEngineView_aur->url().toString();
         ui->action_35->setEnabled(false);
-    } else {
+    } else
         ui->searchLineEdit->setText(aurUrl);
-    }
 
     ui->action_31->setVisible(true);
     ui->action_32->setVisible(true);
@@ -328,7 +327,6 @@ void MainWindow::on_action_downgrade_triggered()
     ui->tabWidget->setCurrentIndex(12);
     ui->action_updatelist->setVisible(true);
 }
-
 
 //---#####################################################################################################################################################
 //--################################################################## БЫСТРЫЕ ФУНКЦИИ ##################################################################
@@ -878,6 +876,7 @@ void MainWindow::on_list_aurpkg_itemSelectionChanged()
         ui->details_aurpkg->setHtml(tr("Ничего не выбрано"));
     }
 }
+
 void MainWindow::on_action_infopkg_triggered(bool checked)
 {
     if (ui->list_aur->currentItem() == nullptr) {
@@ -889,12 +888,19 @@ void MainWindow::on_action_infopkg_triggered(bool checked)
         return;
     }
 
+    actionInfopkgPressed = checked;
+    QString packageName = ui->list_aur->currentItem()->text();
+
     if (checked) {
         ui->tabWidget_details->setCurrentIndex(1);
         ui->action_infopkg->setText(tr("Описание пакета"));
+
+        prepareFiles(ui->tree_aur, packageName);
     } else {
         ui->tabWidget_details->setCurrentIndex(0);
         ui->action_infopkg->setText(tr("Файлы пакета"));
+
+        prepareDetails(ui->list_aur, ui->details_aur, packageName);
     }
 }
 
@@ -916,15 +922,21 @@ void MainWindow::on_action_infopkg_pkg_triggered(bool checked)
         return;
     }
 
+    actionInfopkgPkgPressed = checked;
+    QString packageName = listWidget->currentItem()->text();
+
     if (checked) {
         ui->tabWidget_details_pkg->setCurrentIndex(1);
         ui->action_infopkg_pkg->setText(tr("Описание пакета"));
+
+        prepareFiles(ui->tree_files_pkg, packageName);
     } else {
         ui->tabWidget_details_pkg->setCurrentIndex(0);
         ui->action_infopkg_pkg->setText(tr("Файлы пакета"));
+
+        prepareDetails(listWidget, ui->details_aurpkg, packageName);
     }
 }
-
 
 void MainWindow::on_push_grub_fast_clicked()
 {
@@ -2363,10 +2375,15 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
     lastSelectedPackage = packageName;
     currentPackageName = packageName;
 
-    prepareDetails(listWidget, detailsWidget, packageName);
+    if (!actionInfopkgPressed) {
+        prepareDetails(listWidget, detailsWidget, packageName);
+    }
 
-    if (page == 2 || page == 4) {
-        QTreeWidget* treeWidget = (page == 2) ? ui->tree_aur : ui->tree_files_pkg;
+    if (page == 2 && actionInfopkgPressed) {
+        QTreeWidget* treeWidget = ui->tree_aur;
+        prepareFiles(treeWidget, packageName);
+    } else if (page == 4 && actionInfopkgPkgPressed) {
+        QTreeWidget* treeWidget = ui->tree_files_pkg;
         prepareFiles(treeWidget, packageName);
     }
 }
@@ -2551,7 +2568,6 @@ void MainWindow::prepareFiles(QTreeWidget* treeWidget, const QString& packageNam
     fileListProcess->start(packageCommands.value(0).value("query_list_files").at(0),
                            QStringList() << packageCommands.value(0).value("query_list_files").at(1) << packageName);
 }
-
 
 void MainWindow::onListItemClicked(const QString &packageName, int row, QListWidgetItem *item)
 {

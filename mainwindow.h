@@ -172,6 +172,9 @@ private:
     bool stopProcessing = false;
     bool allItemsAdded = true;
 
+    bool actionInfopkgPressed = false; // Флаг для action_infopkg
+    bool actionInfopkgPkgPressed = false; // Флаг для action_infopkg_pkg
+
     int lastSelectedRow = -1;
     QString lastSelectedPackage;
 
