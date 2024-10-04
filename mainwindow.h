@@ -172,8 +172,8 @@ private:
     bool stopProcessing = false;
     bool allItemsAdded = true;
 
-    bool actionInfopkgPressed = false; // Флаг для action_infopkg
-    bool actionInfopkgPkgPressed = false; // Флаг для action_infopkg_pkg
+    bool actionInfopkgPressed = false;
+    bool actionInfopkgPkgPressed = false;
 
     int lastSelectedRow = -1;
     QString lastSelectedPackage;
@@ -285,6 +285,8 @@ public slots:
     void on_action_30_triggered();
 
 private slots:
+    bool checkIfPackageIsInstalled(const QString& packageName);
+
     void prepareDetails(QListWidget* listWidget, QTextBrowser* detailsWidget, const QString& packageName);
     void prepareFiles(QTreeWidget* treeWidget, const QString& packageName);
 

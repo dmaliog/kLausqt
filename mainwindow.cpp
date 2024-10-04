@@ -18,7 +18,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "17.2";
+QString currentVersion = "17.4";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -664,10 +664,14 @@ void MainWindow::on_action_5_triggered()
     } else {
         QListWidget* listWidget = nullptr;
 
+        if (page == 2) {
+            listWidget = ui->list_aur;
+        } else {
         if (ui->tabWidget_pkg->currentIndex() == 0)
             listWidget = ui->list_app;
         else if (ui->tabWidget_pkg->currentIndex() == 1)
             listWidget = ui->list_sysapp;
+        }
 
         if (listWidget->currentItem() == nullptr) {
             sendNotification(tr("Внимание"), tr("Выберите пакет из списка для запуска!"));
@@ -1168,12 +1172,24 @@ void MainWindow::setupListContextMenu()
     connect(ui->tree_files_pkg, &QListWidget::customContextMenuRequested, this, &MainWindow::showListContextMenu);
 }
 
+bool MainWindow::checkIfPackageIsInstalled(const QString& packageName) {
+    for (int i = 0; i < ui->list_sysapp->count(); ++i) {
+        QListWidgetItem* item = ui->list_sysapp->item(i);
+        if (item->text() == packageName) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void MainWindow::showListContextMenu(const QPoint& pos) {
     QWidget* senderWidget = qobject_cast<QWidget*>(sender());
     if (!senderWidget) return;
 
     QListWidget* listWidget = qobject_cast<QListWidget*>(senderWidget);
     QTreeWidget* treeWidget = qobject_cast<QTreeWidget*>(senderWidget);
+
+    if (!listWidget && !treeWidget) return;
 
     QString itemName;
     QString currentPath;
@@ -1189,10 +1205,8 @@ void MainWindow::showListContextMenu(const QPoint& pos) {
         if (!treeItem) return;
         itemName = treeItem->text(0);
         currentPath = getCurrentPathFromTree(treeItem);
-
         isFile = QFileInfo::exists(currentPath) && !QFileInfo(currentPath).isDir();
-    } else
-        return;
+    }
 
     QString favoriteFile = mainDir + "menu/Favorite/Favorite.txt";
     QFile file(favoriteFile);
@@ -1209,22 +1223,22 @@ void MainWindow::showListContextMenu(const QPoint& pos) {
         menu.addAction(action);
     };
 
-    if (treeWidget) {
-        if (QDir(currentPath).exists() || isFile) {
-            QString pathToOpen = isFile ? QFileInfo(currentPath).absolutePath() : currentPath;
-            addAction(":/img/48.png", tr("Перейти к расположению"), [=]() { openFolder(pathToOpen); });
-        }
+    bool isInstalled = listWidget ? checkIfPackageIsInstalled(itemName) : false;
+
+    if (treeWidget && (QDir(currentPath).exists() || isFile)) {
+        QString pathToOpen = isFile ? QFileInfo(currentPath).absolutePath() : currentPath;
+        addAction(":/img/48.png", tr("Перейти к расположению"), [=]() { openFolder(pathToOpen); });
     }
 
     if (listWidget) {
-        if (listWidget == ui->list_aur) {
+        if (!isInstalled) {
             addAction(":/img/15.png", tr("Установить"), &MainWindow::on_action_4_triggered);
             addAction(":/img/27.png", tr("Изменить PKGBUILD и установить"), &MainWindow::on_action_30_triggered);
-        } else if (listWidget == ui->list_app || listWidget == ui->list_sysapp) {
-            addAction(":/img/25.png", tr("Найти в каталоге пакетов"), &MainWindow::on_action_searchpkg_triggered);
-            addAction(":/img/13.png", tr("Запустить"), &MainWindow::on_action_5_triggered);
-            addAction(":/img/15.png", tr("Обновить версию"), &MainWindow::on_action_4_triggered);
-            addAction(":/img/14.png", tr("Удалить"), &MainWindow::on_action_6_triggered);
+        } else if (isInstalled) {
+                addAction(":/img/25.png", tr("Найти в каталоге пакетов"), &MainWindow::on_action_searchpkg_triggered);
+                addAction(":/img/13.png", tr("Запустить"), &MainWindow::on_action_5_triggered);
+                addAction(":/img/15.png", tr("Обновить версию"), &MainWindow::on_action_4_triggered);
+                addAction(":/img/14.png", tr("Удалить"), &MainWindow::on_action_6_triggered);
         }
 
         addAction(":/img/34.png", tr("Информация о пакете"), &MainWindow::on_action_34_triggered);
@@ -1232,8 +1246,9 @@ void MainWindow::showListContextMenu(const QPoint& pos) {
                   isFavorite ? &MainWindow::on_action_favorite_del_triggered : &MainWindow::on_action_favorite_triggered);
     }
 
-    if (menu.actions().isEmpty()) return;
-    menu.exec(senderWidget->mapToGlobal(pos));
+    if (!menu.actions().isEmpty()) {
+        menu.exec(senderWidget->mapToGlobal(pos));
+    }
 }
 
 void MainWindow::openFolder(const QString& path) {
@@ -4272,11 +4287,14 @@ void MainWindow::on_action_favorite_del_triggered()
 void MainWindow::on_action_searchpkg_triggered()
 {
     QListWidget* listWidget = nullptr;
-
-    if (ui->tabWidget_pkg->currentIndex() == 0)
-        listWidget = ui->list_app;
-    else if (ui->tabWidget_pkg->currentIndex() == 1)
-        listWidget = ui->list_sysapp;
+    if (page == 2) {
+        listWidget = ui->list_aur;
+    } else {
+        if (ui->tabWidget_pkg->currentIndex() == 0)
+            listWidget = ui->list_app;
+        else if (ui->tabWidget_pkg->currentIndex() == 1)
+            listWidget = ui->list_sysapp;
+    }
 
     if (auto item = listWidget->currentItem()) {
         ui->action_2->trigger();
