@@ -807,7 +807,7 @@ void MainWindow::on_action_6_triggered()
 
     currentTerminalProcess = QSharedPointer<QProcess>::create(this);
     connect(currentTerminalProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
-        loadContentInstall();
+        on_action_updatelist_triggered();
     });
     currentTerminalProcess->setProgram(terminal.binary);
     currentTerminalProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("remove") << packageName);
@@ -876,7 +876,7 @@ void MainWindow::on_action_4_triggered()
 
     currentTerminalProcess = QSharedPointer<QProcess>::create(this);
     connect(currentTerminalProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
-        loadContentInstall();
+        on_action_updatelist_triggered();
     });
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
