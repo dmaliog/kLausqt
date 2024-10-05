@@ -438,7 +438,7 @@ private slots:
     void on_action_favorite_triggered();
     void on_action_favorite_del_triggered();
     void on_action_searchpkg_triggered();
-    void on_action_allpkg_triggered(bool checked);
+    void on_action_allpkg_triggered();
 };
 
 

@@ -191,5 +191,7 @@
         <file>img/letter-8.png</file>
         <file>img/letter-9.png</file>
         <file>img/splash.png</file>
+        <file>img/pkgdep.png</file>
+        <file>img/pkgnodep.png</file>
     </qresource>
 </RCC>

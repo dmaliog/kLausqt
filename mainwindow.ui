@@ -493,7 +493,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab_webgame">
        <attribute name="title">
@@ -620,7 +620,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
          </widget>
         </item>
         <item row="0" column="0">
-         <widget class="QLabel" name="label_name_aur">
+         <widget class="QLabel" name="label_aur">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -994,7 +994,7 @@ margin-left:10px;</string>
              <number>0</number>
             </property>
             <item row="0" column="0">
-             <widget class="QLabel" name="label_name_aurpkg">
+             <widget class="QLabel" name="label_aurpkg">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                 <horstretch>0</horstretch>
@@ -1082,7 +1082,7 @@ margin-left:10px;</string>
              <number>0</number>
             </property>
             <item row="0" column="0">
-             <widget class="QLabel" name="label_name_sysapp">
+             <widget class="QLabel" name="label_sysapp">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -1125,6 +1125,320 @@ margin-left:10px;</string>
               </property>
               <property name="contextMenuPolicy">
                <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_dependencies">
+           <attribute name="title">
+            <string>Страница</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_28">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_dependencies">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>260</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background:#396d69;
+padding:0 15px;
+border-top-left-radius: 15px;
+border-top-right-radius: 15px;
+color:#66c3bb;
+margin-left:10px;</string>
+              </property>
+              <property name="text">
+               <string>Зависимости пакетов</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QListWidget" name="list_dependencies">
+              <property name="font">
+               <font>
+                <pointsize>13</pointsize>
+               </font>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::FocusPolicy::NoFocus</enum>
+              </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_unused_dependencies">
+           <attribute name="title">
+            <string>Страница</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_29">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_unused_dependencies">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>320</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background:#396d69;
+padding:0 15px;
+border-top-left-radius: 15px;
+border-top-right-radius: 15px;
+color:#66c3bb;
+margin-left:10px;</string>
+              </property>
+              <property name="text">
+               <string>Ненужные зависимости пакетов</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QListWidget" name="list_unused_dependencies">
+              <property name="font">
+               <font>
+                <pointsize>13</pointsize>
+               </font>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::FocusPolicy::NoFocus</enum>
+              </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_aur_packages">
+           <attribute name="title">
+            <string>Страница</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_30">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_aur_packages">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>240</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background:#396d69;
+padding:0 15px;
+border-top-left-radius: 15px;
+border-top-right-radius: 15px;
+color:#66c3bb;
+margin-left:10px;</string>
+              </property>
+              <property name="text">
+               <string>Пакеты из AUR</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::TextFormat::AutoText</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+              </property>
+              <property name="margin">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QListWidget" name="list_aur_packages">
+              <property name="font">
+               <font>
+                <pointsize>13</pointsize>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::FocusPolicy::NoFocus</enum>
+              </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
+              </property>
+              <property name="horizontalScrollBarPolicy">
+               <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_official_packages">
+           <attribute name="title">
+            <string>Страница</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_31">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_official_packages">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>380</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background:#396d69;
+padding:0 15px;
+border-top-left-radius: 15px;
+border-top-right-radius: 15px;
+color:#66c3bb;
+margin-left:10px;</string>
+              </property>
+              <property name="text">
+               <string>Пакеты из официальных репозиториев</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::TextFormat::AutoText</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+              </property>
+              <property name="margin">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QListWidget" name="list_official_packages">
+              <property name="font">
+               <font>
+                <pointsize>13</pointsize>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::FocusPolicy::NoFocus</enum>
+              </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
+              </property>
+              <property name="horizontalScrollBarPolicy">
+               <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
               </property>
              </widget>
             </item>
@@ -1439,7 +1753,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
          </widget>
         </item>
         <item row="0" column="0">
-         <widget class="QLabel" name="label_name_sh">
+         <widget class="QLabel" name="label_sh">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -1700,7 +2014,7 @@ margin-left:10px;</string>
          </widget>
         </item>
         <item row="0" column="0">
-         <widget class="QLabel" name="label_name_journal">
+         <widget class="QLabel" name="label_journal">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -3074,7 +3388,7 @@ margin-left:10px;</string>
             <number>0</number>
            </property>
            <item>
-            <widget class="QLabel" name="label_name_grub_3">
+            <widget class="QLabel" name="label_grub_3">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -3265,7 +3579,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <number>0</number>
            </property>
            <item>
-            <widget class="QLabel" name="label_name_grub">
+            <widget class="QLabel" name="label_grub">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -3651,7 +3965,7 @@ background:#396d69;
             <number>0</number>
            </property>
            <item>
-            <widget class="QLabel" name="label_name_bench">
+            <widget class="QLabel" name="label_bench">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -4512,7 +4826,7 @@ margin-left:10px;</string>
             <number>0</number>
            </property>
            <item>
-            <widget class="QLabel" name="label_name_pacman">
+            <widget class="QLabel" name="label_pacman">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -4755,7 +5069,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <number>0</number>
            </property>
            <item>
-            <widget class="QLabel" name="label_name_fstab">
+            <widget class="QLabel" name="label_fstab">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>

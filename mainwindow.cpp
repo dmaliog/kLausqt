@@ -18,7 +18,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "17.5";
+QString currentVersion = "17.6";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -55,6 +55,8 @@ int trans = 2; //перевод описания
 int colorlist = 2; //раскрашивать листы
 int timerupdpkg = 2;
 
+int currentTabIndex;
+
 //---#####################################################################################################################################################
 //--############################################################## ОПРЕДЕЛЕНИЕ ТЕРМИНАЛА ################################################################
 //-#####################################################################################################################################################
@@ -68,9 +70,7 @@ QMap<int, QMap<QString, QStringList>> packageCommands = {
             {"update", {"yay", "-Syu"}},
             {"list_files", {"yay", "-Ql"}},
             {"query_list_files", {"yay", "-Fl"}},
-            {"query", {"yay", "-Q"}},
             {"show_info", {"yay", "-Si"}},
-            {"query_explicit", {"yay", "-Qe"}},
             {"search", {"yay", "-Ss"}},
             {"query_q", {"yay", "-Qq"}},
             {"remove_explicit", {"yay", "-Rs"}},
@@ -79,7 +79,13 @@ QMap<int, QMap<QString, QStringList>> packageCommands = {
             {"clean_all_cache", {"yay", "-Scc"}},
             {"localinstall", {"yay", "-Udd"}},
             {"like", {"yay", "-Wv"}},
-            {"dislike", {"yay", "-Wu"}}
+            {"dislike", {"yay", "-Wu"}},
+            {"query_explicit", {"yay", "-Qeq"}},
+            {"query", {"yay", "-Qq"}},
+            {"query_dependencies", {"yay", "-Qdq"}},
+            {"query_unused_dependencies", {"yay", "-Qdtq"}},
+            {"query_aur_packages", {"yay", "-Qmq"}},
+            {"query_official_packages", {"yay", "-Qnq"}}
         }
     }
 };
@@ -505,10 +511,26 @@ void MainWindow::on_action_34_triggered()
     if (page == 2)
         listWidget = ui->list_aur;
     else if (page == 4) {
-        if (ui->tabWidget_pkg->currentIndex() == 0)
+        switch (ui->tabWidget_pkg->currentIndex()) {
+        case 0:
             listWidget = ui->list_app;
-        else if (ui->tabWidget_pkg->currentIndex() == 1)
+            break;
+        case 1:
             listWidget = ui->list_sysapp;
+            break;
+        case 2:
+            listWidget = ui->list_dependencies;
+            break;
+        case 3:
+            listWidget = ui->list_unused_dependencies;
+            break;
+        case 4:
+            listWidget = ui->list_aur_packages;
+            break;
+        case 5:
+            listWidget = ui->list_official_packages;
+            break;
+        }
     }
 
     if (!listWidget || !listWidget->currentItem()) {
@@ -664,13 +686,29 @@ void MainWindow::on_action_5_triggered()
     } else {
         QListWidget* listWidget = nullptr;
 
-        if (page == 2) {
+        if (page == 2)
             listWidget = ui->list_aur;
-        } else {
-        if (ui->tabWidget_pkg->currentIndex() == 0)
-            listWidget = ui->list_app;
-        else if (ui->tabWidget_pkg->currentIndex() == 1)
-            listWidget = ui->list_sysapp;
+        else if (page == 4) {
+            switch (ui->tabWidget_pkg->currentIndex()) {
+            case 0:
+                listWidget = ui->list_app;
+                break;
+            case 1:
+                listWidget = ui->list_sysapp;
+                break;
+            case 2:
+                listWidget = ui->list_dependencies;
+                break;
+            case 3:
+                listWidget = ui->list_unused_dependencies;
+                break;
+            case 4:
+                listWidget = ui->list_aur_packages;
+                break;
+            case 5:
+                listWidget = ui->list_official_packages;
+                break;
+            }
         }
 
         if (listWidget->currentItem() == nullptr) {
@@ -722,10 +760,26 @@ void MainWindow::on_action_6_triggered()
     if (page == 2)
         listWidget = ui->list_aur;
     else if (page == 4) {
-        if (ui->tabWidget_pkg->currentIndex() == 0)
+        switch (ui->tabWidget_pkg->currentIndex()) {
+        case 0:
             listWidget = ui->list_app;
-        else if (ui->tabWidget_pkg->currentIndex() == 1)
+            break;
+        case 1:
             listWidget = ui->list_sysapp;
+            break;
+        case 2:
+            listWidget = ui->list_dependencies;
+            break;
+        case 3:
+            listWidget = ui->list_unused_dependencies;
+            break;
+        case 4:
+            listWidget = ui->list_aur_packages;
+            break;
+        case 5:
+            listWidget = ui->list_official_packages;
+            break;
+        }
     }
 
     if (listWidget->currentItem() == nullptr) {
@@ -768,10 +822,26 @@ void MainWindow::on_action_4_triggered()
     if (page == 2)
         listWidget = ui->list_aur;
     else if (page == 4) {
-        if (ui->tabWidget_pkg->currentIndex() == 0)
+        switch (ui->tabWidget_pkg->currentIndex()) {
+        case 0:
             listWidget = ui->list_app;
-        else if (ui->tabWidget_pkg->currentIndex() == 1)
+            break;
+        case 1:
             listWidget = ui->list_sysapp;
+            break;
+        case 2:
+            listWidget = ui->list_dependencies;
+            break;
+        case 3:
+            listWidget = ui->list_unused_dependencies;
+            break;
+        case 4:
+            listWidget = ui->list_aur_packages;
+            break;
+        case 5:
+            listWidget = ui->list_official_packages;
+            break;
+        }
     }
 
     if (listWidget->currentItem() == nullptr) {
@@ -871,10 +941,26 @@ void MainWindow::on_list_aurpkg_itemSelectionChanged()
 {
     QListWidget* listWidget = nullptr;
 
-    if (ui->tabWidget_pkg->currentIndex() == 0)
+    switch (ui->tabWidget_pkg->currentIndex()) {
+    case 0:
         listWidget = ui->list_app;
-    else if (ui->tabWidget_pkg->currentIndex() == 1)
+        break;
+    case 1:
         listWidget = ui->list_sysapp;
+        break;
+    case 2:
+        listWidget = ui->list_dependencies;
+        break;
+    case 3:
+        listWidget = ui->list_unused_dependencies;
+        break;
+    case 4:
+        listWidget = ui->list_aur_packages;
+        break;
+    case 5:
+        listWidget = ui->list_official_packages;
+        break;
+    }
 
     if (listWidget->selectedItems().isEmpty()) {
         ui->action_infopkg_pkg->setChecked(false);
@@ -914,10 +1000,26 @@ void MainWindow::on_action_infopkg_pkg_triggered(bool checked)
 {
     QListWidget* listWidget = nullptr;
 
-    if (ui->tabWidget_pkg->currentIndex() == 0)
+    switch (ui->tabWidget_pkg->currentIndex()) {
+    case 0:
         listWidget = ui->list_app;
-    else if (ui->tabWidget_pkg->currentIndex() == 1)
+        break;
+    case 1:
         listWidget = ui->list_sysapp;
+        break;
+    case 2:
+        listWidget = ui->list_dependencies;
+        break;
+    case 3:
+        listWidget = ui->list_unused_dependencies;
+        break;
+    case 4:
+        listWidget = ui->list_aur_packages;
+        break;
+    case 5:
+        listWidget = ui->list_official_packages;
+        break;
+    }
 
     if (listWidget->currentItem() == nullptr) {
         QAction *action = qobject_cast<QAction*>(sender());
@@ -1168,8 +1270,20 @@ void MainWindow::on_action_editsh_triggered()
 void MainWindow::setupListContextMenu()
 {
     connect(ui->list_aur, &QListWidget::customContextMenuRequested, this, &MainWindow::showListContextMenu);
-    connect(ui->list_app, &QListWidget::customContextMenuRequested, this, &MainWindow::showListContextMenu);
-    connect(ui->list_sysapp, &QListWidget::customContextMenuRequested, this, &MainWindow::showListContextMenu);
+
+    QList<QListWidget*> listWidgets = {
+        ui->list_app,
+        ui->list_sysapp,
+        ui->list_dependencies,
+        ui->list_unused_dependencies,
+        ui->list_aur_packages,
+        ui->list_official_packages
+    };
+
+    for (QListWidget* listWidget : listWidgets) {
+        connect(listWidget, &QListWidget::customContextMenuRequested, this, &MainWindow::showListContextMenu);
+    }
+
     connect(ui->tree_aur, &QListWidget::customContextMenuRequested, this, &MainWindow::showListContextMenu);
     connect(ui->tree_files_pkg, &QListWidget::customContextMenuRequested, this, &MainWindow::showListContextMenu);
 }
@@ -1398,19 +1512,41 @@ void MainWindow::search(const QString& searchText)
 void MainWindow::searchTextChanged(const QString& searchText)
 {
     switch (page) {
-        case 2: searchAndScroll(ui->list_aur, searchText); break;
-        case 4:
-            if (ui->tabWidget_pkg->currentIndex() == 0)
-                searchAndScroll(ui->list_app, searchText);
-            else if (ui->tabWidget_pkg->currentIndex() == 1)
-                searchAndScroll(ui->list_sysapp, searchText);
-            break;
-        case 3: searchAndScroll(ui->list_sh, searchText); break;
-        case 14: searchAndScroll(ui->list_downgrade, searchText); break;
-        case 111: searchAndScroll(ui->list_journal, searchText); break;
-        case 112: searchAndScroll(ui->list_bench, searchText); break;
-        case 113: searchAndScroll(ui->list_repair, searchText); break;
-        default: break;
+    case 2:
+        searchAndScroll(ui->list_aur, searchText);
+        break;
+    case 4: {
+        QList<QListWidget*> listWidgets = {
+            ui->list_app,
+            ui->list_sysapp,
+            ui->list_dependencies,
+            ui->list_unused_dependencies,
+            ui->list_aur_packages,
+            ui->list_official_packages
+        };
+
+        int currentIndex = ui->tabWidget_pkg->currentIndex();
+        if (currentIndex >= 0 && currentIndex < listWidgets.size())
+            searchAndScroll(listWidgets[currentIndex], searchText);
+        break;
+    }
+    case 3:
+        searchAndScroll(ui->list_sh, searchText);
+        break;
+    case 14:
+        searchAndScroll(ui->list_downgrade, searchText);
+        break;
+    case 111:
+        searchAndScroll(ui->list_journal, searchText);
+        break;
+    case 112:
+        searchAndScroll(ui->list_bench, searchText);
+        break;
+    case 113:
+        searchAndScroll(ui->list_repair, searchText);
+        break;
+    default:
+        break;
     }
 }
 
@@ -1708,8 +1844,20 @@ void MainWindow::loadSettings()
     //-############################## СИГНАЛЫ И СЛОТЫ ###################################
     //-##################################################################################
     connect(ui->list_aur, &QListWidget::itemSelectionChanged, this, &::MainWindow::on_list_aur_itemSelectionChanged);
-    connect(ui->list_app, &QListWidget::itemSelectionChanged, this, &::MainWindow::on_list_aurpkg_itemSelectionChanged);
-    connect(ui->list_sysapp, &QListWidget::itemSelectionChanged, this, &::MainWindow::on_list_aurpkg_itemSelectionChanged);
+
+    QList<QListWidget*> listWidgets = {
+        ui->list_app,
+        ui->list_sysapp,
+        ui->list_dependencies,
+        ui->list_unused_dependencies,
+        ui->list_aur_packages,
+        ui->list_official_packages
+    };
+
+    // Подключаем сигнал itemSelectionChanged для каждого виджета
+    for (QListWidget* listWidget : listWidgets) {
+        connect(listWidget, &QListWidget::itemSelectionChanged, this, &MainWindow::on_list_aurpkg_itemSelectionChanged);
+    }
 
     connect(ui->time_update, &QTimeEdit::timeChanged, this, &MainWindow::onTimeChanged);
 
@@ -1761,25 +1909,18 @@ void MainWindow::loadSettings()
             onListItemClicked("", 0, item);
     });
 
-    connect(ui->list_app, &QListWidget::itemClicked, this, [=](QListWidgetItem *item) {
-        CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(ui->list_app->itemWidget(item));
-        if (itemWidget) {
-            QString packageName = itemWidget->getPackageName();
-            int row = ui->list_app->row(item);
-            onListItemClicked(packageName, row, item);
-        } else
-            onListItemClicked("", 0, item);
-    });
+    for (QListWidget* listWidget : listWidgets) {
+        connect(listWidget, &QListWidget::itemClicked, this, [=](QListWidgetItem *item) {
+            CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(listWidget->itemWidget(item));
+            QString packageName;
+            int row = listWidget->row(item);
 
-    connect(ui->list_sysapp, &QListWidget::itemClicked, this, [=](QListWidgetItem *item) {
-        CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(ui->list_sysapp->itemWidget(item));
-        if (itemWidget) {
-            QString packageName = itemWidget->getPackageName();
-            int row = ui->list_sysapp->row(item);
+            if (itemWidget)
+                packageName = itemWidget->getPackageName();
+
             onListItemClicked(packageName, row, item);
-        } else
-            onListItemClicked("", 0, item);
-    });
+        });
+    }
 
     connect(ui->list_downgrade, &QListWidget::itemClicked, this, &MainWindow::onListDowngradeItemClicked);
 
@@ -1902,7 +2043,7 @@ void MainWindow::loadSettings()
         else {
             if ((!errorShown && page == 2) || (!errorShown && page == 4)) {
                 sendNotification(tr("Ошибка"), tr("Страница не найдена (ошибка 404)"));
-                errorShown = true;  // Устанавливаем флаг, что уведомление было показано
+                errorShown = true;
                 showLoadingAnimation(false,ui->webEngineView);
             }
         }
@@ -2042,7 +2183,7 @@ void MainWindow::loadSettings()
         }
         pacman.close();
 
-        QString regexPattern = "^(" + sections.join("/\\S+|") + "/\\S+|aur/\\S+)"; // Формирование регулярного выражения
+        QString regexPattern = "^(" + sections.join("/\\S+|") + "/\\S+|aur/\\S+)";
         settings.setValue("Repository", regexPattern);
         repo = QSharedPointer<QString>::create(regexPattern);
     }
@@ -2091,7 +2232,7 @@ void MainWindow::loadSettings()
         if (linkPath.endsWith('/'))
             linkPath.chop(1);
 
-        QString lastSegment = linkPath.section('/', -1); // Извлекаем последний сегмент пути
+        QString lastSegment = linkPath.section('/', -1);
         ui->searchLineEdit->setText(lastSegment);
 
         QKeyEvent *event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
@@ -2646,10 +2787,27 @@ void MainWindow::onListItemClicked(const QString &packageName, int row, QListWid
     if (page == 4)
     {
         QListWidget* listWidget = nullptr;
-        if (ui->tabWidget_pkg->currentIndex() == 0)
+
+        switch (ui->tabWidget_pkg->currentIndex()) {
+        case 0:
             listWidget = ui->list_app;
-        else if (ui->tabWidget_pkg->currentIndex() == 1)
+            break;
+        case 1:
             listWidget = ui->list_sysapp;
+            break;
+        case 2:
+            listWidget = ui->list_dependencies;
+            break;
+        case 3:
+            listWidget = ui->list_unused_dependencies;
+            break;
+        case 4:
+            listWidget = ui->list_aur_packages;
+            break;
+        case 5:
+            listWidget = ui->list_official_packages;
+            break;
+        }
 
         row = listWidget->row(item);
         processListItem(row, listWidget, ui->details_aurpkg, "");
@@ -3276,7 +3434,7 @@ void MainWindow::addLinkToList(const QString &link) {
     }
 
     QIcon icon;
-    bool isArchive = cleanedLink.endsWith(".zst") || cleanedLink.endsWith(".xz");  // Проверяем на расширение .zst или .xz
+    bool isArchive = cleanedLink.endsWith(".zst") || cleanedLink.endsWith(".xz");
     bool isFolder = !isArchive;
 
     if (cleanedLink == "../")
@@ -3297,13 +3455,28 @@ void MainWindow::addLinkToList(const QString &link) {
 
 // ----
 void MainWindow::loadContentInstall() {
-    QStringList commandExplicit = packageCommands.value(pkg).value("query_explicit");
-    QStringList allPackagesExplicit = executeCommand(commandExplicit);
-    loadPackageList(allPackagesExplicit, ui->list_app);
+    QList<QPair<QStringList, QListWidget*>> commands = {
+        {packageCommands.value(pkg).value("query_explicit"), ui->list_app},
+        {packageCommands.value(pkg).value("query"), ui->list_sysapp},
+        {packageCommands.value(pkg).value("query_dependencies"), ui->list_dependencies},
+        {packageCommands.value(pkg).value("query_unused_dependencies"), ui->list_unused_dependencies},
+        {packageCommands.value(pkg).value("query_aur_packages"), ui->list_aur_packages},
+        {packageCommands.value(pkg).value("query_official_packages"), ui->list_official_packages}
+    };
 
-    QStringList commandQuery = packageCommands.value(pkg).value("query");
-    QStringList allPackagesQuery = executeCommand(commandQuery);
-    loadPackageList(allPackagesQuery, ui->list_sysapp);
+    auto loadPackages = [this](const QStringList& command, QListWidget* listWidget) {
+        QStringList packages = executeCommand(command);
+        loadPackageList(packages, listWidget);
+    };
+
+    for (const auto& commandPair : commands) {
+        QStringList command = commandPair.first;
+        QListWidget* listWidget = commandPair.second;
+
+        QThreadPool::globalInstance()->start([=] {
+            loadPackages(command, listWidget);
+        });
+    }
 }
 
 void MainWindow::loadPackageList(const QStringList& packages, QListWidget* listWidget) {
@@ -3361,10 +3534,9 @@ void MainWindow::onCurrentProcessReadyRead()
 
     QString repoz, packageName, version, sizeDownload, sizeInstallation;
     int installed = 0, rating = 0, orphaned = 0, old = 0;
-    QListWidgetItem* foundItem = nullptr; // Переменная для хранения найденного элемента
+    QListWidgetItem* foundItem = nullptr;
     bool found = false;
 
-    // Инициализация регулярных выражений
     static const QRegularExpression repoRegex(R"(^([^/]+))");
     static const QRegularExpression packageNameRegex(R"(/\s*([^\s]+)\s)");
     static const QRegularExpression versionRegex(R"(\s([^\s]+)\s)");
@@ -3441,7 +3613,6 @@ void MainWindow::onCurrentProcessReadyRead()
     if (foundItem) {
         int row = ui->list_aur->row(foundItem);
         onListItemClicked(ui->searchLineEdit->text(), row, foundItem);
-
         ui->list_aur->setCurrentItem(foundItem);
         ui->list_aur->scrollToItem(foundItem);
         ui->list_aur->selectionModel()->select(ui->list_aur->model()->index(ui->list_aur->row(foundItem), 0), QItemSelectionModel::Select);
@@ -3503,17 +3674,14 @@ void MainWindow::loadScripts(const QString& baseDir, QListWidget* listWidget)
         QString iconPath;
 
         QFile scriptFile(fileInfo.filePath());
-        if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text))
-        {
+        if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
             QTextStream scriptStream(&scriptFile);
-            while (!scriptStream.atEnd())
-            {
+            while (!scriptStream.atEnd()) {
                 QString line = scriptStream.readLine();
                 if (line.startsWith("#name_" + *lang))
                     itemName = line.mid(12).trimmed();
 
-                else if (line.startsWith("#icon"))
-                {
+                else if (line.startsWith("#icon")) {
                     QString iconNumber = line.mid(6).trimmed();
                     iconPath = findIconPapirus(iconNumber);
                 }
@@ -3524,8 +3692,7 @@ void MainWindow::loadScripts(const QString& baseDir, QListWidget* listWidget)
         QListWidgetItem* item = new QListWidgetItem(itemName.isEmpty() ? fileInfo.fileName() : itemName);
         item->setForeground(generateRandomColor(colorlist));
 
-        if (!iconPath.isEmpty())
-        {
+        if (!iconPath.isEmpty()) {
             QIcon icon(iconPath);
             item->setIcon(icon);
         }
@@ -4083,10 +4250,26 @@ void MainWindow::on_action_updatelist_triggered()
     {
         QListWidget* listWidget = nullptr;
 
-        if (ui->tabWidget_pkg->currentIndex() == 0)
+        switch (ui->tabWidget_pkg->currentIndex()) {
+        case 0:
             listWidget = ui->list_app;
-        else if (ui->tabWidget_pkg->currentIndex() == 1)
+            break;
+        case 1:
             listWidget = ui->list_sysapp;
+            break;
+        case 2:
+            listWidget = ui->list_dependencies;
+            break;
+        case 3:
+            listWidget = ui->list_unused_dependencies;
+            break;
+        case 4:
+            listWidget = ui->list_aur_packages;
+            break;
+        case 5:
+            listWidget = ui->list_official_packages;
+            break;
+        }
 
         miniAnimation(true, listWidget);
         listWidget->clear();
@@ -4148,10 +4331,26 @@ void MainWindow::on_action_favorite_triggered() {
     else if (page == 4) {
         QListWidget* listWidget = nullptr;
 
-        if (ui->tabWidget_pkg->currentIndex() == 0)
+        switch (ui->tabWidget_pkg->currentIndex()) {
+        case 0:
             listWidget = ui->list_app;
-        else if (ui->tabWidget_pkg->currentIndex() == 1)
+            break;
+        case 1:
             listWidget = ui->list_sysapp;
+            break;
+        case 2:
+            listWidget = ui->list_dependencies;
+            break;
+        case 3:
+            listWidget = ui->list_unused_dependencies;
+            break;
+        case 4:
+            listWidget = ui->list_aur_packages;
+            break;
+        case 5:
+            listWidget = ui->list_official_packages;
+            break;
+        }
 
         currentItem = listWidget->currentItem();
     }
@@ -4223,10 +4422,26 @@ void MainWindow::on_action_favorite_del_triggered()
     else if (page == 4) {
         QListWidget* listWidget = nullptr;
 
-        if (ui->tabWidget_pkg->currentIndex() == 0)
+        switch (ui->tabWidget_pkg->currentIndex()) {
+        case 0:
             listWidget = ui->list_app;
-        else if (ui->tabWidget_pkg->currentIndex() == 1)
+            break;
+        case 1:
             listWidget = ui->list_sysapp;
+            break;
+        case 2:
+            listWidget = ui->list_dependencies;
+            break;
+        case 3:
+            listWidget = ui->list_unused_dependencies;
+            break;
+        case 4:
+            listWidget = ui->list_aur_packages;
+            break;
+        case 5:
+            listWidget = ui->list_official_packages;
+            break;
+        }
 
         currentItem = listWidget->currentItem();
     }
@@ -4302,13 +4517,29 @@ void MainWindow::on_action_favorite_del_triggered()
 
 void MainWindow::on_action_searchpkg_triggered() {
     QListWidget* listWidget = nullptr;
-    if (page == 2) {
+    if (page == 2)
         listWidget = ui->list_aur;
-    } else {
-        if (ui->tabWidget_pkg->currentIndex() == 0)
+    else if (page == 4) {
+        switch (ui->tabWidget_pkg->currentIndex()) {
+        case 0:
             listWidget = ui->list_app;
-        else if (ui->tabWidget_pkg->currentIndex() == 1)
+            break;
+        case 1:
             listWidget = ui->list_sysapp;
+            break;
+        case 2:
+            listWidget = ui->list_dependencies;
+            break;
+        case 3:
+            listWidget = ui->list_unused_dependencies;
+            break;
+        case 4:
+            listWidget = ui->list_aur_packages;
+            break;
+        case 5:
+            listWidget = ui->list_official_packages;
+            break;
+        }
     }
 
     QListWidgetItem* currentItem = listWidget->currentItem();
@@ -4334,13 +4565,38 @@ void MainWindow::on_action_searchpkg_triggered() {
     QCoreApplication::postEvent(ui->searchLineEdit, new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier));
 }
 
-void MainWindow::on_action_allpkg_triggered(bool checked)
+void MainWindow::on_action_allpkg_triggered()
 {
-    if (checked) {
-        ui->tabWidget_pkg->setCurrentIndex(1);
-        ui->action_allpkg->setText(tr("Пользовательские пакеты"));
-    } else {
-        ui->tabWidget_pkg->setCurrentIndex(0);
+    currentTabIndex++;
+    if (currentTabIndex > 5)
+        currentTabIndex = 0;
+
+    ui->tabWidget_pkg->setCurrentIndex(currentTabIndex);
+
+    switch (currentTabIndex) {
+    case 0:
         ui->action_allpkg->setText(tr("Все пакеты"));
+        ui->action_allpkg->setIcon(QIcon(":/img/pkgall.png"));
+        break;
+    case 1:
+        ui->action_allpkg->setText(tr("Зависимости пакетов"));
+        ui->action_allpkg->setIcon(QIcon(":/img/pkgdep.png"));
+        break;
+    case 2:
+        ui->action_allpkg->setText(tr("Ненужные зависимости пакетов"));
+        ui->action_allpkg->setIcon(QIcon(":/img/pkgnodep.png"));
+        break;
+    case 3:
+        ui->action_allpkg->setText(tr("Пакеты из AUR"));
+        ui->action_allpkg->setIcon(QIcon(":/img/aur.png"));
+        break;
+    case 4:
+        ui->action_allpkg->setText(tr("Пакеты из официальных репозиториев"));
+        ui->action_allpkg->setIcon(QIcon(":/img/extra.png"));
+        break;
+    case 5:
+        ui->action_allpkg->setText(tr("Пользовательские пакеты"));
+        ui->action_allpkg->setIcon(QIcon(":/img/pkguser.png"));
+        break;
     }
 }
