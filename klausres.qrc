@@ -191,5 +191,8 @@
         <file>img/splash.png</file>
         <file>img/pkgdep.png</file>
         <file>img/pkgnodep.png</file>
+        <file>img/copy.png</file>
+        <file>img/minus.png</file>
+        <file>img/plus.png</file>
     </qresource>
 </RCC>

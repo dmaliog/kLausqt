@@ -18,7 +18,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "17.6";
+QString currentVersion = "17.7";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -1415,22 +1415,63 @@ void MainWindow::showListContextMenu(const QPoint& pos) {
 
     if (treeWidget && (QDir(currentPath).exists() || isFile)) {
         QString pathToOpen = isFile ? QFileInfo(currentPath).absolutePath() : currentPath;
+
+        QTreeWidgetItem* currentTreeItem = treeWidget->itemAt(pos);
+        bool isExpanded = currentTreeItem && currentTreeItem->isExpanded();
+
+        std::function<void(QTreeWidgetItem*, bool)> toggleExpansionRecursive = [&](QTreeWidgetItem* item, bool expand) {
+            if (item) {
+                item->setExpanded(expand);
+                for (int i = 0; i < item->childCount(); ++i) {
+                    toggleExpansionRecursive(item->child(i), expand);
+                }
+            }
+        };
+
+        addAction(isExpanded ? ":/img/minus.png" : ":/img/plus.png",
+                  isExpanded ? tr("Свернуть ветку") : tr("Развернуть ветку"),
+                  [=]() {
+                      toggleExpansionRecursive(currentTreeItem, !isExpanded); // Переключаем состояние
+                  });
+
+        menu.addSeparator();
+
+        addAction(":/img/minus.png", tr("Свернуть все"), [=]() {
+            treeWidget->collapseAll();
+        });
+
+        addAction(":/img/plus.png", tr("Развернуть все"), [=]() {
+            treeWidget->expandAll();
+        });
+
+        menu.addSeparator();
+
+        addAction(":/img/copy.png", tr("Копировать в буфер обмена"), [=]() {
+            QClipboard *clipboard = QGuiApplication::clipboard();
+            clipboard->setText(currentPath);
+            sendNotification(tr("Буфер обмена"), tr("Путь скопирован в буфер обмена: %1").arg(currentPath));
+        });
+
         addAction(":/img/48.png", tr("Перейти к расположению"), [=]() { openFolder(pathToOpen); });
     }
 
     if (listWidget) {
         if (!isInstalled) {
             addAction(":/img/25.png", tr("Найти в каталоге пакетов"), &MainWindow::on_action_searchpkg_triggered);
+            menu.addSeparator();
             addAction(":/img/15.png", tr("Установить"), &MainWindow::on_action_4_triggered);
             addAction(":/img/27.png", tr("Изменить PKGBUILD и установить"), &MainWindow::on_action_30_triggered);
         } else if (isInstalled) {
             addAction(":/img/25.png", tr("Найти в каталоге пакетов"), &MainWindow::on_action_searchpkg_triggered);
+            menu.addSeparator();
             addAction(":/img/13.png", tr("Запустить"), &MainWindow::on_action_5_triggered);
             addAction(":/img/15.png", tr("Обновить версию"), &MainWindow::on_action_4_triggered);
             addAction(":/img/14.png", tr("Удалить"), &MainWindow::on_action_6_triggered);
         }
 
         addAction(":/img/34.png", tr("Информация о пакете"), &MainWindow::on_action_34_triggered);
+
+        menu.addSeparator();
         addAction(":/img/star.png", isFavorite ? tr("Удалить из избранного") : tr("Добавить в избранное"),
                   isFavorite ? &MainWindow::on_action_favorite_del_triggered : &MainWindow::on_action_favorite_triggered);
     }
