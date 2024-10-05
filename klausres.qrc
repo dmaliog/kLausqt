@@ -44,7 +44,6 @@
         <file>img/p_1.png</file>
         <file>img/tray.png</file>
         <file>journals/fdisk.sh</file>
-        <file>journals/foreign-pkg.sh</file>
         <file>journals/hwinfo.sh</file>
         <file>journals/inxi.sh</file>
         <file>journals/lsblk.sh</file>
@@ -67,7 +66,6 @@
         <file>sh/save.sh</file>
         <file>sh/wayland.sh</file>
         <file>sh/zen.sh</file>
-        <file>journals/native-pkg.sh</file>
         <file>bench/interbench.sh</file>
         <file>bench/ttcp.sh</file>
         <file>bench/iperf.sh</file>

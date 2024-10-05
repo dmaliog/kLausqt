@@ -209,8 +209,6 @@ private:
                                          ":/journals/hwinfo.sh",
                                          ":/journals/lsblk.sh",
                                          ":/journals/fdisk.sh",
-                                         ":/journals/native-pkg.sh",
-                                         ":/journals/foreign-pkg.sh",
                                          ":/journals/xorg-log.sh",
                                          ":/journals/top-pkg.sh"};
 
