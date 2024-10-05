@@ -18,7 +18,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "17.7";
+QString currentVersion = "17.8";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -1413,7 +1413,7 @@ void MainWindow::showListContextMenu(const QPoint& pos) {
 
     bool isInstalled = listWidget ? checkIfPackageIsInstalled(itemName) : false;
 
-    if (treeWidget && (QDir(currentPath).exists() || isFile)) {
+    if (treeWidget) {
         QString pathToOpen = isFile ? QFileInfo(currentPath).absolutePath() : currentPath;
 
         QTreeWidgetItem* currentTreeItem = treeWidget->itemAt(pos);
@@ -1431,7 +1431,7 @@ void MainWindow::showListContextMenu(const QPoint& pos) {
         addAction(isExpanded ? ":/img/minus.png" : ":/img/plus.png",
                   isExpanded ? tr("Свернуть ветку") : tr("Развернуть ветку"),
                   [=]() {
-                      toggleExpansionRecursive(currentTreeItem, !isExpanded); // Переключаем состояние
+                      toggleExpansionRecursive(currentTreeItem, !isExpanded);
                   });
 
         menu.addSeparator();
@@ -1452,7 +1452,8 @@ void MainWindow::showListContextMenu(const QPoint& pos) {
             sendNotification(tr("Буфер обмена"), tr("Путь скопирован в буфер обмена: %1").arg(currentPath));
         });
 
-        addAction(":/img/48.png", tr("Перейти к расположению"), [=]() { openFolder(pathToOpen); });
+        if(QDir(currentPath).exists() || isFile)
+            addAction(":/img/48.png", tr("Перейти к расположению"), [=]() { openFolder(pathToOpen); });
     }
 
     if (listWidget) {
