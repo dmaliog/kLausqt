@@ -18,7 +18,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "17.8";
+QString currentVersion = "17.9";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -992,6 +992,8 @@ void MainWindow::on_list_aur_itemSelectionChanged()
         ui->action_infopkg->setChecked(false);
         ui->tabWidget_details->setCurrentIndex(0);
         ui->details_aur->setHtml(detailsAURdefault);
+
+        actionInfopkgPressed = false;
     }
 }
 
@@ -1029,7 +1031,8 @@ void MainWindow::on_list_aurpkg_itemSelectionChanged()
 
 void MainWindow::on_action_infopkg_triggered(bool checked)
 {
-    if (ui->list_aur->currentItem() == nullptr) {
+    QListWidgetItem *currentItem = ui->list_aur->currentItem();
+    if (currentItem == nullptr) {
         QAction *action = qobject_cast<QAction*>(sender());
         if (action)
             action->setChecked(!checked);
@@ -1038,8 +1041,14 @@ void MainWindow::on_action_infopkg_triggered(bool checked)
         return;
     }
 
+    QString packageName;
+    CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(ui->list_aur->itemWidget(currentItem));
+    if (itemWidget)
+        packageName = itemWidget->getPackageName();
+    else
+        packageName = currentItem->text();
+
     actionInfopkgPressed = checked;
-    QString packageName = ui->list_aur->currentItem()->text();
 
     if (checked) {
         ui->tabWidget_details->setCurrentIndex(1);
@@ -1053,6 +1062,7 @@ void MainWindow::on_action_infopkg_triggered(bool checked)
         prepareDetails(ui->list_aur, ui->details_aur, packageName);
     }
 }
+
 
 void MainWindow::on_action_infopkg_pkg_triggered(bool checked)
 {
@@ -1079,6 +1089,7 @@ void MainWindow::on_action_infopkg_pkg_triggered(bool checked)
         break;
     }
 
+    QListWidgetItem *currentItem = listWidget->currentItem();
     if (listWidget->currentItem() == nullptr) {
         QAction *action = qobject_cast<QAction*>(sender());
         if (action)
@@ -1088,8 +1099,14 @@ void MainWindow::on_action_infopkg_pkg_triggered(bool checked)
         return;
     }
 
+    QString packageName;
+    CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(listWidget->itemWidget(currentItem));
+    if (itemWidget)
+        packageName = itemWidget->getPackageName();
+    else
+        packageName = currentItem->text();
+
     actionInfopkgPkgPressed = checked;
-    QString packageName = listWidget->currentItem()->text();
 
     if (checked) {
         ui->tabWidget_details_pkg->setCurrentIndex(1);
@@ -2647,9 +2664,8 @@ void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser*
     lastSelectedPackage = packageName;
     currentPackageName = packageName;
 
-    if (!actionInfopkgPressed) {
+    if (!actionInfopkgPressed)
         prepareDetails(listWidget, detailsWidget, packageName);
-    }
 
     if (page == 2 && actionInfopkgPressed) {
         QTreeWidget* treeWidget = ui->tree_aur;
