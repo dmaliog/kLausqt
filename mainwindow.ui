@@ -6159,12 +6159,11 @@ background-color:#474c63;
   </action>
   <action name="action_allpkg">
    <property name="checkable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="klausres.qrc">
-     <normaloff>:/img/pkgall.png</normaloff>
-     <normalon>:/img/pkguser.png</normalon>:/img/pkgall.png</iconset>
+     <normaloff>:/img/pkgall.png</normaloff>:/img/pkgall.png</iconset>
    </property>
    <property name="text">
     <string>Все пакеты</string>
