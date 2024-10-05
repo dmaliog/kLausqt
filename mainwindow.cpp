@@ -807,7 +807,36 @@ void MainWindow::on_action_6_triggered()
 
     currentTerminalProcess = QSharedPointer<QProcess>::create(this);
     connect(currentTerminalProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
-        on_action_updatelist_triggered();
+        QListWidget* listWidget = nullptr;
+
+        switch (ui->tabWidget_pkg->currentIndex()) {
+        case 0:
+            listWidget = ui->list_app;
+            break;
+        case 1:
+            listWidget = ui->list_sysapp;
+            break;
+        case 2:
+            listWidget = ui->list_dependencies;
+            break;
+        case 3:
+            listWidget = ui->list_unused_dependencies;
+            break;
+        case 4:
+            listWidget = ui->list_aur_packages;
+            break;
+        case 5:
+            listWidget = ui->list_official_packages;
+            break;
+        }
+
+        miniAnimation(true, listWidget);
+        listWidget->clear();
+
+        QTimer::singleShot(500, this, [=]() {
+            miniAnimation(false, listWidget);
+            loadContentInstall();
+        });
     });
     currentTerminalProcess->setProgram(terminal.binary);
     currentTerminalProcess->setArguments(QStringList() << terminal.args << packageCommands.value(pkg).value("remove") << packageName);
@@ -876,7 +905,36 @@ void MainWindow::on_action_4_triggered()
 
     currentTerminalProcess = QSharedPointer<QProcess>::create(this);
     connect(currentTerminalProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
-        on_action_updatelist_triggered();
+        QListWidget* listWidget = nullptr;
+
+        switch (ui->tabWidget_pkg->currentIndex()) {
+        case 0:
+            listWidget = ui->list_app;
+            break;
+        case 1:
+            listWidget = ui->list_sysapp;
+            break;
+        case 2:
+            listWidget = ui->list_dependencies;
+            break;
+        case 3:
+            listWidget = ui->list_unused_dependencies;
+            break;
+        case 4:
+            listWidget = ui->list_aur_packages;
+            break;
+        case 5:
+            listWidget = ui->list_official_packages;
+            break;
+        }
+
+        miniAnimation(true, listWidget);
+        listWidget->clear();
+
+        QTimer::singleShot(500, this, [=]() {
+            miniAnimation(false, listWidget);
+            loadContentInstall();
+        });
     });
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
