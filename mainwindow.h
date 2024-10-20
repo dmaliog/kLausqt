@@ -301,7 +301,6 @@ private slots:
     void loadSubcategories(const QString& category);
     void loadMainMenu();
 
-
     void loadDowngrades(const QString& packagesArchiveCatalog);
 
     void writeToFile(const QString& filePath, const QString& content);

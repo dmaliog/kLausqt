@@ -18,7 +18,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "18.0";
+QString currentVersion = "18.1";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -986,9 +986,11 @@ void MainWindow::on_action_30_triggered()
     QSharedPointer<QProcess>(new QProcess)->startDetached(terminal.binary, QStringList() << terminal.args << "bash" << mainDir + "sh/PKGBUILD.sh" << *lang << helper << packageName);
 }
 
-void MainWindow::on_list_aur_itemSelectionChanged()
-{
+void MainWindow::on_list_aur_itemSelectionChanged() {
     if (ui->list_aur->selectedItems().isEmpty()) {
+        lastSelectedRow = -1;
+        lastSelectedPackage.clear();
+
         ui->action_infopkg->setChecked(false);
         ui->tabWidget_details->setCurrentIndex(0);
         ui->details_aur->setHtml(detailsAURdefault);
