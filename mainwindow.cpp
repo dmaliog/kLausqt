@@ -18,7 +18,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "17.9";
+QString currentVersion = "18.0";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -1388,7 +1388,8 @@ void MainWindow::showListContextMenu(const QPoint& pos) {
 
     if (!listWidget && !treeWidget) return;
 
-    QString itemName;
+    QString basePackageName;
+    QString packageName;
     QString currentPath;
     bool isFile = false;
 
@@ -1400,15 +1401,17 @@ void MainWindow::showListContextMenu(const QPoint& pos) {
         CustomListItemWidget *itemWidget = qobject_cast<CustomListItemWidget*>(listWidget->itemWidget(currentItem));
 
         if (itemWidget)
-            itemName = itemWidget->getPackageName();
+            basePackageName = itemWidget->getPackageName();
         else
-            itemName = currentItem->text();
+            basePackageName = currentItem->text();
 
-        currentPath = getCurrentPathFromList(itemName);
+        packageName = basePackageName.section('/', -1);
+
+        currentPath = getCurrentPathFromList(packageName);
     } else if (treeWidget) {
         QTreeWidgetItem* treeItem = treeWidget->itemAt(pos);
         if (!treeItem) return;
-        itemName = treeItem->text(0);
+        packageName = treeItem->text(0);
         currentPath = getCurrentPathFromTree(treeItem);
         isFile = QFileInfo::exists(currentPath) && !QFileInfo(currentPath).isDir();
     }
@@ -1418,7 +1421,7 @@ void MainWindow::showListContextMenu(const QPoint& pos) {
     bool isFavorite = false;
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream in(&file);
-        isFavorite = in.readAll().contains(itemName);
+        isFavorite = in.readAll().contains(packageName);
     }
 
     QMenu menu(this);
@@ -1428,7 +1431,7 @@ void MainWindow::showListContextMenu(const QPoint& pos) {
         menu.addAction(action);
     };
 
-    bool isInstalled = listWidget ? checkIfPackageIsInstalled(itemName) : false;
+    bool isInstalled = listWidget ? checkIfPackageIsInstalled(packageName) : false;
 
     if (treeWidget) {
         QString pathToOpen = isFile ? QFileInfo(currentPath).absolutePath() : currentPath;
@@ -1497,6 +1500,7 @@ void MainWindow::showListContextMenu(const QPoint& pos) {
     if (!menu.actions().isEmpty())
         menu.exec(senderWidget->mapToGlobal(pos));
 }
+
 
 void MainWindow::openFolder(const QString& path) {
     QUrl url = QUrl::fromLocalFile(path);
@@ -4471,11 +4475,19 @@ void MainWindow::on_action_favorite_triggered() {
         currentItem = listWidget->currentItem();
     }
 
-    if (!currentItem) {
+    if (!currentItem)
         return;
-    }
 
-    QString itemName = currentItem->text();
+    CustomListItemWidget* itemWidget = qobject_cast<CustomListItemWidget*>(ui->list_aur->itemWidget(currentItem));
+    QString basePackageName;
+
+    if (itemWidget)
+        basePackageName = itemWidget->getPackageName();
+    else
+        basePackageName = currentItem->text();
+
+    QString packageName = basePackageName.section('/', -1);
+
     QString favoriteFilePath = mainDir + "menu/Favorite/Favorite.txt";
 
     QFile file(favoriteFilePath);
@@ -4491,7 +4503,7 @@ void MainWindow::on_action_favorite_triggered() {
 
     while (!in.atEnd()) {
         QString line = in.readLine().trimmed();
-        if (line == itemName) {
+        if (line == packageName) {
             itemExists = true;
             break;
         }
@@ -4503,7 +4515,7 @@ void MainWindow::on_action_favorite_triggered() {
     file.close();
 
     if (itemExists) {
-        sendNotification(tr("Ошибка"), tr("Пакет '%1' уже существует в избранном").arg(itemName));
+        sendNotification(tr("Ошибка"), tr("Пакет '%1' уже существует в избранном").arg(packageName));
         return;
     }
 
@@ -4520,10 +4532,10 @@ void MainWindow::on_action_favorite_triggered() {
     for (const QString& line : lines)
         out << line << "\n";
 
-    out << itemName << "\n";
+    out << packageName << "\n";
     file.close();
 
-    sendNotification(tr("Избранное"), tr("Пакет '%1' добавлен в избранное").arg(itemName));
+    sendNotification(tr("Избранное"), tr("Пакет '%1' добавлен в избранное").arg(packageName));
 
     if (currentCategory == "Favorite")
         loadSubcategories("Favorite");
@@ -4562,11 +4574,19 @@ void MainWindow::on_action_favorite_del_triggered()
         currentItem = listWidget->currentItem();
     }
 
-    if (!currentItem) {
+    if (!currentItem)
         return;
-    }
 
-    QString itemName = currentItem->text();
+    CustomListItemWidget* itemWidget = qobject_cast<CustomListItemWidget*>(ui->list_aur->itemWidget(currentItem));
+    QString basePackageName;
+
+    if (itemWidget)
+        basePackageName = itemWidget->getPackageName();
+    else
+        basePackageName = currentItem->text();
+
+    QString packageName = basePackageName.section('/', -1);
+
     QString favoriteFilePath = mainDir + "menu/Favorite/Favorite.txt";
 
     QFile file(favoriteFilePath);
@@ -4582,7 +4602,7 @@ void MainWindow::on_action_favorite_del_triggered()
 
     while (!in.atEnd()) {
         QString line = in.readLine().trimmed();
-        if (line == itemName) {
+        if (line == packageName) {
             itemExists = true;
             continue;
         }
@@ -4594,7 +4614,7 @@ void MainWindow::on_action_favorite_del_triggered()
     file.close();
 
     if (!itemExists) {
-        sendNotification(tr("Ошибка"), tr("Пакет '%1' не найден в избранном").arg(itemName));
+        sendNotification(tr("Ошибка"), tr("Пакет '%1' не найден в избранном").arg(packageName));
         return;
     }
 
@@ -4620,7 +4640,7 @@ void MainWindow::on_action_favorite_del_triggered()
 
     file.close();
 
-    sendNotification(tr("Избранное"), tr("Пакет '%1' удален из избранного").arg(itemName));
+    sendNotification(tr("Избранное"), tr("Пакет '%1' удален из избранного").arg(packageName));
 
     bool isFileEmpty = (lines.isEmpty() || (lines.size() == 1 && lines.first().startsWith("[Favorite]")));
 
