@@ -1381,6 +1381,47 @@ bool MainWindow::checkIfPackageIsInstalled(const QString& packageName) {
     return false;
 }
 
+QStringList MainWindow::readFavoritePackages() {
+    QString favoriteFilePath = mainDir + "menu/Favorite/Favorite.txt";
+    QFile file(favoriteFilePath);
+    QStringList favorites;
+
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&file);
+        bool headerFound = false;
+        while (!in.atEnd()) {
+            QString line = in.readLine().trimmed();
+            if (line == "[Favorite]") {
+                headerFound = true;
+            } else if (headerFound && !line.isEmpty()) {
+                favorites.append(line);
+            }
+        }
+        file.close();
+    }
+
+    return favorites;
+}
+
+void MainWindow::updateFavoritePackages(const QStringList& favorites) {
+    QString favoriteFilePath = mainDir + "menu/Favorite/Favorite.txt";
+    QFile file(favoriteFilePath);
+
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
+        sendNotification(tr("Ошибка"), tr("Не удалось открыть файл Favorite.txt для записи"));
+        return;
+    }
+
+    QTextStream out(&file);
+
+    if (!favorites.isEmpty()) {
+        out << "[Favorite]\n";
+        out << favorites.join("\n") << "\n"; // Записываем пакеты
+    }
+
+    file.close();
+}
+
 void MainWindow::showListContextMenu(const QPoint& pos) {
     QWidget* senderWidget = qobject_cast<QWidget*>(sender());
     if (!senderWidget) return;
@@ -1418,13 +1459,8 @@ void MainWindow::showListContextMenu(const QPoint& pos) {
         isFile = QFileInfo::exists(currentPath) && !QFileInfo(currentPath).isDir();
     }
 
-    QString favoriteFile = mainDir + "menu/Favorite/Favorite.txt";
-    QFile file(favoriteFile);
-    bool isFavorite = false;
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QTextStream in(&file);
-        isFavorite = in.readAll().contains(packageName);
-    }
+    QStringList favorites = readFavoritePackages();
+    bool isFavorite = favorites.contains(packageName);
 
     QMenu menu(this);
     auto addAction = [&](const QString& icon, const QString& text, auto slot) {
@@ -3668,6 +3704,8 @@ void MainWindow::onCurrentProcessReadyRead()
     static const QRegularExpression outOfDateRegex(R"(\(Out-of-date: (\d{4}-\d{2}-\d{2})\))");
     static const QRegularExpression orphanedRegex(R"(\(Orphaned\))");
 
+    QStringList favorites = readFavoritePackages();
+
     while (currentProcess->canReadLine()) {
         if (stopProcessing)
             break;
@@ -3708,7 +3746,10 @@ void MainWindow::onCurrentProcessReadyRead()
 
             QColor color = generateRandomColor(colorlist);
 
-            CustomListItemWidget *itemWidget = new CustomListItemWidget(repoz, packageName, installed, orphaned, old, rating, sizeInstallation, color, ui->list_aur);
+            // Проверяем, является ли пакет избранным
+            bool favorite = favorites.contains(packageName) ? 1 : 0;
+
+            CustomListItemWidget *itemWidget = new CustomListItemWidget(repoz, packageName, installed, orphaned, old, rating, sizeInstallation, color, favorite, ui->list_aur);
 
             QString styleSheet = QString("background: none;").arg(color.name());
             itemWidget->setStyleSheet(styleSheet);
@@ -4445,212 +4486,87 @@ void MainWindow::on_push_grub_clicked()
     writeToFile("/etc/default/grub", ui->text_grub->toPlainText());
 }
 
-void MainWindow::on_action_favorite_triggered() {
-    QListWidgetItem* currentItem = nullptr;
-
-    if (page == 2)
-        currentItem = ui->list_aur->currentItem();
-    else if (page == 4) {
+QListWidgetItem* MainWindow::getCurrentListItem() {
+    if (page == 2) {
+        return ui->list_aur->currentItem();
+    } else if (page == 4) {
         QListWidget* listWidget = nullptr;
-
         switch (ui->tabWidget_pkg->currentIndex()) {
-        case 0:
-            listWidget = ui->list_app;
-            break;
-        case 1:
-            listWidget = ui->list_sysapp;
-            break;
-        case 2:
-            listWidget = ui->list_dependencies;
-            break;
-        case 3:
-            listWidget = ui->list_unused_dependencies;
-            break;
-        case 4:
-            listWidget = ui->list_aur_packages;
-            break;
-        case 5:
-            listWidget = ui->list_official_packages;
-            break;
+        case 0: listWidget = ui->list_app; break;
+        case 1: listWidget = ui->list_sysapp; break;
+        case 2: listWidget = ui->list_dependencies; break;
+        case 3: listWidget = ui->list_unused_dependencies; break;
+        case 4: listWidget = ui->list_aur_packages; break;
+        case 5: listWidget = ui->list_official_packages; break;
         }
-
-        currentItem = listWidget->currentItem();
+        return listWidget ? listWidget->currentItem() : nullptr;
     }
+    return nullptr;
+}
 
-    if (!currentItem)
-        return;
+
+void MainWindow::on_action_favorite_triggered() {
+    QListWidgetItem* currentItem = getCurrentListItem();
+    if (!currentItem) return;
 
     CustomListItemWidget* itemWidget = qobject_cast<CustomListItemWidget*>(ui->list_aur->itemWidget(currentItem));
-    QString basePackageName;
+    QString packageName = itemWidget ? itemWidget->getPackageName().section('/', -1) : currentItem->text();
 
-    if (itemWidget)
-        basePackageName = itemWidget->getPackageName();
-    else
-        basePackageName = currentItem->text();
+    QStringList favorites = readFavoritePackages();
 
-    QString packageName = basePackageName.section('/', -1);
-
-    QString favoriteFilePath = mainDir + "menu/Favorite/Favorite.txt";
-
-    QFile file(favoriteFilePath);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        sendNotification(tr("Ошибка"), tr("Не удалось открыть файл Favorite.txt"));
-        return;
-    }
-
-    QTextStream in(&file);
-    bool itemExists = false;
-    bool hasFavoriteSection = false;
-    QStringList lines;
-
-    while (!in.atEnd()) {
-        QString line = in.readLine().trimmed();
-        if (line == packageName) {
-            itemExists = true;
-            break;
-        }
-        if (line == "[Favorite]")
-            hasFavoriteSection = true;
-
-        lines.append(line);
-    }
-    file.close();
-
-    if (itemExists) {
+    if (favorites.contains(packageName)) {
         sendNotification(tr("Ошибка"), tr("Пакет '%1' уже существует в избранном").arg(packageName));
         return;
     }
 
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        sendNotification(tr("Ошибка"), tr("Не удалось открыть файл Favorite.txt для записи"));
-        return;
-    }
-
-    QTextStream out(&file);
-
-    if (!hasFavoriteSection)
-        out << "[Favorite]\n";
-
-    for (const QString& line : lines)
-        out << line << "\n";
-
-    out << packageName << "\n";
-    file.close();
+    favorites.append(packageName);
+    updateFavoritePackages(favorites);
 
     sendNotification(tr("Избранное"), tr("Пакет '%1' добавлен в избранное").arg(packageName));
 
-    if (currentCategory == "Favorite")
-        loadSubcategories("Favorite");
+    for (int i = 0; i < ui->list_aur->count(); ++i) {
+        QListWidgetItem* item = ui->list_aur->item(i);
+        CustomListItemWidget* widget = qobject_cast<CustomListItemWidget*>(ui->list_aur->itemWidget(item));
+        if (widget && widget->getPackageName().section('/', -1) == packageName) {
+            widget->updateFavoriteIcon(true);
+        }
+    }
+
+    if (currentCategory == "Favorite") loadSubcategories("Favorite");
 }
 
-void MainWindow::on_action_favorite_del_triggered()
-{
-    QListWidgetItem* currentItem = nullptr;
-
-    if (page == 2)
-        currentItem = ui->list_aur->currentItem();
-    else if (page == 4) {
-        QListWidget* listWidget = nullptr;
-
-        switch (ui->tabWidget_pkg->currentIndex()) {
-        case 0:
-            listWidget = ui->list_app;
-            break;
-        case 1:
-            listWidget = ui->list_sysapp;
-            break;
-        case 2:
-            listWidget = ui->list_dependencies;
-            break;
-        case 3:
-            listWidget = ui->list_unused_dependencies;
-            break;
-        case 4:
-            listWidget = ui->list_aur_packages;
-            break;
-        case 5:
-            listWidget = ui->list_official_packages;
-            break;
-        }
-
-        currentItem = listWidget->currentItem();
-    }
-
-    if (!currentItem)
-        return;
+void MainWindow::on_action_favorite_del_triggered() {
+    QListWidgetItem* currentItem = getCurrentListItem();
+    if (!currentItem) return;
 
     CustomListItemWidget* itemWidget = qobject_cast<CustomListItemWidget*>(ui->list_aur->itemWidget(currentItem));
-    QString basePackageName;
+    QString packageName = itemWidget ? itemWidget->getPackageName().section('/', -1) : currentItem->text();
 
-    if (itemWidget)
-        basePackageName = itemWidget->getPackageName();
-    else
-        basePackageName = currentItem->text();
+    QStringList favorites = readFavoritePackages();
 
-    QString packageName = basePackageName.section('/', -1);
-
-    QString favoriteFilePath = mainDir + "menu/Favorite/Favorite.txt";
-
-    QFile file(favoriteFilePath);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        sendNotification(tr("Ошибка"), tr("Не удалось открыть файл Favorite.txt"));
-        return;
-    }
-
-    QTextStream in(&file);
-    QStringList lines;
-    bool itemExists = false;
-    bool hasFavoriteSection = false;
-
-    while (!in.atEnd()) {
-        QString line = in.readLine().trimmed();
-        if (line == packageName) {
-            itemExists = true;
-            continue;
-        }
-        if (line == "[Favorite]") {
-            hasFavoriteSection = true;
-        }
-        lines.append(line);
-    }
-    file.close();
-
-    if (!itemExists) {
+    if (!favorites.removeOne(packageName)) {
         sendNotification(tr("Ошибка"), tr("Пакет '%1' не найден в избранном").arg(packageName));
         return;
     }
 
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        sendNotification(tr("Ошибка"), tr("Не удалось открыть файл Favorite.txt для записи"));
-        return;
-    }
-
-    QTextStream out(&file);
-    bool firstLine = true;
-
-    for (const QString& line : lines) {
-        if (!line.isEmpty()) {
-            if (!firstLine || hasFavoriteSection || line.startsWith("[Favorite]")) {
-                out << line << "\n";
-            } else {
-                out << "[Favorite]\n" << line << "\n";
-                hasFavoriteSection = true;
-                firstLine = false;
-            }
-        }
-    }
-
-    file.close();
+    updateFavoritePackages(favorites);
 
     sendNotification(tr("Избранное"), tr("Пакет '%1' удален из избранного").arg(packageName));
 
-    bool isFileEmpty = (lines.isEmpty() || (lines.size() == 1 && lines.first().startsWith("[Favorite]")));
+    for (int i = 0; i < ui->list_aur->count(); ++i) {
+        QListWidgetItem* item = ui->list_aur->item(i);
+        CustomListItemWidget* widget = qobject_cast<CustomListItemWidget*>(ui->list_aur->itemWidget(item));
+        if (widget && widget->getPackageName().section('/', -1) == packageName) {
+            widget->updateFavoriteIcon(false);
+        }
+    }
 
-    if (isFileEmpty) {
-        currentCategory = "";
+    if (favorites.isEmpty()) {
+        currentCategory.clear();
         loadMainMenu();
-    } else if (currentCategory == "Favorite")
+    } else if (currentCategory == "Favorite") {
         loadSubcategories("Favorite");
+    }
 }
 
 void MainWindow::on_action_searchpkg_triggered() {

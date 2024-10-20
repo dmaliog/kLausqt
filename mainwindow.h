@@ -283,6 +283,11 @@ public slots:
     void on_action_30_triggered();
 
 private slots:
+    void updateFavoritePackages(const QStringList& favorites);
+
+    QStringList readFavoritePackages();
+    QListWidgetItem* getCurrentListItem();
+
     bool checkIfPackageIsInstalled(const QString& packageName);
 
     void prepareDetails(QListWidget* listWidget, QTextBrowser* detailsWidget, const QString& packageName);
@@ -516,7 +521,7 @@ class CustomListItemWidget : public QWidget
     Q_OBJECT
 
 public:
-    CustomListItemWidget(const QString &repo, const QString &text, const int &installed, const int &orphaned, const int &old, const int &rating, const QString &sizeInstallation, const QColor &color, QWidget *parent = nullptr)
+    CustomListItemWidget(const QString &repo, const QString &text, const int &installed, const int &orphaned, const int &old, const int &rating, const QString &sizeInstallation, const QColor &color, const bool &isFavorite, QWidget *parent = nullptr)
         : QWidget(parent), packageName(repo + "/" + text)
     {
         QHBoxLayout *layout = new QHBoxLayout(this);
@@ -530,14 +535,11 @@ public:
             repoName = match.captured(1);
 
         QLabel *repoLabel = createIconLabel(QFile::exists(":/img/" + repoName + ".png") ? ":/img/" + repoName + ".png" : ":/img/community.png");
-
         layout->addWidget(repoLabel);
-
 
         QLabel *textLabel = new QLabel(text, this);
         textLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         textLabel->setStyleSheet(QString("color:%1;font-size:12pt;").arg(color.name()));
-
         layout->addWidget(textLabel);
 
         if (orphaned == 1)
@@ -557,6 +559,10 @@ public:
             QLabel *installedLabel = createIconLabel(":/img/installed.png");
             layout->addWidget(installedLabel);
         }
+
+        favoriteLabel = createIconLabel(":/img/p_1.png");
+        favoriteLabel->setVisible(isFavorite);
+        layout->addWidget(favoriteLabel);
 
         if (repo == "aur")
         {
@@ -578,6 +584,12 @@ public:
         connect(this, &CustomListItemWidget::clicked, this, &CustomListItemWidget::handleClicked);
     }
 
+    void updateFavoriteIcon(bool isFavorite) {
+        if (favoriteLabel) {
+            favoriteLabel->setVisible(isFavorite);
+        }
+    }
+
     QString getPackageNameWithoutRepo() const {
         return packageName.section('/', -1);  // Возвращает часть после последнего "/"
     }
@@ -585,7 +597,6 @@ public:
     QString getPackageName() const {
         return packageName;
     }
-
 signals:
     void clicked(const QString &packageName);
 
@@ -596,6 +607,7 @@ private slots:
 
 private:
     QString packageName;
+    QLabel *favoriteLabel;
 
     QLabel *createIconLabel(const QString &iconPath)
     {
