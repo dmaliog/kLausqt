@@ -5777,6 +5777,9 @@ background-color:#474c63;
    </property>
   </action>
   <action name="action_addsh">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="klausres.qrc">
      <normaloff>:/img/37.png</normaloff>:/img/37.png</iconset>
@@ -5792,6 +5795,9 @@ background-color:#474c63;
    </property>
   </action>
   <action name="action_rmsh">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="klausres.qrc">
      <normaloff>:/img/38.png</normaloff>:/img/38.png</iconset>
@@ -5807,6 +5813,9 @@ background-color:#474c63;
    </property>
   </action>
   <action name="action_editsh">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="klausres.qrc">
      <normaloff>:/img/39.png</normaloff>:/img/39.png</iconset>

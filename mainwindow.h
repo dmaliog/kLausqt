@@ -185,63 +185,62 @@ private:
     // QMap
     QMap<QString, QString> iconMap;
 
-    QStringList shResourcePaths = {":/sh/1c.sh",
-                                   ":/sh/wayland.sh",
-                                   ":/sh/imgneofetch.sh",
-                                   ":/sh/root.sh",
-                                   ":/sh/PKGBUILD.sh",
-                                   ":/sh/save.sh",
-                                   ":/sh/load.sh",
-                                   ":/sh/zen.sh",
-                                   ":/sh/snap.sh",
-                                   ":/sh/amd.sh",
-                                   ":/sh/nvidia.sh",
-                                   ":/sh/intel.sh",
-                                   ":/sh/pacman-lock.sh"};
+    QStringList shResourcePaths = {":/sh/1c/1c.sh",
+                                   ":/sh/imgneofetch/imgneofetch.sh",
+                                   ":/sh/root/root.sh",
+                                   ":/sh/PKGBUILD/PKGBUILD.sh",
+                                   ":/sh/save/save.sh",
+                                   ":/sh/load/load.sh",
+                                   ":/sh/zen/zen.sh",
+                                   ":/sh/snap/snap.sh",
+                                   ":/sh/amd/amd.sh",
+                                   ":/sh/nvidia/nvidia.sh",
+                                   ":/sh/intel/intel.sh",
+                                   ":/sh/pacman-lock/pacman-lock.sh"};
 
-    QStringList clearResourcePaths = {":/clear/clear_trash.sh"};
+    QStringList clearResourcePaths = {":/clear/clear_trash/clear_trash.sh"};
 
-    QStringList journalsResourcePaths = {":/journals/neofetch.sh",
-                                         ":/journals/systemd-analyze.sh",
-                                         ":/journals/lspci.sh",
-                                         ":/journals/lsusb.sh",
-                                         ":/journals/inxi.sh",
-                                         ":/journals/hwinfo.sh",
-                                         ":/journals/lsblk.sh",
-                                         ":/journals/fdisk.sh",
-                                         ":/journals/xorg-log.sh",
-                                         ":/journals/top-pkg.sh"};
+    QStringList journalsResourcePaths = {":/journals/neofetch/neofetch.sh",
+                                         ":/journals/systemd-analyze/systemd-analyze.sh",
+                                         ":/journals/lspci/lspci.sh",
+                                         ":/journals/lsusb/lsusb.sh",
+                                         ":/journals/inxi/inxi.sh",
+                                         ":/journals/hwinfo/hwinfo.sh",
+                                         ":/journals/lsblk/lsblk.sh",
+                                         ":/journals/fdisk/fdisk.sh",
+                                         ":/journals/xorg-log/xorg-log.sh",
+                                         ":/journals/top-pkg/top-pkg.sh"};
 
-    QStringList benchResourcePaths = {":/bench/unixbench.sh",
-                                      ":/bench/interbench.sh",
-                                      ":/bench/ttcp.sh",
-                                      ":/bench/iperf.sh",
-                                      ":/bench/time.sh",
-                                      ":/bench/hdparm.sh",
-                                      ":/bench/gnome-disks.sh",
-                                      ":/bench/kdiskmark.sh",
-                                      ":/bench/systemd-analyze.sh",
-                                      ":/bench/dd.sh",
-                                      ":/bench/7z.sh",
-                                      ":/bench/peakperf.sh",
-                                      ":/bench/basemark.sh",
-                                      ":/bench/blender-benchmark.sh",
-                                      ":/bench/GFXBench.sh",
-                                      ":/bench/glmark2.sh",
-                                      ":/bench/glxgears.sh",
-                                      ":/bench/gputest.sh",
-                                      ":/bench/intel-gpu-tools.sh",
-                                      ":/bench/unigine-sanctuary.sh",
-                                      ":/bench/unigine-tropics.sh",
-                                      ":/bench/unigine-heaven.sh",
-                                      ":/bench/unigine-valley.sh",
-                                      ":/bench/unigine-superposition.sh",
-                                      ":/bench/vkmark.sh",
-                                      ":/bench/bonnie.sh",
-                                      ":/bench/s-tui.sh",
-                                      ":/bench/phoronix-test-suite.sh",
-                                      ":/bench/hardinfo.sh",
-                                      ":/bench/iozone.sh"};
+    QStringList benchResourcePaths = {":/bench/unixbench/unixbench.sh",
+                                      ":/bench/interbench/interbench.sh",
+                                      ":/bench/ttcp/ttcp.sh",
+                                      ":/bench/iperf/iperf.sh",
+                                      ":/bench/time/time.sh",
+                                      ":/bench/hdparm/hdparm.sh",
+                                      ":/bench/gnome-disks/gnome-disks.sh",
+                                      ":/bench/kdiskmark/kdiskmark.sh",
+                                      ":/bench/systemd-analyze/systemd-analyze.sh",
+                                      ":/bench/dd/dd.sh",
+                                      ":/bench/7z/7z.sh",
+                                      ":/bench/peakperf/peakperf.sh",
+                                      ":/bench/basemark/basemark.sh",
+                                      ":/bench/blender-benchmark/blender-benchmark.sh",
+                                      ":/bench/GFXBench/GFXBench.sh",
+                                      ":/bench/glmark2/glmark2.sh",
+                                      ":/bench/glxgears/glxgears.sh",
+                                      ":/bench/gputest/gputest.sh",
+                                      ":/bench/intel-gpu-tools/intel-gpu-tools.sh",
+                                      ":/bench/unigine-sanctuary/unigine-sanctuary.sh",
+                                      ":/bench/unigine-tropics/unigine-tropics.sh",
+                                      ":/bench/unigine-heaven/unigine-heaven.sh",
+                                      ":/bench/unigine-valley/unigine-valley.sh",
+                                      ":/bench/unigine-superposition/unigine-superposition.sh",
+                                      ":/bench/vkmark/vkmark.sh",
+                                      ":/bench/bonnie/bonnie.sh",
+                                      ":/bench/s-tui/s-tui.sh",
+                                      ":/bench/phoronix-test-suite/phoronix-test-suite.sh",
+                                      ":/bench/hardinfo/hardinfo.sh",
+                                      ":/bench/iozone/iozone.sh"};
 
     QStringList menuResourcePaths = {":/menu/icon.ini",
                                       ":/menu/ru_RU.ini",
@@ -257,10 +256,6 @@ private:
                                       ":/menu/Utilities/Utilities.txt",
                                       ":/menu/Favorite/Favorite.txt",
                                       ":/menu/Populaty/Populaty.txt"};
-
-    QStringList endingsToRemove = QStringList() << "-bin" << "-git" << "-qt" << "-qt4" << "-qt5" << "-qt6"
-                                                << "qt-" << "qt4-" << "qt5-" << "qt6-" << "-gtk" << "-gtk2"
-                                                << "-gtk3" << "-cvs" << "-svn" << "-hg" << "-darcs" << "-bzr";
 
 
 protected:
@@ -356,7 +351,8 @@ private slots:
     void loadScripts(const QString& basedDir, QListWidget* listWidget);
     void saveScripts(const QStringList& resourcePaths);
     void removeToolButtonTooltips(QToolBar* toolbar);
-    void removeScripts(const QStringList& resourcePaths, const QString& baseDir);
+    void removeScripts(const QStringList &resourcePaths,
+                       const QString &baseDir);
     void removeDirectory(const QString& dirPath);
     void restoreArchive(const QString& archivePath);
     void createArchive(const QString& folderPath, const QString& folderName);

@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>bench/unixbench.sh</file>
-        <file>clear/clear_trash.sh</file>
         <file>img/1.png</file>
         <file>img/11.png</file>
         <file>img/13.png</file>
@@ -43,58 +41,11 @@
         <file>img/m6.png</file>
         <file>img/p_1.png</file>
         <file>img/tray.png</file>
-        <file>journals/fdisk.sh</file>
-        <file>journals/hwinfo.sh</file>
-        <file>journals/inxi.sh</file>
-        <file>journals/lsblk.sh</file>
-        <file>journals/lspci.sh</file>
-        <file>journals/lsusb.sh</file>
-        <file>journals/neofetch.sh</file>
-        <file>journals/systemd-analyze.sh</file>
-        <file>journals/top-pkg.sh</file>
-        <file>journals/xorg-log.sh</file>
         <file>kLausPro.pro</file>
         <file>loading.browser.js</file>
         <file>media/message.wav</file>
         <file>other/main.sh</file>
         <file>other/notify.png</file>
-        <file>sh/1c.sh</file>
-        <file>sh/PKGBUILD.sh</file>
-        <file>sh/imgneofetch.sh</file>
-        <file>sh/load.sh</file>
-        <file>sh/root.sh</file>
-        <file>sh/save.sh</file>
-        <file>sh/wayland.sh</file>
-        <file>sh/zen.sh</file>
-        <file>bench/interbench.sh</file>
-        <file>bench/ttcp.sh</file>
-        <file>bench/iperf.sh</file>
-        <file>bench/time.sh</file>
-        <file>bench/hdparm.sh</file>
-        <file>bench/gnome-disks.sh</file>
-        <file>bench/kdiskmark.sh</file>
-        <file>bench/systemd-analyze.sh</file>
-        <file>bench/dd.sh</file>
-        <file>bench/7z.sh</file>
-        <file>bench/peakperf.sh</file>
-        <file>bench/basemark.sh</file>
-        <file>bench/blender-benchmark.sh</file>
-        <file>bench/GFXBench.sh</file>
-        <file>bench/glmark2.sh</file>
-        <file>bench/glxgears.sh</file>
-        <file>bench/gputest.sh</file>
-        <file>bench/intel-gpu-tools.sh</file>
-        <file>bench/unigine-sanctuary.sh</file>
-        <file>bench/unigine-valley.sh</file>
-        <file>bench/unigine-tropics.sh</file>
-        <file>bench/unigine-superposition.sh</file>
-        <file>bench/unigine-heaven.sh</file>
-        <file>bench/vkmark.sh</file>
-        <file>bench/bonnie.sh</file>
-        <file>bench/s-tui.sh</file>
-        <file>bench/phoronix-test-suite.sh</file>
-        <file>bench/hardinfo.sh</file>
-        <file>bench/iozone.sh</file>
         <file>img/aur.png</file>
         <file>img/multilib.png</file>
         <file>img/core.png</file>
@@ -107,25 +58,18 @@
         <file>img/community.png</file>
         <file>img/community_mini.png</file>
         <file>img/load.gif</file>
-        <file>sh/snap.sh</file>
         <file>img/reload.png</file>
         <file>img/qr_linux2.png</file>
         <file>img/55.png</file>
         <file>img/xiaomi.png</file>
         <file>img/populaty.png</file>
         <file>img/server.gif</file>
-        <file>other/ru_RU/translations.txt</file>
-        <file>other/en_US/translations.txt</file>
-        <file>sh/amd.sh</file>
-        <file>sh/intel.sh</file>
-        <file>sh/nvidia.sh</file>
         <file>img/sony.png</file>
         <file>img/samsung.png</file>
         <file>lang/kLaus_ru_RU.qm</file>
         <file>lang/kLaus_en_US.qm</file>
         <file>lang/kLaus_ru_RU.ts</file>
         <file>lang/kLaus_en_US.ts</file>
-        <file>sh/pacman-lock.sh</file>
         <file>img/old.png</file>
         <file>img/orphaned.png</file>
         <file>img/installed.png</file>
@@ -194,5 +138,164 @@
         <file>img/copy.png</file>
         <file>img/minus.png</file>
         <file>img/plus.png</file>
+        <file>sh/amd/amd.sh</file>
+        <file>sh/imgneofetch/imgneofetch.sh</file>
+        <file>sh/1c/1c.sh</file>
+        <file>sh/intel/intel.sh</file>
+        <file>sh/load/load.sh</file>
+        <file>sh/nvidia/nvidia.sh</file>
+        <file>sh/pacman-lock/pacman-lock.sh</file>
+        <file>sh/PKGBUILD/PKGBUILD.sh</file>
+        <file>sh/root/root.sh</file>
+        <file>sh/save/save.sh</file>
+        <file>sh/snap/snap.sh</file>
+        <file>sh/zen/zen.sh</file>
+        <file>sh/1c/en_US.ini</file>
+        <file>sh/1c/ru_RU.ini</file>
+        <file>sh/amd/en_US.ini</file>
+        <file>sh/amd/ru_RU.ini</file>
+        <file>sh/imgneofetch/en_US.ini</file>
+        <file>sh/imgneofetch/ru_RU.ini</file>
+        <file>sh/intel/en_US.ini</file>
+        <file>sh/intel/ru_RU.ini</file>
+        <file>sh/load/en_US.ini</file>
+        <file>sh/load/ru_RU.ini</file>
+        <file>sh/nvidia/en_US.ini</file>
+        <file>sh/nvidia/ru_RU.ini</file>
+        <file>sh/pacman-lock/en_US.ini</file>
+        <file>sh/pacman-lock/ru_RU.ini</file>
+        <file>sh/PKGBUILD/en_US.ini</file>
+        <file>sh/PKGBUILD/ru_RU.ini</file>
+        <file>sh/root/en_US.ini</file>
+        <file>sh/root/ru_RU.ini</file>
+        <file>sh/save/en_US.ini</file>
+        <file>sh/save/ru_RU.ini</file>
+        <file>sh/snap/en_US.ini</file>
+        <file>sh/snap/ru_RU.ini</file>
+        <file>sh/zen/en_US.ini</file>
+        <file>sh/zen/ru_RU.ini</file>
+        <file>clear/clear_trash/clear_trash.sh</file>
+        <file>clear/clear_trash/en_US.ini</file>
+        <file>clear/clear_trash/ru_RU.ini</file>
+        <file>journals/fdisk/en_US.ini</file>
+        <file>journals/fdisk/ru_RU.ini</file>
+        <file>journals/fdisk/fdisk.sh</file>
+        <file>journals/hwinfo/en_US.ini</file>
+        <file>journals/hwinfo/ru_RU.ini</file>
+        <file>journals/hwinfo/hwinfo.sh</file>
+        <file>journals/inxi/en_US.ini</file>
+        <file>journals/inxi/inxi.sh</file>
+        <file>journals/inxi/ru_RU.ini</file>
+        <file>journals/lsblk/en_US.ini</file>
+        <file>journals/lsblk/lsblk.sh</file>
+        <file>journals/lsblk/ru_RU.ini</file>
+        <file>journals/lspci/en_US.ini</file>
+        <file>journals/lspci/lspci.sh</file>
+        <file>journals/lspci/ru_RU.ini</file>
+        <file>journals/lsusb/en_US.ini</file>
+        <file>journals/lsusb/lsusb.sh</file>
+        <file>journals/lsusb/ru_RU.ini</file>
+        <file>journals/neofetch/en_US.ini</file>
+        <file>journals/neofetch/neofetch.sh</file>
+        <file>journals/neofetch/ru_RU.ini</file>
+        <file>journals/systemd-analyze/en_US.ini</file>
+        <file>journals/systemd-analyze/ru_RU.ini</file>
+        <file>journals/systemd-analyze/systemd-analyze.sh</file>
+        <file>journals/top-pkg/en_US.ini</file>
+        <file>journals/top-pkg/ru_RU.ini</file>
+        <file>journals/top-pkg/top-pkg.sh</file>
+        <file>journals/xorg-log/en_US.ini</file>
+        <file>journals/xorg-log/ru_RU.ini</file>
+        <file>journals/xorg-log/xorg-log.sh</file>
+        <file>bench/7z/7z.sh</file>
+        <file>bench/7z/en_US.ini</file>
+        <file>bench/7z/ru_RU.ini</file>
+        <file>bench/basemark/basemark.sh</file>
+        <file>bench/basemark/en_US.ini</file>
+        <file>bench/basemark/ru_RU.ini</file>
+        <file>bench/blender-benchmark/blender-benchmark.sh</file>
+        <file>bench/blender-benchmark/en_US.ini</file>
+        <file>bench/blender-benchmark/ru_RU.ini</file>
+        <file>bench/bonnie/bonnie.sh</file>
+        <file>bench/bonnie/en_US.ini</file>
+        <file>bench/bonnie/ru_RU.ini</file>
+        <file>bench/dd/dd.sh</file>
+        <file>bench/dd/en_US.ini</file>
+        <file>bench/dd/ru_RU.ini</file>
+        <file>bench/GFXBench/en_US.ini</file>
+        <file>bench/GFXBench/GFXBench.sh</file>
+        <file>bench/GFXBench/ru_RU.ini</file>
+        <file>bench/glmark2/en_US.ini</file>
+        <file>bench/glmark2/glmark2.sh</file>
+        <file>bench/glmark2/ru_RU.ini</file>
+        <file>bench/glxgears/en_US.ini</file>
+        <file>bench/glxgears/glxgears.sh</file>
+        <file>bench/glxgears/ru_RU.ini</file>
+        <file>bench/gnome-disks/en_US.ini</file>
+        <file>bench/gnome-disks/gnome-disks.sh</file>
+        <file>bench/gnome-disks/ru_RU.ini</file>
+        <file>bench/gputest/en_US.ini</file>
+        <file>bench/gputest/gputest.sh</file>
+        <file>bench/gputest/ru_RU.ini</file>
+        <file>bench/hardinfo/en_US.ini</file>
+        <file>bench/hardinfo/hardinfo.sh</file>
+        <file>bench/hardinfo/ru_RU.ini</file>
+        <file>bench/hdparm/en_US.ini</file>
+        <file>bench/hdparm/hdparm.sh</file>
+        <file>bench/hdparm/ru_RU.ini</file>
+        <file>bench/intel-gpu-tools/en_US.ini</file>
+        <file>bench/intel-gpu-tools/intel-gpu-tools.sh</file>
+        <file>bench/intel-gpu-tools/ru_RU.ini</file>
+        <file>bench/interbench/en_US.ini</file>
+        <file>bench/interbench/interbench.sh</file>
+        <file>bench/interbench/ru_RU.ini</file>
+        <file>bench/iozone/en_US.ini</file>
+        <file>bench/iozone/iozone.sh</file>
+        <file>bench/iozone/ru_RU.ini</file>
+        <file>bench/iperf/en_US.ini</file>
+        <file>bench/iperf/iperf.sh</file>
+        <file>bench/iperf/ru_RU.ini</file>
+        <file>bench/kdiskmark/en_US.ini</file>
+        <file>bench/kdiskmark/kdiskmark.sh</file>
+        <file>bench/kdiskmark/ru_RU.ini</file>
+        <file>bench/peakperf/en_US.ini</file>
+        <file>bench/peakperf/peakperf.sh</file>
+        <file>bench/peakperf/ru_RU.ini</file>
+        <file>bench/phoronix-test-suite/en_US.ini</file>
+        <file>bench/phoronix-test-suite/phoronix-test-suite.sh</file>
+        <file>bench/phoronix-test-suite/ru_RU.ini</file>
+        <file>bench/s-tui/en_US.ini</file>
+        <file>bench/s-tui/ru_RU.ini</file>
+        <file>bench/s-tui/s-tui.sh</file>
+        <file>bench/systemd-analyze/en_US.ini</file>
+        <file>bench/systemd-analyze/ru_RU.ini</file>
+        <file>bench/systemd-analyze/systemd-analyze.sh</file>
+        <file>bench/time/en_US.ini</file>
+        <file>bench/time/ru_RU.ini</file>
+        <file>bench/time/time.sh</file>
+        <file>bench/ttcp/en_US.ini</file>
+        <file>bench/ttcp/ru_RU.ini</file>
+        <file>bench/ttcp/ttcp.sh</file>
+        <file>bench/unigine-heaven/en_US.ini</file>
+        <file>bench/unigine-heaven/ru_RU.ini</file>
+        <file>bench/unigine-heaven/unigine-heaven.sh</file>
+        <file>bench/unigine-sanctuary/en_US.ini</file>
+        <file>bench/unigine-sanctuary/ru_RU.ini</file>
+        <file>bench/unigine-sanctuary/unigine-sanctuary.sh</file>
+        <file>bench/unigine-superposition/en_US.ini</file>
+        <file>bench/unigine-superposition/ru_RU.ini</file>
+        <file>bench/unigine-superposition/unigine-superposition.sh</file>
+        <file>bench/unigine-tropics/en_US.ini</file>
+        <file>bench/unigine-tropics/ru_RU.ini</file>
+        <file>bench/unigine-tropics/unigine-tropics.sh</file>
+        <file>bench/unigine-valley/en_US.ini</file>
+        <file>bench/unigine-valley/ru_RU.ini</file>
+        <file>bench/unigine-valley/unigine-valley.sh</file>
+        <file>bench/unixbench/en_US.ini</file>
+        <file>bench/unixbench/ru_RU.ini</file>
+        <file>bench/unixbench/unixbench.sh</file>
+        <file>bench/vkmark/en_US.ini</file>
+        <file>bench/vkmark/ru_RU.ini</file>
+        <file>bench/vkmark/vkmark.sh</file>
     </qresource>
 </RCC>
