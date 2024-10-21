@@ -18,7 +18,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "18.2";
+QString currentVersion = "18.3";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -1905,19 +1905,31 @@ void MainWindow::saveScripts(const QStringList& resourcePaths)
         QString fullDirPath = mainDir + "/" + QFileInfo(relativePath).path();
         QDir().mkpath(fullDirPath);
 
-        QFile::copy(path, fullDirPath + "/" + QFileInfo(path).fileName());
+        QString destFilePath = fullDirPath + "/" + QFileInfo(path).fileName();
+        QFile::copy(path, destFilePath);
+
+        QFile::setPermissions(destFilePath, QFileDevice::ReadOwner | QFileDevice::WriteOwner | QFileDevice::ExeOwner |
+                                                QFileDevice::ReadGroup | QFileDevice::WriteGroup | QFileDevice::ExeGroup |
+                                                QFileDevice::ReadOther | QFileDevice::WriteOther | QFileDevice::ExeOther);
 
         QStringList languages = {"en_US", "ru_RU"};
         for (const QString& lang : languages) {
             QString iniPath = QString(":/%1/%2.ini").arg(QFileInfo(relativePath).path(), lang);
-            if (QFile::exists(iniPath))
-                QFile::copy(iniPath, fullDirPath + QString("/%1.ini").arg(lang));
+            QString destIniPath = fullDirPath + QString("/%1.ini").arg(lang);
+            if (QFile::exists(iniPath)) {
+                QFile::copy(iniPath, destIniPath);
+
+                QFile::setPermissions(destIniPath, QFileDevice::ReadOwner | QFileDevice::WriteOwner |
+                                                       QFileDevice::ReadGroup | QFileDevice::WriteGroup |
+                                                       QFileDevice::ReadOther | QFileDevice::WriteOther);
+            }
         }
     }
 
     if (resourcePaths == menuResourcePaths)
         ui->action_updatelist->trigger();
 }
+
 
 
 MainWindow::~MainWindow()
@@ -3882,7 +3894,6 @@ void MainWindow::loadScripts(const QString& baseDir, QListWidget* listWidget)
             listWidget->addItem(item);
         }
     }
-
     listWidget->sortItems(Qt::AscendingOrder);
 }
 
