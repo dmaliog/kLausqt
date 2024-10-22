@@ -4263,13 +4263,33 @@ void MainWindow::handleListItemClicked(QListWidgetItem *item, const QString& scr
 }
 
 void MainWindow::loadWikiContent(const QString& url) {
-    auto reply = networkManager.get(QNetworkRequest(QUrl(url)));
-    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
-        if (reply->error() == QNetworkReply::NoError)
-        {
-            ui->details_wiki->setHtml(formatWikiContent(reply->readAll()));
+    currentLoadingUrl = url;
+    QString cacheFilePath = mainDir + "tmp/" + QUrl(url).fileName() + ".html";
+
+    if (QFile::exists(cacheFilePath)) {
+        QFile cacheFile(cacheFilePath);
+        if (cacheFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            ui->details_wiki->setHtml(cacheFile.readAll());
             ui->details_wiki->setVisible(true);
             ui->label_wiki->setVisible(true);
+            return;
+        }
+    }
+
+    auto reply = networkManager.get(QNetworkRequest(QUrl(url)));
+    connect(reply, &QNetworkReply::finished, this, [this, reply, cacheFilePath, url]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QString content = formatWikiContent(reply->readAll());
+            QDir().mkdir(QFileInfo(cacheFilePath).absolutePath());
+            QFile cacheFile(cacheFilePath);
+            if (cacheFile.open(QIODevice::WriteOnly | QIODevice::Text))
+                cacheFile.write(content.toUtf8());
+
+            if (url == currentLoadingUrl) {
+                ui->details_wiki->setHtml(content);
+                ui->details_wiki->setVisible(true);
+                ui->label_wiki->setVisible(true);
+            }
         }
         reply->deleteLater();
     });

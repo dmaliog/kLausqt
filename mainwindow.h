@@ -92,6 +92,7 @@ private:
     }
 
     QString currentPackageName;
+    QString currentLoadingUrl;
 
     QGraphicsScene* imageScene;
     QStandardItemModel* thumbnailModel;
