@@ -4336,8 +4336,8 @@ QColor MainWindow::getDominantColor(const QImage& image) {
 
 void MainWindow::loadGifToGraphicsView(const QString& gifPath) {
     if (page != 111 || gifPath.isEmpty()) {
-        ui->graphics_screen->setVisible(false);
-        ui->label_screen->setVisible(false);
+        AnimationHelper::fadeOut(ui->graphics_screen, 300);
+        AnimationHelper::fadeOut(ui->label_screen, 300);
         return;
     }
 
@@ -4352,8 +4352,8 @@ void MainWindow::loadGifToGraphicsView(const QString& gifPath) {
         auto currentPixmap = movie->currentPixmap().scaled(ui->graphics_screen->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
         pixmapItem->setPixmap(currentPixmap);
         ui->graphics_screen->fitInView(pixmapItem, Qt::KeepAspectRatio);
-        ui->graphics_screen->setVisible(true);
-        ui->label_screen->setVisible(true);
+        AnimationHelper::fadeIn(ui->graphics_screen, 300);
+        AnimationHelper::fadeIn(ui->label_screen, 300);
 
         QColor dominantColor = getDominantColor(currentPixmap.toImage());
         ui->graphics_screen->setStyleSheet(QString("background-color: rgb(%1, %2, %3);").arg(dominantColor.red()).arg(dominantColor.green()).arg(dominantColor.blue()));
@@ -4747,5 +4747,4 @@ void MainWindow::on_action_allpkg_triggered()
         default:
             return;
     }
-
 }
