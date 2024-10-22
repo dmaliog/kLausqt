@@ -289,6 +289,8 @@ public slots:
     void on_action_30_triggered();
 
 private slots:
+    QColor getDominantColor(const QImage& image);
+
     void on_list_journal_itemSelectionChanged();
 
     QString formatWikiContent(const QString& content);

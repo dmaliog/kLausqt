@@ -18,7 +18,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "18.5";
+QString currentVersion = "18.6";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -2758,9 +2758,8 @@ void MainWindow::showLoadingAnimation(bool show, QWebEngineView* webView)
 void MainWindow::processListItem(int row, QListWidget* listWidget, QTextBrowser* detailsWidget, const QString& package) {
     QString packageName = !package.isEmpty() ? package : listWidget->item(row)->text();
 
-    if (row == lastSelectedRow && packageName == lastSelectedPackage) {
+    if (row == lastSelectedRow && packageName == lastSelectedPackage)
         return;
-    }
 
     lastSelectedRow = row;
     lastSelectedPackage = packageName;
@@ -4289,30 +4288,59 @@ QString MainWindow::formatWikiContent(const QString& content)
     return "<html><body style='font-family: Courier; font-size: 10pt;'>" + tempContent + "</body></html>";
 }
 
-void MainWindow::loadGifToGraphicsView(const QString& gifPath) {
-    if (page != 111) return; // не журналы
-
-    if (gifPath.isEmpty()) {
-        ui->graphics_screen->setVisible(false);
-        ui->label_screen->setVisible(false);
-    }
-
-    QGraphicsScene *scene = new QGraphicsScene(this);
-    ui->graphics_screen->setScene(scene);
-
-    QMovie *movie = new QMovie(gifPath);
-    if (movie->isValid()) {
-        QGraphicsPixmapItem *pixmapItem = scene->addPixmap(QPixmap());
-        connect(movie, &QMovie::frameChanged, this, [pixmapItem, movie, this]() {
-            pixmapItem->setPixmap(movie->currentPixmap().scaled(ui->graphics_screen->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-            ui->graphics_screen->fitInView(pixmapItem, Qt::KeepAspectRatio);
-            ui->graphics_screen->setVisible(true);
-            ui->label_screen->setVisible(true);
-        });
-        movie->start();
-    }
+uint qHash(const QColor &color) {
+    return qHash(color.rgb());
 }
 
+QColor MainWindow::getDominantColor(const QImage& image) {
+    QHash<QColor, int> colorCount;
+
+    for (int y = 0; y < image.height(); ++y) {
+        for (int x = 0; x < image.width(); ++x) {
+            QColor color = image.pixelColor(x, y);
+            if (color.alpha() > 0)
+                colorCount[color] += 1;
+        }
+    }
+
+    QColor dominantColor;
+    int maxCount = 0;
+    for (auto it = colorCount.begin(); it != colorCount.end(); ++it) {
+        if (it.value() > maxCount) {
+            maxCount = it.value();
+            dominantColor = it.key();
+        }
+    }
+    return dominantColor;
+}
+
+void MainWindow::loadGifToGraphicsView(const QString& gifPath) {
+    if (page != 111 || gifPath.isEmpty()) {
+        ui->graphics_screen->setVisible(false);
+        ui->label_screen->setVisible(false);
+        return;
+    }
+
+    auto scene = new QGraphicsScene(this);
+    ui->graphics_screen->setScene(scene);
+
+    auto movie = new QMovie(gifPath);
+    if (!movie->isValid()) return;
+
+    auto pixmapItem = scene->addPixmap(QPixmap());
+    connect(movie, &QMovie::frameChanged, this, [pixmapItem, movie, this]() {
+        auto currentPixmap = movie->currentPixmap().scaled(ui->graphics_screen->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        pixmapItem->setPixmap(currentPixmap);
+        ui->graphics_screen->fitInView(pixmapItem, Qt::KeepAspectRatio);
+        ui->graphics_screen->setVisible(true);
+        ui->label_screen->setVisible(true);
+
+        QColor dominantColor = getDominantColor(currentPixmap.toImage());
+        ui->graphics_screen->setStyleSheet(QString("background-color: rgb(%1, %2, %3);").arg(dominantColor.red()).arg(dominantColor.green()).arg(dominantColor.blue()));
+    });
+
+    movie->start();
+}
 
 void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString& scriptDir) {
     Terminal terminal = getTerminal();
