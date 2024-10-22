@@ -18,7 +18,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "18.4";
+QString currentVersion = "18.5";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -4290,6 +4290,13 @@ QString MainWindow::formatWikiContent(const QString& content)
 }
 
 void MainWindow::loadGifToGraphicsView(const QString& gifPath) {
+    if (page != 111) return; // не журналы
+
+    if (gifPath.isEmpty()) {
+        ui->graphics_screen->setVisible(false);
+        ui->label_screen->setVisible(false);
+    }
+
     QGraphicsScene *scene = new QGraphicsScene(this);
     ui->graphics_screen->setScene(scene);
 
