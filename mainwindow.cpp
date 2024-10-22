@@ -18,7 +18,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "18.6";
+QString currentVersion = "18.7";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -814,6 +814,10 @@ void MainWindow::on_action_6_triggered()
         packageName = itemWidget->getPackageName();
     else
         packageName = currentItem->text();
+
+    QStringList parts = packageName.split('/');
+    if (parts.size() > 1)
+        packageName = parts.last();
 
     Terminal terminal = getTerminal();
 
