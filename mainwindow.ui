@@ -493,7 +493,7 @@ QTabWidget#tabWidget QTabBar::tab:selected {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="tab_webgame">
        <attribute name="title">
@@ -1918,62 +1918,51 @@ margin-left:10px;</string>
         <property name="leftMargin">
          <number>15</number>
         </property>
+        <property name="rightMargin">
+         <number>9</number>
+        </property>
         <property name="horizontalSpacing">
          <number>20</number>
         </property>
         <property name="verticalSpacing">
          <number>0</number>
         </property>
-        <item row="1" column="1">
-         <widget class="QTextBrowser" name="details_journal">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
+        <item row="1" column="0" rowspan="5">
+         <widget class="QListWidget" name="list_journal">
           <property name="minimumSize">
            <size>
-            <width>630</width>
+            <width>530</width>
             <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>530</width>
+            <height>16777215</height>
            </size>
           </property>
           <property name="font">
            <font>
-            <pointsize>11</pointsize>
+            <pointsize>13</pointsize>
+            <bold>false</bold>
            </font>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QTextEdit {
-	background:#272727;
-}</string>
+          <property name="focusPolicy">
+           <enum>Qt::FocusPolicy::NoFocus</enum>
           </property>
-          <property name="verticalScrollBarPolicy">
-           <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
+          <property name="contextMenuPolicy">
+           <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
           </property>
-          <property name="readOnly">
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="wordWrap">
            <bool>true</bool>
-          </property>
-          <property name="html">
-           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;Ничего не выбрано&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-          <property name="openLinks">
-           <bool>false</bool>
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
-         <widget class="QLabel" name="label_details_journal">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
+        <item row="3" column="1">
+         <widget class="QLabel" name="label_screen">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -2000,16 +1989,39 @@ color:#66c3bb;
 margin-left:10px;</string>
           </property>
           <property name="text">
-           <string>Описание</string>
+           <string>Скриншот</string>
           </property>
-          <property name="textFormat">
-           <enum>Qt::TextFormat::AutoText</enum>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="label_wiki">
+          <property name="minimumSize">
+           <size>
+            <width>230</width>
+            <height>40</height>
+           </size>
           </property>
-          <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+          <property name="maximumSize">
+           <size>
+            <width>230</width>
+            <height>16777215</height>
+           </size>
           </property>
-          <property name="margin">
-           <number>0</number>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background:#396d69;
+padding:0 15px;
+border-top-left-radius: 15px;
+border-top-right-radius: 15px;
+color:#66c3bb;
+margin-left:10px;</string>
+          </property>
+          <property name="text">
+           <string>Мануал</string>
           </property>
          </widget>
         </item>
@@ -2060,7 +2072,54 @@ margin-left:10px;</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="2" rowspan="2">
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_details_journal">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>230</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background:#396d69;
+padding:0 15px;
+border-top-left-radius: 15px;
+border-top-right-radius: 15px;
+color:#66c3bb;
+margin-left:10px;</string>
+          </property>
+          <property name="text">
+           <string>Описание</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::TextFormat::AutoText</enum>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3" rowspan="5">
          <spacer name="horizontalSpacer_6">
           <property name="orientation">
            <enum>Qt::Orientation::Horizontal</enum>
@@ -2073,10 +2132,55 @@ margin-left:10px;</string>
           </property>
          </spacer>
         </item>
+        <item row="1" column="1">
+         <widget class="QTextBrowser" name="details_journal">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>520</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QTextEdit {
+	background:#272727;
+}</string>
+          </property>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="html">
+           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;Ничего не выбрано&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="openLinks">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
         <item row="2" column="1">
          <spacer name="verticalSpacer_7">
           <property name="orientation">
            <enum>Qt::Orientation::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Policy::Maximum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -2086,34 +2190,41 @@ margin-left:10px;</string>
           </property>
          </spacer>
         </item>
-        <item row="1" column="0" rowspan="2">
-         <widget class="QListWidget" name="list_journal">
+        <item row="4" column="1">
+         <widget class="QGraphicsView" name="graphics_screen">
           <property name="minimumSize">
            <size>
-            <width>670</width>
-            <height>0</height>
+            <width>520</width>
+            <height>450</height>
            </size>
           </property>
-          <property name="maximumSize">
-           <size>
-            <width>670</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>13</pointsize>
-            <bold>false</bold>
-           </font>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::FocusPolicy::NoFocus</enum>
-          </property>
-          <property name="contextMenuPolicy">
-           <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
           </property>
           <property name="horizontalScrollBarPolicy">
            <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="sizeAdjustPolicy">
+           <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustIgnored</enum>
+          </property>
+          <property name="renderHints">
+           <set>QPainter::RenderHint::TextAntialiasing</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2" rowspan="4">
+         <widget class="QTextBrowser" name="details_wiki">
+          <property name="minimumSize">
+           <size>
+            <width>380</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="acceptRichText">
+           <bool>true</bool>
+          </property>
+          <property name="openLinks">
+           <bool>false</bool>
           </property>
          </widget>
         </item>

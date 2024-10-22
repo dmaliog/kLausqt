@@ -114,6 +114,7 @@ private:
 
     QString currentCategory;      // Текущая категория
     QString currentSubcategory;   // Текущая подкатегория
+
     // Умные указатели
     QCompleter* completer;
     QStandardItemModel* completerModel;
@@ -201,15 +202,25 @@ private:
     QStringList clearResourcePaths = {":/clear/clear_trash/clear_trash.sh"};
 
     QStringList journalsResourcePaths = {":/journals/neofetch/neofetch.sh",
+                                         ":/journals/neofetch/demo.gif",
                                          ":/journals/systemd-analyze/systemd-analyze.sh",
+                                         ":/journals/systemd-analyze/demo.gif",
                                          ":/journals/lspci/lspci.sh",
+                                         ":/journals/lspci/demo.gif",
                                          ":/journals/lsusb/lsusb.sh",
+                                         ":/journals/lsusb/demo.gif",
                                          ":/journals/inxi/inxi.sh",
+                                         ":/journals/inxi/demo.gif",
                                          ":/journals/hwinfo/hwinfo.sh",
+                                         ":/journals/hwinfo/demo.gif",
                                          ":/journals/lsblk/lsblk.sh",
+                                         ":/journals/lsblk/demo.gif",
                                          ":/journals/fdisk/fdisk.sh",
+                                         ":/journals/fdisk/demo.gif",
                                          ":/journals/xorg-log/xorg-log.sh",
-                                         ":/journals/top-pkg/top-pkg.sh"};
+                                         ":/journals/xorg-log/demo.gif",
+                                         ":/journals/top-pkg/top-pkg.sh",
+                                         ":/journals/top-pkg/demo.gif"};
 
     QStringList benchResourcePaths = {":/bench/unixbench/unixbench.sh",
                                       ":/bench/interbench/interbench.sh",
@@ -278,6 +289,11 @@ public slots:
     void on_action_30_triggered();
 
 private slots:
+    void on_list_journal_itemSelectionChanged();
+
+    QString formatWikiContent(const QString& content);
+    void loadWikiContent(const QString& url);
+    void loadGifToGraphicsView(const QString& gifPath);
     void updateFavoritePackages(const QStringList& favorites);
 
     QStringList readFavoritePackages();

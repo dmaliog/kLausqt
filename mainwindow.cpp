@@ -160,6 +160,7 @@ void MainWindow::on_action_9_triggered()
     ui->action_grub->setVisible(true);
     ui->action_pacman->setVisible(true);
     ui->action_fstab->setVisible(true);
+    on_list_journal_itemSelectionChanged();
     on_action_27_triggered();
 }
 
@@ -1014,6 +1015,15 @@ void MainWindow::on_list_aur_itemSelectionChanged() {
         ui->details_aur->setHtml(detailsAURdefault);
 
         actionInfopkgPressed = false;
+    }
+}
+
+void MainWindow::on_list_journal_itemSelectionChanged() {
+    if (ui->list_journal->selectedItems().isEmpty()) {
+        ui->details_wiki->setVisible(false);
+        ui->label_wiki->setVisible(false);
+        ui->graphics_screen->setVisible(false);
+        ui->label_screen->setVisible(false);
     }
 }
 
@@ -1930,8 +1940,6 @@ void MainWindow::saveScripts(const QStringList& resourcePaths)
         ui->action_updatelist->trigger();
 }
 
-
-
 MainWindow::~MainWindow()
 {
     iconMap.clear();
@@ -2056,6 +2064,7 @@ void MainWindow::loadSettings()
     //-############################## СИГНАЛЫ И СЛОТЫ ###################################
     //-##################################################################################
     connect(ui->list_aur, &QListWidget::itemSelectionChanged, this, &::MainWindow::on_list_aur_itemSelectionChanged);
+    connect(ui->list_journal, &QListWidget::itemSelectionChanged, this, &::MainWindow::on_list_journal_itemSelectionChanged);
 
     QList<QListWidget*> listWidgets = {
         ui->list_app,
@@ -4220,11 +4229,10 @@ void MainWindow::on_check_saveurl_stateChanged(int arg1)
     settings.setValue("SaveURL",arg1);
 }
 
-void MainWindow::handleListItemClicked(QListWidgetItem *item, const QString& scriptDir)
-{
+void MainWindow::handleListItemClicked(QListWidgetItem *item, const QString& scriptDir) {
     if (!item) return;
 
-    QString msg, scriptPath, itemName = item->text();
+    QString itemName = item->text(), msg, scriptPath, wikiUrl;
     QDirIterator it(scriptDir, QStringList() << *lang + "*.ini", QDir::Files, QDirIterator::Subdirectories);
 
     while (it.hasNext()) {
@@ -4232,20 +4240,72 @@ void MainWindow::handleListItemClicked(QListWidgetItem *item, const QString& scr
         if (itemName == settings.value("name").toString()) {
             scriptPath = it.fileInfo().absolutePath() + "/" + it.fileInfo().baseName() + ".sh";
             msg = settings.value("msg").toString();
+            wikiUrl = settings.value("wiki").toString();
             break;
         }
     }
 
-    if (scriptPath.isEmpty())
-        scriptPath = scriptDir + itemName;
+    if (scriptPath.isEmpty()) scriptPath = scriptDir + itemName;
 
-    if (scriptDir.contains("journals"))
-        ui->details_journal->setHtml(msg);
-    else if (scriptDir.contains("sh"))
-        ui->details_sh->setHtml(msg);
-    else if (scriptDir.contains("bench"))
-        ui->details_bench->setHtml(msg);
+    (scriptDir.contains("journals") ? ui->details_journal :
+         scriptDir.contains("sh") ? ui->details_sh :
+         ui->details_bench)->setHtml(msg);
+
+    loadGifToGraphicsView(QFileInfo(scriptPath).absolutePath() + "/demo.gif");
+
+    if (page == 111) //журналы
+    {
+        if (!wikiUrl.isEmpty()) loadWikiContent(wikiUrl);
+        else {
+            ui->details_wiki->setVisible(false);
+            ui->label_wiki->setVisible(false);
+        }
+    }
 }
+
+void MainWindow::loadWikiContent(const QString& url) {
+    auto reply = networkManager.get(QNetworkRequest(QUrl(url)));
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        if (reply->error() == QNetworkReply::NoError)
+        {
+            ui->details_wiki->setHtml(formatWikiContent(reply->readAll()));
+            ui->details_wiki->setVisible(true);
+            ui->label_wiki->setVisible(true);
+        }
+        reply->deleteLater();
+    });
+}
+
+QString MainWindow::formatWikiContent(const QString& content)
+{
+    QString tempContent = content;
+
+    tempContent.replace("\n", "<br>")
+        .replace(QRegularExpression("(?<=<br>|^)(NAME)(?=<br>|$)"), "<h2>NAME</h2>")
+        .replace(QRegularExpression("(?<=<br>|^)(SYNOPSIS)(?=<br>|$)"), "<h2>SYNOPSIS</h2>")
+        .replace(QRegularExpression("(?<=<br>|^)(DESCRIPTION)(?=<br>|$)"), "<h2>DESCRIPTION</h2>")
+        .replace(QRegularExpression("(?<=<br>|^)(OPTIONS)(?=<br>|$)"), "<h2>OPTIONS</h2>");
+
+    return "<html><body style='font-family: Courier; font-size: 10pt;'>" + tempContent + "</body></html>";
+}
+
+void MainWindow::loadGifToGraphicsView(const QString& gifPath) {
+    QGraphicsScene *scene = new QGraphicsScene(this);
+    ui->graphics_screen->setScene(scene);
+
+    QMovie *movie = new QMovie(gifPath);
+    if (movie->isValid()) {
+        QGraphicsPixmapItem *pixmapItem = scene->addPixmap(QPixmap());
+        connect(movie, &QMovie::frameChanged, this, [pixmapItem, movie, this]() {
+            pixmapItem->setPixmap(movie->currentPixmap().scaled(ui->graphics_screen->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+            ui->graphics_screen->fitInView(pixmapItem, Qt::KeepAspectRatio);
+            ui->graphics_screen->setVisible(true);
+            ui->label_screen->setVisible(true);
+        });
+        movie->start();
+    }
+}
+
 
 void MainWindow::handleListItemDoubleClick(QListWidgetItem *item, const QString& scriptDir) {
     Terminal terminal = getTerminal();

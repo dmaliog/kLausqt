@@ -297,5 +297,15 @@
         <file>bench/vkmark/en_US.ini</file>
         <file>bench/vkmark/ru_RU.ini</file>
         <file>bench/vkmark/vkmark.sh</file>
+        <file>journals/fdisk/demo.gif</file>
+        <file>journals/hwinfo/demo.gif</file>
+        <file>journals/inxi/demo.gif</file>
+        <file>journals/lsblk/demo.gif</file>
+        <file>journals/lspci/demo.gif</file>
+        <file>journals/lsusb/demo.gif</file>
+        <file>journals/neofetch/demo.gif</file>
+        <file>journals/systemd-analyze/demo.gif</file>
+        <file>journals/top-pkg/demo.gif</file>
+        <file>journals/xorg-log/demo.gif</file>
     </qresource>
 </RCC>
