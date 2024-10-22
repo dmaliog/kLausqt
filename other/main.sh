@@ -2,13 +2,25 @@
 
 # Функция определения языка
 lang() {
+    # Устанавливаем язык по умолчанию
     language="en_US"
     if [ -n "$1" ]; then
         language="$1"
     fi
 
-    translations_file="$language/translations.txt"
-    source "$HOME/.config/kLaus/other/$translations_file"
+    # Устанавливаем путь к файлу переводов
+    translations_file="$language.ini" # Изменен на .ini, как вы упомянули
+    script_dir=$(dirname "$0") # Получаем директорию, где находится скрипт
+    translations_path="$script_dir/$translations_file" # Формируем полный путь к файлу переводов
+
+    # Проверяем существование файла переводов
+    if [[ ! -f "$translations_path" ]]; then
+        echo "Файл переводов не найден: $translations_path"
+        exit 1
+    fi
+
+    # Загружаем переводы
+    source "$translations_path"
 }
 
 # Функция для отправки вывода на сервер
