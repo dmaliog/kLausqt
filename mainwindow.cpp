@@ -4256,8 +4256,8 @@ void MainWindow::handleListItemClicked(QListWidgetItem *item, const QString& scr
     {
         if (!wikiUrl.isEmpty()) loadWikiContent(wikiUrl);
         else {
-            ui->details_wiki->setVisible(false);
-            ui->label_wiki->setVisible(false);
+            AnimationHelper::fadeOut(ui->details_wiki, 300);
+            AnimationHelper::fadeOut(ui->label_wiki, 300);
         }
     }
 }
@@ -4270,8 +4270,8 @@ void MainWindow::loadWikiContent(const QString& url) {
         QFile cacheFile(cacheFilePath);
         if (cacheFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
             ui->details_wiki->setHtml(cacheFile.readAll());
-            ui->details_wiki->setVisible(true);
-            ui->label_wiki->setVisible(true);
+            AnimationHelper::fadeIn(ui->details_wiki, 300);
+            AnimationHelper::fadeIn(ui->label_wiki, 300);
             return;
         }
     }
@@ -4287,8 +4287,8 @@ void MainWindow::loadWikiContent(const QString& url) {
 
             if (url == currentLoadingUrl) {
                 ui->details_wiki->setHtml(content);
-                ui->details_wiki->setVisible(true);
-                ui->label_wiki->setVisible(true);
+                AnimationHelper::fadeIn(ui->details_wiki, 300);
+                AnimationHelper::fadeIn(ui->label_wiki, 300);
             }
         }
         reply->deleteLater();
