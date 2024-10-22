@@ -3846,9 +3846,8 @@ void MainWindow::loadScripts(const QString& baseDir, QListWidget* listWidget)
             QListWidgetItem* item = new QListWidgetItem(itemName);
             item->setForeground(generateRandomColor(colorlist));
 
-            if (!iconPath.isEmpty()) {
+            if (!iconPath.isEmpty())
                 item->setIcon(QIcon(iconPath));
-            }
 
             listWidget->addItem(item);
         }
