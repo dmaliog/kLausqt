@@ -4,6 +4,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "AnimationHelper.h"
+#include "customtextedit.h"
 #include <QtWebEngineWidgets>
 #include <QSoundEffect>
 #include <QRegularExpression>
@@ -18,7 +19,7 @@
 //-#####################################################################################################################################################
 QString mainDir = QDir::homePath() + "/.config/kLaus/";
 QString filePath = mainDir + "settings.ini";
-QString currentVersion = "18.8";
+QString currentVersion = "18.9";
 QString packagesArchiveAUR = "steam";
 QString packagesArchiveDefault = "packages";
 QString packagesArchiveCat = packagesArchiveDefault;
@@ -1089,16 +1090,13 @@ void MainWindow::on_action_infopkg_triggered(bool checked)
     if (checked) {
         ui->tabWidget_details->setCurrentIndex(1);
         ui->action_infopkg->setText(tr("Описание пакета"));
-
         prepareFiles(ui->tree_aur, packageName);
     } else {
         ui->tabWidget_details->setCurrentIndex(0);
         ui->action_infopkg->setText(tr("Файлы пакета"));
-
         prepareDetails(ui->list_aur, ui->details_aur, packageName);
     }
 }
-
 
 void MainWindow::on_action_infopkg_pkg_triggered(bool checked)
 {
@@ -1157,31 +1155,6 @@ void MainWindow::on_action_infopkg_pkg_triggered(bool checked)
 
         prepareDetails(listWidget, ui->details_aurpkg, packageName);
     }
-}
-
-void MainWindow::on_push_grub_fast_clicked()
-{
-    QString filename = "/etc/default/grub";
-    QString grubContent = ui->line_grub->text().trimmed();
-    QString timeout = ui->spin_grub->value() > 0 ? QString::number(ui->spin_grub->value()) : "5";
-
-    if (currentProcess && currentProcess->state() == QProcess::Running) {
-        currentProcess->kill();
-
-        disconnect(currentProcess.data(), &QProcess::readyReadStandardOutput, nullptr, nullptr);
-        disconnect(currentProcess.data(), &QProcess::finished, nullptr, nullptr);
-    }
-
-    currentProcess = QSharedPointer<QProcess>::create(this);
-    connect(currentProcess.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=]() {
-        sendNotification(tr("GRUB изменен"), tr("Изменения GRUB вступят в силу после перезагрузки."));
-    });
-    currentProcess->setProgram("pkexec");
-    QStringList arguments;
-    arguments << "bash" << "-c" << "sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"" + grubContent + "\"/; s/^GRUB_TIMEOUT=.*/GRUB_TIMEOUT=\"" + timeout + "\"/' " + filename + " && sudo grub-mkconfig -o /boot/grub/grub.cfg";
-    currentProcess->setArguments(arguments);
-    currentProcess->setProcessChannelMode(QProcess::MergedChannels);
-    currentProcess->start();
 }
 
 void MainWindow::on_action_addsh_triggered()
@@ -1301,6 +1274,7 @@ void MainWindow::on_action_editsh_triggered()
         sendNotification(tr("Внимание"), tr("Выберите скрипт из списка для изменения!"));
         return;
     }
+
     QListWidgetItem* selectedItem = ui->list_sh->currentItem();
     QString itemContent = selectedItem->text();
     QDir dir(mainDir + "sh/");
@@ -1427,11 +1401,10 @@ QStringList MainWindow::readFavoritePackages() {
         bool headerFound = false;
         while (!in.atEnd()) {
             QString line = in.readLine().trimmed();
-            if (line == "[Favorite]") {
+            if (line == "[Favorite]")
                 headerFound = true;
-            } else if (headerFound && !line.isEmpty()) {
+            else if (headerFound && !line.isEmpty())
                 favorites.append(line);
-            }
         }
         file.close();
     }
@@ -1987,6 +1960,13 @@ void MainWindow::loadSound(int soundIndex)
     beep->play();
 }
 
+void MainWindow::updateCommandDescription(const QString& word) {
+    if (commandDescriptions.contains(word))
+        ui->details_cmd_grub->setText(commandDescriptions.value(word));
+    else
+        ui->details_cmd_grub->setText(tr("Наведите мышь в конфигурации и получите подсказку"));
+}
+
 void MainWindow::loadSettings()
 {
     //-##################################################################################
@@ -2067,6 +2047,11 @@ void MainWindow::loadSettings()
     //-##################################################################################
     //-############################## СИГНАЛЫ И СЛОТЫ ###################################
     //-##################################################################################
+
+    loadCommandDescriptions(mainDir + "other/grub/" + *lang + ".ini");
+
+    connect(ui->text_grub, &CustomTextEdit::wordHovered, this, &MainWindow::updateCommandDescription);
+
     connect(ui->list_aur, &QListWidget::itemSelectionChanged, this, &::MainWindow::on_list_aur_itemSelectionChanged);
     connect(ui->list_journal, &QListWidget::itemSelectionChanged, this, &::MainWindow::on_list_journal_itemSelectionChanged);
 
@@ -2340,53 +2325,7 @@ void MainWindow::loadSettings()
     QFile grub("/etc/default/grub");
 
     if (!grub.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        ui->push_grub_fast->setDisabled(true);
-        ui->line_grub->setDisabled(true);
-        ui->spin_grub->setDisabled(true);
-        ui->line_grub->setText(tr("GRUB не установлен"));
-    } else {
-        QTextStream in(&grub);
-        QString grubContent;
-        QString timeoutStr;
-
-        static QRegularExpression timeoutRegex("^GRUB_TIMEOUT=['\"]?(\\d+)['\"]?$");
-        static QRegularExpression grubCmdlineRegex("^GRUB_CMDLINE_LINUX_DEFAULT=['\"]?(.*)['\"]?$");
-
-        while (!in.atEnd()) {
-            QString line = in.readLine();
-            if (line.startsWith("GRUB_TIMEOUT=")) {
-                QRegularExpressionMatch match = timeoutRegex.match(line);
-                if (match.hasMatch()) {
-                    timeoutStr = match.captured(1).trimmed();
-                    static const QRegularExpression quotationRegex("[\"']");
-                    timeoutStr.remove(quotationRegex);
-                }
-                continue;
-            }
-            if (line.startsWith("GRUB_CMDLINE_LINUX_DEFAULT=")) {
-                QRegularExpressionMatch match = grubCmdlineRegex.match(line);
-                if (match.hasMatch()) {
-                    grubContent = match.captured(1).trimmed();
-                    static const QRegularExpression quotationRegex("[\"']");
-                    grubContent.remove(quotationRegex);
-                }
-                else {
-                    grubCmdlineRegex.setPattern("^GRUB_CMDLINE_LINUX_DEFAULT=['\"]?(.*)['\"]?$");
-                    match = grubCmdlineRegex.match(line);
-                    if (match.hasMatch()) {
-                        grubContent = match.captured(1).trimmed();
-                        static const QRegularExpression quotationRegex("[\"']");
-                        grubContent.remove(quotationRegex);
-                    }
-                }
-                break;
-            }
-        }
-        grub.close();
-
-        int timeoutgrub = timeoutStr.toInt();
-        ui->spin_grub->setValue(timeoutgrub);
-        ui->line_grub->setText(grubContent);
+        ui->action_grub->setDisabled(true);
     }
     //-##################################################################################
     //-########################## СПИСОК РЕПОЗИТОРИЕВ ###################################
@@ -2565,25 +2504,37 @@ void MainWindow::handleActionHovered()
         ui->label1->setText(action->text());
 }
 
+void MainWindow::loadCommandDescriptions(const QString& filePath) {
+    QSettings settings(filePath, QSettings::IniFormat);
+    settings.beginGroup("Descriptions");
+    foreach (const QString &key, settings.allKeys()) {
+        commandDescriptions.insert(key, settings.value(key).toString());
+    }
+    settings.endGroup();
+}
+
 bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
+    // Обработка событий для панели инструментов
     if (obj == ui->toolBar || obj == ui->toolBar_2) {
         if (event->type() == QEvent::Enter) {
             QAction* action = qobject_cast<QAction*>(obj);
             if (action)
                 ui->label1->setText(action->text());
-        } else if (event->type() == QEvent::Leave)
+        } else if (event->type() == QEvent::Leave) {
             ui->label1->setText(originalLabelText);
+        }
     }
 
+    // Обработка нажатия клавиш
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
-        if (keyEvent->key() == Qt::Key_Tab && (page == 2 || page == 4)  && obj == ui->searchLineEdit && !ui->searchLineEdit->text().isEmpty()) {
+        if (keyEvent->key() == Qt::Key_Tab && (page == 2 || page == 4) && obj == ui->searchLineEdit && !ui->searchLineEdit->text().isEmpty()) {
             completerModel->clear();
             handleServerResponseSearch(ui->searchLineEdit->text());
             return true;
         }
     }
-    return QObject::eventFilter(obj, event);
+    return QObject::eventFilter(obj, event); // Вызов базового метода для остальных событий
 }
 
 void MainWindow::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
@@ -3851,6 +3802,7 @@ void MainWindow::loadingListWidget()
     saveScripts(journalsResourcePaths);
     saveScripts(benchResourcePaths);
     saveScripts(menuResourcePaths);
+    saveScripts(otherResourcePaths);
 
     loadScripts(mainDir + "sh/", ui->list_sh);
     loadScripts(mainDir + "clear/", ui->list_clear);
@@ -3868,11 +3820,6 @@ void MainWindow::loadingListWidget()
     cacheButtonHelper->setForeground(generateRandomColor(colorlist));
     cacheButtonPacman->setForeground(generateRandomColor(colorlist));
     orphanButton->setForeground(generateRandomColor(colorlist));
-
-    QDir().mkpath(mainDir + "other/");
-
-    QFile::copy(":/other/notify.png", mainDir + "other/notify.png");
-    QFile::copy(":/other/main.sh", mainDir + "other/main.sh");
 }
 
 void MainWindow::loadScripts(const QString& baseDir, QListWidget* listWidget)

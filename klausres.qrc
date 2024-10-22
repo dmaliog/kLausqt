@@ -307,5 +307,7 @@
         <file>journals/systemd-analyze/demo.gif</file>
         <file>journals/top-pkg/demo.gif</file>
         <file>journals/xorg-log/demo.gif</file>
+        <file>other/grub/en_US.ini</file>
+        <file>other/grub/ru_RU.ini</file>
     </qresource>
 </RCC>

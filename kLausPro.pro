@@ -21,6 +21,7 @@ SOURCES += \
 
 HEADERS += \
     AnimationHelper.h \
+    customtextedit.h \
     mainwindow.h \
     scrapper.h
 

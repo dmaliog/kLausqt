@@ -24,6 +24,7 @@
 #include <QRandomGenerator>
 #include <QRegularExpression>
 
+
 struct Terminal {
     QString binary;
     QString args;
@@ -90,6 +91,9 @@ private:
 
         return process.exitCode() == 0;
     }
+
+    QMap<QString, QString> commandDescriptions;
+
 
     QString currentPackageName;
     QString currentLoadingUrl;
@@ -269,9 +273,14 @@ private:
                                       ":/menu/Favorite/Favorite.txt",
                                       ":/menu/Populaty/Populaty.txt"};
 
+    QStringList otherResourcePaths = {":/other/notify.png",
+                                     ":/other/main.sh",
+                                     ":/other/grub/en_US.ini",
+                                     ":/other/grub/ru_RU.ini"};
+
 
 protected:
-    void closeEvent(QCloseEvent *event) override; // объявление метода closeEvent()
+    void closeEvent(QCloseEvent *event) override;
     bool eventFilter(QObject *obj, QEvent *event) override;
 
 public slots:
@@ -288,8 +297,11 @@ public slots:
     void on_action_17_triggered();
     void on_action_27_triggered();
     void on_action_30_triggered();
+    void updateCommandDescription(const QString& word);
 
 private slots:
+    void loadCommandDescriptions(const QString& filePath);
+
     QColor getDominantColor(const QImage& image);
 
     void on_list_journal_itemSelectionChanged();
@@ -430,7 +442,6 @@ private slots:
     void on_list_bench_itemClicked(QListWidgetItem *item);
     void on_list_journal_itemClicked(QListWidgetItem *item);
     void on_list_sh_itemClicked(QListWidgetItem *item);
-    void on_push_grub_fast_clicked();
     void on_push_kde_clicked();
     void on_push_repair_clicked();
     void on_push_vk_clicked();
@@ -457,7 +468,6 @@ private slots:
     void on_action_searchpkg_triggered();
     void on_action_allpkg_triggered();
 };
-
 
 class MySyntaxHighlighter : public QSyntaxHighlighter {
 public:
